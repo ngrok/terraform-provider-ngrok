@@ -1,0 +1,34 @@
+# certificate_authorities Resource
+
+## Example Usage
+
+Define the Certificate Authority resource `ngrok_certificate_authority.example`:
+
+```
+resource "ngrok_certificate_authority" "example" {
+  ca_pem = "-----BEGIN CERTIFICATE-----\nMIIEETCCAvmgAwIBAgIUU3N6lNzPqar4400cLQMcVHFl+mEwDQYJKoZIhvcNAQEL\nBQAwgZcxCzAJBgNVBAYTAkFVMQwwCgYDVQQIDANOU1cxDzANBgNVBAcMBlN5ZG5l\neTEZMBcGA1UECgwQRHJvcGJlYXIgUHR5IEx0ZDEkMCIGA1UEAwwbSW50cmFuZXQg\nU2VydmljZXMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlzZWN1cml0eUBkcm9w\nYmVhci5leGFtcGxlMB4XDTIwMDUwMTE2Mjc1OVoXDTIxMDUwMTE2Mjc1OVowgZcx\nCzAJBgNVBAYTAkFVMQwwCgYDVQQIDANOU1cxDzANBgNVBAcMBlN5ZG5leTEZMBcG\nA1UECgwQRHJvcGJlYXIgUHR5IEx0ZDEkMCIGA1UEAwwbSW50cmFuZXQgU2Vydmlj\nZXMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlzZWN1cml0eUBkcm9wYmVhci5l\neGFtcGxlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7y/EAN0yZkA0\nnRpMBfomnnS8KMWHb90kvGfhkCDR8WCQz5mX7eDEYDthRQrEgp63qtJ7IoCM5f0A\nUD6J2m/mZecP7SfA8OuTAZ7UyRixpZh0zJQSgj24Sh1LQuYci0DNXrei+R1qBvd+\npmpZwkKygNrbZYe3oY1PZ3jEYPSAQzIObDF7LhdhLLrcfWa9BHOGMLnALNMY558b\nvoijTCEmRrSavdvrAS9LDRipEXT8EQOWZZT9VbPtgSBalvStdoupAptmPIWjXftf\nWi1kry+P0xVFZG9iZwUeAT6fSJ+gJD8M1UXWaQbocYrctESP0sZEFM3rzdWqrZb7\n3cH3K5OCvwIDAQABo1MwUTAdBgNVHQ4EFgQUsZdchgUimRHLiPRWw51+DGBmlfMw\nHwYDVR0jBBgwFoAUsZdchgUimRHLiPRWw51+DGBmlfMwDwYDVR0TAQH/BAUwAwEB\n/zANBgkqhkiG9w0BAQsFAAOCAQEANk25tt8sSfn6Qu1bbhWRbjKgS5z+j9LqyCna\nv3fbSchMthaQR7w0vL69ayroeYdqDZkRMmHjuYKY4NyqyXkkaqVO63wEicCo55d9\npIKuPzc/7xwdRephosjGTQ4QaQ4OnrdpJZieI92m9ODexgsab84AYmwNpbGOI/tK\nnPsQr8x1RfLs2gbBwQ4MYVM3tQQbX0o+yve5nz/NCOq4vdG+eKON5u6VYMkOOg9F\nVyNY1iISQkpNk/AF6Vi9BGuDb5Hg0phEl1Q0ntCO7ZHAUHjy0ucqXZiXoXdXZcs3\n3zKKLUKva59EDBZ5TUucvXh8VemBtNc6hd1mX4Tq7lAreG9pjQ==\n-----END CERTIFICATE-----"
+  description = "Internal Coprorates Services Authority"
+  metadata = "{\"internal_id\": \"7d2caeee-cdc3-4b26-b2c2-b280b8287552\"}"
+}
+```
+
+## Argument Reference
+
+* `ca_pem` - (Optional) raw PEM of the Certificate Authority
+* `description` - (Optional) human-readable description of this Certificate Authority. optional, max 255 bytes.
+* `metadata` - (Optional) arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.
+
+## Attribute Reference
+
+* `ca_pem` - raw PEM of the Certificate Authority
+* `created_at` - timestamp when the Certificate Authority was created, RFC 3339 format
+* `description` - human-readable description of this Certificate Authority. optional, max 255 bytes.
+* `extended_key_usages` - extended set of actions the private key of this Certificate Authority can be used for
+* `key_usages` - set of actions the private key of this Certificate Authority can be used for
+* `metadata` - arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.
+* `ngrok_id` - unique identifier for this Certificate Authority
+* `not_after` - timestamp when this Certificate Authority becomes invalid, RFC 3339 format
+* `not_before` - timestamp when this Certificate Authority becomes valid, RFC 3339 format
+* `subject_common_name` - subject common name of the Certificate Authority
+* `uri` - URI of the Certificate Authority API resource
+
