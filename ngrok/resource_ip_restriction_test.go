@@ -12,11 +12,11 @@ import (
 
 var (
 	resourceIPRestrictions_createConfig = `resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1kD5lPhASrZDORy76QzCNTQMbvx" ]
+  ip_policy_ids = [ "ipp_1kD8xC1LAJMo5H6GAhbAEHK6KK3" ]
   type = "dashboard"
 }`
 	resourceIPRestrictions_updateConfig = `resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1kD5lPhASrZDORy76QzCNTQMbvx", "ipp_1kD5lOBZIalkoqANn8oRzRefnY7" ]
+  ip_policy_ids = [ "ipp_1kD8xC1LAJMo5H6GAhbAEHK6KK3", "ipp_1kD8xEEKd8uwIkh1w58nUfecaub" ]
 }`
 )
 
