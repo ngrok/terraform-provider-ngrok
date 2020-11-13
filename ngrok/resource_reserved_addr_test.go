@@ -16,7 +16,7 @@ var (
   region = "us"
 }`
 	resourceReservedAddrs_updateConfig = `resource "ngrok_reserved_addr" "example" {
-  endpoint_configuration_id = "ec_1kFHEIGhWiObrZ5drpllfrHXksG"
+  endpoint_configuration_id = "ec_1kFMnfXzBAeT0YOCReoMuZzbxNi"
   metadata = "{\"proto\": \"ssh\"}"
 }`
 )

@@ -6,7 +6,7 @@ Define the Reserved Domain resource `ngrok_reserved_domain.example`:
 
 ```
 resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1kFHDLW9JO8GBctbTFUUiqan4Ay"
+  certificate_id = "cert_1kFMmfBQSoDeu0iRlRBsTqT8wWF"
   name = "myapp.mydomain.com"
   region = "us"
 }
