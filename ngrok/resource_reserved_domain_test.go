@@ -12,7 +12,7 @@ import (
 
 var (
 	resourceReservedDomains_createConfig = `resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1kOKsYBONzGaa5dTLtqDHUznDrU"
+  certificate_id = "cert_1kOLlXstd4HHQN393n2Kl17b8vB"
   name = "myapp.mydomain.com"
   region = "us"
 }`
@@ -21,8 +21,8 @@ var (
     authority = "letsencrypt"
   }
   description = "point-of-sale new york #302"
-  http_endpoint_configuration_id = "ec_1kOKslQyDbcqj2ttpZcwqz6j7JQ"
-  https_endpoint_configuration_id = "ec_1kOKsqL2ZQ9Ohinm41LQFyhJRPI"
+  http_endpoint_configuration_id = "ec_1kOLlm1Iq4atbJWk4d7rZyx1Vu7"
+  https_endpoint_configuration_id = "ec_1kOLlmtJP96OAAqsaGXOv4snHOo"
   metadata = "{env: \"staging\", \"connector_id\":\"64698fcc-5f5c-4b63-910e-8669d04bd943\"}"
 }`
 )
