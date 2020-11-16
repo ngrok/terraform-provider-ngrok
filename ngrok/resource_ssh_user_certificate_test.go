@@ -15,8 +15,8 @@ var (
   description = "temporary access to staging machine"
   principals = [ "ec2-user", "root" ]
   public_key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBK58lFzmWlDimDtBz78wVT4oauA8PjY0CiXTCEIsBNC6UwOJvZ0jdSaYNhDaa7dRV84DfBb/gKzqlXC7cVMZjl0= alan@work-laptop"
-  ssh_certificate_authority_id = "sshca_1kONCO9Ja0gvqHAZG9sTIgPZPdd"
-  valid_until = "2021-02-14T22:59:09Z"
+  ssh_certificate_authority_id = "sshca_1kOTHChqJfYH2ZBW1BM9YE64t3i"
+  valid_until = "2021-02-14T23:49:07Z"
 }`
 	resourceSSHUserCertificates_updateConfig = `resource "ngrok_ssh_user_certificate" "example" {
   description = "temporary access to staging machine for alan"
