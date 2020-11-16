@@ -13,7 +13,7 @@ import (
 var (
 	resourceLogConfigs_createConfig = `resource "ngrok_log_config" "example" {
   description = "low sampling, basic HTTP logs"
-  destination_ids = [ "ld_1kFRCyNfTCCSJrgQ8FDGvZj1KkL" ]
+  destination_ids = [ "ld_1kOL0tanCezZcR4WvvzYV9okU8H" ]
   event_type = "http_request_complete"
   fields = [ "http.request.method", "http.response.status_code", "conn.client_ip" ]
   metadata = "{\"environment\": \"staging\"}"
