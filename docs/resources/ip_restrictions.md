@@ -6,7 +6,7 @@ Define the IP Restriction resource `ngrok_ip_restriction.example`:
 
 ```
 resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1kTYc0VY1VYjD2hdnwfUehMR9ks" ]
+  ip_policy_ids = [ "ipp_1kTabINnEEKK8LDDNxUMWBhD2Ce" ]
   type = "dashboard"
 }
 ```
