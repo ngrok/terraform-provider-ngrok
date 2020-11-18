@@ -7,7 +7,7 @@ Define the Log Config resource `ngrok_log_config.example`:
 ```
 resource "ngrok_log_config" "example" {
   description = "low sampling, basic HTTP logs"
-  destination_ids = [ "ld_1kTRYQVbxuTm373PEyYseU1ZDiJ" ]
+  destination_ids = [ "ld_1kTYdJ8WPsNqbyqk4engTmL11P0" ]
   event_type = "http_request_complete"
   fields = [ "http.request.method", "http.response.status_code", "conn.client_ip" ]
   metadata = "{\"environment\": \"staging\"}"

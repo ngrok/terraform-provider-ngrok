@@ -15,8 +15,8 @@ var (
   description = "personal server"
   principals = [ "inconshreveable.com", "10.2.42.9" ]
   public_key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI3oSgxrOEJ+tIJ/n6VYtxQIFvynqlOHpfOAJ4x4OfmMYDkbf8dr6RAuUSf+ZC2HMCujta7EjZ9t+6v08Ue+Cgk= inconshreveable.com"
-  ssh_certificate_authority_id = "sshca_1kTRa0k7gG4GxLGa1hNCQ0mOL35"
-  valid_until = "2021-02-16T18:04:14Z"
+  ssh_certificate_authority_id = "sshca_1kTYeuhLswMzBx8nr4ixn1UHSpD"
+  valid_until = "2021-02-16T19:02:26Z"
 }`
 	resourceSSHHostCertificates_updateConfig = `resource "ngrok_ssh_host_certificate" "example" {
   metadata = "{\"region\": \"us-west-2\"}"
