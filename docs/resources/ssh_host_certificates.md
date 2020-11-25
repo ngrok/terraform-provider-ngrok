@@ -9,8 +9,8 @@ resource "ngrok_ssh_host_certificate" "example" {
   description = "personal server"
   principals = [ "inconshreveable.com", "10.2.42.9" ]
   public_key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI3oSgxrOEJ+tIJ/n6VYtxQIFvynqlOHpfOAJ4x4OfmMYDkbf8dr6RAuUSf+ZC2HMCujta7EjZ9t+6v08Ue+Cgk= inconshreveable.com"
-  ssh_certificate_authority_id = "sshca_1knP5MrYP8jGJL99FmnX9aaxXQv"
-  valid_until = "2021-02-23T19:39:57Z"
+  ssh_certificate_authority_id = "sshca_1knYpAcqpE13bpP3if2JBIhg7PQ"
+  valid_until = "2021-02-23T21:00:02Z"
 }
 ```
 
