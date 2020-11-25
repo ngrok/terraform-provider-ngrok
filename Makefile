@@ -3,7 +3,7 @@ HOSTNAME=ngrok.com
 NAMESPACE=ngrok
 NAME=ngrok
 BINARY=terraform-provider-${NAME}
-VERSION=0.0.6
+VERSION=0.0.7
 
 default: install
 
