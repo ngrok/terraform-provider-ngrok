@@ -3,11 +3,14 @@
 package ngrok
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
 var (
@@ -20,6 +23,36 @@ var (
   description = "Internal Corporate Services Authority (Legacy)"
 }`
 )
+
+func init() {
+	resource.AddTestSweepers("certificate_authorities", &resource.Sweeper{
+		Name: "certificate_authorities",
+		F: func(region string) error {
+			ctx := context.Background()
+			client, err := sharedClientForRegion(region)
+			if err != nil {
+				return fmt.Errorf("Error getting client: %s", err)
+			}
+			conn := client.(*restapi.Client)
+
+			list, _, err := conn.CertificateAuthoritiesList(ctx, nil)
+			if err != nil {
+				return fmt.Errorf("Error getting list of items: %s", err)
+			}
+			for _, item := range list.CertificateAuthorities {
+				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
+				if item.Description != "" && item.Metadata != "" {
+					_, _, err := conn.CertificateAuthoritiesDelete(ctx, &restapi.Item{ID: item.ID})
+
+					if err != nil {
+						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
+					}
+				}
+			}
+			return nil
+		},
+	})
+}
 
 func TestAccResourceCertificateAuthorities(t *testing.T) {
 

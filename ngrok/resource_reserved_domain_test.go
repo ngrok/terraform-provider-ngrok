@@ -3,11 +3,14 @@
 package ngrok
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
 var (
@@ -26,6 +29,36 @@ var (
   metadata = "{env: \"staging\", \"connector_id\":\"64698fcc-5f5c-4b63-910e-8669d04bd943\"}"
 }`
 )
+
+func init() {
+	resource.AddTestSweepers("reserved_domains", &resource.Sweeper{
+		Name: "reserved_domains",
+		F: func(region string) error {
+			ctx := context.Background()
+			client, err := sharedClientForRegion(region)
+			if err != nil {
+				return fmt.Errorf("Error getting client: %s", err)
+			}
+			conn := client.(*restapi.Client)
+
+			list, _, err := conn.ReservedDomainsList(ctx, nil)
+			if err != nil {
+				return fmt.Errorf("Error getting list of items: %s", err)
+			}
+			for _, item := range list.ReservedDomains {
+				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
+				if item.Description != "" && item.Metadata != "" {
+					_, _, err := conn.ReservedDomainsDelete(ctx, &restapi.Item{ID: item.ID})
+
+					if err != nil {
+						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
+					}
+				}
+			}
+			return nil
+		},
+	})
+}
 
 func TestAccResourceReservedDomains(t *testing.T) {
 	t.Skip("Test skipped. See: https://github.com/ngrok-private/ngrok/issues/4718")

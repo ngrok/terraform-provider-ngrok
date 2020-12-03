@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 // sharedClientForRegion returns a common provider client configured for the specified region
 func sharedClientForRegion(region string) (interface{}, error) {
 	cfg := restapi.ClientConfig{
-		APIKey:  os.Getenv("TF_NGROK_API_KEY"),
+		APIKey:  os.Getenv("NGROK_API_KEY"),
 		BaseURL: os.Getenv("NGROK_API_BASE_URL"),
 	}
 
