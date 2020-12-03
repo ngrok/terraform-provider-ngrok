@@ -38,4 +38,4 @@ testacc:
 
 sweep:
 		@echo "WARNING: This will destroy infrastructure. Use only in development accounts."
-		go test -tags github $(TEST) -v -sweep=$(SWEEP) $(TESTARGS) -timeout 60m
+		go test -tags github $(TEST) -sweep=$(SWEEP) -v $(TESTARGS) -timeout 60m
