@@ -1,4 +1,5 @@
 TEST?=$$(go list ./... | grep -v 'vendor')
+SWEEP?=us
 HOSTNAME=ngrok.com
 NAMESPACE=ngrok
 NAME=ngrok
@@ -35,3 +36,6 @@ test:
 testacc:
 		TF_ACC=1 go test -tags github $(TEST) -v $(TESTARGS) -timeout 120m
 
+sweep:
+		@echo "WARNING: This will destroy infrastructure. Use only in development accounts."
+		go test -tags github $(TEST) -v -sweep=$(SWEEP) $(TESTARGS) -timeout 60m
