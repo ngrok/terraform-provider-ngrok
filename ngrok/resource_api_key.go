@@ -117,7 +117,6 @@ func resourceAPIKeysGetDecode(d *schema.ResourceData, res *restapi.APIKey, resp 
 		d.Set("token", res.Token)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

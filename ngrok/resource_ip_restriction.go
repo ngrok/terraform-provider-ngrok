@@ -148,7 +148,6 @@ func resourceIPRestrictionsGetDecode(d *schema.ResourceData, res *restapi.IPRest
 		d.Set("type", res.Type)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

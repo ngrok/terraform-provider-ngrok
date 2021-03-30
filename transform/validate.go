@@ -1,5 +1,3 @@
-// +build github
-
 package transform
 
 import (

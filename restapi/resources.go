@@ -109,6 +109,58 @@ type APIKeyList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
+type StaticBackend struct {
+	// unique identifier for this static backend
+	ID string `json:"id,omitempty"`
+	// timestamp when the backend was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the address to forward to
+	Address string `json:"address,omitempty"`
+	// tls configuration to use
+	TLS StaticBackendTLS `json:"tls,omitempty"`
+}
+
+type StaticBackendTLS struct {
+	// if tls is checked
+	Enabled bool `json:"enabled,omitempty"`
+}
+
+type StaticBackendCreate struct {
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the address to forward to
+	Address string `json:"address,omitempty"`
+	// tls configuration to use
+	TLS StaticBackendTLS `json:"tls,omitempty"`
+}
+
+type StaticBackendUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this backend. Optional
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata *string `json:"metadata,omitempty"`
+	// the address to forward to
+	Address string `json:"address,omitempty"`
+	// tls configuration to use
+	TLS StaticBackendTLS `json:"tls,omitempty"`
+}
+
+type StaticBackendList struct {
+	// the list of all static backends on this account
+	Backends []StaticBackend `json:"backends,omitempty"`
+	// URI of the static backends list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type CertificateAuthorityCreate struct {
 	// human-readable description of this Certificate Authority. optional, max 255
 	// bytes.
@@ -248,6 +300,230 @@ type CredentialList struct {
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventStreamCreate struct {
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields []string `json:"fields,omitempty"`
+	// The protocol that determines which events will be collected. Supported values
+	// are <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
+	EventType string `json:"event_type,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventStreamUpdate struct {
+	// Unique identifier for this Event Stream.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields *[]string `json:"fields,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs *[]string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate *float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventStreamList struct {
+	// The list of all Event Streams on this account.
+	EventStreams []EventStream `json:"event_streams,omitempty"`
+	// URI of the Event Stream list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventStream struct {
+	// Unique identifier for this Event Stream.
+	ID string `json:"id,omitempty"`
+	// URI of the Event Stream API resource.
+	URI string `json:"uri,omitempty"`
+	// Timestamp when the Event Stream was created, RFC 3339 format.
+	CreatedAt string `json:"created_at,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields []string `json:"fields,omitempty"`
+	// The protocol that determines which events will be collected. Supported values
+	// are <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
+	EventType string `json:"event_type,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventDestinationCreate struct {
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is <code>JSON</code>.
+	Format string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
+	// or <code>s3</code>.
+	Target              EventTarget `json:"target,omitempty"`
+	VerifyWithTestEvent *bool       `json:"verify_with_test_event,omitempty"`
+}
+
+type EventDestinationUpdate struct {
+	// Unique identifier for this Event Destination.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is <code>JSON</code>.
+	Format *string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
+	// or <code>s3</code>.
+	Target              *EventTarget `json:"target,omitempty"`
+	VerifyWithTestEvent *bool        `json:"verify_with_test_event,omitempty"`
+}
+
+type EventDestination struct {
+	// Unique identifier for this Event Destination.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Timestamp when the Event Destination was created, RFC 3339 format.
+	CreatedAt string `json:"created_at,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is <code>JSON</code>.
+	Format string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
+	// or <code>s3</code>.
+	Target EventTarget `json:"target,omitempty"`
+	// URI of the Event Destination API resource.
+	URI string `json:"uri,omitempty"`
+}
+
+type EventDestinationList struct {
+	// The list of all Event Destinations on this account.
+	EventDestinations []EventDestination `json:"event_destinations,omitempty"`
+	// URI of the Event Destinations list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventTarget struct {
+	// Configuration used to send events to Amazon Kinesis Data Firehose.
+	Firehose *EventTargetFirehose `json:"firehose,omitempty"`
+	// Configuration used to send events to Amazon Kinesis.
+	Kinesis *EventTargetKinesis `json:"kinesis,omitempty"`
+	// Configuration used to send events to Amazon CloudWatch Logs.
+	CloudwatchLogs *EventTargetCloudwatchLogs `json:"cloudwatch_logs,omitempty"`
+	// Configuration used for internal debugging.
+	Debug *EventTargetDebug `json:"debug,omitempty"`
+}
+
+type EventTargetFirehose struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of
+	// <code>role</code> or <code>creds</code> should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the Firehose delivery stream to deposit
+	// events into.
+	DeliveryStreamARN string `json:"delivery_stream_arn,omitempty"`
+}
+
+type EventTargetKinesis struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of
+	// <code>role</code> or <code>creds</code> should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the Kinesis stream to deposit events into.
+	StreamARN string `json:"stream_arn,omitempty"`
+}
+
+type EventTargetCloudwatchLogs struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of
+	// <code>role</code> or <code>creds</code> should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the CloudWatch Logs group to deposit events
+	// into.
+	LogGroupARN string `json:"log_group_arn,omitempty"`
+}
+
+type EventTargetS3 struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of
+	// <code>role</code> or <code>creds</code> should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the S3 bucket to deposit events into.
+	BucketARN string `json:"bucket_arn,omitempty"`
+	// An optional prefix to prepend to S3 object keys.
+	ObjectPrefix string `json:"object_prefix,omitempty"`
+	// Whether or not to compress files with gzip.
+	Compression bool `json:"compression,omitempty"`
+	// How many bytes we should accumulate into a single file before sending to S3.
+	MaxFileSize int64 `json:"max_file_size,omitempty"`
+	// How many seconds we should batch up events before sending them to S3.
+	MaxFileAge int64 `json:"max_file_age,omitempty"`
+}
+
+type EventTargetDebug struct {
+	// Whether or not to output to publisher service logs.
+	Log bool `json:"log,omitempty"`
+	// URL to send events to.
+	CallbackURL string `json:"callback_url,omitempty"`
+}
+
+type AWSAuth struct {
+	// A role for ngrok to assume on your behalf to deposit events into your AWS
+	// account.
+	Role *AWSRole `json:"role,omitempty"`
+	// Credentials to your AWS account if you prefer ngrok to sign in with long-term
+	// access keys.
+	Creds *AWSCredentials `json:"creds,omitempty"`
+}
+
+type AWSRole struct {
+	// An ARN that specifies the role that ngrok should use to deliver to the
+	// configured target.
+	RoleARN string `json:"role_arn,omitempty"`
+}
+
+type AWSCredentials struct {
+	// The ID portion of an AWS access key.
+	AWSAccessKeyID string `json:"aws_access_key_id,omitempty"`
+	// The secret portion of an AWS access key.
+	AWSSecretAccessKey *string `json:"aws_secret_access_key,omitempty"`
+}
+
+type SentEvent struct {
+	EventID string `json:"event_id,omitempty"`
 }
 
 type IPPolicyCreate struct {
@@ -468,223 +744,6 @@ type IPWhitelistEntryList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
-type LogConfigCreate struct {
-	// Arbitrary user-defined machine-readable data of this Log Config. Optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Log Config. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each logging event.
-	Fields []string `json:"fields,omitempty"`
-	// The protocol that determines which events can be logged. Supported values are
-	// <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
-	EventType string `json:"event_type,omitempty"`
-	// A list of Log Destination ids which should be applied to this Log Config. Log
-	// Configs are required to have at least one Log Destination.
-	DestinationIDs []string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to log. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate float64 `json:"sampling_rate,omitempty"`
-}
-
-type LogConfigUpdate struct {
-	// Unique identifier for this Log Config.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Log Config. Optional, max
-	// 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// Human-readable description of the Log Config. Optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each logging event.
-	Fields *[]string `json:"fields,omitempty"`
-	// A list of Log Destination ids which should be applied to this Log Config. Log
-	// Configs are required to have at least one Log Destination.
-	DestinationIDs *[]string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to log. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate *float64 `json:"sampling_rate,omitempty"`
-}
-
-type LogConfigList struct {
-	// The list of all Log Configs on this account.
-	LogConfigs []LogConfig `json:"log_configs,omitempty"`
-	// URI of the Log Config list API resource.
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page.
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type LogConfig struct {
-	// Unique identifier for this Log Config.
-	ID string `json:"id,omitempty"`
-	// URI of the Log Config API resource.
-	URI string `json:"uri,omitempty"`
-	// Timestamp when the Log Config was created, RFC 3339 format.
-	CreatedAt string `json:"created_at,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Log Config. Optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Log Config. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each logging event.
-	Fields []string `json:"fields,omitempty"`
-	// The protocol that determines which events can be logged. Supported values are
-	// <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
-	EventType string `json:"event_type,omitempty"`
-	// A list of Log Destination ids which should be applied to this Log Config. Log
-	// Configs are required to have at least one Log Destination.
-	DestinationIDs []string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to log. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate float64 `json:"sampling_rate,omitempty"`
-}
-
-type LogDestinationCreate struct {
-	// Arbitrary user-defined machine-readable data of this Log Destination. Optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Log Destination. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// The output format you would like to serialize your logs into before they post to
-	// their target. Currently the only accepted value is <code>JSON</code>.
-	Format string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your logs to their ultimate
-	// destination. A log destination must contain exactly one of the following
-	// objects, leaving the rest null: <code>kinesis</code>, <code>firehose</code>,
-	// <code>cloudwatch</code>, or <code>S3</code>.
-	Target LogDestinationTarget `json:"target,omitempty"`
-}
-
-type LogDestinationUpdate struct {
-	// Unique identifier for this Log Destination.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Log Destination. Optional,
-	// max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// Human-readable description of the Log Destination. Optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// The output format you would like to serialize your logs into before they post to
-	// their target. Currently the only accepted value is <code>JSON</code>.
-	Format *string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your logs to their ultimate
-	// destination. A log destination must contain exactly one of the following
-	// objects, leaving the rest null: <code>kinesis</code>, <code>firehose</code>,
-	// <code>cloudwatch</code>, or <code>S3</code>.
-	Target *LogDestinationTarget `json:"target,omitempty"`
-}
-
-type LogDestination struct {
-	// Unique identifier for this Log Destination.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Log Destination. Optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Timestamp when the Log Destination was created, RFC 3339 format.
-	CreatedAt string `json:"created_at,omitempty"`
-	// Human-readable description of the Log Destination. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// The output format you would like to serialize your logs into before they post to
-	// their target. Currently the only accepted value is <code>JSON</code>.
-	Format string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your logs to their ultimate
-	// destination. A log destination must contain exactly one of the following
-	// objects, leaving the rest null: <code>kinesis</code>, <code>firehose</code>,
-	// <code>cloudwatch</code>, or <code>S3</code>.
-	Target LogDestinationTarget `json:"target,omitempty"`
-	// URI of the Log Destination API resource.
-	URI string `json:"uri,omitempty"`
-}
-
-type LogDestinationList struct {
-	// The list of all Log Destinations on this account.
-	LogDestinations []LogDestination `json:"log_destinations,omitempty"`
-	// URI of the Log Destinations list API resource.
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page.
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type LogDestinationTarget struct {
-	// Configuration used to stream logs to Amazon Kinesis Data Firehose.
-	Firehose *Firehose `json:"firehose,omitempty"`
-	// Configuration used to stream logs to Amazon Kinesis.
-	Kinesis *Kinesis `json:"kinesis,omitempty"`
-	// Configuration used to send logs to Amazon CloudWatch Logs.
-	Cloudwatch *Cloudwatch `json:"cloudwatch,omitempty"`
-	// Configuration used for internal debugging.
-	Debug *EventTargetDebug `json:"debug,omitempty"`
-}
-
-type Firehose struct {
-	// Configuration authentication into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the Firehose delivery stream to deposit logs
-	// into.
-	DeliveryStreamARN string `json:"delivery_stream_arn,omitempty"`
-}
-
-type Kinesis struct {
-	// Configuration authentication into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the Kinesis stream to deposit logs into.
-	StreamARN string `json:"stream_arn,omitempty"`
-}
-
-type Cloudwatch struct {
-	// Configuration authentication into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the CloudWatch Logs group to deposit logs
-	// with.
-	LogGroupARN string `json:"log_group_arn,omitempty"`
-}
-
-type S3 struct {
-	// Configuration authentication into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the S3 bucket to post logs into.
-	BucketARN string `json:"bucket_arn,omitempty"`
-	// An optional prefix to prepend to S3 object keys.
-	ObjectPrefix string `json:"object_prefix,omitempty"`
-	// Whether or not to compress log files with gzip.
-	Compression bool `json:"compression,omitempty"`
-	// How large in bytes we should accumulate logs before sending them to S3.
-	MaxFileSize int64 `json:"max_file_size,omitempty"`
-	// The maximum age in seconds we should accumulate logs before sending them to S3.
-	MaxFileAge int64 `json:"max_file_age,omitempty"`
-}
-
-type EventTargetDebug struct {
-	// Whether or not to output to publisher service logs.
-	Log bool `json:"log,omitempty"`
-	// Url to send events to.
-	CallbackURL string `json:"callback_url,omitempty"`
-}
-
-type AWSAuth struct {
-	// A role for ngrok to assume on your behalf to deposit logs into your AWS account.
-	Role *AWSRole `json:"role,omitempty"`
-	// Credentials to your AWS account if you prefer ngrok to sign in with long-term
-	// access keys.
-	Creds *AWSCredentials `json:"creds,omitempty"`
-}
-
-type AWSRole struct {
-	// An arn that describes a role that ngrok can assume and use to post to the
-	// configured target.
-	ARN string `json:"arn,omitempty"`
-}
-
-type AWSCredentials struct {
-	// The ID portion of an AWS access key.
-	AWSAccessKeyID string `json:"aws_access_key_id,omitempty"`
-	// The secret portion of an AWS access key.
-	AWSSecretAccessKey *string `json:"aws_secret_access_key,omitempty"`
-}
-
 type EndpointConfiguration struct {
 	// unique identifier of this endpoint configuration
 	ID string `json:"id,omitempty"`
@@ -727,6 +786,8 @@ type EndpointConfiguration struct {
 	SAML *EndpointSAML `json:"saml,omitempty"`
 	// oidc module configuration or <code>null</code>
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// backend module configuration or <code>null</code>
+	Backend *EndpointBackend `json:"backend,omitempty"`
 }
 
 type EndpointConfigurationList struct {
@@ -773,6 +834,8 @@ type EndpointConfigurationUpdate struct {
 	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
 	// oidc module configuration or <code>null</code>
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// backend module configuration or <code>null</code>
+	Backend *EndpointBackendMutate `json:"backend,omitempty"`
 }
 
 type EndpointConfigurationCreate struct {
@@ -811,6 +874,8 @@ type EndpointConfigurationCreate struct {
 	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
 	// oidc module configuration or <code>null</code>
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// backend module configuration or <code>null</code>
+	Backend *EndpointBackendMutate `json:"backend,omitempty"`
 }
 
 type EndpointWebhookValidation struct {
@@ -889,18 +954,18 @@ type EndpointLogging struct {
 	// <code>true</code> if the module will be applied to traffic, <code>false</code>
 	// to disable. default <code>true</code> if unspecified
 	Enabled *bool `json:"enabled,omitempty"`
-	// list of all LogConfigs that will be used to configure and export this endpoint's
-	// logs
-	LogConfigs []Ref `json:"log_configs,omitempty"`
+	// list of all EventStreams that will be used to configure and export this
+	// endpoint's logs
+	EventStreams []Ref `json:"event_streams,omitempty"`
 }
 
 type EndpointLoggingMutate struct {
 	// <code>true</code> if the module will be applied to traffic, <code>false</code>
 	// to disable. default <code>true</code> if unspecified
 	Enabled *bool `json:"enabled,omitempty"`
-	// list of all LogConfigs that will be used to configure and export this endpoint's
-	// logs
-	LogConfigIDs []string `json:"log_config_ids,omitempty"`
+	// list of all EventStreams that will be used to configure and export this
+	// endpoint's logs
+	EventStreamIDs []string `json:"event_stream_ids,omitempty"`
 }
 
 type EndpointRequestHeaders struct {
@@ -1232,6 +1297,22 @@ type EndpointOIDC struct {
 	Scopes []string `json:"scopes,omitempty"`
 }
 
+type EndpointBackend struct {
+	// <code>true</code> if the module will be applied to traffic, <code>false</code>
+	// to disable. default <code>true</code> if unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+	// backend to be used to back this endpoint
+	Backend Ref `json:"backend,omitempty"`
+}
+
+type EndpointBackendMutate struct {
+	// <code>true</code> if the module will be applied to traffic, <code>false</code>
+	// to disable. default <code>true</code> if unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+	// backend to be used to back this endpoint
+	BackendID string `json:"backend_id,omitempty"`
+}
+
 type EndpointLoggingReplace struct {
 	ID     string                `json:"id,omitempty"`
 	Module EndpointLoggingMutate `json:"module,omitempty"`
@@ -1295,6 +1376,11 @@ type EndpointSAMLReplace struct {
 type EndpointOIDCReplace struct {
 	ID     string       `json:"id,omitempty"`
 	Module EndpointOIDC `json:"module,omitempty"`
+}
+
+type EndpointBackendReplace struct {
+	ID     string                `json:"id,omitempty"`
+	Module EndpointBackendMutate `json:"module,omitempty"`
 }
 
 type ReservedAddrCreate struct {

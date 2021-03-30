@@ -131,7 +131,6 @@ func resourceCredentialsGetDecode(d *schema.ResourceData, res *restapi.Credentia
 		d.Set("token", res.Token)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

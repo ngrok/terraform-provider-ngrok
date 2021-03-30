@@ -3,6 +3,7 @@
 package ngrok
 
 import (
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
@@ -31,7 +32,6 @@ func expandEmpty(in interface{}) *restapi.Empty {
 	if in == nil {
 		return nil
 	}
-
 	var obj restapi.Empty
 	return &obj
 }
@@ -70,12 +70,13 @@ func expandItem(in interface{}) *restapi.Item {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Item
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -97,8 +98,8 @@ func flattenPage(obj *restapi.Page) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["before_id"] = *obj.BeforeID
-	m["limit"] = *obj.Limit
+	m["before_id"] = obj.BeforeID
+	m["limit"] = obj.Limit
 
 	return []interface{}{m}
 }
@@ -118,12 +119,13 @@ func expandPage(in interface{}) *restapi.Page {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Page
 	if v, ok := m["before_id"]; ok {
 		obj.BeforeID = expandString(v)
@@ -171,12 +173,13 @@ func expandError(in interface{}) *restapi.Error {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Error
 	if v, ok := m["error_code"]; ok {
 		obj.ErrorCode = *expandString(v)
@@ -228,12 +231,13 @@ func expandRef(in interface{}) *restapi.Ref {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Ref
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -284,12 +288,13 @@ func expandAbuseReport(in interface{}) *restapi.AbuseReport {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.AbuseReport
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -350,12 +355,13 @@ func expandAbuseReportHostname(in interface{}) *restapi.AbuseReportHostname {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.AbuseReportHostname
 	if v, ok := m["hostname"]; ok {
 		obj.Hostname = *expandString(v)
@@ -401,12 +407,13 @@ func expandAbuseReportCreate(in interface{}) *restapi.AbuseReportCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.AbuseReportCreate
 	if v, ok := m["urls"]; ok {
 		obj.URLs = *expandStringSlice(v)
@@ -452,12 +459,13 @@ func expandAPIKeyCreate(in interface{}) *restapi.APIKeyCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.APIKeyCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -483,8 +491,8 @@ func flattenAPIKeyUpdate(obj *restapi.APIKeyUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -504,12 +512,13 @@ func expandAPIKeyUpdate(in interface{}) *restapi.APIKeyUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.APIKeyUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -542,7 +551,7 @@ func flattenAPIKey(obj *restapi.APIKey) interface{} {
 	m["description"] = obj.Description
 	m["metadata"] = obj.Metadata
 	m["created_at"] = obj.CreatedAt
-	m["token"] = *obj.Token
+	m["token"] = obj.Token
 
 	return []interface{}{m}
 }
@@ -562,12 +571,13 @@ func expandAPIKey(in interface{}) *restapi.APIKey {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.APIKey
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -606,7 +616,7 @@ func flattenAPIKeyList(obj *restapi.APIKeyList) interface{} {
 	m := make(map[string]interface{})
 	m["keys"] = flattenAPIKeySlice(&obj.Keys)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -626,12 +636,13 @@ func expandAPIKeyList(in interface{}) *restapi.APIKeyList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.APIKeyList
 	if v, ok := m["keys"]; ok {
 		obj.Keys = *expandAPIKeySlice(v)
@@ -649,6 +660,302 @@ func expandAPIKeyListSlice(in interface{}) *[]restapi.APIKeyList {
 	var out []restapi.APIKeyList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandAPIKeyList(v))
+	}
+	return &out
+}
+
+func flattenStaticBackend(obj *restapi.StaticBackend) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["created_at"] = obj.CreatedAt
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["address"] = obj.Address
+	m["tls"] = flattenStaticBackendTLS(&obj.TLS)
+
+	return []interface{}{m}
+}
+
+func flattenStaticBackendSlice(objs *[]restapi.StaticBackend) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenStaticBackend(&v))
+	}
+	return sl
+}
+
+func expandStaticBackend(in interface{}) *restapi.StaticBackend {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.StaticBackend
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["address"]; ok {
+		obj.Address = *expandString(v)
+	}
+	if v, ok := m["tls"]; ok {
+		obj.TLS = *expandStaticBackendTLS(v)
+	}
+	return &obj
+}
+
+func expandStaticBackendSlice(in interface{}) *[]restapi.StaticBackend {
+	var out []restapi.StaticBackend
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandStaticBackend(v))
+	}
+	return &out
+}
+
+func flattenStaticBackendTLS(obj *restapi.StaticBackendTLS) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+
+	return []interface{}{m}
+}
+
+func flattenStaticBackendTLSSlice(objs *[]restapi.StaticBackendTLS) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenStaticBackendTLS(&v))
+	}
+	return sl
+}
+
+func expandStaticBackendTLS(in interface{}) *restapi.StaticBackendTLS {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.StaticBackendTLS
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = *expandBool(v)
+	}
+	return &obj
+}
+
+func expandStaticBackendTLSSlice(in interface{}) *[]restapi.StaticBackendTLS {
+	var out []restapi.StaticBackendTLS
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandStaticBackendTLS(v))
+	}
+	return &out
+}
+
+func flattenStaticBackendCreate(obj *restapi.StaticBackendCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["address"] = obj.Address
+	m["tls"] = flattenStaticBackendTLS(&obj.TLS)
+
+	return []interface{}{m}
+}
+
+func flattenStaticBackendCreateSlice(objs *[]restapi.StaticBackendCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenStaticBackendCreate(&v))
+	}
+	return sl
+}
+
+func expandStaticBackendCreate(in interface{}) *restapi.StaticBackendCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.StaticBackendCreate
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["address"]; ok {
+		obj.Address = *expandString(v)
+	}
+	if v, ok := m["tls"]; ok {
+		obj.TLS = *expandStaticBackendTLS(v)
+	}
+	return &obj
+}
+
+func expandStaticBackendCreateSlice(in interface{}) *[]restapi.StaticBackendCreate {
+	var out []restapi.StaticBackendCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandStaticBackendCreate(v))
+	}
+	return &out
+}
+
+func flattenStaticBackendUpdate(obj *restapi.StaticBackendUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["address"] = obj.Address
+	m["tls"] = flattenStaticBackendTLS(&obj.TLS)
+
+	return []interface{}{m}
+}
+
+func flattenStaticBackendUpdateSlice(objs *[]restapi.StaticBackendUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenStaticBackendUpdate(&v))
+	}
+	return sl
+}
+
+func expandStaticBackendUpdate(in interface{}) *restapi.StaticBackendUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.StaticBackendUpdate
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["address"]; ok {
+		obj.Address = *expandString(v)
+	}
+	if v, ok := m["tls"]; ok {
+		obj.TLS = *expandStaticBackendTLS(v)
+	}
+	return &obj
+}
+
+func expandStaticBackendUpdateSlice(in interface{}) *[]restapi.StaticBackendUpdate {
+	var out []restapi.StaticBackendUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandStaticBackendUpdate(v))
+	}
+	return &out
+}
+
+func flattenStaticBackendList(obj *restapi.StaticBackendList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["backends"] = flattenStaticBackendSlice(&obj.Backends)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenStaticBackendListSlice(objs *[]restapi.StaticBackendList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenStaticBackendList(&v))
+	}
+	return sl
+}
+
+func expandStaticBackendList(in interface{}) *restapi.StaticBackendList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.StaticBackendList
+	if v, ok := m["backends"]; ok {
+		obj.Backends = *expandStaticBackendSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandStaticBackendListSlice(in interface{}) *[]restapi.StaticBackendList {
+	var out []restapi.StaticBackendList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandStaticBackendList(v))
 	}
 	return &out
 }
@@ -681,12 +988,13 @@ func expandCertificateAuthorityCreate(in interface{}) *restapi.CertificateAuthor
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CertificateAuthorityCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -715,8 +1023,8 @@ func flattenCertificateAuthorityUpdate(obj *restapi.CertificateAuthorityUpdate) 
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -736,12 +1044,13 @@ func expandCertificateAuthorityUpdate(in interface{}) *restapi.CertificateAuthor
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CertificateAuthorityUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -799,12 +1108,13 @@ func expandCertificateAuthority(in interface{}) *restapi.CertificateAuthority {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CertificateAuthority
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -858,7 +1168,7 @@ func flattenCertificateAuthorityList(obj *restapi.CertificateAuthorityList) inte
 	m := make(map[string]interface{})
 	m["certificate_authorities"] = flattenCertificateAuthoritySlice(&obj.CertificateAuthorities)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -878,12 +1188,13 @@ func expandCertificateAuthorityList(in interface{}) *restapi.CertificateAuthorit
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CertificateAuthorityList
 	if v, ok := m["certificate_authorities"]; ok {
 		obj.CertificateAuthorities = *expandCertificateAuthoritySlice(v)
@@ -933,12 +1244,13 @@ func expandCredentialCreate(in interface{}) *restapi.CredentialCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CredentialCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -967,9 +1279,9 @@ func flattenCredentialUpdate(obj *restapi.CredentialUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["acl"] = *obj.ACL
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["acl"] = obj.ACL
 
 	return []interface{}{m}
 }
@@ -989,12 +1301,13 @@ func expandCredentialUpdate(in interface{}) *restapi.CredentialUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CredentialUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1030,7 +1343,7 @@ func flattenCredential(obj *restapi.Credential) interface{} {
 	m["created_at"] = obj.CreatedAt
 	m["description"] = obj.Description
 	m["metadata"] = obj.Metadata
-	m["token"] = *obj.Token
+	m["token"] = obj.Token
 	m["acl"] = obj.ACL
 
 	return []interface{}{m}
@@ -1051,12 +1364,13 @@ func expandCredential(in interface{}) *restapi.Credential {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Credential
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1098,7 +1412,7 @@ func flattenCredentialList(obj *restapi.CredentialList) interface{} {
 	m := make(map[string]interface{})
 	m["credentials"] = flattenCredentialSlice(&obj.Credentials)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -1118,12 +1432,13 @@ func expandCredentialList(in interface{}) *restapi.CredentialList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.CredentialList
 	if v, ok := m["credentials"]; ok {
 		obj.Credentials = *expandCredentialSlice(v)
@@ -1141,6 +1456,1074 @@ func expandCredentialListSlice(in interface{}) *[]restapi.CredentialList {
 	var out []restapi.CredentialList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandCredentialList(v))
+	}
+	return &out
+}
+
+func flattenEventStreamCreate(obj *restapi.EventStreamCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
+	m["fields"] = obj.Fields
+	m["event_type"] = obj.EventType
+	m["destination_ids"] = obj.DestinationIDs
+	m["sampling_rate"] = obj.SamplingRate
+
+	return []interface{}{m}
+}
+
+func flattenEventStreamCreateSlice(objs *[]restapi.EventStreamCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventStreamCreate(&v))
+	}
+	return sl
+}
+
+func expandEventStreamCreate(in interface{}) *restapi.EventStreamCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventStreamCreate
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["fields"]; ok {
+		obj.Fields = *expandStringSlice(v)
+	}
+	if v, ok := m["event_type"]; ok {
+		obj.EventType = *expandString(v)
+	}
+	if v, ok := m["destination_ids"]; ok {
+		obj.DestinationIDs = *expandStringSlice(v)
+	}
+	if v, ok := m["sampling_rate"]; ok {
+		obj.SamplingRate = *expandFloat64(v)
+	}
+	return &obj
+}
+
+func expandEventStreamCreateSlice(in interface{}) *[]restapi.EventStreamCreate {
+	var out []restapi.EventStreamCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventStreamCreate(v))
+	}
+	return &out
+}
+
+func flattenEventStreamUpdate(obj *restapi.EventStreamUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
+	m["fields"] = obj.Fields
+	m["destination_ids"] = obj.DestinationIDs
+	m["sampling_rate"] = obj.SamplingRate
+
+	return []interface{}{m}
+}
+
+func flattenEventStreamUpdateSlice(objs *[]restapi.EventStreamUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventStreamUpdate(&v))
+	}
+	return sl
+}
+
+func expandEventStreamUpdate(in interface{}) *restapi.EventStreamUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventStreamUpdate
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["fields"]; ok {
+		obj.Fields = expandStringSlice(v)
+	}
+	if v, ok := m["destination_ids"]; ok {
+		obj.DestinationIDs = expandStringSlice(v)
+	}
+	if v, ok := m["sampling_rate"]; ok {
+		obj.SamplingRate = expandFloat64(v)
+	}
+	return &obj
+}
+
+func expandEventStreamUpdateSlice(in interface{}) *[]restapi.EventStreamUpdate {
+	var out []restapi.EventStreamUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventStreamUpdate(v))
+	}
+	return &out
+}
+
+func flattenEventStreamList(obj *restapi.EventStreamList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["event_streams"] = flattenEventStreamSlice(&obj.EventStreams)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenEventStreamListSlice(objs *[]restapi.EventStreamList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventStreamList(&v))
+	}
+	return sl
+}
+
+func expandEventStreamList(in interface{}) *restapi.EventStreamList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventStreamList
+	if v, ok := m["event_streams"]; ok {
+		obj.EventStreams = *expandEventStreamSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandEventStreamListSlice(in interface{}) *[]restapi.EventStreamList {
+	var out []restapi.EventStreamList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventStreamList(v))
+	}
+	return &out
+}
+
+func flattenEventStream(obj *restapi.EventStream) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["uri"] = obj.URI
+	m["created_at"] = obj.CreatedAt
+	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
+	m["fields"] = obj.Fields
+	m["event_type"] = obj.EventType
+	m["destination_ids"] = obj.DestinationIDs
+	m["sampling_rate"] = obj.SamplingRate
+
+	return []interface{}{m}
+}
+
+func flattenEventStreamSlice(objs *[]restapi.EventStream) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventStream(&v))
+	}
+	return sl
+}
+
+func expandEventStream(in interface{}) *restapi.EventStream {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventStream
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["fields"]; ok {
+		obj.Fields = *expandStringSlice(v)
+	}
+	if v, ok := m["event_type"]; ok {
+		obj.EventType = *expandString(v)
+	}
+	if v, ok := m["destination_ids"]; ok {
+		obj.DestinationIDs = *expandStringSlice(v)
+	}
+	if v, ok := m["sampling_rate"]; ok {
+		obj.SamplingRate = *expandFloat64(v)
+	}
+	return &obj
+}
+
+func expandEventStreamSlice(in interface{}) *[]restapi.EventStream {
+	var out []restapi.EventStream
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventStream(v))
+	}
+	return &out
+}
+
+func flattenEventDestinationCreate(obj *restapi.EventDestinationCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
+	m["format"] = obj.Format
+	m["target"] = flattenEventTarget(&obj.Target)
+	m["verify_with_test_event"] = obj.VerifyWithTestEvent
+
+	return []interface{}{m}
+}
+
+func flattenEventDestinationCreateSlice(objs *[]restapi.EventDestinationCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventDestinationCreate(&v))
+	}
+	return sl
+}
+
+func expandEventDestinationCreate(in interface{}) *restapi.EventDestinationCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventDestinationCreate
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["format"]; ok {
+		obj.Format = *expandString(v)
+	}
+	if v, ok := m["target"]; ok {
+		obj.Target = *expandEventTarget(v)
+	}
+	if v, ok := m["verify_with_test_event"]; ok {
+		obj.VerifyWithTestEvent = expandBool(v)
+	}
+	return &obj
+}
+
+func expandEventDestinationCreateSlice(in interface{}) *[]restapi.EventDestinationCreate {
+	var out []restapi.EventDestinationCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventDestinationCreate(v))
+	}
+	return &out
+}
+
+func flattenEventDestinationUpdate(obj *restapi.EventDestinationUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
+	m["format"] = obj.Format
+	m["target"] = flattenEventTarget(obj.Target)
+	m["verify_with_test_event"] = obj.VerifyWithTestEvent
+
+	return []interface{}{m}
+}
+
+func flattenEventDestinationUpdateSlice(objs *[]restapi.EventDestinationUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventDestinationUpdate(&v))
+	}
+	return sl
+}
+
+func expandEventDestinationUpdate(in interface{}) *restapi.EventDestinationUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventDestinationUpdate
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["format"]; ok {
+		obj.Format = expandString(v)
+	}
+	if v, ok := m["target"]; ok {
+		obj.Target = expandEventTarget(v)
+	}
+	if v, ok := m["verify_with_test_event"]; ok {
+		obj.VerifyWithTestEvent = expandBool(v)
+	}
+	return &obj
+}
+
+func expandEventDestinationUpdateSlice(in interface{}) *[]restapi.EventDestinationUpdate {
+	var out []restapi.EventDestinationUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventDestinationUpdate(v))
+	}
+	return &out
+}
+
+func flattenEventDestination(obj *restapi.EventDestination) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["metadata"] = obj.Metadata
+	m["created_at"] = obj.CreatedAt
+	m["description"] = obj.Description
+	m["format"] = obj.Format
+	m["target"] = flattenEventTarget(&obj.Target)
+	m["uri"] = obj.URI
+
+	return []interface{}{m}
+}
+
+func flattenEventDestinationSlice(objs *[]restapi.EventDestination) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventDestination(&v))
+	}
+	return sl
+}
+
+func expandEventDestination(in interface{}) *restapi.EventDestination {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventDestination
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["format"]; ok {
+		obj.Format = *expandString(v)
+	}
+	if v, ok := m["target"]; ok {
+		obj.Target = *expandEventTarget(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventDestinationSlice(in interface{}) *[]restapi.EventDestination {
+	var out []restapi.EventDestination
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventDestination(v))
+	}
+	return &out
+}
+
+func flattenEventDestinationList(obj *restapi.EventDestinationList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["event_destinations"] = flattenEventDestinationSlice(&obj.EventDestinations)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenEventDestinationListSlice(objs *[]restapi.EventDestinationList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventDestinationList(&v))
+	}
+	return sl
+}
+
+func expandEventDestinationList(in interface{}) *restapi.EventDestinationList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventDestinationList
+	if v, ok := m["event_destinations"]; ok {
+		obj.EventDestinations = *expandEventDestinationSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandEventDestinationListSlice(in interface{}) *[]restapi.EventDestinationList {
+	var out []restapi.EventDestinationList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventDestinationList(v))
+	}
+	return &out
+}
+
+func flattenEventTarget(obj *restapi.EventTarget) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["firehose"] = flattenEventTargetFirehose(obj.Firehose)
+	m["kinesis"] = flattenEventTargetKinesis(obj.Kinesis)
+	m["cloudwatch_logs"] = flattenEventTargetCloudwatchLogs(obj.CloudwatchLogs)
+	m["debug"] = flattenEventTargetDebug(obj.Debug)
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetSlice(objs *[]restapi.EventTarget) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTarget(&v))
+	}
+	return sl
+}
+
+func expandEventTarget(in interface{}) *restapi.EventTarget {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTarget
+	if v, ok := m["firehose"]; ok {
+		obj.Firehose = expandEventTargetFirehose(v)
+	}
+	if v, ok := m["kinesis"]; ok {
+		obj.Kinesis = expandEventTargetKinesis(v)
+	}
+	if v, ok := m["cloudwatch_logs"]; ok {
+		obj.CloudwatchLogs = expandEventTargetCloudwatchLogs(v)
+	}
+	if v, ok := m["debug"]; ok {
+		obj.Debug = expandEventTargetDebug(v)
+	}
+	return &obj
+}
+
+func expandEventTargetSlice(in interface{}) *[]restapi.EventTarget {
+	var out []restapi.EventTarget
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTarget(v))
+	}
+	return &out
+}
+
+func flattenEventTargetFirehose(obj *restapi.EventTargetFirehose) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["auth"] = flattenAWSAuth(&obj.Auth)
+	m["delivery_stream_arn"] = obj.DeliveryStreamARN
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetFirehoseSlice(objs *[]restapi.EventTargetFirehose) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetFirehose(&v))
+	}
+	return sl
+}
+
+func expandEventTargetFirehose(in interface{}) *restapi.EventTargetFirehose {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetFirehose
+	if v, ok := m["auth"]; ok {
+		obj.Auth = *expandAWSAuth(v)
+	}
+	if v, ok := m["delivery_stream_arn"]; ok {
+		obj.DeliveryStreamARN = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetFirehoseSlice(in interface{}) *[]restapi.EventTargetFirehose {
+	var out []restapi.EventTargetFirehose
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetFirehose(v))
+	}
+	return &out
+}
+
+func flattenEventTargetKinesis(obj *restapi.EventTargetKinesis) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["auth"] = flattenAWSAuth(&obj.Auth)
+	m["stream_arn"] = obj.StreamARN
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetKinesisSlice(objs *[]restapi.EventTargetKinesis) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetKinesis(&v))
+	}
+	return sl
+}
+
+func expandEventTargetKinesis(in interface{}) *restapi.EventTargetKinesis {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetKinesis
+	if v, ok := m["auth"]; ok {
+		obj.Auth = *expandAWSAuth(v)
+	}
+	if v, ok := m["stream_arn"]; ok {
+		obj.StreamARN = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetKinesisSlice(in interface{}) *[]restapi.EventTargetKinesis {
+	var out []restapi.EventTargetKinesis
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetKinesis(v))
+	}
+	return &out
+}
+
+func flattenEventTargetCloudwatchLogs(obj *restapi.EventTargetCloudwatchLogs) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["auth"] = flattenAWSAuth(&obj.Auth)
+	m["log_group_arn"] = obj.LogGroupARN
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetCloudwatchLogsSlice(objs *[]restapi.EventTargetCloudwatchLogs) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetCloudwatchLogs(&v))
+	}
+	return sl
+}
+
+func expandEventTargetCloudwatchLogs(in interface{}) *restapi.EventTargetCloudwatchLogs {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetCloudwatchLogs
+	if v, ok := m["auth"]; ok {
+		obj.Auth = *expandAWSAuth(v)
+	}
+	if v, ok := m["log_group_arn"]; ok {
+		obj.LogGroupARN = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetCloudwatchLogsSlice(in interface{}) *[]restapi.EventTargetCloudwatchLogs {
+	var out []restapi.EventTargetCloudwatchLogs
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetCloudwatchLogs(v))
+	}
+	return &out
+}
+
+func flattenEventTargetS3(obj *restapi.EventTargetS3) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["auth"] = flattenAWSAuth(&obj.Auth)
+	m["bucket_arn"] = obj.BucketARN
+	m["object_prefix"] = obj.ObjectPrefix
+	m["compression"] = obj.Compression
+	m["max_file_size"] = obj.MaxFileSize
+	m["max_file_age"] = obj.MaxFileAge
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetS3Slice(objs *[]restapi.EventTargetS3) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetS3(&v))
+	}
+	return sl
+}
+
+func expandEventTargetS3(in interface{}) *restapi.EventTargetS3 {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetS3
+	if v, ok := m["auth"]; ok {
+		obj.Auth = *expandAWSAuth(v)
+	}
+	if v, ok := m["bucket_arn"]; ok {
+		obj.BucketARN = *expandString(v)
+	}
+	if v, ok := m["object_prefix"]; ok {
+		obj.ObjectPrefix = *expandString(v)
+	}
+	if v, ok := m["compression"]; ok {
+		obj.Compression = *expandBool(v)
+	}
+	if v, ok := m["max_file_size"]; ok {
+		obj.MaxFileSize = *expandInt64(v)
+	}
+	if v, ok := m["max_file_age"]; ok {
+		obj.MaxFileAge = *expandInt64(v)
+	}
+	return &obj
+}
+
+func expandEventTargetS3Slice(in interface{}) *[]restapi.EventTargetS3 {
+	var out []restapi.EventTargetS3
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetS3(v))
+	}
+	return &out
+}
+
+func flattenEventTargetDebug(obj *restapi.EventTargetDebug) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["log"] = obj.Log
+	m["callback_url"] = obj.CallbackURL
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetDebugSlice(objs *[]restapi.EventTargetDebug) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetDebug(&v))
+	}
+	return sl
+}
+
+func expandEventTargetDebug(in interface{}) *restapi.EventTargetDebug {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetDebug
+	if v, ok := m["log"]; ok {
+		obj.Log = *expandBool(v)
+	}
+	if v, ok := m["callback_url"]; ok {
+		obj.CallbackURL = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetDebugSlice(in interface{}) *[]restapi.EventTargetDebug {
+	var out []restapi.EventTargetDebug
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetDebug(v))
+	}
+	return &out
+}
+
+func flattenAWSAuth(obj *restapi.AWSAuth) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["role"] = flattenAWSRole(obj.Role)
+	m["creds"] = flattenAWSCredentials(obj.Creds)
+
+	return []interface{}{m}
+}
+
+func flattenAWSAuthSlice(objs *[]restapi.AWSAuth) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAWSAuth(&v))
+	}
+	return sl
+}
+
+func expandAWSAuth(in interface{}) *restapi.AWSAuth {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AWSAuth
+	if v, ok := m["role"]; ok {
+		obj.Role = expandAWSRole(v)
+	}
+	if v, ok := m["creds"]; ok {
+		obj.Creds = expandAWSCredentials(v)
+	}
+	return &obj
+}
+
+func expandAWSAuthSlice(in interface{}) *[]restapi.AWSAuth {
+	var out []restapi.AWSAuth
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAWSAuth(v))
+	}
+	return &out
+}
+
+func flattenAWSRole(obj *restapi.AWSRole) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["role_arn"] = obj.RoleARN
+
+	return []interface{}{m}
+}
+
+func flattenAWSRoleSlice(objs *[]restapi.AWSRole) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAWSRole(&v))
+	}
+	return sl
+}
+
+func expandAWSRole(in interface{}) *restapi.AWSRole {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AWSRole
+	if v, ok := m["role_arn"]; ok {
+		obj.RoleARN = *expandString(v)
+	}
+	return &obj
+}
+
+func expandAWSRoleSlice(in interface{}) *[]restapi.AWSRole {
+	var out []restapi.AWSRole
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAWSRole(v))
+	}
+	return &out
+}
+
+func flattenAWSCredentials(obj *restapi.AWSCredentials) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["aws_access_key_id"] = obj.AWSAccessKeyID
+	m["aws_secret_access_key"] = obj.AWSSecretAccessKey
+
+	return []interface{}{m}
+}
+
+func flattenAWSCredentialsSlice(objs *[]restapi.AWSCredentials) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAWSCredentials(&v))
+	}
+	return sl
+}
+
+func expandAWSCredentials(in interface{}) *restapi.AWSCredentials {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AWSCredentials
+	if v, ok := m["aws_access_key_id"]; ok {
+		obj.AWSAccessKeyID = *expandString(v)
+	}
+	if v, ok := m["aws_secret_access_key"]; ok {
+		obj.AWSSecretAccessKey = expandString(v)
+	}
+	return &obj
+}
+
+func expandAWSCredentialsSlice(in interface{}) *[]restapi.AWSCredentials {
+	var out []restapi.AWSCredentials
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAWSCredentials(v))
+	}
+	return &out
+}
+
+func flattenSentEvent(obj *restapi.SentEvent) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["event_id"] = obj.EventID
+
+	return []interface{}{m}
+}
+
+func flattenSentEventSlice(objs *[]restapi.SentEvent) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenSentEvent(&v))
+	}
+	return sl
+}
+
+func expandSentEvent(in interface{}) *restapi.SentEvent {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.SentEvent
+	if v, ok := m["event_id"]; ok {
+		obj.EventID = *expandString(v)
+	}
+	return &obj
+}
+
+func expandSentEventSlice(in interface{}) *[]restapi.SentEvent {
+	var out []restapi.SentEvent
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandSentEvent(v))
 	}
 	return &out
 }
@@ -1173,12 +2556,13 @@ func expandIPPolicyCreate(in interface{}) *restapi.IPPolicyCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -1207,8 +2591,8 @@ func flattenIPPolicyUpdate(obj *restapi.IPPolicyUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -1228,12 +2612,13 @@ func expandIPPolicyUpdate(in interface{}) *restapi.IPPolicyUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1286,12 +2671,13 @@ func expandIPPolicy(in interface{}) *restapi.IPPolicy {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicy
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1330,7 +2716,7 @@ func flattenIPPolicyList(obj *restapi.IPPolicyList) interface{} {
 	m := make(map[string]interface{})
 	m["ip_policies"] = flattenIPPolicySlice(&obj.IPPolicies)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -1350,12 +2736,13 @@ func expandIPPolicyList(in interface{}) *restapi.IPPolicyList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyList
 	if v, ok := m["ip_policies"]; ok {
 		obj.IPPolicies = *expandIPPolicySlice(v)
@@ -1406,12 +2793,13 @@ func expandIPPolicyRuleCreate(in interface{}) *restapi.IPPolicyRuleCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyRuleCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -1443,9 +2831,9 @@ func flattenIPPolicyRuleUpdate(obj *restapi.IPPolicyRuleUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["cidr"] = *obj.CIDR
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["cidr"] = obj.CIDR
 
 	return []interface{}{m}
 }
@@ -1465,12 +2853,13 @@ func expandIPPolicyRuleUpdate(in interface{}) *restapi.IPPolicyRuleUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyRuleUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1527,12 +2916,13 @@ func expandIPPolicyRule(in interface{}) *restapi.IPPolicyRule {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyRule
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1574,7 +2964,7 @@ func flattenIPPolicyRuleList(obj *restapi.IPPolicyRuleList) interface{} {
 	m := make(map[string]interface{})
 	m["ip_policy_rules"] = flattenIPPolicyRuleSlice(&obj.IPPolicyRules)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -1594,12 +2984,13 @@ func expandIPPolicyRuleList(in interface{}) *restapi.IPPolicyRuleList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPPolicyRuleList
 	if v, ok := m["ip_policy_rules"]; ok {
 		obj.IPPolicyRules = *expandIPPolicyRuleSlice(v)
@@ -1651,12 +3042,13 @@ func expandIPRestrictionCreate(in interface{}) *restapi.IPRestrictionCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPRestrictionCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -1691,9 +3083,9 @@ func flattenIPRestrictionUpdate(obj *restapi.IPRestrictionUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["enforced"] = *obj.Enforced
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["enforced"] = obj.Enforced
 	m["ip_policy_ids"] = obj.IPPolicyIDs
 
 	return []interface{}{m}
@@ -1714,12 +3106,13 @@ func expandIPRestrictionUpdate(in interface{}) *restapi.IPRestrictionUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPRestrictionUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1780,12 +3173,13 @@ func expandIPRestriction(in interface{}) *restapi.IPRestriction {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPRestriction
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -1830,7 +3224,7 @@ func flattenIPRestrictionList(obj *restapi.IPRestrictionList) interface{} {
 	m := make(map[string]interface{})
 	m["ip_restrictions"] = flattenIPRestrictionSlice(&obj.IPRestrictions)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -1850,12 +3244,13 @@ func expandIPRestrictionList(in interface{}) *restapi.IPRestrictionList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPRestrictionList
 	if v, ok := m["ip_restrictions"]; ok {
 		obj.IPRestrictions = *expandIPRestrictionSlice(v)
@@ -1905,12 +3300,13 @@ func expandIPWhitelistEntryCreate(in interface{}) *restapi.IPWhitelistEntryCreat
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPWhitelistEntryCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -1939,8 +3335,8 @@ func flattenIPWhitelistEntryUpdate(obj *restapi.IPWhitelistEntryUpdate) interfac
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -1960,12 +3356,13 @@ func expandIPWhitelistEntryUpdate(in interface{}) *restapi.IPWhitelistEntryUpdat
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPWhitelistEntryUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -2018,12 +3415,13 @@ func expandIPWhitelistEntry(in interface{}) *restapi.IPWhitelistEntry {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPWhitelistEntry
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -2062,7 +3460,7 @@ func flattenIPWhitelistEntryList(obj *restapi.IPWhitelistEntryList) interface{} 
 	m := make(map[string]interface{})
 	m["whitelist"] = flattenIPWhitelistEntrySlice(&obj.Whitelist)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -2082,12 +3480,13 @@ func expandIPWhitelistEntryList(in interface{}) *restapi.IPWhitelistEntryList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.IPWhitelistEntryList
 	if v, ok := m["whitelist"]; ok {
 		obj.Whitelist = *expandIPWhitelistEntrySlice(v)
@@ -2105,1001 +3504,6 @@ func expandIPWhitelistEntryListSlice(in interface{}) *[]restapi.IPWhitelistEntry
 	var out []restapi.IPWhitelistEntryList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandIPWhitelistEntryList(v))
-	}
-	return &out
-}
-
-func flattenLogConfigCreate(obj *restapi.LogConfigCreate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["fields"] = obj.Fields
-	m["event_type"] = obj.EventType
-	m["destination_ids"] = obj.DestinationIDs
-	m["sampling_rate"] = obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenLogConfigCreateSlice(objs *[]restapi.LogConfigCreate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogConfigCreate(&v))
-	}
-	return sl
-}
-
-func expandLogConfigCreate(in interface{}) *restapi.LogConfigCreate {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogConfigCreate
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = *expandStringSlice(v)
-	}
-	if v, ok := m["event_type"]; ok {
-		obj.EventType = *expandString(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = *expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = *expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandLogConfigCreateSlice(in interface{}) *[]restapi.LogConfigCreate {
-	var out []restapi.LogConfigCreate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogConfigCreate(v))
-	}
-	return &out
-}
-
-func flattenLogConfigUpdate(obj *restapi.LogConfigUpdate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["ngrok_id"] = obj.ID
-	m["metadata"] = *obj.Metadata
-	m["description"] = *obj.Description
-	m["fields"] = *obj.Fields
-	m["destination_ids"] = *obj.DestinationIDs
-	m["sampling_rate"] = *obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenLogConfigUpdateSlice(objs *[]restapi.LogConfigUpdate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogConfigUpdate(&v))
-	}
-	return sl
-}
-
-func expandLogConfigUpdate(in interface{}) *restapi.LogConfigUpdate {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogConfigUpdate
-	if v, ok := m["ngrok_id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = expandStringSlice(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandLogConfigUpdateSlice(in interface{}) *[]restapi.LogConfigUpdate {
-	var out []restapi.LogConfigUpdate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogConfigUpdate(v))
-	}
-	return &out
-}
-
-func flattenLogConfigList(obj *restapi.LogConfigList) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["log_configs"] = flattenLogConfigSlice(&obj.LogConfigs)
-	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
-
-	return []interface{}{m}
-}
-
-func flattenLogConfigListSlice(objs *[]restapi.LogConfigList) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogConfigList(&v))
-	}
-	return sl
-}
-
-func expandLogConfigList(in interface{}) *restapi.LogConfigList {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogConfigList
-	if v, ok := m["log_configs"]; ok {
-		obj.LogConfigs = *expandLogConfigSlice(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	if v, ok := m["next_page_uri"]; ok {
-		obj.NextPageURI = expandString(v)
-	}
-	return &obj
-}
-
-func expandLogConfigListSlice(in interface{}) *[]restapi.LogConfigList {
-	var out []restapi.LogConfigList
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogConfigList(v))
-	}
-	return &out
-}
-
-func flattenLogConfig(obj *restapi.LogConfig) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["ngrok_id"] = obj.ID
-	m["uri"] = obj.URI
-	m["created_at"] = obj.CreatedAt
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["fields"] = obj.Fields
-	m["event_type"] = obj.EventType
-	m["destination_ids"] = obj.DestinationIDs
-	m["sampling_rate"] = obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenLogConfigSlice(objs *[]restapi.LogConfig) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogConfig(&v))
-	}
-	return sl
-}
-
-func expandLogConfig(in interface{}) *restapi.LogConfig {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogConfig
-	if v, ok := m["ngrok_id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	if v, ok := m["created_at"]; ok {
-		obj.CreatedAt = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = *expandStringSlice(v)
-	}
-	if v, ok := m["event_type"]; ok {
-		obj.EventType = *expandString(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = *expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = *expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandLogConfigSlice(in interface{}) *[]restapi.LogConfig {
-	var out []restapi.LogConfig
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogConfig(v))
-	}
-	return &out
-}
-
-func flattenLogDestinationCreate(obj *restapi.LogDestinationCreate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["format"] = obj.Format
-	m["target"] = flattenLogDestinationTarget(&obj.Target)
-
-	return []interface{}{m}
-}
-
-func flattenLogDestinationCreateSlice(objs *[]restapi.LogDestinationCreate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogDestinationCreate(&v))
-	}
-	return sl
-}
-
-func expandLogDestinationCreate(in interface{}) *restapi.LogDestinationCreate {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogDestinationCreate
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["format"]; ok {
-		obj.Format = *expandString(v)
-	}
-	if v, ok := m["target"]; ok {
-		obj.Target = *expandLogDestinationTarget(v)
-	}
-	return &obj
-}
-
-func expandLogDestinationCreateSlice(in interface{}) *[]restapi.LogDestinationCreate {
-	var out []restapi.LogDestinationCreate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogDestinationCreate(v))
-	}
-	return &out
-}
-
-func flattenLogDestinationUpdate(obj *restapi.LogDestinationUpdate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["ngrok_id"] = obj.ID
-	m["metadata"] = *obj.Metadata
-	m["description"] = *obj.Description
-	m["format"] = *obj.Format
-	m["target"] = flattenLogDestinationTarget(obj.Target)
-
-	return []interface{}{m}
-}
-
-func flattenLogDestinationUpdateSlice(objs *[]restapi.LogDestinationUpdate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogDestinationUpdate(&v))
-	}
-	return sl
-}
-
-func expandLogDestinationUpdate(in interface{}) *restapi.LogDestinationUpdate {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogDestinationUpdate
-	if v, ok := m["ngrok_id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = expandString(v)
-	}
-	if v, ok := m["format"]; ok {
-		obj.Format = expandString(v)
-	}
-	if v, ok := m["target"]; ok {
-		obj.Target = expandLogDestinationTarget(v)
-	}
-	return &obj
-}
-
-func expandLogDestinationUpdateSlice(in interface{}) *[]restapi.LogDestinationUpdate {
-	var out []restapi.LogDestinationUpdate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogDestinationUpdate(v))
-	}
-	return &out
-}
-
-func flattenLogDestination(obj *restapi.LogDestination) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["ngrok_id"] = obj.ID
-	m["metadata"] = obj.Metadata
-	m["created_at"] = obj.CreatedAt
-	m["description"] = obj.Description
-	m["format"] = obj.Format
-	m["target"] = flattenLogDestinationTarget(&obj.Target)
-	m["uri"] = obj.URI
-
-	return []interface{}{m}
-}
-
-func flattenLogDestinationSlice(objs *[]restapi.LogDestination) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogDestination(&v))
-	}
-	return sl
-}
-
-func expandLogDestination(in interface{}) *restapi.LogDestination {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogDestination
-	if v, ok := m["ngrok_id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["created_at"]; ok {
-		obj.CreatedAt = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["format"]; ok {
-		obj.Format = *expandString(v)
-	}
-	if v, ok := m["target"]; ok {
-		obj.Target = *expandLogDestinationTarget(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	return &obj
-}
-
-func expandLogDestinationSlice(in interface{}) *[]restapi.LogDestination {
-	var out []restapi.LogDestination
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogDestination(v))
-	}
-	return &out
-}
-
-func flattenLogDestinationList(obj *restapi.LogDestinationList) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["log_destinations"] = flattenLogDestinationSlice(&obj.LogDestinations)
-	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
-
-	return []interface{}{m}
-}
-
-func flattenLogDestinationListSlice(objs *[]restapi.LogDestinationList) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogDestinationList(&v))
-	}
-	return sl
-}
-
-func expandLogDestinationList(in interface{}) *restapi.LogDestinationList {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogDestinationList
-	if v, ok := m["log_destinations"]; ok {
-		obj.LogDestinations = *expandLogDestinationSlice(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	if v, ok := m["next_page_uri"]; ok {
-		obj.NextPageURI = expandString(v)
-	}
-	return &obj
-}
-
-func expandLogDestinationListSlice(in interface{}) *[]restapi.LogDestinationList {
-	var out []restapi.LogDestinationList
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogDestinationList(v))
-	}
-	return &out
-}
-
-func flattenLogDestinationTarget(obj *restapi.LogDestinationTarget) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["firehose"] = flattenFirehose(obj.Firehose)
-	m["kinesis"] = flattenKinesis(obj.Kinesis)
-	m["cloudwatch"] = flattenCloudwatch(obj.Cloudwatch)
-	m["debug"] = flattenEventTargetDebug(obj.Debug)
-
-	return []interface{}{m}
-}
-
-func flattenLogDestinationTargetSlice(objs *[]restapi.LogDestinationTarget) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenLogDestinationTarget(&v))
-	}
-	return sl
-}
-
-func expandLogDestinationTarget(in interface{}) *restapi.LogDestinationTarget {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.LogDestinationTarget
-	if v, ok := m["firehose"]; ok {
-		obj.Firehose = expandFirehose(v)
-	}
-	if v, ok := m["kinesis"]; ok {
-		obj.Kinesis = expandKinesis(v)
-	}
-	if v, ok := m["cloudwatch"]; ok {
-		obj.Cloudwatch = expandCloudwatch(v)
-	}
-	if v, ok := m["debug"]; ok {
-		obj.Debug = expandEventTargetDebug(v)
-	}
-	return &obj
-}
-
-func expandLogDestinationTargetSlice(in interface{}) *[]restapi.LogDestinationTarget {
-	var out []restapi.LogDestinationTarget
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandLogDestinationTarget(v))
-	}
-	return &out
-}
-
-func flattenFirehose(obj *restapi.Firehose) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["auth"] = flattenAWSAuth(&obj.Auth)
-	m["delivery_stream_arn"] = obj.DeliveryStreamARN
-
-	return []interface{}{m}
-}
-
-func flattenFirehoseSlice(objs *[]restapi.Firehose) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenFirehose(&v))
-	}
-	return sl
-}
-
-func expandFirehose(in interface{}) *restapi.Firehose {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.Firehose
-	if v, ok := m["auth"]; ok {
-		obj.Auth = *expandAWSAuth(v)
-	}
-	if v, ok := m["delivery_stream_arn"]; ok {
-		obj.DeliveryStreamARN = *expandString(v)
-	}
-	return &obj
-}
-
-func expandFirehoseSlice(in interface{}) *[]restapi.Firehose {
-	var out []restapi.Firehose
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandFirehose(v))
-	}
-	return &out
-}
-
-func flattenKinesis(obj *restapi.Kinesis) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["auth"] = flattenAWSAuth(&obj.Auth)
-	m["stream_arn"] = obj.StreamARN
-
-	return []interface{}{m}
-}
-
-func flattenKinesisSlice(objs *[]restapi.Kinesis) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenKinesis(&v))
-	}
-	return sl
-}
-
-func expandKinesis(in interface{}) *restapi.Kinesis {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.Kinesis
-	if v, ok := m["auth"]; ok {
-		obj.Auth = *expandAWSAuth(v)
-	}
-	if v, ok := m["stream_arn"]; ok {
-		obj.StreamARN = *expandString(v)
-	}
-	return &obj
-}
-
-func expandKinesisSlice(in interface{}) *[]restapi.Kinesis {
-	var out []restapi.Kinesis
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandKinesis(v))
-	}
-	return &out
-}
-
-func flattenCloudwatch(obj *restapi.Cloudwatch) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["auth"] = flattenAWSAuth(&obj.Auth)
-	m["log_group_arn"] = obj.LogGroupARN
-
-	return []interface{}{m}
-}
-
-func flattenCloudwatchSlice(objs *[]restapi.Cloudwatch) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenCloudwatch(&v))
-	}
-	return sl
-}
-
-func expandCloudwatch(in interface{}) *restapi.Cloudwatch {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.Cloudwatch
-	if v, ok := m["auth"]; ok {
-		obj.Auth = *expandAWSAuth(v)
-	}
-	if v, ok := m["log_group_arn"]; ok {
-		obj.LogGroupARN = *expandString(v)
-	}
-	return &obj
-}
-
-func expandCloudwatchSlice(in interface{}) *[]restapi.Cloudwatch {
-	var out []restapi.Cloudwatch
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandCloudwatch(v))
-	}
-	return &out
-}
-
-func flattenS3(obj *restapi.S3) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["auth"] = flattenAWSAuth(&obj.Auth)
-	m["bucket_arn"] = obj.BucketARN
-	m["object_prefix"] = obj.ObjectPrefix
-	m["compression"] = obj.Compression
-	m["max_file_size"] = obj.MaxFileSize
-	m["max_file_age"] = obj.MaxFileAge
-
-	return []interface{}{m}
-}
-
-func flattenS3Slice(objs *[]restapi.S3) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenS3(&v))
-	}
-	return sl
-}
-
-func expandS3(in interface{}) *restapi.S3 {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.S3
-	if v, ok := m["auth"]; ok {
-		obj.Auth = *expandAWSAuth(v)
-	}
-	if v, ok := m["bucket_arn"]; ok {
-		obj.BucketARN = *expandString(v)
-	}
-	if v, ok := m["object_prefix"]; ok {
-		obj.ObjectPrefix = *expandString(v)
-	}
-	if v, ok := m["compression"]; ok {
-		obj.Compression = *expandBool(v)
-	}
-	if v, ok := m["max_file_size"]; ok {
-		obj.MaxFileSize = *expandInt64(v)
-	}
-	if v, ok := m["max_file_age"]; ok {
-		obj.MaxFileAge = *expandInt64(v)
-	}
-	return &obj
-}
-
-func expandS3Slice(in interface{}) *[]restapi.S3 {
-	var out []restapi.S3
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandS3(v))
-	}
-	return &out
-}
-
-func flattenEventTargetDebug(obj *restapi.EventTargetDebug) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["log"] = obj.Log
-	m["callback_url"] = obj.CallbackURL
-
-	return []interface{}{m}
-}
-
-func flattenEventTargetDebugSlice(objs *[]restapi.EventTargetDebug) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEventTargetDebug(&v))
-	}
-	return sl
-}
-
-func expandEventTargetDebug(in interface{}) *restapi.EventTargetDebug {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.EventTargetDebug
-	if v, ok := m["log"]; ok {
-		obj.Log = *expandBool(v)
-	}
-	if v, ok := m["callback_url"]; ok {
-		obj.CallbackURL = *expandString(v)
-	}
-	return &obj
-}
-
-func expandEventTargetDebugSlice(in interface{}) *[]restapi.EventTargetDebug {
-	var out []restapi.EventTargetDebug
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventTargetDebug(v))
-	}
-	return &out
-}
-
-func flattenAWSAuth(obj *restapi.AWSAuth) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["role"] = flattenAWSRole(obj.Role)
-	m["creds"] = flattenAWSCredentials(obj.Creds)
-
-	return []interface{}{m}
-}
-
-func flattenAWSAuthSlice(objs *[]restapi.AWSAuth) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenAWSAuth(&v))
-	}
-	return sl
-}
-
-func expandAWSAuth(in interface{}) *restapi.AWSAuth {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.AWSAuth
-	if v, ok := m["role"]; ok {
-		obj.Role = expandAWSRole(v)
-	}
-	if v, ok := m["creds"]; ok {
-		obj.Creds = expandAWSCredentials(v)
-	}
-	return &obj
-}
-
-func expandAWSAuthSlice(in interface{}) *[]restapi.AWSAuth {
-	var out []restapi.AWSAuth
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandAWSAuth(v))
-	}
-	return &out
-}
-
-func flattenAWSRole(obj *restapi.AWSRole) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["arn"] = obj.ARN
-
-	return []interface{}{m}
-}
-
-func flattenAWSRoleSlice(objs *[]restapi.AWSRole) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenAWSRole(&v))
-	}
-	return sl
-}
-
-func expandAWSRole(in interface{}) *restapi.AWSRole {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.AWSRole
-	if v, ok := m["arn"]; ok {
-		obj.ARN = *expandString(v)
-	}
-	return &obj
-}
-
-func expandAWSRoleSlice(in interface{}) *[]restapi.AWSRole {
-	var out []restapi.AWSRole
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandAWSRole(v))
-	}
-	return &out
-}
-
-func flattenAWSCredentials(obj *restapi.AWSCredentials) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["aws_access_key_id"] = obj.AWSAccessKeyID
-	m["aws_secret_access_key"] = *obj.AWSSecretAccessKey
-
-	return []interface{}{m}
-}
-
-func flattenAWSCredentialsSlice(objs *[]restapi.AWSCredentials) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenAWSCredentials(&v))
-	}
-	return sl
-}
-
-func expandAWSCredentials(in interface{}) *restapi.AWSCredentials {
-	if in == nil {
-		return nil
-	}
-	v := in.([]interface{})
-	if len(v) == 0 {
-		return nil
-	}
-	m := v[0].(map[string]interface{})
-
-	var obj restapi.AWSCredentials
-	if v, ok := m["aws_access_key_id"]; ok {
-		obj.AWSAccessKeyID = *expandString(v)
-	}
-	if v, ok := m["aws_secret_access_key"]; ok {
-		obj.AWSSecretAccessKey = expandString(v)
-	}
-	return &obj
-}
-
-func expandAWSCredentialsSlice(in interface{}) *[]restapi.AWSCredentials {
-	var out []restapi.AWSCredentials
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandAWSCredentials(v))
 	}
 	return &out
 }
@@ -3129,6 +3533,7 @@ func flattenEndpointConfiguration(obj *restapi.EndpointConfiguration) interface{
 	m["logging"] = flattenEndpointLogging(obj.Logging)
 	m["saml"] = flattenEndpointSAML(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
+	m["backend"] = flattenEndpointBackend(obj.Backend)
 
 	return []interface{}{m}
 }
@@ -3148,12 +3553,13 @@ func expandEndpointConfiguration(in interface{}) *restapi.EndpointConfiguration 
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointConfiguration
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -3212,6 +3618,9 @@ func expandEndpointConfiguration(in interface{}) *restapi.EndpointConfiguration 
 	if v, ok := m["oidc"]; ok {
 		obj.OIDC = expandEndpointOIDC(v)
 	}
+	if v, ok := m["backend"]; ok {
+		obj.Backend = expandEndpointBackend(v)
+	}
 	return &obj
 }
 
@@ -3231,7 +3640,7 @@ func flattenEndpointConfigurationList(obj *restapi.EndpointConfigurationList) in
 	m := make(map[string]interface{})
 	m["endpoint_configurations"] = flattenEndpointConfigurationSlice(&obj.EndpointConfigurations)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -3251,12 +3660,13 @@ func expandEndpointConfigurationList(in interface{}) *restapi.EndpointConfigurat
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointConfigurationList
 	if v, ok := m["endpoint_configurations"]; ok {
 		obj.EndpointConfigurations = *expandEndpointConfigurationSlice(v)
@@ -3285,8 +3695,8 @@ func flattenEndpointConfigurationUpdate(obj *restapi.EndpointConfigurationUpdate
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 	m["basic_auth"] = flattenEndpointBasicAuth(obj.BasicAuth)
 	m["circuit_breaker"] = flattenEndpointCircuitBreaker(obj.CircuitBreaker)
 	m["compression"] = flattenEndpointCompression(obj.Compression)
@@ -3300,6 +3710,7 @@ func flattenEndpointConfigurationUpdate(obj *restapi.EndpointConfigurationUpdate
 	m["logging"] = flattenEndpointLoggingMutate(obj.Logging)
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
+	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 
 	return []interface{}{m}
 }
@@ -3319,12 +3730,13 @@ func expandEndpointConfigurationUpdate(in interface{}) *restapi.EndpointConfigur
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointConfigurationUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -3374,6 +3786,9 @@ func expandEndpointConfigurationUpdate(in interface{}) *restapi.EndpointConfigur
 	if v, ok := m["oidc"]; ok {
 		obj.OIDC = expandEndpointOIDC(v)
 	}
+	if v, ok := m["backend"]; ok {
+		obj.Backend = expandEndpointBackendMutate(v)
+	}
 	return &obj
 }
 
@@ -3407,6 +3822,7 @@ func flattenEndpointConfigurationCreate(obj *restapi.EndpointConfigurationCreate
 	m["logging"] = flattenEndpointLoggingMutate(obj.Logging)
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
+	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 
 	return []interface{}{m}
 }
@@ -3426,12 +3842,13 @@ func expandEndpointConfigurationCreate(in interface{}) *restapi.EndpointConfigur
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointConfigurationCreate
 	if v, ok := m["type"]; ok {
 		obj.Type = *expandString(v)
@@ -3481,6 +3898,9 @@ func expandEndpointConfigurationCreate(in interface{}) *restapi.EndpointConfigur
 	if v, ok := m["oidc"]; ok {
 		obj.OIDC = expandEndpointOIDC(v)
 	}
+	if v, ok := m["backend"]; ok {
+		obj.Backend = expandEndpointBackendMutate(v)
+	}
 	return &obj
 }
 
@@ -3498,7 +3918,7 @@ func flattenEndpointWebhookValidation(obj *restapi.EndpointWebhookValidation) in
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["provider"] = obj.Provider
 	m["secret"] = obj.Secret
 
@@ -3520,12 +3940,13 @@ func expandEndpointWebhookValidation(in interface{}) *restapi.EndpointWebhookVal
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointWebhookValidation
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3553,7 +3974,7 @@ func flattenEndpointCompression(obj *restapi.EndpointCompression) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 
 	return []interface{}{m}
 }
@@ -3573,12 +3994,13 @@ func expandEndpointCompression(in interface{}) *restapi.EndpointCompression {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointCompression
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3600,7 +4022,7 @@ func flattenEndpointMutualTLS(obj *restapi.EndpointMutualTLS) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["certificate_authorities"] = flattenRefSlice(&obj.CertificateAuthorities)
 
 	return []interface{}{m}
@@ -3621,12 +4043,13 @@ func expandEndpointMutualTLS(in interface{}) *restapi.EndpointMutualTLS {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointMutualTLS
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3651,7 +4074,7 @@ func flattenEndpointMutualTLSMutate(obj *restapi.EndpointMutualTLSMutate) interf
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["certificate_authority_ids"] = obj.CertificateAuthorityIDs
 
 	return []interface{}{m}
@@ -3672,12 +4095,13 @@ func expandEndpointMutualTLSMutate(in interface{}) *restapi.EndpointMutualTLSMut
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointMutualTLSMutate
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3702,9 +4126,9 @@ func flattenEndpointTLSTermination(obj *restapi.EndpointTLSTermination) interfac
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["terminate_at"] = obj.TerminateAt
-	m["min_version"] = *obj.MinVersion
+	m["min_version"] = obj.MinVersion
 
 	return []interface{}{m}
 }
@@ -3724,12 +4148,13 @@ func expandEndpointTLSTermination(in interface{}) *restapi.EndpointTLSTerminatio
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointTLSTermination
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3757,7 +4182,7 @@ func flattenEndpointBasicAuth(obj *restapi.EndpointBasicAuth) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["auth_provider_id"] = obj.AuthProviderID
 	m["realm"] = obj.Realm
 	m["allow_options"] = obj.AllowOptions
@@ -3780,12 +4205,13 @@ func expandEndpointBasicAuth(in interface{}) *restapi.EndpointBasicAuth {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointBasicAuth
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3816,8 +4242,8 @@ func flattenEndpointLogging(obj *restapi.EndpointLogging) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
-	m["log_configs"] = flattenRefSlice(&obj.LogConfigs)
+	m["enabled"] = obj.Enabled
+	m["event_streams"] = flattenRefSlice(&obj.EventStreams)
 
 	return []interface{}{m}
 }
@@ -3837,18 +4263,19 @@ func expandEndpointLogging(in interface{}) *restapi.EndpointLogging {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointLogging
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
 	}
-	if v, ok := m["log_configs"]; ok {
-		obj.LogConfigs = *expandRefSlice(v)
+	if v, ok := m["event_streams"]; ok {
+		obj.EventStreams = *expandRefSlice(v)
 	}
 	return &obj
 }
@@ -3867,8 +4294,8 @@ func flattenEndpointLoggingMutate(obj *restapi.EndpointLoggingMutate) interface{
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
-	m["log_config_ids"] = obj.LogConfigIDs
+	m["enabled"] = obj.Enabled
+	m["event_stream_ids"] = obj.EventStreamIDs
 
 	return []interface{}{m}
 }
@@ -3888,18 +4315,19 @@ func expandEndpointLoggingMutate(in interface{}) *restapi.EndpointLoggingMutate 
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointLoggingMutate
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
 	}
-	if v, ok := m["log_config_ids"]; ok {
-		obj.LogConfigIDs = *expandStringSlice(v)
+	if v, ok := m["event_stream_ids"]; ok {
+		obj.EventStreamIDs = *expandStringSlice(v)
 	}
 	return &obj
 }
@@ -3918,7 +4346,7 @@ func flattenEndpointRequestHeaders(obj *restapi.EndpointRequestHeaders) interfac
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["add"] = obj.Add
 	m["remove"] = obj.Remove
 
@@ -3940,12 +4368,13 @@ func expandEndpointRequestHeaders(in interface{}) *restapi.EndpointRequestHeader
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointRequestHeaders
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -3973,7 +4402,7 @@ func flattenEndpointResponseHeaders(obj *restapi.EndpointResponseHeaders) interf
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["add"] = obj.Add
 	m["remove"] = obj.Remove
 
@@ -3995,12 +4424,13 @@ func expandEndpointResponseHeaders(in interface{}) *restapi.EndpointResponseHead
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointResponseHeaders
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4028,7 +4458,7 @@ func flattenEndpointIPPolicy(obj *restapi.EndpointIPPolicy) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["ip_policies"] = flattenRefSlice(&obj.IPPolicies)
 
 	return []interface{}{m}
@@ -4049,12 +4479,13 @@ func expandEndpointIPPolicy(in interface{}) *restapi.EndpointIPPolicy {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointIPPolicy
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4079,7 +4510,7 @@ func flattenEndpointIPPolicyMutate(obj *restapi.EndpointIPPolicyMutate) interfac
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["ip_policy_ids"] = obj.IPPolicyIDs
 
 	return []interface{}{m}
@@ -4100,12 +4531,13 @@ func expandEndpointIPPolicyMutate(in interface{}) *restapi.EndpointIPPolicyMutat
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointIPPolicyMutate
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4130,7 +4562,7 @@ func flattenEndpointCircuitBreaker(obj *restapi.EndpointCircuitBreaker) interfac
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["tripped_duration"] = obj.TrippedDuration
 	m["rolling_window"] = obj.RollingWindow
 	m["num_buckets"] = obj.NumBuckets
@@ -4155,12 +4587,13 @@ func expandEndpointCircuitBreaker(in interface{}) *restapi.EndpointCircuitBreake
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointCircuitBreaker
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4197,7 +4630,7 @@ func flattenEndpointOAuth(obj *restapi.EndpointOAuth) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["provider"] = flattenEndpointOAuthProvider(&obj.Provider)
 	m["options_passthrough"] = obj.OptionsPassthrough
 	m["cookie_prefix"] = obj.CookiePrefix
@@ -4223,12 +4656,13 @@ func expandEndpointOAuth(in interface{}) *restapi.EndpointOAuth {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuth
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4291,12 +4725,13 @@ func expandEndpointOAuthProvider(in interface{}) *restapi.EndpointOAuthProvider 
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthProvider
 	if v, ok := m["github"]; ok {
 		obj.Github = expandEndpointOAuthGitHub(v)
@@ -4327,8 +4762,8 @@ func flattenEndpointOAuthGitHub(obj *restapi.EndpointOAuthGitHub) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["client_id"] = *obj.ClientID
-	m["client_secret"] = *obj.ClientSecret
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
 	m["scopes"] = obj.Scopes
 	m["email_addresses"] = obj.EmailAddresses
 	m["email_domains"] = obj.EmailDomains
@@ -4353,12 +4788,13 @@ func expandEndpointOAuthGitHub(in interface{}) *restapi.EndpointOAuthGitHub {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthGitHub
 	if v, ok := m["client_id"]; ok {
 		obj.ClientID = expandString(v)
@@ -4398,8 +4834,8 @@ func flattenEndpointOAuthFacebook(obj *restapi.EndpointOAuthFacebook) interface{
 	}
 
 	m := make(map[string]interface{})
-	m["client_id"] = *obj.ClientID
-	m["client_secret"] = *obj.ClientSecret
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
 	m["scopes"] = obj.Scopes
 	m["email_addresses"] = obj.EmailAddresses
 	m["email_domains"] = obj.EmailDomains
@@ -4422,12 +4858,13 @@ func expandEndpointOAuthFacebook(in interface{}) *restapi.EndpointOAuthFacebook 
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthFacebook
 	if v, ok := m["client_id"]; ok {
 		obj.ClientID = expandString(v)
@@ -4461,8 +4898,8 @@ func flattenEndpointOAuthMicrosoft(obj *restapi.EndpointOAuthMicrosoft) interfac
 	}
 
 	m := make(map[string]interface{})
-	m["client_id"] = *obj.ClientID
-	m["client_secret"] = *obj.ClientSecret
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
 	m["scopes"] = obj.Scopes
 	m["email_addresses"] = obj.EmailAddresses
 	m["email_domains"] = obj.EmailDomains
@@ -4485,12 +4922,13 @@ func expandEndpointOAuthMicrosoft(in interface{}) *restapi.EndpointOAuthMicrosof
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthMicrosoft
 	if v, ok := m["client_id"]; ok {
 		obj.ClientID = expandString(v)
@@ -4524,8 +4962,8 @@ func flattenEndpointOAuthGoogle(obj *restapi.EndpointOAuthGoogle) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["client_id"] = *obj.ClientID
-	m["client_secret"] = *obj.ClientSecret
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
 	m["scopes"] = obj.Scopes
 	m["email_addresses"] = obj.EmailAddresses
 	m["email_domains"] = obj.EmailDomains
@@ -4548,12 +4986,13 @@ func expandEndpointOAuthGoogle(in interface{}) *restapi.EndpointOAuthGoogle {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthGoogle
 	if v, ok := m["client_id"]; ok {
 		obj.ClientID = expandString(v)
@@ -4587,7 +5026,7 @@ func flattenEndpointSAML(obj *restapi.EndpointSAML) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["options_passthrough"] = obj.OptionsPassthrough
 	m["cookie_prefix"] = obj.CookiePrefix
 	m["inactivity_timeout"] = obj.InactivityTimeout
@@ -4595,7 +5034,7 @@ func flattenEndpointSAML(obj *restapi.EndpointSAML) interface{} {
 	m["idp_metadata_url"] = obj.IdPMetadataURL
 	m["idp_metadata"] = obj.IdPMetadata
 	m["force_authn"] = obj.ForceAuthn
-	m["allow_idp_initiated"] = *obj.AllowIdPInitiated
+	m["allow_idp_initiated"] = obj.AllowIdPInitiated
 	m["authorized_groups"] = obj.AuthorizedGroups
 	m["entity_id"] = obj.EntityID
 	m["assertion_consumer_service_url"] = obj.AssertionConsumerServiceURL
@@ -4621,12 +5060,13 @@ func expandEndpointSAML(in interface{}) *restapi.EndpointSAML {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointSAML
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4690,7 +5130,7 @@ func flattenEndpointSAMLMutate(obj *restapi.EndpointSAMLMutate) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["options_passthrough"] = obj.OptionsPassthrough
 	m["cookie_prefix"] = obj.CookiePrefix
 	m["inactivity_timeout"] = obj.InactivityTimeout
@@ -4698,7 +5138,7 @@ func flattenEndpointSAMLMutate(obj *restapi.EndpointSAMLMutate) interface{} {
 	m["idp_metadata_url"] = obj.IdPMetadataURL
 	m["idp_metadata"] = obj.IdPMetadata
 	m["force_authn"] = obj.ForceAuthn
-	m["allow_idp_initiated"] = *obj.AllowIdPInitiated
+	m["allow_idp_initiated"] = obj.AllowIdPInitiated
 	m["authorized_groups"] = obj.AuthorizedGroups
 
 	return []interface{}{m}
@@ -4719,12 +5159,13 @@ func expandEndpointSAMLMutate(in interface{}) *restapi.EndpointSAMLMutate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointSAMLMutate
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4773,7 +5214,7 @@ func flattenEndpointOIDC(obj *restapi.EndpointOIDC) interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enabled"] = *obj.Enabled
+	m["enabled"] = obj.Enabled
 	m["options_passthrough"] = obj.OptionsPassthrough
 	m["cookie_prefix"] = obj.CookiePrefix
 	m["inactivity_timeout"] = obj.InactivityTimeout
@@ -4801,12 +5242,13 @@ func expandEndpointOIDC(in interface{}) *restapi.EndpointOIDC {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOIDC
 	if v, ok := m["enabled"]; ok {
 		obj.Enabled = expandBool(v)
@@ -4846,6 +5288,110 @@ func expandEndpointOIDCSlice(in interface{}) *[]restapi.EndpointOIDC {
 	return &out
 }
 
+func flattenEndpointBackend(obj *restapi.EndpointBackend) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["backend"] = flattenRef(&obj.Backend)
+
+	return []interface{}{m}
+}
+
+func flattenEndpointBackendSlice(objs *[]restapi.EndpointBackend) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointBackend(&v))
+	}
+	return sl
+}
+
+func expandEndpointBackend(in interface{}) *restapi.EndpointBackend {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointBackend
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["backend"]; ok {
+		obj.Backend = *expandRef(v)
+	}
+	return &obj
+}
+
+func expandEndpointBackendSlice(in interface{}) *[]restapi.EndpointBackend {
+	var out []restapi.EndpointBackend
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointBackend(v))
+	}
+	return &out
+}
+
+func flattenEndpointBackendMutate(obj *restapi.EndpointBackendMutate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["backend_id"] = obj.BackendID
+
+	return []interface{}{m}
+}
+
+func flattenEndpointBackendMutateSlice(objs *[]restapi.EndpointBackendMutate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointBackendMutate(&v))
+	}
+	return sl
+}
+
+func expandEndpointBackendMutate(in interface{}) *restapi.EndpointBackendMutate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointBackendMutate
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["backend_id"]; ok {
+		obj.BackendID = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEndpointBackendMutateSlice(in interface{}) *[]restapi.EndpointBackendMutate {
+	var out []restapi.EndpointBackendMutate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointBackendMutate(v))
+	}
+	return &out
+}
+
 func flattenEndpointLoggingReplace(obj *restapi.EndpointLoggingReplace) interface{} {
 	if obj == nil {
 		return nil
@@ -4873,12 +5419,13 @@ func expandEndpointLoggingReplace(in interface{}) *restapi.EndpointLoggingReplac
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointLoggingReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -4924,12 +5471,13 @@ func expandEndpointBasicAuthReplace(in interface{}) *restapi.EndpointBasicAuthRe
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointBasicAuthReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -4975,12 +5523,13 @@ func expandEndpointCircuitBreakerReplace(in interface{}) *restapi.EndpointCircui
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointCircuitBreakerReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5026,12 +5575,13 @@ func expandEndpointCompressionReplace(in interface{}) *restapi.EndpointCompressi
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointCompressionReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5077,12 +5627,13 @@ func expandEndpointTLSTerminationReplace(in interface{}) *restapi.EndpointTLSTer
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointTLSTerminationReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5128,12 +5679,13 @@ func expandEndpointIPPolicyReplace(in interface{}) *restapi.EndpointIPPolicyRepl
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointIPPolicyReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5179,12 +5731,13 @@ func expandEndpointMutualTLSReplace(in interface{}) *restapi.EndpointMutualTLSRe
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointMutualTLSReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5230,12 +5783,13 @@ func expandEndpointRequestHeadersReplace(in interface{}) *restapi.EndpointReques
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointRequestHeadersReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5281,12 +5835,13 @@ func expandEndpointResponseHeadersReplace(in interface{}) *restapi.EndpointRespo
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointResponseHeadersReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5332,12 +5887,13 @@ func expandEndpointOAuthReplace(in interface{}) *restapi.EndpointOAuthReplace {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOAuthReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5383,12 +5939,13 @@ func expandEndpointWebhookValidationReplace(in interface{}) *restapi.EndpointWeb
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointWebhookValidationReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5434,12 +5991,13 @@ func expandEndpointSAMLReplace(in interface{}) *restapi.EndpointSAMLReplace {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointSAMLReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5485,12 +6043,13 @@ func expandEndpointOIDCReplace(in interface{}) *restapi.EndpointOIDCReplace {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.EndpointOIDCReplace
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5505,6 +6064,58 @@ func expandEndpointOIDCReplaceSlice(in interface{}) *[]restapi.EndpointOIDCRepla
 	var out []restapi.EndpointOIDCReplace
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEndpointOIDCReplace(v))
+	}
+	return &out
+}
+
+func flattenEndpointBackendReplace(obj *restapi.EndpointBackendReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["ngrok_id"] = obj.ID
+	m["module"] = flattenEndpointBackendMutate(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEndpointBackendReplaceSlice(objs *[]restapi.EndpointBackendReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointBackendReplace(&v))
+	}
+	return sl
+}
+
+func expandEndpointBackendReplace(in interface{}) *restapi.EndpointBackendReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointBackendReplace
+	if v, ok := m["ngrok_id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointBackendMutate(v)
+	}
+	return &obj
+}
+
+func expandEndpointBackendReplaceSlice(in interface{}) *[]restapi.EndpointBackendReplace {
+	var out []restapi.EndpointBackendReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointBackendReplace(v))
 	}
 	return &out
 }
@@ -5538,12 +6149,13 @@ func expandReservedAddrCreate(in interface{}) *restapi.ReservedAddrCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedAddrCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -5575,9 +6187,9 @@ func flattenReservedAddrUpdate(obj *restapi.ReservedAddrUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["endpoint_configuration_id"] = *obj.EndpointConfigurationID
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["endpoint_configuration_id"] = obj.EndpointConfigurationID
 
 	return []interface{}{m}
 }
@@ -5597,12 +6209,13 @@ func expandReservedAddrUpdate(in interface{}) *restapi.ReservedAddrUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedAddrUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5660,12 +6273,13 @@ func expandReservedAddr(in interface{}) *restapi.ReservedAddr {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedAddr
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5710,7 +6324,7 @@ func flattenReservedAddrList(obj *restapi.ReservedAddrList) interface{} {
 	m := make(map[string]interface{})
 	m["reserved_addrs"] = flattenReservedAddrSlice(&obj.ReservedAddrs)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -5730,12 +6344,13 @@ func expandReservedAddrList(in interface{}) *restapi.ReservedAddrList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedAddrList
 	if v, ok := m["reserved_addrs"]; ok {
 		obj.ReservedAddrs = *expandReservedAddrSlice(v)
@@ -5769,7 +6384,7 @@ func flattenReservedDomainCreate(obj *restapi.ReservedDomainCreate) interface{} 
 	m["metadata"] = obj.Metadata
 	m["http_endpoint_configuration_id"] = obj.HTTPEndpointConfigurationID
 	m["https_endpoint_configuration_id"] = obj.HTTPSEndpointConfigurationID
-	m["certificate_id"] = *obj.CertificateID
+	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 
 	return []interface{}{m}
@@ -5790,12 +6405,13 @@ func expandReservedDomainCreate(in interface{}) *restapi.ReservedDomainCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainCreate
 	if v, ok := m["name"]; ok {
 		obj.Name = *expandString(v)
@@ -5839,11 +6455,11 @@ func flattenReservedDomainUpdate(obj *restapi.ReservedDomainUpdate) interface{} 
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["http_endpoint_configuration_id"] = *obj.HTTPEndpointConfigurationID
-	m["https_endpoint_configuration_id"] = *obj.HTTPSEndpointConfigurationID
-	m["certificate_id"] = *obj.CertificateID
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["http_endpoint_configuration_id"] = obj.HTTPEndpointConfigurationID
+	m["https_endpoint_configuration_id"] = obj.HTTPSEndpointConfigurationID
+	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 
 	return []interface{}{m}
@@ -5864,12 +6480,13 @@ func expandReservedDomainUpdate(in interface{}) *restapi.ReservedDomainUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -5916,7 +6533,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["metadata"] = obj.Metadata
 	m["domain"] = obj.Domain
 	m["region"] = obj.Region
-	m["cname_target"] = *obj.CNAMETarget
+	m["cname_target"] = obj.CNAMETarget
 	m["http_endpoint_configuration"] = flattenRef(obj.HTTPEndpointConfiguration)
 	m["https_endpoint_configuration"] = flattenRef(obj.HTTPSEndpointConfiguration)
 	m["certificate"] = flattenRef(obj.Certificate)
@@ -5941,12 +6558,13 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomain
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6006,7 +6624,7 @@ func flattenReservedDomainList(obj *restapi.ReservedDomainList) interface{} {
 	m := make(map[string]interface{})
 	m["reserved_domains"] = flattenReservedDomainSlice(&obj.ReservedDomains)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -6026,12 +6644,13 @@ func expandReservedDomainList(in interface{}) *restapi.ReservedDomainList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainList
 	if v, ok := m["reserved_domains"]; ok {
 		obj.ReservedDomains = *expandReservedDomainSlice(v)
@@ -6080,12 +6699,13 @@ func expandReservedDomainCertPolicy(in interface{}) *restapi.ReservedDomainCertP
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainCertPolicy
 	if v, ok := m["authority"]; ok {
 		obj.Authority = *expandString(v)
@@ -6110,7 +6730,7 @@ func flattenReservedDomainCertStatus(obj *restapi.ReservedDomainCertStatus) inte
 	}
 
 	m := make(map[string]interface{})
-	m["renews_at"] = *obj.RenewsAt
+	m["renews_at"] = obj.RenewsAt
 	m["provisioning_job"] = flattenReservedDomainCertJob(obj.ProvisioningJob)
 
 	return []interface{}{m}
@@ -6131,12 +6751,13 @@ func expandReservedDomainCertStatus(in interface{}) *restapi.ReservedDomainCertS
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainCertStatus
 	if v, ok := m["renews_at"]; ok {
 		obj.RenewsAt = expandString(v)
@@ -6182,12 +6803,13 @@ func expandReservedDomainCertNSTarget(in interface{}) *restapi.ReservedDomainCer
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainCertNSTarget
 	if v, ok := m["zone"]; ok {
 		obj.Zone = *expandString(v)
@@ -6212,10 +6834,10 @@ func flattenReservedDomainCertJob(obj *restapi.ReservedDomainCertJob) interface{
 	}
 
 	m := make(map[string]interface{})
-	m["error_code"] = *obj.ErrorCode
+	m["error_code"] = obj.ErrorCode
 	m["msg"] = obj.Msg
 	m["started_at"] = obj.StartedAt
-	m["retries_at"] = *obj.RetriesAt
+	m["retries_at"] = obj.RetriesAt
 	m["ns_targets"] = flattenReservedDomainCertNSTargetSlice(&obj.NSTargets)
 
 	return []interface{}{m}
@@ -6236,12 +6858,13 @@ func expandReservedDomainCertJob(in interface{}) *restapi.ReservedDomainCertJob 
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.ReservedDomainCertJob
 	if v, ok := m["error_code"]; ok {
 		obj.ErrorCode = expandString(v)
@@ -6296,12 +6919,13 @@ func expandRootResponse(in interface{}) *restapi.RootResponse {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.RootResponse
 	if v, ok := m["uri"]; ok {
 		obj.URI = *expandString(v)
@@ -6350,12 +6974,13 @@ func expandSSHCertificateAuthorityCreate(in interface{}) *restapi.SSHCertificate
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCertificateAuthorityCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -6390,8 +7015,8 @@ func flattenSSHCertificateAuthorityUpdate(obj *restapi.SSHCertificateAuthorityUp
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -6411,12 +7036,13 @@ func expandSSHCertificateAuthorityUpdate(in interface{}) *restapi.SSHCertificate
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCertificateAuthorityUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6470,12 +7096,13 @@ func expandSSHCertificateAuthority(in interface{}) *restapi.SSHCertificateAuthor
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCertificateAuthority
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6517,7 +7144,7 @@ func flattenSSHCertificateAuthorityList(obj *restapi.SSHCertificateAuthorityList
 	m := make(map[string]interface{})
 	m["ssh_certificate_authorities"] = flattenSSHCertificateAuthoritySlice(&obj.SSHCertificateAuthorities)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -6537,12 +7164,13 @@ func expandSSHCertificateAuthorityList(in interface{}) *restapi.SSHCertificateAu
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCertificateAuthorityList
 	if v, ok := m["ssh_certificate_authorities"]; ok {
 		obj.SSHCertificateAuthorities = *expandSSHCertificateAuthoritySlice(v)
@@ -6593,12 +7221,13 @@ func expandSSHCredentialCreate(in interface{}) *restapi.SSHCredentialCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCredentialCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -6630,9 +7259,9 @@ func flattenSSHCredentialUpdate(obj *restapi.SSHCredentialUpdate) interface{} {
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
-	m["acl"] = *obj.ACL
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["acl"] = obj.ACL
 
 	return []interface{}{m}
 }
@@ -6652,12 +7281,13 @@ func expandSSHCredentialUpdate(in interface{}) *restapi.SSHCredentialUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCredentialUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6714,12 +7344,13 @@ func expandSSHCredential(in interface{}) *restapi.SSHCredential {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCredential
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6761,7 +7392,7 @@ func flattenSSHCredentialList(obj *restapi.SSHCredentialList) interface{} {
 	m := make(map[string]interface{})
 	m["ssh_credentials"] = flattenSSHCredentialSlice(&obj.SSHCredentials)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -6781,12 +7412,13 @@ func expandSSHCredentialList(in interface{}) *restapi.SSHCredentialList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHCredentialList
 	if v, ok := m["ssh_credentials"]; ok {
 		obj.SSHCredentials = *expandSSHCredentialSlice(v)
@@ -6840,12 +7472,13 @@ func expandSSHHostCertificateCreate(in interface{}) *restapi.SSHHostCertificateC
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHHostCertificateCreate
 	if v, ok := m["ssh_certificate_authority_id"]; ok {
 		obj.SSHCertificateAuthorityID = *expandString(v)
@@ -6886,8 +7519,8 @@ func flattenSSHHostCertificateUpdate(obj *restapi.SSHHostCertificateUpdate) inte
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -6907,12 +7540,13 @@ func expandSSHHostCertificateUpdate(in interface{}) *restapi.SSHHostCertificateU
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHHostCertificateUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -6971,12 +7605,13 @@ func expandSSHHostCertificate(in interface{}) *restapi.SSHHostCertificate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHHostCertificate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7033,7 +7668,7 @@ func flattenSSHHostCertificateList(obj *restapi.SSHHostCertificateList) interfac
 	m := make(map[string]interface{})
 	m["ssh_host_certificates"] = flattenSSHHostCertificateSlice(&obj.SSHHostCertificates)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -7053,12 +7688,13 @@ func expandSSHHostCertificateList(in interface{}) *restapi.SSHHostCertificateLis
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHHostCertificateList
 	if v, ok := m["ssh_host_certificates"]; ok {
 		obj.SSHHostCertificates = *expandSSHHostCertificateSlice(v)
@@ -7114,12 +7750,13 @@ func expandSSHUserCertificateCreate(in interface{}) *restapi.SSHUserCertificateC
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHUserCertificateCreate
 	if v, ok := m["ssh_certificate_authority_id"]; ok {
 		obj.SSHCertificateAuthorityID = *expandString(v)
@@ -7166,8 +7803,8 @@ func flattenSSHUserCertificateUpdate(obj *restapi.SSHUserCertificateUpdate) inte
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -7187,12 +7824,13 @@ func expandSSHUserCertificateUpdate(in interface{}) *restapi.SSHUserCertificateU
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHUserCertificateUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7253,12 +7891,13 @@ func expandSSHUserCertificate(in interface{}) *restapi.SSHUserCertificate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHUserCertificate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7321,7 +7960,7 @@ func flattenSSHUserCertificateList(obj *restapi.SSHUserCertificateList) interfac
 	m := make(map[string]interface{})
 	m["ssh_user_certificates"] = flattenSSHUserCertificateSlice(&obj.SSHUserCertificates)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -7341,12 +7980,13 @@ func expandSSHUserCertificateList(in interface{}) *restapi.SSHUserCertificateLis
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.SSHUserCertificateList
 	if v, ok := m["ssh_user_certificates"]; ok {
 		obj.SSHUserCertificates = *expandSSHUserCertificateSlice(v)
@@ -7397,12 +8037,13 @@ func expandTLSCertificateCreate(in interface{}) *restapi.TLSCertificateCreate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TLSCertificateCreate
 	if v, ok := m["description"]; ok {
 		obj.Description = *expandString(v)
@@ -7434,8 +8075,8 @@ func flattenTLSCertificateUpdate(obj *restapi.TLSCertificateUpdate) interface{} 
 
 	m := make(map[string]interface{})
 	m["ngrok_id"] = obj.ID
-	m["description"] = *obj.Description
-	m["metadata"] = *obj.Metadata
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
 
 	return []interface{}{m}
 }
@@ -7455,12 +8096,13 @@ func expandTLSCertificateUpdate(in interface{}) *restapi.TLSCertificateUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TLSCertificateUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7496,7 +8138,7 @@ func flattenTLSCertificate(obj *restapi.TLSCertificate) interface{} {
 	m["certificate_pem"] = obj.CertificatePEM
 	m["subject_common_name"] = obj.SubjectCommonName
 	m["subject_alternative_names"] = flattenTLSCertificateSANs(&obj.SubjectAlternativeNames)
-	m["issued_at"] = *obj.IssuedAt
+	m["issued_at"] = obj.IssuedAt
 	m["not_before"] = obj.NotBefore
 	m["not_after"] = obj.NotAfter
 	m["key_usages"] = obj.KeyUsages
@@ -7528,12 +8170,13 @@ func expandTLSCertificate(in interface{}) *restapi.TLSCertificate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TLSCertificate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7617,7 +8260,7 @@ func flattenTLSCertificateList(obj *restapi.TLSCertificateList) interface{} {
 	m := make(map[string]interface{})
 	m["tls_certificates"] = flattenTLSCertificateSlice(&obj.TLSCertificates)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -7637,12 +8280,13 @@ func expandTLSCertificateList(in interface{}) *restapi.TLSCertificateList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TLSCertificateList
 	if v, ok := m["tls_certificates"]; ok {
 		obj.TLSCertificates = *expandTLSCertificateSlice(v)
@@ -7691,12 +8335,13 @@ func expandTLSCertificateSANs(in interface{}) *restapi.TLSCertificateSANs {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TLSCertificateSANs
 	if v, ok := m["dns_names"]; ok {
 		obj.DNSNames = *expandStringSlice(v)
@@ -7750,12 +8395,13 @@ func expandTunnelSession(in interface{}) *restapi.TunnelSession {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TunnelSession
 	if v, ok := m["agent_version"]; ok {
 		obj.AgentVersion = *expandString(v)
@@ -7806,7 +8452,7 @@ func flattenTunnelSessionList(obj *restapi.TunnelSessionList) interface{} {
 	m := make(map[string]interface{})
 	m["tunnel_sessions"] = flattenTunnelSessionSlice(&obj.TunnelSessions)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -7826,12 +8472,13 @@ func expandTunnelSessionList(in interface{}) *restapi.TunnelSessionList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TunnelSessionList
 	if v, ok := m["tunnel_sessions"]; ok {
 		obj.TunnelSessions = *expandTunnelSessionSlice(v)
@@ -7880,12 +8527,13 @@ func expandTunnelSessionsUpdate(in interface{}) *restapi.TunnelSessionsUpdate {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TunnelSessionsUpdate
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7936,12 +8584,13 @@ func expandTunnel(in interface{}) *restapi.Tunnel {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.Tunnel
 	if v, ok := m["ngrok_id"]; ok {
 		obj.ID = *expandString(v)
@@ -7983,7 +8632,7 @@ func flattenTunnelList(obj *restapi.TunnelList) interface{} {
 	m := make(map[string]interface{})
 	m["tunnels"] = flattenTunnelSlice(&obj.Tunnels)
 	m["uri"] = obj.URI
-	m["next_page_uri"] = *obj.NextPageURI
+	m["next_page_uri"] = obj.NextPageURI
 
 	return []interface{}{m}
 }
@@ -8003,12 +8652,13 @@ func expandTunnelList(in interface{}) *restapi.TunnelList {
 	if in == nil {
 		return nil
 	}
-	v := in.([]interface{})
-	if len(v) == 0 {
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
 		return nil
 	}
-	m := v[0].(map[string]interface{})
 
+	m := v.List()[0].(map[string]interface{})
 	var obj restapi.TunnelList
 	if v, ok := m["tunnels"]; ok {
 		obj.Tunnels = *expandTunnelSlice(v)

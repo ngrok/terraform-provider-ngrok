@@ -174,7 +174,6 @@ func resourceCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *restap
 		d.Set("subject_common_name", res.SubjectCommonName)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

@@ -10,12 +10,12 @@ import (
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
-func resourceLogDestinations() *schema.Resource {
+func resourceEventDestinations() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceLogDestinationsCreate,
-		Read:   resourceLogDestinationsGet,
-		Update: resourceLogDestinationsUpdate,
-		Delete: resourceLogDestinationsDelete,
+		Create: resourceEventDestinationsCreate,
+		Read:   resourceEventDestinationsGet,
+		Update: resourceEventDestinationsUpdate,
+		Delete: resourceEventDestinationsDelete,
 
 		Schema: map[string]*schema.Schema{
 			"created_at": {
@@ -25,7 +25,7 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "Timestamp when the Log Destination was created, RFC 3339 format.",
+				Description: "Timestamp when the Event Destination was created, RFC 3339 format.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -34,7 +34,7 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Human-readable description of the Log Destination. Optional, max 255 bytes.",
+				Description: "Human-readable description of the Event Destination. Optional, max 255 bytes.",
 			},
 			"format": {
 				Type:        schema.TypeString,
@@ -43,7 +43,7 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "The output format you would like to serialize your logs into before they post to their target. Currently the only accepted value is JSON.",
+				Description: "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is JSON.",
 			},
 			"metadata": {
 				Type:        schema.TypeString,
@@ -52,7 +52,7 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Arbitrary user-defined machine-readable data of this Log Destination. Optional, max 4096 bytes.",
+				Description: "Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.",
 			},
 			"ngrok_id": {
 				Type:        schema.TypeString,
@@ -61,91 +61,86 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Unique identifier for this Log Destination.",
+				Description: "Unique identifier for this Event Destination.",
 			},
 			"target": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    false,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "An object that encapsulates where and how to send your logs to their ultimate destination. A log destination must contain exactly one of the following objects, leaving the rest null: kinesis, firehose, cloudwatch, or S3.",
-				MaxItems:    1,
+				Description: "An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: kinesis, firehose, cloudwatch_logs, or s3.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"firehose": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
-							Description: "Configuration used to stream logs to Amazon Kinesis Data Firehose.",
-							MaxItems:    1,
+							ForceNew:    false,
+							Description: "Configuration used to send events to Amazon Kinesis Data Firehose.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"auth": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "Configuration authentication into your AWS account. Exactly one of role or creds should be configured.",
-										MaxItems:    1,
+										ForceNew:    false,
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
-													Description: "A role for ngrok to assume on your behalf to deposit logs into your AWS account.",
-													MaxItems:    1,
+													ForceNew:    false,
+													Description: "A role for ngrok to assume on your behalf to deposit events into your AWS account.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
-															"arn": {
+															"role_arn": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
-																Description: "An arn that describes a role that ngrok can assume and use to post to the configured target.",
+																ForceNew:    false,
+																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
 															},
 														},
 													},
 												},
 												"creds": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
+													ForceNew:    false,
 													Description: "Credentials to your AWS account if you prefer ngrok to sign in with long-term access keys.",
-													MaxItems:    1,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",
 															},
 														},
@@ -157,87 +152,83 @@ func resourceLogDestinations() *schema.Resource {
 									"delivery_stream_arn": {
 										Type:        schema.TypeString,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "An Amazon Resource Name specifying the Firehose delivery stream to deposit logs into.",
+										ForceNew:    false,
+										Description: "An Amazon Resource Name specifying the Firehose delivery stream to deposit events into.",
 									},
 								},
 							},
 						},
 						"kinesis": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
-							Description: "Configuration used to stream logs to Amazon Kinesis.",
-							MaxItems:    1,
+							ForceNew:    false,
+							Description: "Configuration used to send events to Amazon Kinesis.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"auth": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "Configuration authentication into your AWS account. Exactly one of role or creds should be configured.",
-										MaxItems:    1,
+										ForceNew:    false,
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
-													Description: "A role for ngrok to assume on your behalf to deposit logs into your AWS account.",
-													MaxItems:    1,
+													ForceNew:    false,
+													Description: "A role for ngrok to assume on your behalf to deposit events into your AWS account.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
-															"arn": {
+															"role_arn": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
-																Description: "An arn that describes a role that ngrok can assume and use to post to the configured target.",
+																ForceNew:    false,
+																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
 															},
 														},
 													},
 												},
 												"creds": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
+													ForceNew:    false,
 													Description: "Credentials to your AWS account if you prefer ngrok to sign in with long-term access keys.",
-													MaxItems:    1,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",
 															},
 														},
@@ -249,87 +240,83 @@ func resourceLogDestinations() *schema.Resource {
 									"stream_arn": {
 										Type:        schema.TypeString,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "An Amazon Resource Name specifying the Kinesis stream to deposit logs into.",
+										ForceNew:    false,
+										Description: "An Amazon Resource Name specifying the Kinesis stream to deposit events into.",
 									},
 								},
 							},
 						},
-						"cloudwatch": {
-							Type:        schema.TypeList,
+						"cloudwatch_logs": {
+							Type:        schema.TypeSet,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
-							Description: "Configuration used to send logs to Amazon CloudWatch Logs.",
-							MaxItems:    1,
+							ForceNew:    false,
+							Description: "Configuration used to send events to Amazon CloudWatch Logs.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"auth": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "Configuration authentication into your AWS account. Exactly one of role or creds should be configured.",
-										MaxItems:    1,
+										ForceNew:    false,
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
-													Description: "A role for ngrok to assume on your behalf to deposit logs into your AWS account.",
-													MaxItems:    1,
+													ForceNew:    false,
+													Description: "A role for ngrok to assume on your behalf to deposit events into your AWS account.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
-															"arn": {
+															"role_arn": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
-																Description: "An arn that describes a role that ngrok can assume and use to post to the configured target.",
+																ForceNew:    false,
+																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
 															},
 														},
 													},
 												},
 												"creds": {
-													Type:        schema.TypeList,
+													Type:        schema.TypeSet,
 													Required:    false,
-													Computed:    true,
+													Computed:    false,
 													Optional:    true,
 													Sensitive:   false,
-													ForceNew:    true,
+													ForceNew:    false,
 													Description: "Credentials to your AWS account if you prefer ngrok to sign in with long-term access keys.",
-													MaxItems:    1,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
 																Required:    false,
-																Computed:    true,
+																Computed:    false,
 																Optional:    true,
 																Sensitive:   false,
-																ForceNew:    true,
+																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",
 															},
 														},
@@ -341,43 +328,42 @@ func resourceLogDestinations() *schema.Resource {
 									"log_group_arn": {
 										Type:        schema.TypeString,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "An Amazon Resource Name specifying the CloudWatch Logs group to deposit logs with.",
+										ForceNew:    false,
+										Description: "An Amazon Resource Name specifying the CloudWatch Logs group to deposit events into.",
 									},
 								},
 							},
 						},
 						"debug": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
+							ForceNew:    false,
 							Description: "Configuration used for internal debugging.",
-							MaxItems:    1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"log": {
 										Type:        schema.TypeBool,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
+										ForceNew:    false,
 										Description: "Whether or not to output to publisher service logs.",
 									},
 									"callback_url": {
 										Type:        schema.TypeString,
 										Required:    false,
-										Computed:    true,
+										Computed:    false,
 										Optional:    true,
 										Sensitive:   false,
-										ForceNew:    true,
-										Description: "Url to send events to.",
+										ForceNew:    false,
+										Description: "URL to send events to.",
 									},
 								},
 							},
@@ -392,16 +378,25 @@ func resourceLogDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "URI of the Log Destination API resource.",
+				Description: "URI of the Event Destination API resource.",
+			},
+			"verify_with_test_event": {
+				Type:        schema.TypeBool,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "",
 			},
 		},
 	}
 }
 
-func resourceLogDestinationsCreate(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventDestinationsCreate(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	var arg restapi.LogDestinationCreate
+	var arg restapi.EventDestinationCreate
 	if v, ok := d.GetOk("metadata"); ok {
 		arg.Metadata = *expandString(v)
 	}
@@ -412,26 +407,29 @@ func resourceLogDestinationsCreate(d *schema.ResourceData, m interface{}) (err e
 		arg.Format = *expandString(v)
 	}
 	if v, ok := d.GetOk("target"); ok {
-		arg.Target = *expandLogDestinationTarget(v)
+		arg.Target = *expandEventTarget(v)
+	}
+	if v, ok := d.GetOk("verify_with_test_event"); ok {
+		arg.VerifyWithTestEvent = expandBool(v)
 	}
 
-	res, _, err := b.client.LogDestinationsCreate(context.Background(), &arg)
+	res, _, err := b.client.EventDestinationsCreate(context.Background(), &arg)
 	if err == nil {
 		d.SetId(res.ID)
 	}
-	return resourceLogDestinationsGet(d, m)
+	return resourceEventDestinationsGet(d, m)
 }
 
-func resourceLogDestinationsGet(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventDestinationsGet(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	res, resp, err := b.client.LogDestinationsGet(context.Background(), &restapi.Item{
+	res, resp, err := b.client.EventDestinationsGet(context.Background(), &restapi.Item{
 		ID: d.Id(),
 	})
-	return resourceLogDestinationsGetDecode(d, res, resp, err)
+	return resourceEventDestinationsGetDecode(d, res, resp, err)
 }
 
-func resourceLogDestinationsGetDecode(d *schema.ResourceData, res *restapi.LogDestination, resp *http.Response, err error) error {
+func resourceEventDestinationsGetDecode(d *schema.ResourceData, res *restapi.EventDestination, resp *http.Response, err error) error {
 	switch {
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
@@ -443,17 +441,16 @@ func resourceLogDestinationsGetDecode(d *schema.ResourceData, res *restapi.LogDe
 		d.Set("format", res.Format)
 		d.Set("metadata", res.Metadata)
 		d.Set("ngrok_id", res.ID)
-		d.Set("target", flattenLogDestinationTarget(&res.Target))
+		d.Set("target", flattenEventTarget(&res.Target))
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 
-func resourceLogDestinationsUpdate(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventDestinationsUpdate(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	var arg restapi.LogDestinationUpdate
+	var arg restapi.EventDestinationUpdate
 	arg.ID = d.Id()
 	if v, ok := d.GetOk("ngrok_id"); ok {
 		arg.ID = *expandString(v)
@@ -468,20 +465,23 @@ func resourceLogDestinationsUpdate(d *schema.ResourceData, m interface{}) (err e
 		arg.Format = expandString(v)
 	}
 	if v, ok := d.GetOk("target"); ok {
-		arg.Target = expandLogDestinationTarget(v)
+		arg.Target = expandEventTarget(v)
+	}
+	if v, ok := d.GetOk("verify_with_test_event"); ok {
+		arg.VerifyWithTestEvent = expandBool(v)
 	}
 
-	res, _, err := b.client.LogDestinationsUpdate(context.Background(), &arg)
+	res, _, err := b.client.EventDestinationsUpdate(context.Background(), &arg)
 	if err != nil {
 		return err
 	}
 	d.SetId(res.ID)
 
-	return resourceLogDestinationsGet(d, m)
+	return resourceEventDestinationsGet(d, m)
 }
 
-func resourceLogDestinationsDelete(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventDestinationsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
-	_, _, err = b.client.LogDestinationsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	_, _, err = b.client.EventDestinationsDelete(context.Background(), &restapi.Item{ID: d.Id()})
 	return err
 }

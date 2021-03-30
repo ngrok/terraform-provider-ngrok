@@ -10,12 +10,12 @@ import (
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
-func resourceLogConfigs() *schema.Resource {
+func resourceEventStreams() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceLogConfigsCreate,
-		Read:   resourceLogConfigsGet,
-		Update: resourceLogConfigsUpdate,
-		Delete: resourceLogConfigsDelete,
+		Create: resourceEventStreamsCreate,
+		Read:   resourceEventStreamsGet,
+		Update: resourceEventStreamsUpdate,
+		Delete: resourceEventStreamsDelete,
 
 		Schema: map[string]*schema.Schema{
 			"created_at": {
@@ -25,7 +25,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "Timestamp when the Log Config was created, RFC 3339 format.",
+				Description: "Timestamp when the Event Stream was created, RFC 3339 format.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -34,7 +34,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Human-readable description of the Log Config. Optional, max 255 bytes.",
+				Description: "Human-readable description of the Event Stream. Optional, max 255 bytes.",
 			},
 			"destination_ids": {
 				Type:        schema.TypeList,
@@ -43,7 +43,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "A list of Log Destination ids which should be applied to this Log Config. Log Configs are required to have at least one Log Destination.",
+				Description: "A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"event_type": {
@@ -53,7 +53,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "The protocol that determines which events can be logged. Supported values are tcp_connection_closed and http_request_complete.",
+				Description: "The protocol that determines which events will be collected. Supported values are tcp_connection_closed and http_request_complete.",
 			},
 			"fields": {
 				Type:        schema.TypeList,
@@ -62,7 +62,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "A list of protocol-specific fields you want to collect on each logging event.",
+				Description: "A list of protocol-specific fields you want to collect on each event.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"metadata": {
@@ -72,7 +72,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Arbitrary user-defined machine-readable data of this Log Config. Optional, max 4096 bytes.",
+				Description: "Arbitrary user-defined machine-readable data of this Event Stream. Optional, max 4096 bytes.",
 			},
 			"ngrok_id": {
 				Type:        schema.TypeString,
@@ -81,7 +81,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "Unique identifier for this Log Config.",
+				Description: "Unique identifier for this Event Stream.",
 			},
 			"sampling_rate": {
 				Type:        schema.TypeFloat,
@@ -90,7 +90,7 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "The percentage of all events you would like to log. Valid values range from 0.01, representing 1% of all events to 1.00, representing 100% of all events.",
+				Description: "The percentage of all events you would like to capture. Valid values range from 0.01, representing 1% of all events to 1.00, representing 100% of all events.",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -99,16 +99,16 @@ func resourceLogConfigs() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "URI of the Log Config API resource.",
+				Description: "URI of the Event Stream API resource.",
 			},
 		},
 	}
 }
 
-func resourceLogConfigsCreate(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventStreamsCreate(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	var arg restapi.LogConfigCreate
+	var arg restapi.EventStreamCreate
 	if v, ok := d.GetOk("metadata"); ok {
 		arg.Metadata = *expandString(v)
 	}
@@ -128,23 +128,23 @@ func resourceLogConfigsCreate(d *schema.ResourceData, m interface{}) (err error)
 		arg.SamplingRate = *expandFloat64(v)
 	}
 
-	res, _, err := b.client.LogConfigsCreate(context.Background(), &arg)
+	res, _, err := b.client.EventStreamsCreate(context.Background(), &arg)
 	if err == nil {
 		d.SetId(res.ID)
 	}
-	return resourceLogConfigsGet(d, m)
+	return resourceEventStreamsGet(d, m)
 }
 
-func resourceLogConfigsGet(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventStreamsGet(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	res, resp, err := b.client.LogConfigsGet(context.Background(), &restapi.Item{
+	res, resp, err := b.client.EventStreamsGet(context.Background(), &restapi.Item{
 		ID: d.Id(),
 	})
-	return resourceLogConfigsGetDecode(d, res, resp, err)
+	return resourceEventStreamsGetDecode(d, res, resp, err)
 }
 
-func resourceLogConfigsGetDecode(d *schema.ResourceData, res *restapi.LogConfig, resp *http.Response, err error) error {
+func resourceEventStreamsGetDecode(d *schema.ResourceData, res *restapi.EventStream, resp *http.Response, err error) error {
 	switch {
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
@@ -161,14 +161,13 @@ func resourceLogConfigsGetDecode(d *schema.ResourceData, res *restapi.LogConfig,
 		d.Set("sampling_rate", res.SamplingRate)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 
-func resourceLogConfigsUpdate(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventStreamsUpdate(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 
-	var arg restapi.LogConfigUpdate
+	var arg restapi.EventStreamUpdate
 	arg.ID = d.Id()
 	if v, ok := d.GetOk("ngrok_id"); ok {
 		arg.ID = *expandString(v)
@@ -189,17 +188,17 @@ func resourceLogConfigsUpdate(d *schema.ResourceData, m interface{}) (err error)
 		arg.SamplingRate = expandFloat64(v)
 	}
 
-	res, _, err := b.client.LogConfigsUpdate(context.Background(), &arg)
+	res, _, err := b.client.EventStreamsUpdate(context.Background(), &arg)
 	if err != nil {
 		return err
 	}
 	d.SetId(res.ID)
 
-	return resourceLogConfigsGet(d, m)
+	return resourceEventStreamsGet(d, m)
 }
 
-func resourceLogConfigsDelete(d *schema.ResourceData, m interface{}) (err error) {
+func resourceEventStreamsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
-	_, _, err = b.client.LogConfigsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	_, _, err = b.client.EventStreamsDelete(context.Background(), &restapi.Item{ID: d.Id()})
 	return err
 }

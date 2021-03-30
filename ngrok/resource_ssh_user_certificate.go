@@ -221,7 +221,6 @@ func resourceSSHUserCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 		d.Set("valid_after", res.ValidAfter)
 		d.Set("valid_until", res.ValidUntil)
 	}
-
 	return nil
 }
 

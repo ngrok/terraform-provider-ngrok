@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -54,7 +55,7 @@ func (r teeReaderCloser) Read(p []byte) (n int, err error) {
 			return n, err
 		}
 	}
-	if err == io.EOF {
+	if errors.Is(err, io.EOF) {
 		r.w.Close()
 		<-r.done
 	}
