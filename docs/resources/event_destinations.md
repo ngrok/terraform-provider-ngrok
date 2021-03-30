@@ -6,20 +6,6 @@ Define the Event Destination resource `ngrok_event_destination.example`:
 
 ```
 resource "ngrok_event_destination" "example" {
-  description = "kinesis dev stream"
-  format = "json"
-  metadata = "{\"environment\":\"dev\"}"
-  target {
-    kinesis {
-      auth {
-        creds {
-          aws_access_key_id = "AKIAIOSFODNN7EXAMPLE"
-          aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-        }
-      }
-      stream_arn = "arn:ngrok-local:kinesis:us-east-2:123456789012:stream/mystream2"
-    }
-  }
 }
 ```
 

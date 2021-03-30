@@ -6,7 +6,6 @@ Define the Tunnel Credential resource `ngrok_credential.example`:
 
 ```
 resource "ngrok_credential" "example" {
-  description = "development cred for alan@example.com"
 }
 ```
 
