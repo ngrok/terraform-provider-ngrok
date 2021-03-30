@@ -19,14 +19,13 @@ func resourceReservedDomains() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"certificate": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "object referencing the TLS certificate used for connections to this domain. This can be either a user-uploaded certificate, the most recently issued automatic one, or null otherwise.",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"ngrok_id": {
@@ -60,46 +59,44 @@ func resourceReservedDomains() *schema.Resource {
 				Description: "ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.",
 			},
 			"certificate_management_policy": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    false,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"authority": {
 							Type:        schema.TypeString,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
+							ForceNew:    false,
 							Description: "certificate authority to request certificates from. The only supported value is letsencrypt.",
 						},
 						"private_key_type": {
 							Type:        schema.TypeString,
 							Required:    false,
-							Computed:    true,
+							Computed:    false,
 							Optional:    true,
 							Sensitive:   false,
-							ForceNew:    true,
+							ForceNew:    false,
 							Description: "type of private key to use when requesting certificates. Defaults to rsa, can be either rsa or ecdsa.",
 						},
 					},
 				},
 			},
 			"certificate_management_status": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "status of the automatic certificate management for this domain, or null if automatic management is disabled",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"renews_at": {
@@ -112,14 +109,13 @@ func resourceReservedDomains() *schema.Resource {
 							Description: "timestamp when the next renewal will be requested, RFC 3339 format",
 						},
 						"provisioning_job": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Required:    false,
 							Computed:    true,
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    true,
 							Description: "status of the certificate provisioning job, or null if the certificiate isn't being provisioned or renewed",
-							MaxItems:    1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"error_code": {
@@ -166,7 +162,6 @@ func resourceReservedDomains() *schema.Resource {
 										Sensitive:   false,
 										ForceNew:    true,
 										Description: "if present, indicates the dns nameservers that the user must configure to complete the provisioning process of a wildcard certificate",
-										MaxItems:    1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"zone": {
@@ -234,14 +229,13 @@ func resourceReservedDomains() *schema.Resource {
 				Description: "hostname of the reserved domain",
 			},
 			"http_endpoint_configuration": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "object referencing the endpoint configuration applied to http traffic on this domain",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"ngrok_id": {
@@ -275,14 +269,13 @@ func resourceReservedDomains() *schema.Resource {
 				Description: "ID of an endpoint configuration of type http that will be used to handle inbound http traffic to this domain",
 			},
 			"https_endpoint_configuration": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "object referencing the endpoint configuration applied to https traffic on this domain",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"ngrok_id": {
@@ -439,7 +432,6 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		d.Set("region", res.Region)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

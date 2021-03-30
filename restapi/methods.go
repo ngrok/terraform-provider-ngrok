@@ -5,6 +5,7 @@ package restapi
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"text/template"
@@ -21,7 +22,7 @@ func (c *Client) AbuseReportsCreate(ctx context.Context, arg *AbuseReportCreate)
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -39,7 +40,7 @@ func (c *Client) AbuseReportsGet(ctx context.Context, arg *Item) (*AbuseReport, 
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -56,7 +57,7 @@ func (c *Client) APIKeysCreate(ctx context.Context, arg *APIKeyCreate) (*APIKey,
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -74,7 +75,7 @@ func (c *Client) APIKeysDelete(ctx context.Context, arg *Item) (*Empty, *http.Re
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -92,7 +93,7 @@ func (c *Client) APIKeysGet(ctx context.Context, arg *Item) (*APIKey, *http.Resp
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -109,7 +110,7 @@ func (c *Client) APIKeysList(ctx context.Context, arg *Page) (*APIKeyList, *http
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -127,7 +128,95 @@ func (c *Client) APIKeysUpdate(ctx context.Context, arg *APIKeyUpdate) (*APIKey,
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new static backend
+func (c *Client) StaticBackendsCreate(ctx context.Context, arg *StaticBackendCreate) (*StaticBackend, *http.Response, error) {
+	var res StaticBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/static")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a static backend by ID. TODO what if used?
+func (c *Client) StaticBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get detailed information about a static backend by ID
+func (c *Client) StaticBackendsGet(ctx context.Context, arg *Item) (*StaticBackend, *http.Response, error) {
+	var res StaticBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all static backends on this account
+func (c *Client) StaticBackendsList(ctx context.Context, arg *Page) (*StaticBackendList, *http.Response, error) {
+	var res StaticBackendList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/static")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update static backend by ID
+func (c *Client) StaticBackendsUpdate(ctx context.Context, arg *StaticBackendUpdate) (*StaticBackend, *http.Response, error) {
+	var res StaticBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -144,7 +233,7 @@ func (c *Client) CertificateAuthoritiesCreate(ctx context.Context, arg *Certific
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -162,7 +251,7 @@ func (c *Client) CertificateAuthoritiesDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -180,7 +269,7 @@ func (c *Client) CertificateAuthoritiesGet(ctx context.Context, arg *Item) (*Cer
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -197,7 +286,7 @@ func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *Page) (*Ce
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -215,7 +304,7 @@ func (c *Client) CertificateAuthoritiesUpdate(ctx context.Context, arg *Certific
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -232,7 +321,7 @@ func (c *Client) CredentialsCreate(ctx context.Context, arg *CredentialCreate) (
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -250,7 +339,7 @@ func (c *Client) CredentialsDelete(ctx context.Context, arg *Item) (*Empty, *htt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -268,7 +357,7 @@ func (c *Client) CredentialsGet(ctx context.Context, arg *Item) (*Credential, *h
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -285,7 +374,7 @@ func (c *Client) CredentialsList(ctx context.Context, arg *Page) (*CredentialLis
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -303,7 +392,201 @@ func (c *Client) CredentialsUpdate(ctx context.Context, arg *CredentialUpdate) (
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Event Stream. It will not apply to anything until you associate it with one or more Endpoint Configs.
+func (c *Client) EventStreamsCreate(ctx context.Context, arg *EventStreamCreate) (*EventStream, *http.Response, error) {
+	var res EventStream
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an Event Stream. Associated Event Destinations will be preserved.
+func (c *Client) EventStreamsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get detailed information about an Event Stream by ID.
+func (c *Client) EventStreamsGet(ctx context.Context, arg *Item) (*EventStream, *http.Response, error) {
+	var res EventStream
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Event Streams available on this account.
+func (c *Client) EventStreamsList(ctx context.Context, arg *Page) (*EventStreamList, *http.Response, error) {
+	var res EventStreamList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update attributes of an Event Stream by ID.
+func (c *Client) EventStreamsUpdate(ctx context.Context, arg *EventStreamUpdate) (*EventStream, *http.Response, error) {
+	var res EventStream
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Event Destination. It will not apply to anything until it is associated with an Event Stream, and that Event Stream is associated with an Endpoint Config.
+func (c *Client) EventDestinationsCreate(ctx context.Context, arg *EventDestinationCreate) (*EventDestination, *http.Response, error) {
+	var res EventDestination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an Event Destination. If the Event Destination is still referenced by an Event Stream, this will throw an error until that Event Stream has removed that reference.
+func (c *Client) EventDestinationsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get detailed information about an Event Destination by ID.
+func (c *Client) EventDestinationsGet(ctx context.Context, arg *Item) (*EventDestination, *http.Response, error) {
+	var res EventDestination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Event Destinations on this account.
+func (c *Client) EventDestinationsList(ctx context.Context, arg *Page) (*EventDestinationList, *http.Response, error) {
+	var res EventDestinationList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update attributes of an Event Destination.
+func (c *Client) EventDestinationsUpdate(ctx context.Context, arg *EventDestinationUpdate) (*EventDestination, *http.Response, error) {
+	var res EventDestination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Send a test event to an Event Destination
+func (c *Client) EventDestinationsSendTestEvent(ctx context.Context, arg *Item) (*SentEvent, *http.Response, error) {
+	var res SentEvent
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}/send_test_event")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -320,7 +603,7 @@ func (c *Client) IPPoliciesCreate(ctx context.Context, arg *IPPolicyCreate) (*IP
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -338,7 +621,7 @@ func (c *Client) IPPoliciesDelete(ctx context.Context, arg *Item) (*Empty, *http
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -356,7 +639,7 @@ func (c *Client) IPPoliciesGet(ctx context.Context, arg *Item) (*IPPolicy, *http
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -373,7 +656,7 @@ func (c *Client) IPPoliciesList(ctx context.Context, arg *Page) (*IPPolicyList, 
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -391,7 +674,7 @@ func (c *Client) IPPoliciesUpdate(ctx context.Context, arg *IPPolicyUpdate) (*IP
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -408,7 +691,7 @@ func (c *Client) IPPolicyRulesCreate(ctx context.Context, arg *IPPolicyRuleCreat
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -426,7 +709,7 @@ func (c *Client) IPPolicyRulesDelete(ctx context.Context, arg *Item) (*Empty, *h
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -444,7 +727,7 @@ func (c *Client) IPPolicyRulesGet(ctx context.Context, arg *Item) (*IPPolicyRule
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -461,7 +744,7 @@ func (c *Client) IPPolicyRulesList(ctx context.Context, arg *Page) (*IPPolicyRul
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -479,7 +762,7 @@ func (c *Client) IPPolicyRulesUpdate(ctx context.Context, arg *IPPolicyRuleUpdat
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -496,7 +779,7 @@ func (c *Client) IPRestrictionsCreate(ctx context.Context, arg *IPRestrictionCre
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -514,7 +797,7 @@ func (c *Client) IPRestrictionsDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -532,7 +815,7 @@ func (c *Client) IPRestrictionsGet(ctx context.Context, arg *Item) (*IPRestricti
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -549,7 +832,7 @@ func (c *Client) IPRestrictionsList(ctx context.Context, arg *Page) (*IPRestrict
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -567,7 +850,7 @@ func (c *Client) IPRestrictionsUpdate(ctx context.Context, arg *IPRestrictionUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -584,7 +867,7 @@ func (c *Client) IPWhitelistCreate(ctx context.Context, arg *IPWhitelistEntryCre
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -602,7 +885,7 @@ func (c *Client) IPWhitelistDelete(ctx context.Context, arg *Item) (*Empty, *htt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -620,7 +903,7 @@ func (c *Client) IPWhitelistGet(ctx context.Context, arg *Item) (*IPWhitelistEnt
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -637,7 +920,7 @@ func (c *Client) IPWhitelistList(ctx context.Context, arg *Page) (*IPWhitelistEn
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -655,183 +938,7 @@ func (c *Client) IPWhitelistUpdate(ctx context.Context, arg *IPWhitelistEntryUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Create a new Log Config. It will not apply to anything until you associate it with one or more Endpoint Configs.
-func (c *Client) LogConfigsCreate(ctx context.Context, arg *LogConfigCreate) (*LogConfig, *http.Response, error) {
-	var res LogConfig
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_configs")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Delete a Log Config. Associated Log Destinations will be preserved.
-func (c *Client) LogConfigsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_configs/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Get detailed information about a Log Config by ID.
-func (c *Client) LogConfigsGet(ctx context.Context, arg *Item) (*LogConfig, *http.Response, error) {
-	var res LogConfig
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_configs/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// List all Log Configs available on this account.
-func (c *Client) LogConfigsList(ctx context.Context, arg *Page) (*LogConfigList, *http.Response, error) {
-	var res LogConfigList
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_configs")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Update attributes of an Log Config by ID.
-func (c *Client) LogConfigsUpdate(ctx context.Context, arg *LogConfigUpdate) (*LogConfig, *http.Response, error) {
-	var res LogConfig
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_configs/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Create a new Log Destination. It will not apply to anything until it is associated with a Log Config, and that Log Config is associated with an Endpoint Config.
-func (c *Client) LogDestinationsCreate(ctx context.Context, arg *LogDestinationCreate) (*LogDestination, *http.Response, error) {
-	var res LogDestination
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_destinations")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Delete a Log Destination. If the Log Destination is still referenced by a Log Config, this will throw an error until that Log Config has removed that reference.
-func (c *Client) LogDestinationsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Get detailed information about a Log Destination by ID.
-func (c *Client) LogDestinationsGet(ctx context.Context, arg *Item) (*LogDestination, *http.Response, error) {
-	var res LogDestination
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// List all Log Destinations on this account.
-func (c *Client) LogDestinationsList(ctx context.Context, arg *Page) (*LogDestinationList, *http.Response, error) {
-	var res LogDestinationList
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_destinations")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Update attributes of a Log Destination.
-func (c *Client) LogDestinationsUpdate(ctx context.Context, arg *LogDestinationUpdate) (*LogDestination, *http.Response, error) {
-	var res LogDestination
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/log_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -848,7 +955,7 @@ func (c *Client) EndpointConfigurationsCreate(ctx context.Context, arg *Endpoint
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -866,7 +973,7 @@ func (c *Client) EndpointConfigurationsDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -884,7 +991,7 @@ func (c *Client) EndpointConfigurationsGet(ctx context.Context, arg *Item) (*End
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -901,7 +1008,7 @@ func (c *Client) EndpointConfigurationsList(ctx context.Context, arg *Page) (*En
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -919,7 +1026,7 @@ func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *Endpoint
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -936,7 +1043,7 @@ func (c *Client) EndpointLoggingModuleReplace(ctx context.Context, arg *Endpoint
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -953,7 +1060,7 @@ func (c *Client) EndpointLoggingModuleGet(ctx context.Context, arg *Item) (*Endp
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -970,7 +1077,7 @@ func (c *Client) EndpointLoggingModuleDelete(ctx context.Context, arg *Item) (*E
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -987,7 +1094,7 @@ func (c *Client) EndpointBasicAuthModuleReplace(ctx context.Context, arg *Endpoi
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1004,7 +1111,7 @@ func (c *Client) EndpointBasicAuthModuleGet(ctx context.Context, arg *Item) (*En
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1021,7 +1128,7 @@ func (c *Client) EndpointBasicAuthModuleDelete(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1038,7 +1145,7 @@ func (c *Client) EndpointCircuitBreakerModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1055,7 +1162,7 @@ func (c *Client) EndpointCircuitBreakerModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1072,7 +1179,7 @@ func (c *Client) EndpointCircuitBreakerModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1089,7 +1196,7 @@ func (c *Client) EndpointCompressionModuleReplace(ctx context.Context, arg *Endp
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1106,7 +1213,7 @@ func (c *Client) EndpointCompressionModuleGet(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1123,7 +1230,7 @@ func (c *Client) EndpointCompressionModuleDelete(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1140,7 +1247,7 @@ func (c *Client) EndpointTLSTerminationModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1157,7 +1264,7 @@ func (c *Client) EndpointTLSTerminationModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1174,7 +1281,7 @@ func (c *Client) EndpointTLSTerminationModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1191,7 +1298,7 @@ func (c *Client) EndpointIPPolicyModuleReplace(ctx context.Context, arg *Endpoin
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1208,7 +1315,7 @@ func (c *Client) EndpointIPPolicyModuleGet(ctx context.Context, arg *Item) (*End
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1225,7 +1332,7 @@ func (c *Client) EndpointIPPolicyModuleDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1242,7 +1349,7 @@ func (c *Client) EndpointMutualTLSModuleReplace(ctx context.Context, arg *Endpoi
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1259,7 +1366,7 @@ func (c *Client) EndpointMutualTLSModuleGet(ctx context.Context, arg *Item) (*En
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1276,7 +1383,7 @@ func (c *Client) EndpointMutualTLSModuleDelete(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1293,7 +1400,7 @@ func (c *Client) EndpointRequestHeadersModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1310,7 +1417,7 @@ func (c *Client) EndpointRequestHeadersModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1327,7 +1434,7 @@ func (c *Client) EndpointRequestHeadersModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1344,7 +1451,7 @@ func (c *Client) EndpointResponseHeadersModuleReplace(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1361,7 +1468,7 @@ func (c *Client) EndpointResponseHeadersModuleGet(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1378,7 +1485,7 @@ func (c *Client) EndpointResponseHeadersModuleDelete(ctx context.Context, arg *I
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1395,7 +1502,7 @@ func (c *Client) EndpointOAuthModuleReplace(ctx context.Context, arg *EndpointOA
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1412,7 +1519,7 @@ func (c *Client) EndpointOAuthModuleGet(ctx context.Context, arg *Item) (*Endpoi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1429,7 +1536,7 @@ func (c *Client) EndpointOAuthModuleDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1446,7 +1553,7 @@ func (c *Client) EndpointWebhookValidationModuleReplace(ctx context.Context, arg
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1463,7 +1570,7 @@ func (c *Client) EndpointWebhookValidationModuleGet(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1480,7 +1587,7 @@ func (c *Client) EndpointWebhookValidationModuleDelete(ctx context.Context, arg 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1497,7 +1604,7 @@ func (c *Client) EndpointSAMLModuleReplace(ctx context.Context, arg *EndpointSAM
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1514,7 +1621,7 @@ func (c *Client) EndpointSAMLModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1531,7 +1638,7 @@ func (c *Client) EndpointSAMLModuleDelete(ctx context.Context, arg *Item) (*Empt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1548,7 +1655,7 @@ func (c *Client) EndpointOIDCModuleReplace(ctx context.Context, arg *EndpointOID
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1565,7 +1672,7 @@ func (c *Client) EndpointOIDCModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1582,7 +1689,58 @@ func (c *Client) EndpointOIDCModuleDelete(ctx context.Context, arg *Item) (*Empt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EndpointBackendModuleReplace(ctx context.Context, arg *EndpointBackendReplace) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EndpointBackendModuleGet(ctx context.Context, arg *Item) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EndpointBackendModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1599,7 +1757,7 @@ func (c *Client) ReservedAddrsCreate(ctx context.Context, arg *ReservedAddrCreat
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1617,7 +1775,7 @@ func (c *Client) ReservedAddrsDelete(ctx context.Context, arg *Item) (*Empty, *h
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1635,7 +1793,7 @@ func (c *Client) ReservedAddrsGet(ctx context.Context, arg *Item) (*ReservedAddr
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1652,7 +1810,7 @@ func (c *Client) ReservedAddrsList(ctx context.Context, arg *Page) (*ReservedAdd
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1670,7 +1828,7 @@ func (c *Client) ReservedAddrsUpdate(ctx context.Context, arg *ReservedAddrUpdat
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1688,7 +1846,7 @@ func (c *Client) ReservedAddrsDeleteEndpointConfig(ctx context.Context, arg *Ite
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1705,7 +1863,7 @@ func (c *Client) ReservedDomainsCreate(ctx context.Context, arg *ReservedDomainC
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1723,7 +1881,7 @@ func (c *Client) ReservedDomainsDelete(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1741,7 +1899,7 @@ func (c *Client) ReservedDomainsGet(ctx context.Context, arg *Item) (*ReservedDo
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1758,7 +1916,7 @@ func (c *Client) ReservedDomainsList(ctx context.Context, arg *Page) (*ReservedD
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1776,7 +1934,7 @@ func (c *Client) ReservedDomainsUpdate(ctx context.Context, arg *ReservedDomainU
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1794,7 +1952,7 @@ func (c *Client) ReservedDomainsDeleteCertificateManagementPolicy(ctx context.Co
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1812,7 +1970,7 @@ func (c *Client) ReservedDomainsDeleteCertificate(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1830,7 +1988,7 @@ func (c *Client) ReservedDomainsDeleteHTTPEndpointConfig(ctx context.Context, ar
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1848,7 +2006,7 @@ func (c *Client) ReservedDomainsDeleteHTTPSEndpointConfig(ctx context.Context, a
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1864,7 +2022,7 @@ func (c *Client) RootGet(ctx context.Context, arg *Empty) (*RootResponse, *http.
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1881,7 +2039,7 @@ func (c *Client) SSHCertificateAuthoritiesCreate(ctx context.Context, arg *SSHCe
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1899,7 +2057,7 @@ func (c *Client) SSHCertificateAuthoritiesDelete(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1917,7 +2075,7 @@ func (c *Client) SSHCertificateAuthoritiesGet(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1934,7 +2092,7 @@ func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *Page) (
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1952,7 +2110,7 @@ func (c *Client) SSHCertificateAuthoritiesUpdate(ctx context.Context, arg *SSHCe
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1969,7 +2127,7 @@ func (c *Client) SSHCredentialsCreate(ctx context.Context, arg *SSHCredentialCre
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1987,7 +2145,7 @@ func (c *Client) SSHCredentialsDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2005,7 +2163,7 @@ func (c *Client) SSHCredentialsGet(ctx context.Context, arg *Item) (*SSHCredenti
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2022,7 +2180,7 @@ func (c *Client) SSHCredentialsList(ctx context.Context, arg *Page) (*SSHCredent
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2040,7 +2198,7 @@ func (c *Client) SSHCredentialsUpdate(ctx context.Context, arg *SSHCredentialUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2057,7 +2215,7 @@ func (c *Client) SSHHostCertificatesCreate(ctx context.Context, arg *SSHHostCert
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2075,7 +2233,7 @@ func (c *Client) SSHHostCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2093,7 +2251,7 @@ func (c *Client) SSHHostCertificatesGet(ctx context.Context, arg *Item) (*SSHHos
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2110,7 +2268,7 @@ func (c *Client) SSHHostCertificatesList(ctx context.Context, arg *Page) (*SSHHo
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2128,7 +2286,7 @@ func (c *Client) SSHHostCertificatesUpdate(ctx context.Context, arg *SSHHostCert
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2145,7 +2303,7 @@ func (c *Client) SSHUserCertificatesCreate(ctx context.Context, arg *SSHUserCert
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2163,7 +2321,7 @@ func (c *Client) SSHUserCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2181,7 +2339,7 @@ func (c *Client) SSHUserCertificatesGet(ctx context.Context, arg *Item) (*SSHUse
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2198,7 +2356,7 @@ func (c *Client) SSHUserCertificatesList(ctx context.Context, arg *Page) (*SSHUs
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2216,7 +2374,7 @@ func (c *Client) SSHUserCertificatesUpdate(ctx context.Context, arg *SSHUserCert
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2233,7 +2391,7 @@ func (c *Client) TLSCertificatesCreate(ctx context.Context, arg *TLSCertificateC
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2251,7 +2409,7 @@ func (c *Client) TLSCertificatesDelete(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2269,7 +2427,7 @@ func (c *Client) TLSCertificatesGet(ctx context.Context, arg *Item) (*TLSCertifi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2286,7 +2444,7 @@ func (c *Client) TLSCertificatesList(ctx context.Context, arg *Page) (*TLSCertif
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2304,7 +2462,7 @@ func (c *Client) TLSCertificatesUpdate(ctx context.Context, arg *TLSCertificateU
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2321,7 +2479,7 @@ func (c *Client) TunnelSessionsList(ctx context.Context, arg *Page) (*TunnelSess
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2339,7 +2497,7 @@ func (c *Client) TunnelSessionsGet(ctx context.Context, arg *Item) (*TunnelSessi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2357,7 +2515,7 @@ func (c *Client) TunnelSessionsRestart(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2375,7 +2533,7 @@ func (c *Client) TunnelSessionsStop(ctx context.Context, arg *Item) (*Empty, *ht
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2393,7 +2551,7 @@ func (c *Client) TunnelSessionsUpdate(ctx context.Context, arg *TunnelSessionsUp
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2410,7 +2568,7 @@ func (c *Client) TunnelsList(ctx context.Context, arg *Page) (*TunnelList, *http
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 
 	resp, err := c.Get(ctx, path.String(), &res)
-	if err == io.EOF && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err

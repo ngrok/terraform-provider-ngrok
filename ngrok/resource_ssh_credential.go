@@ -134,7 +134,6 @@ func resourceSSHCredentialsGetDecode(d *schema.ResourceData, res *restapi.SSHCre
 		d.Set("public_key", res.PublicKey)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

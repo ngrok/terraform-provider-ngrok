@@ -46,14 +46,13 @@ func resourceReservedAddrs() *schema.Resource {
 				Description: "human-readable description of what this reserved address will be used for",
 			},
 			"endpoint_configuration": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "object reference to the endpoint configuration that will be applied to traffic to this address",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"ngrok_id": {
@@ -178,7 +177,6 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 		d.Set("region", res.Region)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

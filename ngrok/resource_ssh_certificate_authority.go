@@ -163,7 +163,6 @@ func resourceSSHCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *res
 		d.Set("public_key", res.PublicKey)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

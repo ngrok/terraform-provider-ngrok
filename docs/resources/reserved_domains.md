@@ -6,7 +6,7 @@ Define the Reserved Domain resource `ngrok_reserved_domain.example`:
 
 ```
 resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1knYf9SPcmPpOwU2EuzxmYOBfFa"
+  certificate_id = "cert_1qTwD7FzsKysLTNS13kTdf4diKZ"
   name = "myapp.mydomain.com"
   region = "us"
 }
@@ -14,6 +14,7 @@ resource "ngrok_reserved_domain" "example" {
 
 ## Argument Reference
 
+* `authority` - (Optional) certificate authority to request certificates from. The only supported value is letsencrypt.
 * `certificate_id` - (Optional) ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.
 * `certificate_management_policy` - (Optional) configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled. Optional, mutually exclusive with `certificate_id`.
 * `description` - (Optional) human-readable description of what this reserved domain will be used for
@@ -21,6 +22,7 @@ resource "ngrok_reserved_domain" "example" {
 * `https_endpoint_configuration_id` - (Optional) ID of an endpoint configuration of type https that will be used to handle inbound https traffic to this domain
 * `metadata` - (Optional) arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.
 * `name` - (Required) the domain name to reserve. It may be a full domain name like app.example.com. If the name does not contain a '.' it will reserve that subdomain on ngrok.io.
+* `private_key_type` - (Optional) type of private key to use when requesting certificates. Defaults to rsa, can be either rsa or ecdsa.
 * `region` - (Optional) reserve the domain in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)
 
 ## Attribute Reference

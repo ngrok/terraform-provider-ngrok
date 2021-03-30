@@ -120,7 +120,6 @@ func resourceIPPoliciesGetDecode(d *schema.ResourceData, res *restapi.IPPolicy, 
 		d.Set("ngrok_id", res.ID)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 

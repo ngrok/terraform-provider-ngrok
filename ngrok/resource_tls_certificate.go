@@ -149,14 +149,13 @@ func resourceTLSCertificates() *schema.Resource {
 				Description: "serial number of the leaf of this TLS certificate",
 			},
 			"subject_alternative_names": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "subject alternative names (SANs) from the leaf of this TLS certificate",
-				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"dns_names": {
@@ -311,7 +310,6 @@ func resourceTLSCertificatesGetDecode(d *schema.ResourceData, res *restapi.TLSCe
 		d.Set("subject_province", res.SubjectProvince)
 		d.Set("uri", res.URI)
 	}
-
 	return nil
 }
 
