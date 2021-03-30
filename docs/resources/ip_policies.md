@@ -6,8 +6,6 @@ Define the IP Policy resource `ngrok_ip_policy.example`:
 
 ```
 resource "ngrok_ip_policy" "example" {
-  action = "allow"
-  description = "API Outbound Gateway"
 }
 ```
 
