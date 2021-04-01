@@ -3,6 +3,7 @@
 package ngrok
 
 import (
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
 )
 
