@@ -6,6 +6,12 @@ Define the Event Stream resource `ngrok_event_stream.example`:
 
 ```
 resource "ngrok_event_stream" "example" {
+  description = "low sampling, basic HTTP logs"
+  destination_ids = [ "ed_1qWtIb5AypUmOnQRx5kLSvgWRgP" ]
+  event_type = "http_request_complete"
+  fields = [ "http.request.method", "http.response.status_code", "conn.client_ip" ]
+  metadata = "{\"environment\": \"staging\"}"
+  sampling_rate = 0.1
 }
 ```
 
