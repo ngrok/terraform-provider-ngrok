@@ -82,6 +82,7 @@ func resourceReservedDomains() *schema.Resource {
 							Required:    false,
 							Computed:    false,
 							Optional:    true,
+							Default:     "rsa",
 							Sensitive:   false,
 							ForceNew:    false,
 							Description: "type of private key to use when requesting certificates. Defaults to rsa, can be either rsa or ecdsa.",

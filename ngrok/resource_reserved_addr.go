@@ -108,6 +108,7 @@ func resourceReservedAddrs() *schema.Resource {
 				Required:    false,
 				Computed:    false,
 				Optional:    true,
+				Default:     "us",
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "reserve the address in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)",

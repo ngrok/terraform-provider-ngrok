@@ -4163,7 +4163,7 @@ func expandEndpointTLSTermination(in interface{}) *restapi.EndpointTLSTerminatio
 		obj.TerminateAt = *expandString(v)
 	}
 	if v, ok := m["min_version"]; ok {
-		obj.MinVersion = expandString(v)
+		obj.MinVersion = *expandString(v)
 	}
 	return &obj
 }
