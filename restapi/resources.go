@@ -930,7 +930,7 @@ type EndpointTLSTermination struct {
 	// the TLS handshake. if unspecified, ngrok will choose an industry-safe default.
 	// This value must be null if <code>terminate_at</code> is set to
 	// <code>upstream</code>.
-	MinVersion *string `json:"min_version,omitempty"`
+	MinVersion string `json:"min_version,omitempty"`
 }
 
 type EndpointBasicAuth struct {
