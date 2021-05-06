@@ -27,7 +27,6 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"ngrok_api_key":                   resourceAPIKeys(),
-			"ngrok_static_backend":            resourceStaticBackends(),
 			"ngrok_certificate_authority":     resourceCertificateAuthorities(),
 			"ngrok_credential":                resourceCredentials(),
 			"ngrok_event_stream":              resourceEventStreams(),
