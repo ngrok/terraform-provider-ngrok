@@ -1017,7 +1017,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "The full XML IdP EntityDescriptor in bytes. This parameter is mutually exclusive with idp_metadata_url. It is recommended to use that parameter instead if the IdP exposes a metadata URL.",
+							Description: "The full XML IdP EntityDescriptor. Your IdP may provide this to you as a a file to download or as a URL.",
 						},
 						"force_authn": {
 							Type:        schema.TypeBool,

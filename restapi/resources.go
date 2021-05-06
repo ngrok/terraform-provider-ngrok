@@ -109,6 +109,47 @@ type APIKeyList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
+type PriorityBackend struct {
+	// unique identifier for this Priority backend
+	ID string `json:"id,omitempty"`
+	// timestamp when the backend was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the ids of the child backends in order
+	Backends []string `json:"backends,omitempty"`
+}
+
+type PriorityBackendCreate struct {
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the ids of the child backends in order
+	Backends []string `json:"backends,omitempty"`
+}
+
+type PriorityBackendUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this backend. Optional
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata *string `json:"metadata,omitempty"`
+	// the ids of the child backends in order
+	Backends []string `json:"backends,omitempty"`
+}
+
+type PriorityBackendList struct {
+	// the list of all Priority backends on this account
+	Backends []PriorityBackend `json:"backends,omitempty"`
+	// URI of the Priority backends list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type StaticBackend struct {
 	// unique identifier for this static backend
 	ID string `json:"id,omitempty"`
@@ -156,6 +197,88 @@ type StaticBackendList struct {
 	// the list of all static backends on this account
 	Backends []StaticBackend `json:"backends,omitempty"`
 	// URI of the static backends list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type TunnelGroupBackend struct {
+	// unique identifier for this TunnelGroup backend
+	ID string `json:"id,omitempty"`
+	// timestamp when the backend was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// labels to watch for tunnels on, e.g. app->foo, dc->bar
+	Labels map[string]string `json:"labels,omitempty"`
+}
+
+type TunnelGroupBackendCreate struct {
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// labels to watch for tunnels on, e.g. app->foo, dc->bar
+	Labels map[string]string `json:"labels,omitempty"`
+}
+
+type TunnelGroupBackendUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this backend. Optional
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata *string `json:"metadata,omitempty"`
+	// labels to watch for tunnels on, e.g. app->foo, dc->bar
+	Labels map[string]string `json:"labels,omitempty"`
+}
+
+type TunnelGroupBackendList struct {
+	// the list of all TunnelGroup backends on this account
+	Backends []TunnelGroupBackend `json:"backends,omitempty"`
+	// URI of the TunnelGroup backends list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type WeightedBackend struct {
+	// unique identifier for this Weighted backend
+	ID string `json:"id,omitempty"`
+	// timestamp when the backend was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the ids of the child backends to their weights (0-10000)
+	Backends map[string]int64 `json:"backends,omitempty"`
+}
+
+type WeightedBackendCreate struct {
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// the ids of the child backends to their weights (0-10000)
+	Backends map[string]int64 `json:"backends,omitempty"`
+}
+
+type WeightedBackendUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this backend. Optional
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata *string `json:"metadata,omitempty"`
+	// the ids of the child backends to their weights (0-10000)
+	Backends map[string]int64 `json:"backends,omitempty"`
+}
+
+type WeightedBackendList struct {
+	// the list of all Weighted backends on this account
+	Backends []WeightedBackend `json:"backends,omitempty"`
+	// URI of the Weighted backends list API resource
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
@@ -524,6 +647,125 @@ type AWSCredentials struct {
 
 type SentEvent struct {
 	EventID string `json:"event_id,omitempty"`
+}
+
+type EventSubscriptionCreate struct {
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description string `json:"description,omitempty"`
+	// TODO
+	Sources []EventSourceReplace `json:"sources,omitempty"`
+	// TODO
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+}
+
+type EventSubscriptionUpdate struct {
+	// Unique identifier for this Event Subscription.
+	ID string `json:"id,omitempty"`
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata *string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description *string `json:"description,omitempty"`
+	// TODO
+	Sources *[]EventSourceReplace `json:"sources,omitempty"`
+	// TODO
+	DestinationIDs *[]string `json:"destination_ids,omitempty"`
+}
+
+type EventSubscriptionList struct {
+	// The list of all Event Subscriptions on this account.
+	EventSubscriptions []EventSubscription `json:"event_subscriptions,omitempty"`
+	// URI of the Event Subscriptions list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventSubscription struct {
+	// Unique identifier for this Event Subscription.
+	ID string `json:"id,omitempty"`
+	// URI of the Event Subscription API resource.
+	URI string `json:"uri,omitempty"`
+	// When the Event Subscription was created (RFC 3339 format).
+	CreatedAt string `json:"created_at,omitempty"`
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description string `json:"description,omitempty"`
+	// TODO
+	Sources []EventSource `json:"sources,omitempty"`
+	// TODO
+	Destinations []Ref `json:"destinations,omitempty"`
+}
+
+type EventSourceReplace struct {
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+}
+
+type EventSource struct {
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+	// TODO
+	URI string `json:"uri,omitempty"`
+}
+
+type EventSourceList struct {
+	// TODO
+	Sources []EventSource `json:"sources,omitempty"`
+	// TODO
+	URI string `json:"uri,omitempty"`
+}
+
+type EventSourceCreate struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+}
+
+type EventSourceUpdate struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter *string `json:"filter,omitempty"`
+	// TODO
+	Fields *[]string `json:"fields,omitempty"`
+}
+
+// This is needed instead of Item because the parameters are different.
+type EventSourceItem struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+}
+
+// This is needed instead of Page because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
+type EventSourcePage struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
 }
 
 type IPPolicyCreate struct {
@@ -930,7 +1172,7 @@ type EndpointTLSTermination struct {
 	// the TLS handshake. if unspecified, ngrok will choose an industry-safe default.
 	// This value must be null if <code>terminate_at</code> is set to
 	// <code>upstream</code>.
-	MinVersion string `json:"min_version,omitempty"`
+	MinVersion *string `json:"min_version,omitempty"`
 }
 
 type EndpointBasicAuth struct {
@@ -1192,9 +1434,8 @@ type EndpointSAML struct {
 	// is then used to validate the signature on incoming SAML assertions to the ACS
 	// endpoint.
 	IdPMetadataURL string `json:"idp_metadata_url,omitempty"`
-	// The full XML IdP EntityDescriptor in bytes. This parameter is mutually exclusive
-	// with <code>idp_metadata_url</code>. It is recommended to use that parameter
-	// instead if the IdP exposes a metadata URL.
+	// The full XML IdP EntityDescriptor. Your IdP may provide this to you as a a file
+	// to download or as a URL.
 	IdPMetadata string `json:"idp_metadata,omitempty"`
 	// If true, indicates that whenever we redirect a user to the IdP for
 	// authentication that the IdP must prompt the user for authentication credentials
@@ -1252,9 +1493,8 @@ type EndpointSAMLMutate struct {
 	// is then used to validate the signature on incoming SAML assertions to the ACS
 	// endpoint.
 	IdPMetadataURL string `json:"idp_metadata_url,omitempty"`
-	// The full XML IdP EntityDescriptor in bytes. This parameter is mutually exclusive
-	// with <code>idp_metadata_url</code>. It is recommended to use that parameter
-	// instead if the IdP exposes a metadata URL.
+	// The full XML IdP EntityDescriptor. Your IdP may provide this to you as a a file
+	// to download or as a URL.
 	IdPMetadata string `json:"idp_metadata,omitempty"`
 	// If true, indicates that whenever we redirect a user to the IdP for
 	// authentication that the IdP must prompt the user for authentication credentials
