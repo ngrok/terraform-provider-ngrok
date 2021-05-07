@@ -17,7 +17,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 		Read:        resourceEndpointConfigurationsGet,
 		Update:      resourceEndpointConfigurationsUpdate,
 		Delete:      resourceEndpointConfigurationsDelete,
-		Description: "## Endpoint Configuration management\n\nAn [Endpoint Configuration](https://ngrok.com.lan/docs/ngrok-link#api-endpoint-configurations) describes\na ngrok network endpoint instance.\n\n_Endpoints are your gateway to ngrok features!_",
+		Description: "## Endpoint Configuration management\n\nAn [Endpoint Configuration](https://ngrok.com/docs/ngrok-link#api-endpoint-configurations) describes\na ngrok network endpoint instance.\n\n_Endpoints are your gateway to ngrok features!_",
 		Schema: map[string]*schema.Schema{
 			"backend": {
 				Type:        schema.TypeSet,
