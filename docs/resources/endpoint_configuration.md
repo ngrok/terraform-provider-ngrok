@@ -4,7 +4,7 @@ page_title: "ngrok_endpoint_configuration Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
   Endpoint Configuration management
-  An Endpoint Configuration https://ngrok.com.lan/docs/ngrok-link#api-endpoint-configurations describes
+  An Endpoint Configuration https://ngrok.com/docs/ngrok-link#api-endpoint-configurations describes
   a ngrok network endpoint instance.
   Endpoints are your gateway to ngrok features!
 ---
@@ -13,7 +13,7 @@ description: |-
 
 ## Endpoint Configuration management
 
-An [Endpoint Configuration](https://ngrok.com.lan/docs/ngrok-link#api-endpoint-configurations) describes
+An [Endpoint Configuration](https://ngrok.com/docs/ngrok-link#api-endpoint-configurations) describes
 a ngrok network endpoint instance.
 
 _Endpoints are your gateway to ngrok features!_
