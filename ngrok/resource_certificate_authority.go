@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -140,9 +141,12 @@ func resourceCertificateAuthoritiesCreate(d *schema.ResourceData, m interface{})
 	}
 
 	res, _, err := b.client.CertificateAuthoritiesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] CertificateAuthoritiesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceCertificateAuthoritiesGet(d, m)
 }
 
@@ -160,6 +164,7 @@ func resourceCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *restap
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] CertificateAuthoritiesGet: %s", err)
 		return err
 	default:
 		d.Set("ca_pem", res.CAPEM)
@@ -194,6 +199,7 @@ func resourceCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface{})
 
 	res, _, err := b.client.CertificateAuthoritiesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] CertificateAuthoritiesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -204,5 +210,8 @@ func resourceCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface{})
 func resourceCertificateAuthoritiesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.CertificateAuthoritiesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] CertificateAuthoritiesDelete: %s", err)
+	}
 	return err
 }

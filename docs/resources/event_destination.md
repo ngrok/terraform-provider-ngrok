@@ -36,10 +36,10 @@ resource "ngrok_event_destination" "example" {
 ### Optional
 
 - **description** (String) Human-readable description of the Event Destination. Optional, max 255 bytes.
-- **format** (String) The output format you would like to serialize events into when sending to their target. Currently the only accepted value is JSON.
+- **format** (String) The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.
 - **id** (String) The ID of this resource.
 - **metadata** (String) Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.
-- **target** (Block Set) An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: kinesis, firehose, cloudwatch_logs, or s3. (see [below for nested schema](#nestedblock--target))
+- **target** (Block Set) An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: `kinesis`, `firehose`, `cloudwatch_logs`, or `s3`. (see [below for nested schema](#nestedblock--target))
 - **uri** (String) URI of the Event Destination API resource.
 - **verify_with_test_event** (Boolean)
 
@@ -63,7 +63,7 @@ Optional:
 
 Optional:
 
-- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured. (see [below for nested schema](#nestedblock--target--cloudwatch_logs--auth))
+- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured. (see [below for nested schema](#nestedblock--target--cloudwatch_logs--auth))
 - **log_group_arn** (String) An Amazon Resource Name specifying the CloudWatch Logs group to deposit events into.
 
 <a id="nestedblock--target--cloudwatch_logs--auth"></a>
@@ -107,7 +107,7 @@ Optional:
 
 Optional:
 
-- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured. (see [below for nested schema](#nestedblock--target--firehose--auth))
+- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured. (see [below for nested schema](#nestedblock--target--firehose--auth))
 - **delivery_stream_arn** (String) An Amazon Resource Name specifying the Firehose delivery stream to deposit events into.
 
 <a id="nestedblock--target--firehose--auth"></a>
@@ -142,7 +142,7 @@ Optional:
 
 Optional:
 
-- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured. (see [below for nested schema](#nestedblock--target--kinesis--auth))
+- **auth** (Block Set) Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured. (see [below for nested schema](#nestedblock--target--kinesis--auth))
 - **stream_arn** (String) An Amazon Resource Name specifying the Kinesis stream to deposit events into.
 
 <a id="nestedblock--target--kinesis--auth"></a>

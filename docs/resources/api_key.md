@@ -29,7 +29,7 @@ resource "ngrok_api_key" "example" {
 - **id** (String) The ID of this resource.
 - **metadata** (String) arbitrary user-defined data of this API key. optional, max 4096 bytes
 - **ngrok_id** (String) unique API key resource identifier
-- **token** (String, Sensitive) the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. This value is only available one time, on the API response from key creation. Otherwise it is null.
+- **token** (String, Sensitive) the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**
 - **uri** (String) URI to the API resource of this API key
 
 

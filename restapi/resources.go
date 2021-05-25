@@ -10,7 +10,7 @@ type Item struct {
 	ID string `json:"id,omitempty"`
 }
 
-type Page struct {
+type Paging struct {
 	BeforeID *string `json:"before_id,omitempty"`
 	Limit    *string `json:"limit,omitempty"`
 }
@@ -40,9 +40,8 @@ type AbuseReport struct {
 	URLs []string `json:"urls,omitempty"`
 	// arbitrary user-defined data about this abuse report. Optional, max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// Indicates whether ngrok has processed the abuse report. one of
-	// <code>PENDING</code>, <code>PROCESSED</code>, or
-	// <code>PARTIALLY_PROCESSED</code>
+	// Indicates whether ngrok has processed the abuse report. one of PENDING,
+	// PROCESSED, or PARTIALLY_PROCESSED
 	Status string `json:"status,omitempty"`
 	// an array of hostname statuses related to the report
 	Hostnames []AbuseReportHostname `json:"hostnames,omitempty"`
@@ -52,9 +51,8 @@ type AbuseReportHostname struct {
 	// the hostname ngrok has parsed out of one of the reported URLs in this abuse
 	// report
 	Hostname string `json:"hostname,omitempty"`
-	// indicates what action ngrok has taken against the hostname. one of
-	// <code>PENDING</code>, <code>BANNED</code>, <code>UNBANNED</code>, or
-	// <code>IGNORE</code>
+	// indicates what action ngrok has taken against the hostname. one of PENDING,
+	// BANNED, UNBANNED, or IGNORE
 	Status string `json:"status,omitempty"`
 }
 
@@ -95,8 +93,8 @@ type APIKey struct {
 	// timestamp when the api key was created, RFC 3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 	// the bearer token that can be placed into the Authorization header to
-	// authenticate request to the ngrok API. <strong>This value is only available one
-	// time, on the API response from key creation. Otherwise it is null.</strong>
+	// authenticate request to the ngrok API. This value is only available one time, on
+	// the API response from key creation. Otherwise it is null.
 	Token *string `json:"token,omitempty"`
 }
 
@@ -350,16 +348,14 @@ type CredentialCreate struct {
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL []string `json:"acl,omitempty"`
 }
 
@@ -372,16 +368,14 @@ type CredentialUpdate struct {
 	// 4096 bytes.
 	Metadata *string `json:"metadata,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL *[]string `json:"acl,omitempty"`
 }
 
@@ -399,20 +393,18 @@ type Credential struct {
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
 	// the credential's authtoken that can be used to authenticate an ngrok client.
-	// <strong><em>This value is only available one time, on the API response from
-	// credential creation, otherwise it is null.</em></strong>
+	// This value is only available one time, on the API response from credential
+	// creation, otherwise it is null.
 	Token *string `json:"token,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL []string `json:"acl,omitempty"`
 }
 
@@ -434,7 +426,7 @@ type EventStreamCreate struct {
 	// A list of protocol-specific fields you want to collect on each event.
 	Fields []string `json:"fields,omitempty"`
 	// The protocol that determines which events will be collected. Supported values
-	// are <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
+	// are tcp_connection_closed and http_request_complete.
 	EventType string `json:"event_type,omitempty"`
 	// A list of Event Destination IDs which should be used for this Event Stream.
 	// Event Streams are required to have at least one Event Destination.
@@ -486,7 +478,7 @@ type EventStream struct {
 	// A list of protocol-specific fields you want to collect on each event.
 	Fields []string `json:"fields,omitempty"`
 	// The protocol that determines which events will be collected. Supported values
-	// are <code>tcp_connection_closed</code> and <code>http_request_complete</code>.
+	// are tcp_connection_closed and http_request_complete.
 	EventType string `json:"event_type,omitempty"`
 	// A list of Event Destination IDs which should be used for this Event Stream.
 	// Event Streams are required to have at least one Event Destination.
@@ -503,12 +495,11 @@ type EventDestinationCreate struct {
 	// Human-readable description of the Event Destination. Optional, max 255 bytes.
 	Description string `json:"description,omitempty"`
 	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is <code>JSON</code>.
+	// target. Currently the only accepted value is JSON.
 	Format string `json:"format,omitempty"`
 	// An object that encapsulates where and how to send your events. An event
 	// destination must contain exactly one of the following objects, leaving the rest
-	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
-	// or <code>s3</code>.
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
 	Target              EventTarget `json:"target,omitempty"`
 	VerifyWithTestEvent *bool       `json:"verify_with_test_event,omitempty"`
 }
@@ -522,12 +513,11 @@ type EventDestinationUpdate struct {
 	// Human-readable description of the Event Destination. Optional, max 255 bytes.
 	Description *string `json:"description,omitempty"`
 	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is <code>JSON</code>.
+	// target. Currently the only accepted value is JSON.
 	Format *string `json:"format,omitempty"`
 	// An object that encapsulates where and how to send your events. An event
 	// destination must contain exactly one of the following objects, leaving the rest
-	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
-	// or <code>s3</code>.
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
 	Target              *EventTarget `json:"target,omitempty"`
 	VerifyWithTestEvent *bool        `json:"verify_with_test_event,omitempty"`
 }
@@ -543,12 +533,11 @@ type EventDestination struct {
 	// Human-readable description of the Event Destination. Optional, max 255 bytes.
 	Description string `json:"description,omitempty"`
 	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is <code>JSON</code>.
+	// target. Currently the only accepted value is JSON.
 	Format string `json:"format,omitempty"`
 	// An object that encapsulates where and how to send your events. An event
 	// destination must contain exactly one of the following objects, leaving the rest
-	// null: <code>kinesis</code>, <code>firehose</code>, <code>cloudwatch_logs</code>,
-	// or <code>s3</code>.
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
 	Target EventTarget `json:"target,omitempty"`
 	// URI of the Event Destination API resource.
 	URI string `json:"uri,omitempty"`
@@ -575,8 +564,8 @@ type EventTarget struct {
 }
 
 type EventTargetFirehose struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
 	Auth AWSAuth `json:"auth,omitempty"`
 	// An Amazon Resource Name specifying the Firehose delivery stream to deposit
 	// events into.
@@ -584,16 +573,16 @@ type EventTargetFirehose struct {
 }
 
 type EventTargetKinesis struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
 	Auth AWSAuth `json:"auth,omitempty"`
 	// An Amazon Resource Name specifying the Kinesis stream to deposit events into.
 	StreamARN string `json:"stream_arn,omitempty"`
 }
 
 type EventTargetCloudwatchLogs struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
 	Auth AWSAuth `json:"auth,omitempty"`
 	// An Amazon Resource Name specifying the CloudWatch Logs group to deposit events
 	// into.
@@ -601,8 +590,8 @@ type EventTargetCloudwatchLogs struct {
 }
 
 type EventTargetS3 struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of
-	// <code>role</code> or <code>creds</code> should be configured.
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
 	Auth AWSAuth `json:"auth,omitempty"`
 	// An Amazon Resource Name specifying the S3 bucket to deposit events into.
 	BucketARN string `json:"bucket_arn,omitempty"`
@@ -762,8 +751,8 @@ type EventSourceItem struct {
 	Type string `json:"type,omitempty"`
 }
 
-// This is needed instead of Page because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
-type EventSourcePage struct {
+// This is needed instead of Paging because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
+type EventSourcePaging struct {
 	// TODO
 	SubscriptionID string `json:"subscription_id,omitempty"`
 }
@@ -775,8 +764,7 @@ type IPPolicyCreate struct {
 	// arbitrary user-defined machine-readable data of this IP policy. optional, max
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are <code>allow</code> or
-	// <code>deny</code>
+	// the IP policy action. Supported values are allow or deny
 	Action string `json:"action,omitempty"`
 }
 
@@ -803,8 +791,7 @@ type IPPolicy struct {
 	// arbitrary user-defined machine-readable data of this IP policy. optional, max
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are <code>allow</code> or
-	// <code>deny</code>
+	// the IP policy action. Supported values are allow or deny
 	Action string `json:"action,omitempty"`
 }
 
@@ -880,9 +867,8 @@ type IPRestrictionCreate struct {
 	// issued
 	Enforced bool `json:"enforced,omitempty"`
 	// the type of IP restriction. this defines what traffic will be restricted with
-	// the attached policies. four values are currently supported:
-	// <code>dashboard</code>, <code>api</code>, <code>agent</code>, and
-	// <code>endpoints</code>
+	// the attached policies. four values are currently supported: dashboard, api,
+	// agent, and endpoints
 	Type string `json:"type,omitempty"`
 	// the set of IP policy identifiers that are used to enforce the restriction
 	IPPolicyIDs []string `json:"ip_policy_ids,omitempty"`
@@ -918,9 +904,8 @@ type IPRestriction struct {
 	// issued
 	Enforced bool `json:"enforced,omitempty"`
 	// the type of IP restriction. this defines what traffic will be restricted with
-	// the attached policies. four values are currently supported:
-	// <code>dashboard</code>, <code>api</code>, <code>agent</code>, and
-	// <code>endpoints</code>
+	// the attached policies. four values are currently supported: dashboard, api,
+	// agent, and endpoints
 	Type string `json:"type,omitempty"`
 	// the set of IP policies that are used to enforce the restriction
 	IPPolicies []Ref `json:"ip_policies,omitempty"`
@@ -990,7 +975,7 @@ type EndpointConfiguration struct {
 	// unique identifier of this endpoint configuration
 	ID string `json:"id,omitempty"`
 	// they type of traffic this endpoint configuration can be applied to. one of:
-	// <code>http</code>, <code>https</code>, <code>tcp</code>
+	// http, https, tcp
 	Type string `json:"type,omitempty"`
 	// human-readable description of what this endpoint configuration will be do when
 	// applied or what traffic it will be applied to. Optional, max 255 bytes
@@ -1002,33 +987,33 @@ type EndpointConfiguration struct {
 	CreatedAt string `json:"created_at,omitempty"`
 	// URI of the endpoint configuration API resource
 	URI string `json:"uri,omitempty"`
-	// basic auth module configuration or <code>null</code>
+	// basic auth module configuration or null
 	BasicAuth *EndpointBasicAuth `json:"basic_auth,omitempty"`
-	// circuit breaker module configuration or <code>null</code>
+	// circuit breaker module configuration or null
 	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
-	// compression module configuration or <code>null</code>
+	// compression module configuration or null
 	Compression *EndpointCompression `json:"compression,omitempty"`
-	// request headers module configuration or <code>null</code>
+	// request headers module configuration or null
 	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
-	// response headers module configuration or <code>null</code>
+	// response headers module configuration or null
 	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
-	// ip policy module configuration or <code>null</code>
+	// ip policy module configuration or null
 	IPPolicy *EndpointIPPolicy `json:"ip_policy,omitempty"`
-	// mutual TLS module configuration or <code>null</code>
+	// mutual TLS module configuration or null
 	MutualTLS *EndpointMutualTLS `json:"mutual_tls,omitempty"`
-	// TLS termination module configuration or <code>null</code>
+	// TLS termination module configuration or null
 	TLSTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
-	// webhook validation module configuration or <code>null</code>
+	// webhook validation module configuration or null
 	WebhookValidation *EndpointWebhookValidation `json:"webhook_validation,omitempty"`
-	// oauth module configuration or <code>null</code>
+	// oauth module configuration or null
 	OAuth *EndpointOAuth `json:"oauth,omitempty"`
-	// logging module configuration or <code>null</code>
+	// logging module configuration or null
 	Logging *EndpointLogging `json:"logging,omitempty"`
-	// saml module configuration or <code>null</code>
+	// saml module configuration or null
 	SAML *EndpointSAML `json:"saml,omitempty"`
-	// oidc module configuration or <code>null</code>
+	// oidc module configuration or null
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
-	// backend module configuration or <code>null</code>
+	// backend module configuration or null
 	Backend *EndpointBackend `json:"backend,omitempty"`
 }
 
@@ -1050,39 +1035,39 @@ type EndpointConfigurationUpdate struct {
 	// arbitrary user-defined machine-readable data of this endpoint configuration.
 	// Optional, max 4096 bytes.
 	Metadata *string `json:"metadata,omitempty"`
-	// basic auth module configuration or <code>null</code>
+	// basic auth module configuration or null
 	BasicAuth *EndpointBasicAuth `json:"basic_auth,omitempty"`
-	// circuit breaker module configuration or <code>null</code>
+	// circuit breaker module configuration or null
 	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
-	// compression module configuration or <code>null</code>
+	// compression module configuration or null
 	Compression *EndpointCompression `json:"compression,omitempty"`
-	// request headers module configuration or <code>null</code>
+	// request headers module configuration or null
 	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
-	// response headers module configuration or <code>null</code>
+	// response headers module configuration or null
 	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
-	// ip policy module configuration or <code>null</code>
+	// ip policy module configuration or null
 	IPPolicy *EndpointIPPolicyMutate `json:"ip_policy,omitempty"`
-	// mutual TLS module configuration or <code>null</code>
+	// mutual TLS module configuration or null
 	MutualTLS *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
-	// TLS termination module configuration or <code>null</code>
+	// TLS termination module configuration or null
 	TLSTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
-	// webhook validation module configuration or <code>null</code>
+	// webhook validation module configuration or null
 	WebhookValidation *EndpointWebhookValidation `json:"webhook_validation,omitempty"`
-	// oauth module configuration or <code>null</code>
+	// oauth module configuration or null
 	OAuth *EndpointOAuth `json:"oauth,omitempty"`
-	// logging module configuration or <code>null</code>
+	// logging module configuration or null
 	Logging *EndpointLoggingMutate `json:"logging,omitempty"`
-	// saml module configuration or <code>null</code>
+	// saml module configuration or null
 	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
-	// oidc module configuration or <code>null</code>
+	// oidc module configuration or null
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
-	// backend module configuration or <code>null</code>
+	// backend module configuration or null
 	Backend *EndpointBackendMutate `json:"backend,omitempty"`
 }
 
 type EndpointConfigurationCreate struct {
 	// they type of traffic this endpoint configuration can be applied to. one of:
-	// <code>http</code>, <code>https</code>, <code>tcp</code>
+	// http, https, tcp
 	Type string `json:"type,omitempty"`
 	// human-readable description of what this endpoint configuration will be do when
 	// applied or what traffic it will be applied to. Optional, max 255 bytes
@@ -1090,44 +1075,43 @@ type EndpointConfigurationCreate struct {
 	// arbitrary user-defined machine-readable data of this endpoint configuration.
 	// Optional, max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// basic auth module configuration or <code>null</code>
+	// basic auth module configuration or null
 	BasicAuth *EndpointBasicAuth `json:"basic_auth,omitempty"`
-	// circuit breaker module configuration or <code>null</code>
+	// circuit breaker module configuration or null
 	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
-	// compression module configuration or <code>null</code>
+	// compression module configuration or null
 	Compression *EndpointCompression `json:"compression,omitempty"`
-	// request headers module configuration or <code>null</code>
+	// request headers module configuration or null
 	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
-	// response headers module configuration or <code>null</code>
+	// response headers module configuration or null
 	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
-	// ip policy module configuration or <code>null</code>
+	// ip policy module configuration or null
 	IPPolicy *EndpointIPPolicyMutate `json:"ip_policy,omitempty"`
-	// mutual TLS module configuration or <code>null</code>
+	// mutual TLS module configuration or null
 	MutualTLS *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
-	// TLS termination module configuration or <code>null</code>
+	// TLS termination module configuration or null
 	TLSTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
-	// webhook validation module configuration or <code>null</code>
+	// webhook validation module configuration or null
 	WebhookValidation *EndpointWebhookValidation `json:"webhook_validation,omitempty"`
-	// oauth module configuration or <code>null</code>
+	// oauth module configuration or null
 	OAuth *EndpointOAuth `json:"oauth,omitempty"`
-	// logging module configuration or <code>null</code>
+	// logging module configuration or null
 	Logging *EndpointLoggingMutate `json:"logging,omitempty"`
-	// saml module configuration or <code>null</code>
+	// saml module configuration or null
 	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
-	// oidc module configuration or <code>null</code>
+	// oidc module configuration or null
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
-	// backend module configuration or <code>null</code>
+	// backend module configuration or null
 	Backend *EndpointBackendMutate `json:"backend,omitempty"`
 }
 
 type EndpointWebhookValidation struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// a string indicating which webhook provider will be sending webhooks to this
-	// endpoint. Value must be one of the supported providers: <code>SLACK</code>,
-	// <code>SNS</code>, <code>STRIPE</code>, <code>GITHUB</code>, <code>TWILIO</code>,
-	// <code>SHOPIFY</code>, <code>GITLAB</code>, <code>INTERCOM</code>.
+	// endpoint. Value must be one of the supported providers: SLACK, SNS, STRIPE,
+	// GITHUB, TWILIO, SHOPIFY, GITLAB, INTERCOM.
 	Provider string `json:"provider,omitempty"`
 	// a string secret used to validate requests from the given provider. All providers
 	// except AWS SNS require a secret
@@ -1135,14 +1119,14 @@ type EndpointWebhookValidation struct {
 }
 
 type EndpointCompression struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
 type EndpointMutualTLS struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// PEM-encoded CA certificates that will be used to validate. Multiple CAs may be
 	// provided by concatenating them together.
@@ -1150,8 +1134,8 @@ type EndpointMutualTLS struct {
 }
 
 type EndpointMutualTLSMutate struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// list of certificate authorities that will be used to validate the TLS client
 	// certificate presnted by the initiatiator of the TLS connection
@@ -1159,42 +1143,39 @@ type EndpointMutualTLSMutate struct {
 }
 
 type EndpointTLSTermination struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
-	// <code>edge</code> if the ngrok edge should terminate TLS traffic,
-	// <code>upstream</code> if TLS traffic should be passed through to the upstream
-	// ngrok agent / application server for termination. if <code>upstream</code> is
-	// chosen, most other modules will be disallowed because they rely on the ngrok
-	// edge being able to access the underlying traffic.
+	// edge if the ngrok edge should terminate TLS traffic, upstream if TLS traffic
+	// should be passed through to the upstream ngrok agent / application server for
+	// termination. if upstream is chosen, most other modules will be disallowed
+	// because they rely on the ngrok edge being able to access the underlying traffic.
 	TerminateAt string `json:"terminate_at,omitempty"`
 	// The minimum TLS version used for termination and advertised to the client during
 	// the TLS handshake. if unspecified, ngrok will choose an industry-safe default.
-	// This value must be null if <code>terminate_at</code> is set to
-	// <code>upstream</code>.
+	// This value must be null if terminate_at is set to upstream.
 	MinVersion *string `json:"min_version,omitempty"`
 }
 
 type EndpointBasicAuth struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// determines how the basic auth credentials are validated. Currently only the
-	// value <code>agent</code> is supported which means that credentials will be
-	// validated against the username and password specified by the ngrok agent's
-	// <code>-auth</code> flag, if any.
+	// value agent is supported which means that credentials will be validated against
+	// the username and password specified by the ngrok agent's -auth flag, if any.
 	AuthProviderID string `json:"auth_provider_id,omitempty"`
 	// an arbitrary string to be specified in as the 'realm' value in the
-	// <code>WWW-Authenticate</code> header. default is <code>ngrok</code>
+	// WWW-Authenticate header. default is ngrok
 	Realm string `json:"realm,omitempty"`
 	// true or false indicating whether to allow OPTIONS requests through without
-	// authentication which is necessary for CORS. default is <code>false</code>
+	// authentication which is necessary for CORS. default is false
 	AllowOptions bool `json:"allow_options,omitempty"`
 }
 
 type EndpointLogging struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// list of all EventStreams that will be used to configure and export this
 	// endpoint's logs
@@ -1202,8 +1183,8 @@ type EndpointLogging struct {
 }
 
 type EndpointLoggingMutate struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// list of all EventStreams that will be used to configure and export this
 	// endpoint's logs
@@ -1211,8 +1192,8 @@ type EndpointLoggingMutate struct {
 }
 
 type EndpointRequestHeaders struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// a map of header key to header value that will be injected into the HTTP Request
 	// before being sent to the upstream application server
@@ -1223,8 +1204,8 @@ type EndpointRequestHeaders struct {
 }
 
 type EndpointResponseHeaders struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// a map of header key to header value that will be injected into the HTTP Response
 	// returned to the HTTP client
@@ -1235,15 +1216,15 @@ type EndpointResponseHeaders struct {
 }
 
 type EndpointIPPolicy struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled    *bool `json:"enabled,omitempty"`
 	IPPolicies []Ref `json:"ip_policies,omitempty"`
 }
 
 type EndpointIPPolicyMutate struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// list of all IP policies that will be used to check if a source IP is allowed
 	// access to the endpoint
@@ -1251,8 +1232,8 @@ type EndpointIPPolicyMutate struct {
 }
 
 type EndpointCircuitBreaker struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// Integer number of seconds after which the circuit is tripped to wait before
 	// re-evaluating upstream health
@@ -1270,8 +1251,8 @@ type EndpointCircuitBreaker struct {
 }
 
 type EndpointOAuth struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// an object which defines the identity provider to use for authentication and
 	// configuration for who may access the endpoint
@@ -1317,12 +1298,11 @@ type EndpointOAuthGitHub struct {
 	ClientID *string `json:"client_id,omitempty"`
 	// the OAuth app client secret. retrieve if from the identity provider's dashboard
 	// where you created your own OAuth app. optional, see all of the caveats in the
-	// docs for <code>client_id</code>.
+	// docs for client_id.
 	ClientSecret *string `json:"client_secret,omitempty"`
 	// a list of provider-specific OAuth scopes with the permissions your OAuth app
 	// would like to ask for. these may not be set if you are using the ngrok-managed
-	// oauth app (i.e. you must pass both <code>client_id</code> and
-	// <code>client_secret</code> to set scopes)
+	// oauth app (i.e. you must pass both client_id and client_secret to set scopes)
 	Scopes []string `json:"scopes,omitempty"`
 	// a list of email addresses of users authenticated by identity provider who are
 	// allowed access to the endpoint
@@ -1332,7 +1312,7 @@ type EndpointOAuthGitHub struct {
 	EmailDomains []string `json:"email_domains,omitempty"`
 	// a list of github teams identifiers. users will be allowed access to the endpoint
 	// if they are a member of any of these teams. identifiers should be in the 'slug'
-	// format qualified with the org name, e.g. <code>org-name/team-name</code>
+	// format qualified with the org name, e.g. org-name/team-name
 	Teams []string `json:"teams,omitempty"`
 	// a list of github org identifiers. users who are members of any of the listed
 	// organizations will be allowed access. identifiers should be the organization's
@@ -1349,12 +1329,11 @@ type EndpointOAuthFacebook struct {
 	ClientID *string `json:"client_id,omitempty"`
 	// the OAuth app client secret. retrieve if from the identity provider's dashboard
 	// where you created your own OAuth app. optional, see all of the caveats in the
-	// docs for <code>client_id</code>.
+	// docs for client_id.
 	ClientSecret *string `json:"client_secret,omitempty"`
 	// a list of provider-specific OAuth scopes with the permissions your OAuth app
 	// would like to ask for. these may not be set if you are using the ngrok-managed
-	// oauth app (i.e. you must pass both <code>client_id</code> and
-	// <code>client_secret</code> to set scopes)
+	// oauth app (i.e. you must pass both client_id and client_secret to set scopes)
 	Scopes []string `json:"scopes,omitempty"`
 	// a list of email addresses of users authenticated by identity provider who are
 	// allowed access to the endpoint
@@ -1373,12 +1352,11 @@ type EndpointOAuthMicrosoft struct {
 	ClientID *string `json:"client_id,omitempty"`
 	// the OAuth app client secret. retrieve if from the identity provider's dashboard
 	// where you created your own OAuth app. optional, see all of the caveats in the
-	// docs for <code>client_id</code>.
+	// docs for client_id.
 	ClientSecret *string `json:"client_secret,omitempty"`
 	// a list of provider-specific OAuth scopes with the permissions your OAuth app
 	// would like to ask for. these may not be set if you are using the ngrok-managed
-	// oauth app (i.e. you must pass both <code>client_id</code> and
-	// <code>client_secret</code> to set scopes)
+	// oauth app (i.e. you must pass both client_id and client_secret to set scopes)
 	Scopes []string `json:"scopes,omitempty"`
 	// a list of email addresses of users authenticated by identity provider who are
 	// allowed access to the endpoint
@@ -1397,12 +1375,11 @@ type EndpointOAuthGoogle struct {
 	ClientID *string `json:"client_id,omitempty"`
 	// the OAuth app client secret. retrieve if from the identity provider's dashboard
 	// where you created your own OAuth app. optional, see all of the caveats in the
-	// docs for <code>client_id</code>.
+	// docs for client_id.
 	ClientSecret *string `json:"client_secret,omitempty"`
 	// a list of provider-specific OAuth scopes with the permissions your OAuth app
 	// would like to ask for. these may not be set if you are using the ngrok-managed
-	// oauth app (i.e. you must pass both <code>client_id</code> and
-	// <code>client_secret</code> to set scopes)
+	// oauth app (i.e. you must pass both client_id and client_secret to set scopes)
 	Scopes []string `json:"scopes,omitempty"`
 	// a list of email addresses of users authenticated by identity provider who are
 	// allowed access to the endpoint
@@ -1413,8 +1390,8 @@ type EndpointOAuthGoogle struct {
 }
 
 type EndpointSAML struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// Do not enforce authentication on HTTP OPTIONS requests. necessary if you are
 	// supporting CORS.
@@ -1443,8 +1420,8 @@ type EndpointSAML struct {
 	ForceAuthn bool `json:"force_authn,omitempty"`
 	// If true, the IdP may initiate a login directly (e.g. the user does not need to
 	// visit the endpoint first and then be redirected). The IdP should set the
-	// <code>RelayState</code> parameter to the target URL of the resource they want
-	// the user to be redirected to after the SAML login assertion has been processed.
+	// RelayState parameter to the target URL of the resource they want the user to be
+	// redirected to after the SAML login assertion has been processed.
 	AllowIdPInitiated *bool `json:"allow_idp_initiated,omitempty"`
 	// If present, only users who are a member of one of the listed groups may access
 	// the target endpoint.
@@ -1472,8 +1449,8 @@ type EndpointSAML struct {
 }
 
 type EndpointSAMLMutate struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// Do not enforce authentication on HTTP OPTIONS requests. necessary if you are
 	// supporting CORS.
@@ -1502,8 +1479,8 @@ type EndpointSAMLMutate struct {
 	ForceAuthn bool `json:"force_authn,omitempty"`
 	// If true, the IdP may initiate a login directly (e.g. the user does not need to
 	// visit the endpoint first and then be redirected). The IdP should set the
-	// <code>RelayState</code> parameter to the target URL of the resource they want
-	// the user to be redirected to after the SAML login assertion has been processed.
+	// RelayState parameter to the target URL of the resource they want the user to be
+	// redirected to after the SAML login assertion has been processed.
 	AllowIdPInitiated *bool `json:"allow_idp_initiated,omitempty"`
 	// If present, only users who are a member of one of the listed groups may access
 	// the target endpoint.
@@ -1511,8 +1488,8 @@ type EndpointSAMLMutate struct {
 }
 
 type EndpointOIDC struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// Do not enforce authentication on HTTP OPTIONS requests. necessary if you are
 	// supporting CORS.
@@ -1538,16 +1515,16 @@ type EndpointOIDC struct {
 }
 
 type EndpointBackend struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// backend to be used to back this endpoint
 	Backend Ref `json:"backend,omitempty"`
 }
 
 type EndpointBackendMutate struct {
-	// <code>true</code> if the module will be applied to traffic, <code>false</code>
-	// to disable. default <code>true</code> if unspecified
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// backend to be used to back this endpoint
 	BackendID string `json:"backend_id,omitempty"`
@@ -1699,11 +1676,11 @@ type ReservedDomainCreate struct {
 	// inbound https traffic to this domain
 	HTTPSEndpointConfigurationID string `json:"https_endpoint_configuration_id,omitempty"`
 	// ID of a user-uploaded TLS certificate to use for connections to targeting this
-	// domain. Optional, mutually exclusive with `certificate_management_policy`.
+	// domain. Optional, mutually exclusive with certificate_management_policy.
 	CertificateID *string `json:"certificate_id,omitempty"`
 	// configuration for automatic management of TLS certificates for this domain, or
 	// null if automatic management is disabled. Optional, mutually exclusive with
-	// `certificate_id`.
+	// certificate_id.
 	CertificateManagementPolicy *ReservedDomainCertPolicy `json:"certificate_management_policy,omitempty"`
 }
 
@@ -1721,11 +1698,11 @@ type ReservedDomainUpdate struct {
 	// inbound https traffic to this domain
 	HTTPSEndpointConfigurationID *string `json:"https_endpoint_configuration_id,omitempty"`
 	// ID of a user-uploaded TLS certificate to use for connections to targeting this
-	// domain. Optional, mutually exclusive with `certificate_management_policy`.
+	// domain. Optional, mutually exclusive with certificate_management_policy.
 	CertificateID *string `json:"certificate_id,omitempty"`
 	// configuration for automatic management of TLS certificates for this domain, or
 	// null if automatic management is disabled. Optional, mutually exclusive with
-	// `certificate_id`.
+	// certificate_id.
 	CertificateManagementPolicy *ReservedDomainCertPolicy `json:"certificate_management_policy,omitempty"`
 }
 
@@ -1828,13 +1805,11 @@ type SSHCertificateAuthorityCreate struct {
 	// arbitrary user-defined machine-readable data of this SSH Certificate Authority.
 	// optional, max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// the type of private key to generate. one of <code>rsa</code>,
-	// <code>ecdsa</code>, <code>ed25519</code>
+	// the type of private key to generate. one of rsa, ecdsa, ed25519
 	PrivateKeyType string `json:"private_key_type,omitempty"`
 	// the type of elliptic curve to use when creating an ECDSA key
 	EllipticCurve string `json:"elliptic_curve,omitempty"`
-	// the key size to use when creating an RSA key. one of <code>2048</code> or
-	// <code>4096</code>
+	// the key size to use when creating an RSA key. one of 2048 or 4096
 	KeySize int64 `json:"key_size,omitempty"`
 }
 
@@ -1885,16 +1860,14 @@ type SSHCredentialCreate struct {
 	// max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL []string `json:"acl,omitempty"`
 	// the PEM-encoded public key of the SSH keypair that will be used to authenticate
 	PublicKey string `json:"public_key,omitempty"`
@@ -1909,16 +1882,14 @@ type SSHCredentialUpdate struct {
 	// max 4096 bytes.
 	Metadata *string `json:"metadata,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL *[]string `json:"acl,omitempty"`
 }
 
@@ -1938,16 +1909,14 @@ type SSHCredential struct {
 	// the PEM-encoded public key of the SSH keypair that will be used to authenticate
 	PublicKey string `json:"public_key,omitempty"`
 	// optional list of ACL rules. If unspecified, the credential will have no
-	// restrictions. The only allowed ACL rule at this time is the <code>bind</code>
-	// rule. The <code>bind</code> rule allows the caller to restrict what domains and
-	// addresses the token is allowed to bind. For example, to allow the token to open
-	// a tunnel on example.ngrok.io your ACL would include the rule
-	// <code>bind:example.ngrok.io</code>. Bind rules may specify a leading wildcard to
-	// match multiple domains with a common suffix. For example, you may specify a rule
-	// of <code>bind:*.example.com</code> which will allow <code>x.example.com</code>,
-	// <code>y.example.com</code>, <code>*.example.com</code>, etc. A rule of
-	// <code>'*'</code> is equivalent to no acl at all and will explicitly permit all
-	// actions.
+	// restrictions. The only allowed ACL rule at this time is the bind rule. The bind
+	// rule allows the caller to restrict what domains and addresses the token is
+	// allowed to bind. For example, to allow the token to open a tunnel on
+	// example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind
+	// rules may specify a leading wildcard to match multiple domains with a common
+	// suffix. For example, you may specify a rule of bind:*.example.com which will
+	// allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is
+	// equivalent to no acl at all and will explicitly permit all actions.
 	ACL []string `json:"acl,omitempty"`
 }
 
@@ -1975,7 +1944,7 @@ type SSHHostCertificateCreate struct {
 	ValidAfter string `json:"valid_after,omitempty"`
 	// The time when this host certificate becomes invalid, in RFC 3339 format. If
 	// unspecified, a default value of one year in the future will be used. The OpenSSH
-	// certificates RFC calls this <code>valid_before</code>.
+	// certificates RFC calls this valid_before.
 	ValidUntil string `json:"valid_until,omitempty"`
 	// human-readable description of this SSH Host Certificate. optional, max 255
 	// bytes.
@@ -2011,8 +1980,7 @@ type SSHHostCertificate struct {
 	Metadata string `json:"metadata,omitempty"`
 	// a public key in OpenSSH Authorized Keys format that this certificate signs
 	PublicKey string `json:"public_key,omitempty"`
-	// the key type of the <code>public_key</code>, one of <code>rsa</code>,
-	// <code>ecdsa</code> or <code>ed25519</code>
+	// the key type of the public_key, one of rsa, ecdsa or ed25519
 	KeyType string `json:"key_type,omitempty"`
 	// the ssh certificate authority that is used to sign this ssh host certificate
 	SSHCertificateAuthorityID string `json:"ssh_certificate_authority_id,omitempty"`
@@ -2024,12 +1992,11 @@ type SSHHostCertificate struct {
 	// the time when the ssh host certificate becomes valid, in RFC 3339 format.
 	ValidAfter string `json:"valid_after,omitempty"`
 	// the time after which the ssh host certificate becomes invalid, in RFC 3339
-	// format. the OpenSSH certificates RFC calls this <code>valid_before</code>.
+	// format. the OpenSSH certificates RFC calls this valid_before.
 	ValidUntil string `json:"valid_until,omitempty"`
 	// the signed SSH certificate in OpenSSH Authorized Keys format. this value should
-	// be placed in a <code>-cert.pub</code> certificate file on disk that should be
-	// referenced in your <code>sshd_config</code> configuration file with a
-	// <code>HostCertificate</code> directive
+	// be placed in a -cert.pub certificate file on disk that should be referenced in
+	// your sshd_config configuration file with a HostCertificate directive
 	Certificate string `json:"certificate,omitempty"`
 }
 
@@ -2053,27 +2020,25 @@ type SSHUserCertificateCreate struct {
 	// this certificate may be used to log in as any user.
 	Principals []string `json:"principals,omitempty"`
 	// A map of critical options included in the certificate. Only two critical options
-	// are currently defined by OpenSSH: <code>force-command</code> and
-	// <code>source-address</code>. See <a
-	// href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">the
-	// OpenSSH certificate protocol spec</a> for additional details.
+	// are currently defined by OpenSSH: force-command and source-address. See
+	// (https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys)the
+	// OpenSSH certificate protocol spec for additional details.
 	CriticalOptions map[string]string `json:"critical_options,omitempty"`
 	// A map of extensions included in the certificate. Extensions are additional
 	// metadata that can be interpreted by the SSH server for any purpose. These can be
 	// used to permit or deny the ability to open a terminal, do port forwarding, x11
 	// forwarding, and more. If unspecified, the certificate will include limited
-	// permissions with the following extension map: <code>{"permit-pty": "",
-	// "permit-user-rc": ""}</code> OpenSSH understands a number of predefined
-	// extensions. See <a
-	// href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">the
-	// OpenSSH certificate protocol spec</a> for additional details.
+	// permissions with the following extension map: {"permit-pty": "",
+	// "permit-user-rc": ""} OpenSSH understands a number of predefined extensions. See
+	// (https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys)the
+	// OpenSSH certificate protocol spec for additional details.
 	Extensions map[string]string `json:"extensions,omitempty"`
 	// The time when the user certificate becomes valid, in RFC 3339 format. Defaults
 	// to the current time if unspecified.
 	ValidAfter string `json:"valid_after,omitempty"`
 	// The time when this host certificate becomes invalid, in RFC 3339 format. If
 	// unspecified, a default value of 24 hours will be used. The OpenSSH certificates
-	// RFC calls this <code>valid_before</code>.
+	// RFC calls this valid_before.
 	ValidUntil string `json:"valid_until,omitempty"`
 	// human-readable description of this SSH User Certificate. optional, max 255
 	// bytes.
@@ -2109,8 +2074,7 @@ type SSHUserCertificate struct {
 	Metadata string `json:"metadata,omitempty"`
 	// a public key in OpenSSH Authorized Keys format that this certificate signs
 	PublicKey string `json:"public_key,omitempty"`
-	// the key type of the <code>public_key</code>, one of <code>rsa</code>,
-	// <code>ecdsa</code> or <code>ed25519</code>
+	// the key type of the public_key, one of rsa, ecdsa or ed25519
 	KeyType string `json:"key_type,omitempty"`
 	// the ssh certificate authority that is used to sign this ssh user certificate
 	SSHCertificateAuthorityID string `json:"ssh_certificate_authority_id,omitempty"`
@@ -2120,30 +2084,27 @@ type SSHUserCertificate struct {
 	// this certificate may be used to log in as any user.
 	Principals []string `json:"principals,omitempty"`
 	// A map of critical options included in the certificate. Only two critical options
-	// are currently defined by OpenSSH: <code>force-command</code> and
-	// <code>source-address</code>. See <a
-	// href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">the
-	// OpenSSH certificate protocol spec</a> for additional details.
+	// are currently defined by OpenSSH: force-command and source-address. See
+	// (https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys)the
+	// OpenSSH certificate protocol spec for additional details.
 	CriticalOptions map[string]string `json:"critical_options,omitempty"`
 	// A map of extensions included in the certificate. Extensions are additional
 	// metadata that can be interpreted by the SSH server for any purpose. These can be
 	// used to permit or deny the ability to open a terminal, do port forwarding, x11
 	// forwarding, and more. If unspecified, the certificate will include limited
-	// permissions with the following extension map: <code>{"permit-pty": "",
-	// "permit-user-rc": ""}</code> OpenSSH understands a number of predefined
-	// extensions. See <a
-	// href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">the
-	// OpenSSH certificate protocol spec</a> for additional details.
+	// permissions with the following extension map: {"permit-pty": "",
+	// "permit-user-rc": ""} OpenSSH understands a number of predefined extensions. See
+	// (https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys)the
+	// OpenSSH certificate protocol spec for additional details.
 	Extensions map[string]string `json:"extensions,omitempty"`
 	// the time when the ssh host certificate becomes valid, in RFC 3339 format.
 	ValidAfter string `json:"valid_after,omitempty"`
 	// the time after which the ssh host certificate becomes invalid, in RFC 3339
-	// format. the OpenSSH certificates RFC calls this <code>valid_before</code>.
+	// format. the OpenSSH certificates RFC calls this valid_before.
 	ValidUntil string `json:"valid_until,omitempty"`
 	// the signed SSH certificate in OpenSSH Authorized Keys Format. this value should
-	// be placed in a <code>-cert.pub</code> certificate file on disk that should be
-	// referenced in your <code>sshd_config</code> configuration file with a
-	// <code>HostCertificate</code> directive
+	// be placed in a -cert.pub certificate file on disk that should be referenced in
+	// your sshd_config configuration file with a HostCertificate directive
 	Certificate string `json:"certificate,omitempty"`
 }
 
@@ -2162,11 +2123,11 @@ type TLSCertificateCreate struct {
 	// arbitrary user-defined machine-readable data of this TLS certificate. optional,
 	// max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// chain of PEM-encoded certificates, leaf first. See <a
-	// href="#tls-certificates-pem">Certificate Bundles</a>.
+	// chain of PEM-encoded certificates, leaf first. See
+	// (https://ngrok.com/docs/api#tls-certificates-pem)Certificate Bundles.
 	CertificatePEM string `json:"certificate_pem,omitempty"`
-	// private key for the TLS certificate, PEM-encoded. See <a
-	// href="#tls-certificates-key">Private Keys</a>.
+	// private key for the TLS certificate, PEM-encoded. See
+	// (https://ngrok.com/docs/ngrok-link#tls-certificates-key)Private Keys.
 	PrivateKeyPEM string `json:"private_key_pem,omitempty"`
 }
 
@@ -2191,8 +2152,8 @@ type TLSCertificate struct {
 	// arbitrary user-defined machine-readable data of this TLS certificate. optional,
 	// max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// chain of PEM-encoded certificates, leaf first. See <a
-	// href="#tls-certificates-pem">Certificate Bundles</a>.
+	// chain of PEM-encoded certificates, leaf first. See
+	// (https://ngrok.com/docs/api#tls-certificates-pem)Certificate Bundles.
 	CertificatePEM string `json:"certificate_pem,omitempty"`
 	// subject common name from the leaf of this TLS certificate
 	SubjectCommonName string `json:"subject_common_name,omitempty"`
@@ -2263,8 +2224,7 @@ type TunnelSession struct {
 	Region string `json:"region,omitempty"`
 	// time when the tunnel session first connected to the ngrok servers
 	StartedAt string `json:"started_at,omitempty"`
-	// the transport protocol used to start the tunnel session. Either
-	// <code>ngrok/v2</code> or <code>ssh</code>
+	// the transport protocol used to start the tunnel session. Either ngrok/v2 or ssh
 	Transport string `json:"transport,omitempty"`
 	// URI to the API resource of the tunnel session
 	URI string `json:"uri,omitempty"`
@@ -2294,13 +2254,12 @@ type Tunnel struct {
 	// timestamp when the tunnel was initiated in RFC 3339 format
 	StartedAt string `json:"started_at,omitempty"`
 	// user-supplied metadata for the tunnel defined in the ngrok configuration file.
-	// See the tunnel <a
-	// href="https://ngrok.com/docs#tunnel-definitions-metadata">metadata configuration
-	// option</a> In API version 0, this value was instead pulled from the top-level <a
-	// href="https://ngrok.com/docs#config_metadata">metadata configuration option</a>.
+	// See the tunnel  (https://ngrok.com/docs#tunnel-definitions-metadata)metadata
+	// configuration option In API version 0, this value was instead pulled from the
+	// top-level  (https://ngrok.com/docs#config_metadata)metadata configuration
+	// option.
 	Metadata string `json:"metadata,omitempty"`
-	// tunnel protocol. one of <code>http</code>, <code>https</code>, <code>tcp</code>
-	// or <code>tls</code>
+	// tunnel protocol. one of http, https, tcp or tls
 	Proto string `json:"proto,omitempty"`
 	// identifier of tune region where the tunnel is running
 	Region string `json:"region,omitempty"`

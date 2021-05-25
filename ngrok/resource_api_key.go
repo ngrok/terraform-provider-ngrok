@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -61,7 +62,7 @@ func resourceAPIKeys() *schema.Resource {
 				Optional:    true,
 				Sensitive:   true,
 				ForceNew:    true,
-				Description: "the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. This value is only available one time, on the API response from key creation. Otherwise it is null.",
+				Description: "the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -88,9 +89,12 @@ func resourceAPIKeysCreate(d *schema.ResourceData, m interface{}) (err error) {
 	}
 
 	res, _, err := b.client.APIKeysCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] APIKeysCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceAPIKeysGet(d, m)
 }
 
@@ -108,6 +112,7 @@ func resourceAPIKeysGetDecode(d *schema.ResourceData, res *restapi.APIKey, resp 
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] APIKeysGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -137,6 +142,7 @@ func resourceAPIKeysUpdate(d *schema.ResourceData, m interface{}) (err error) {
 
 	res, _, err := b.client.APIKeysUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] APIKeysUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -147,5 +153,8 @@ func resourceAPIKeysUpdate(d *schema.ResourceData, m interface{}) (err error) {
 func resourceAPIKeysDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.APIKeysDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] APIKeysDelete: %s", err)
+	}
 	return err
 }

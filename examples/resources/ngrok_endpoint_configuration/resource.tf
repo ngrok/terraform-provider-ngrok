@@ -3,9 +3,9 @@ resource "ngrok_endpoint_configuration" "example" {
   description = "app servers"
   request_headers {
     add = {
-      X-Frontend = "ngrok"
+      x-frontend = "ngrok"
     }
-    remove = [ "Cache-Control" ]
+    remove = [ "cache-control" ]
   }
   type = "https"
 }

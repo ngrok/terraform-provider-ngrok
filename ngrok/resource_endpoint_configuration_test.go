@@ -18,9 +18,9 @@ var (
   description = "app servers"
   request_headers {
     add = {
-      X-Frontend = "ngrok"
+      x-frontend = "ngrok"
     }
-    remove = [ "Cache-Control" ]
+    remove = [ "cache-control" ]
   }
   type = "https"
 }`
@@ -61,7 +61,7 @@ func init() {
 }
 
 func TestAccResourceEndpointConfigurations(t *testing.T) {
-	t.Skip("Test skipped. See: https://github.com/ngrok-private/ngrok/issues/4722")
+
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },

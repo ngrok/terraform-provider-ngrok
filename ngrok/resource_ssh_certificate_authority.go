@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -52,7 +53,7 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the key size to use when creating an RSA key. one of 2048 or 4096",
+				Description: "the key size to use when creating an RSA key. one of `2048` or `4096`",
 			},
 			"key_type": {
 				Type:        schema.TypeString,
@@ -88,7 +89,7 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the type of private key to generate. one of rsa, ecdsa, ed25519",
+				Description: "the type of private key to generate. one of `rsa`, `ecdsa`, `ed25519`",
 			},
 			"public_key": {
 				Type:        schema.TypeString,
@@ -133,9 +134,12 @@ func resourceSSHCertificateAuthoritiesCreate(d *schema.ResourceData, m interface
 	}
 
 	res, _, err := b.client.SSHCertificateAuthoritiesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] SSHCertificateAuthoritiesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceSSHCertificateAuthoritiesGet(d, m)
 }
 
@@ -153,6 +157,7 @@ func resourceSSHCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *res
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] SSHCertificateAuthoritiesGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -183,6 +188,7 @@ func resourceSSHCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface
 
 	res, _, err := b.client.SSHCertificateAuthoritiesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] SSHCertificateAuthoritiesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -193,5 +199,8 @@ func resourceSSHCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface
 func resourceSSHCertificateAuthoritiesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.SSHCertificateAuthoritiesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] SSHCertificateAuthoritiesDelete: %s", err)
+	}
 	return err
 }

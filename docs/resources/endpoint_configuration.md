@@ -25,9 +25,9 @@ resource "ngrok_endpoint_configuration" "example" {
   description = "app servers"
   request_headers {
     add = {
-      X-Frontend = "ngrok"
+      x-frontend = "ngrok"
     }
-    remove = [ "Cache-Control" ]
+    remove = [ "cache-control" ]
   }
   type = "https"
 }
@@ -38,27 +38,27 @@ resource "ngrok_endpoint_configuration" "example" {
 
 ### Optional
 
-- **backend** (Block Set) backend module configuration or null (see [below for nested schema](#nestedblock--backend))
-- **basic_auth** (Block Set) basic auth module configuration or null (see [below for nested schema](#nestedblock--basic_auth))
-- **circuit_breaker** (Block Set) circuit breaker module configuration or null (see [below for nested schema](#nestedblock--circuit_breaker))
-- **compression** (Block Set) compression module configuration or null (see [below for nested schema](#nestedblock--compression))
+- **backend** (Block Set) backend module configuration or `null` (see [below for nested schema](#nestedblock--backend))
+- **basic_auth** (Block Set) basic auth module configuration or `null` (see [below for nested schema](#nestedblock--basic_auth))
+- **circuit_breaker** (Block Set) circuit breaker module configuration or `null` (see [below for nested schema](#nestedblock--circuit_breaker))
+- **compression** (Block Set) compression module configuration or `null` (see [below for nested schema](#nestedblock--compression))
 - **created_at** (String) timestamp when the endpoint configuration was created, RFC 3339 format
 - **description** (String) human-readable description of what this endpoint configuration will be do when applied or what traffic it will be applied to. Optional, max 255 bytes
 - **id** (String) The ID of this resource.
-- **ip_policy** (Block Set) ip policy module configuration or null (see [below for nested schema](#nestedblock--ip_policy))
-- **logging** (Block Set) logging module configuration or null (see [below for nested schema](#nestedblock--logging))
+- **ip_policy** (Block Set) ip policy module configuration or `null` (see [below for nested schema](#nestedblock--ip_policy))
+- **logging** (Block Set) logging module configuration or `null` (see [below for nested schema](#nestedblock--logging))
 - **metadata** (String) arbitrary user-defined machine-readable data of this endpoint configuration. Optional, max 4096 bytes.
-- **mutual_tls** (Block Set) mutual TLS module configuration or null (see [below for nested schema](#nestedblock--mutual_tls))
+- **mutual_tls** (Block Set) mutual TLS module configuration or `null` (see [below for nested schema](#nestedblock--mutual_tls))
 - **ngrok_id** (String) unique identifier of this endpoint configuration
-- **oauth** (Block Set) oauth module configuration or null (see [below for nested schema](#nestedblock--oauth))
-- **oidc** (Block Set) oidc module configuration or null (see [below for nested schema](#nestedblock--oidc))
-- **request_headers** (Block Set) request headers module configuration or null (see [below for nested schema](#nestedblock--request_headers))
-- **response_headers** (Block Set) response headers module configuration or null (see [below for nested schema](#nestedblock--response_headers))
-- **saml** (Block Set) saml module configuration or null (see [below for nested schema](#nestedblock--saml))
-- **tls_termination** (Block Set) TLS termination module configuration or null (see [below for nested schema](#nestedblock--tls_termination))
-- **type** (String) they type of traffic this endpoint configuration can be applied to. one of: http, https, tcp
+- **oauth** (Block Set) oauth module configuration or `null` (see [below for nested schema](#nestedblock--oauth))
+- **oidc** (Block Set) oidc module configuration or `null` (see [below for nested schema](#nestedblock--oidc))
+- **request_headers** (Block Set) request headers module configuration or `null` (see [below for nested schema](#nestedblock--request_headers))
+- **response_headers** (Block Set) response headers module configuration or `null` (see [below for nested schema](#nestedblock--response_headers))
+- **saml** (Block Set) saml module configuration or `null` (see [below for nested schema](#nestedblock--saml))
+- **tls_termination** (Block Set) TLS termination module configuration or `null` (see [below for nested schema](#nestedblock--tls_termination))
+- **type** (String) they type of traffic this endpoint configuration can be applied to. one of: `http`, `https`, `tcp`
 - **uri** (String) URI of the endpoint configuration API resource
-- **webhook_validation** (Block Set) webhook validation module configuration or null (see [below for nested schema](#nestedblock--webhook_validation))
+- **webhook_validation** (Block Set) webhook validation module configuration or `null` (see [below for nested schema](#nestedblock--webhook_validation))
 
 <a id="nestedblock--backend"></a>
 ### Nested Schema for `backend`
@@ -66,7 +66,7 @@ resource "ngrok_endpoint_configuration" "example" {
 Optional:
 
 - **backend** (Block Set) backend to be used to back this endpoint (see [below for nested schema](#nestedblock--backend--backend))
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 
 <a id="nestedblock--backend--backend"></a>
 ### Nested Schema for `backend.backend`
@@ -83,10 +83,10 @@ Optional:
 
 Optional:
 
-- **allow_options** (Boolean) true or false indicating whether to allow OPTIONS requests through without authentication which is necessary for CORS. default is false
-- **auth_provider_id** (String) determines how the basic auth credentials are validated. Currently only the value agent is supported which means that credentials will be validated against the username and password specified by the ngrok agent's -auth flag, if any.
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
-- **realm** (String) an arbitrary string to be specified in as the 'realm' value in the WWW-Authenticate header. default is ngrok
+- **allow_options** (Boolean) true or false indicating whether to allow OPTIONS requests through without authentication which is necessary for CORS. default is `false`
+- **auth_provider_id** (String) determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `-auth` flag, if any.
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
+- **realm** (String) an arbitrary string to be specified in as the 'realm' value in the `WWW-Authenticate` header. default is `ngrok`
 
 
 <a id="nestedblock--circuit_breaker"></a>
@@ -94,7 +94,7 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **error_threshold_percentage** (Number) Error threshold percentage should be between 0 - 1.0, not 0-100.0
 - **num_buckets** (Number) Integer number of buckets into which metrics are retained. Max 128.
 - **rolling_window** (Number) Integer number of seconds in the statistical rolling window that metrics are retained for.
@@ -107,7 +107,7 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 
 
 <a id="nestedblock--ip_policy"></a>
@@ -115,7 +115,7 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **ip_policies** (Block List) (see [below for nested schema](#nestedblock--ip_policy--ip_policies))
 
 <a id="nestedblock--ip_policy--ip_policies"></a>
@@ -133,7 +133,7 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **event_streams** (Block List) list of all EventStreams that will be used to configure and export this endpoint's logs (see [below for nested schema](#nestedblock--logging--event_streams))
 
 <a id="nestedblock--logging--event_streams"></a>
@@ -152,7 +152,7 @@ Optional:
 Optional:
 
 - **certificate_authorities** (Block List) PEM-encoded CA certificates that will be used to validate. Multiple CAs may be provided by concatenating them together. (see [below for nested schema](#nestedblock--mutual_tls--certificate_authorities))
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 
 <a id="nestedblock--mutual_tls--certificate_authorities"></a>
 ### Nested Schema for `mutual_tls.certificate_authorities`
@@ -171,7 +171,7 @@ Optional:
 
 - **auth_check_interval** (Number) Integer number of seconds after which ngrok guarantees it will refresh user state from the identity provider and recheck whether the user is still authorized to access the endpoint. This is the preferred tunable to use to enforce a minimum amount of time after which a revoked user will no longer be able to access the resource.
 - **cookie_prefix** (String) the prefix of the session cookie that ngrok sets on the http client to cache authentication. default is 'ngrok.'
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **inactivity_timeout** (Number) Integer number of seconds of inactivity after which if the user has not accessed the endpoint, their session will time out and they will be forced to reauthenticate.
 - **maximum_duration** (Number) Integer number of seconds of the maximum duration of an authenticated session. After this period is exceeded, a user must reauthenticate.
 - **options_passthrough** (Boolean) Do not enforce authentication on HTTP OPTIONS requests. necessary if you are supporting CORS.
@@ -193,10 +193,10 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.
+- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
-- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)
+- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
 
 
 <a id="nestedblock--oauth--provider--github"></a>
@@ -205,12 +205,12 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.
+- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **organizations** (List of String) a list of github org identifiers. users who are members of any of the listed organizations will be allowed access. identifiers should be the organization's 'slug'
-- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)
-- **teams** (List of String) a list of github teams identifiers. users will be allowed access to the endpoint if they are a member of any of these teams. identifiers should be in the 'slug' format qualified with the org name, e.g. org-name/team-name
+- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
+- **teams** (List of String) a list of github teams identifiers. users will be allowed access to the endpoint if they are a member of any of these teams. identifiers should be in the 'slug' format qualified with the org name, e.g. `org-name/team-name`
 
 
 <a id="nestedblock--oauth--provider--google"></a>
@@ -219,10 +219,10 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.
+- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
-- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)
+- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
 
 
 <a id="nestedblock--oauth--provider--microsoft"></a>
@@ -231,10 +231,10 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.
+- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
-- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)
+- **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
 
 
 
@@ -247,7 +247,7 @@ Optional:
 - **client_id** (String) The OIDC app's client ID and OIDC audience.
 - **client_secret** (String) The OIDC app's client secret.
 - **cookie_prefix** (String) the prefix of the session cookie that ngrok sets on the http client to cache authentication. default is 'ngrok.'
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **inactivity_timeout** (Number) Integer number of seconds of inactivity after which if the user has not accessed the endpoint, their session will time out and they will be forced to reauthenticate.
 - **issuer** (String) URL of the OIDC "OpenID provider". This is the base URL used for discovery.
 - **maximum_duration** (Number) Integer number of seconds of the maximum duration of an authenticated session. After this period is exceeded, a user must reauthenticate.
@@ -261,7 +261,7 @@ Optional:
 Optional:
 
 - **add** (Map of String) a map of header key to header value that will be injected into the HTTP Request before being sent to the upstream application server
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **remove** (List of String) a list of header names that will be removed from the HTTP Request before being sent to the upstream application server
 
 
@@ -271,7 +271,7 @@ Optional:
 Optional:
 
 - **add** (Map of String) a map of header key to header value that will be injected into the HTTP Response returned to the HTTP client
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **remove** (List of String) a list of header names that will be removed from the HTTP Response returned to the HTTP client
 
 
@@ -280,11 +280,11 @@ Optional:
 
 Optional:
 
-- **allow_idp_initiated** (Boolean) If true, the IdP may initiate a login directly (e.g. the user does not need to visit the endpoint first and then be redirected). The IdP should set the RelayState parameter to the target URL of the resource they want the user to be redirected to after the SAML login assertion has been processed.
+- **allow_idp_initiated** (Boolean) If true, the IdP may initiate a login directly (e.g. the user does not need to visit the endpoint first and then be redirected). The IdP should set the `RelayState` parameter to the target URL of the resource they want the user to be redirected to after the SAML login assertion has been processed.
 - **assertion_consumer_service_url** (String) The public URL of the SP's Assertion Consumer Service. This is where the IdP will redirect to during an authentication flow. This will need to be specified to the IdP as configuration.
 - **authorized_groups** (List of String) If present, only users who are a member of one of the listed groups may access the target endpoint.
 - **cookie_prefix** (String) the prefix of the session cookie that ngrok sets on the http client to cache authentication. default is 'ngrok.'
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **entity_id** (String) The SP Entity's unique ID. This always takes the form of a URL. In ngrok's implementation, this URL is the same as the metadata URL. This will need to be specified to the IdP as configuration.
 - **force_authn** (Boolean) If true, indicates that whenever we redirect a user to the IdP for authentication that the IdP must prompt the user for authentication credentials even if the user already has a valid session with the IdP.
 - **idp_metadata** (String) The full XML IdP EntityDescriptor. Your IdP may provide this to you as a a file to download or as a URL.
@@ -302,9 +302,9 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
-- **min_version** (String) The minimum TLS version used for termination and advertised to the client during the TLS handshake. if unspecified, ngrok will choose an industry-safe default. This value must be null if terminate_at is set to upstream.
-- **terminate_at** (String) edge if the ngrok edge should terminate TLS traffic, upstream if TLS traffic should be passed through to the upstream ngrok agent / application server for termination. if upstream is chosen, most other modules will be disallowed because they rely on the ngrok edge being able to access the underlying traffic.
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
+- **min_version** (String) The minimum TLS version used for termination and advertised to the client during the TLS handshake. if unspecified, ngrok will choose an industry-safe default. This value must be null if `terminate_at` is set to `upstream`.
+- **terminate_at** (String) `edge` if the ngrok edge should terminate TLS traffic, `upstream` if TLS traffic should be passed through to the upstream ngrok agent / application server for termination. if `upstream` is chosen, most other modules will be disallowed because they rely on the ngrok edge being able to access the underlying traffic.
 
 
 <a id="nestedblock--webhook_validation"></a>
@@ -312,8 +312,8 @@ Optional:
 
 Optional:
 
-- **enabled** (Boolean) true if the module will be applied to traffic, false to disable. default true if unspecified
-- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: SLACK, SNS, STRIPE, GITHUB, TWILIO, SHOPIFY, GITLAB, INTERCOM.
+- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
+- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`.
 - **secret** (String) a string secret used to validate requests from the given provider. All providers except AWS SNS require a secret
 
 

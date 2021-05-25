@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -26,7 +27,7 @@ func resourceTLSCertificates() *schema.Resource {
 				Optional:         true,
 				Sensitive:        false,
 				ForceNew:         true,
-				Description:      "chain of PEM-encoded certificates, leaf first. See Certificate Bundles.",
+				Description:      "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).",
 				DiffSuppressFunc: transform.DiffSuppressWhitespace,
 			},
 			"created_at": {
@@ -123,12 +124,12 @@ func resourceTLSCertificates() *schema.Resource {
 			},
 			"private_key_pem": {
 				Type:        schema.TypeString,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "private key for the TLS certificate, PEM-encoded. See Private Keys.",
+				Description: "private key for the TLS certificate, PEM-encoded. See [Private Keys](https://ngrok.com/docs/ngrok-link#tls-certificates-key).",
 			},
 			"private_key_type": {
 				Type:        schema.TypeString,
@@ -266,9 +267,12 @@ func resourceTLSCertificatesCreate(d *schema.ResourceData, m interface{}) (err e
 	}
 
 	res, _, err := b.client.TLSCertificatesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] TLSCertificatesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceTLSCertificatesGet(d, m)
 }
 
@@ -286,6 +290,7 @@ func resourceTLSCertificatesGetDecode(d *schema.ResourceData, res *restapi.TLSCe
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] TLSCertificatesGet: %s", err)
 		return err
 	default:
 		d.Set("certificate_pem", res.CertificatePEM)
@@ -330,6 +335,7 @@ func resourceTLSCertificatesUpdate(d *schema.ResourceData, m interface{}) (err e
 
 	res, _, err := b.client.TLSCertificatesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] TLSCertificatesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -340,5 +346,8 @@ func resourceTLSCertificatesUpdate(d *schema.ResourceData, m interface{}) (err e
 func resourceTLSCertificatesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.TLSCertificatesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] TLSCertificatesDelete: %s", err)
+	}
 	return err
 }

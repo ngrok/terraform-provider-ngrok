@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -144,9 +145,12 @@ func resourceReservedAddrsCreate(d *schema.ResourceData, m interface{}) (err err
 	}
 
 	res, _, err := b.client.ReservedAddrsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] ReservedAddrsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceReservedAddrsGet(d, m)
 }
 
@@ -164,6 +168,7 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] ReservedAddrsGet: %s", err)
 		return err
 	default:
 		d.Set("addr", res.Addr)
@@ -201,6 +206,7 @@ func resourceReservedAddrsUpdate(d *schema.ResourceData, m interface{}) (err err
 
 	res, _, err := b.client.ReservedAddrsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] ReservedAddrsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -211,5 +217,8 @@ func resourceReservedAddrsUpdate(d *schema.ResourceData, m interface{}) (err err
 func resourceReservedAddrsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.ReservedAddrsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] ReservedAddrsDelete: %s", err)
+	}
 	return err
 }
