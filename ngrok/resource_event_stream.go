@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -53,7 +54,7 @@ func resourceEventStreams() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "The protocol that determines which events will be collected. Supported values are tcp_connection_closed and http_request_complete.",
+				Description: "The protocol that determines which events will be collected. Supported values are `tcp_connection_closed` and `http_request_complete`.",
 			},
 			"fields": {
 				Type:        schema.TypeList,
@@ -129,9 +130,12 @@ func resourceEventStreamsCreate(d *schema.ResourceData, m interface{}) (err erro
 	}
 
 	res, _, err := b.client.EventStreamsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] EventStreamsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceEventStreamsGet(d, m)
 }
 
@@ -149,6 +153,7 @@ func resourceEventStreamsGetDecode(d *schema.ResourceData, res *restapi.EventStr
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] EventStreamsGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -190,6 +195,7 @@ func resourceEventStreamsUpdate(d *schema.ResourceData, m interface{}) (err erro
 
 	res, _, err := b.client.EventStreamsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] EventStreamsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -200,5 +206,8 @@ func resourceEventStreamsUpdate(d *schema.ResourceData, m interface{}) (err erro
 func resourceEventStreamsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.EventStreamsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] EventStreamsDelete: %s", err)
+	}
 	return err
 }

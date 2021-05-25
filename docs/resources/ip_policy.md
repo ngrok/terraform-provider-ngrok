@@ -24,7 +24,7 @@ resource "ngrok_ip_policy" "example" {
 
 ### Optional
 
-- **action** (String) the IP policy action. Supported values are allow or deny
+- **action** (String) the IP policy action. Supported values are `allow` or `deny`
 - **description** (String) human-readable description of the source IPs of this IP policy. optional, max 255 bytes.
 - **id** (String) The ID of this resource.
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.

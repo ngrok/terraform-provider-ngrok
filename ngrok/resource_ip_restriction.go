@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -48,9 +49,9 @@ func resourceIPRestrictions() *schema.Resource {
 			},
 			"ip_policy_ids": {
 				Type:        schema.TypeList,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "the set of IP policy identifiers that are used to enforce the restriction",
@@ -81,7 +82,7 @@ func resourceIPRestrictions() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: dashboard, api, agent, and endpoints",
+				Description: "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -117,9 +118,12 @@ func resourceIPRestrictionsCreate(d *schema.ResourceData, m interface{}) (err er
 	}
 
 	res, _, err := b.client.IPRestrictionsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] IPRestrictionsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceIPRestrictionsGet(d, m)
 }
 
@@ -137,6 +141,7 @@ func resourceIPRestrictionsGetDecode(d *schema.ResourceData, res *restapi.IPRest
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] IPRestrictionsGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -174,6 +179,7 @@ func resourceIPRestrictionsUpdate(d *schema.ResourceData, m interface{}) (err er
 
 	res, _, err := b.client.IPRestrictionsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] IPRestrictionsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -184,5 +190,8 @@ func resourceIPRestrictionsUpdate(d *schema.ResourceData, m interface{}) (err er
 func resourceIPRestrictionsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.IPRestrictionsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] IPRestrictionsDelete: %s", err)
+	}
 	return err
 }

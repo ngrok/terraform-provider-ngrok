@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -25,7 +26,7 @@ func resourceSSHHostCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a -cert.pub certificate file on disk that should be referenced in your sshd_config configuration file with a HostCertificate directive",
+				Description: "the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive",
 			},
 			"created_at": {
 				Type:        schema.TypeString,
@@ -52,7 +53,7 @@ func resourceSSHHostCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the key type of the public_key, one of rsa, ecdsa or ed25519",
+				Description: "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`",
 			},
 			"metadata": {
 				Type:        schema.TypeString,
@@ -125,7 +126,7 @@ func resourceSSHHostCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this valid_before.",
+				Description: "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.",
 			},
 		},
 	}
@@ -158,9 +159,12 @@ func resourceSSHHostCertificatesCreate(d *schema.ResourceData, m interface{}) (e
 	}
 
 	res, _, err := b.client.SSHHostCertificatesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] SSHHostCertificatesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceSSHHostCertificatesGet(d, m)
 }
 
@@ -178,6 +182,7 @@ func resourceSSHHostCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] SSHHostCertificatesGet: %s", err)
 		return err
 	default:
 		d.Set("certificate", res.Certificate)
@@ -213,6 +218,7 @@ func resourceSSHHostCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 
 	res, _, err := b.client.SSHHostCertificatesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] SSHHostCertificatesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -223,5 +229,8 @@ func resourceSSHHostCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 func resourceSSHHostCertificatesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.SSHHostCertificatesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] SSHHostCertificatesDelete: %s", err)
+	}
 	return err
 }

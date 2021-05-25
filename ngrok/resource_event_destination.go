@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -43,7 +44,7 @@ func resourceEventDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is JSON.",
+				Description: "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.",
 			},
 			"metadata": {
 				Type:        schema.TypeString,
@@ -70,7 +71,7 @@ func resourceEventDestinations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: kinesis, firehose, cloudwatch_logs, or s3.",
+				Description: "An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: `kinesis`, `firehose`, `cloudwatch_logs`, or `s3`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"firehose": {
@@ -90,7 +91,7 @@ func resourceEventDestinations() *schema.Resource {
 										Optional:    true,
 										Sensitive:   false,
 										ForceNew:    false,
-										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
@@ -178,7 +179,7 @@ func resourceEventDestinations() *schema.Resource {
 										Optional:    true,
 										Sensitive:   false,
 										ForceNew:    false,
-										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
@@ -266,7 +267,7 @@ func resourceEventDestinations() *schema.Resource {
 										Optional:    true,
 										Sensitive:   false,
 										ForceNew:    false,
-										Description: "Configuration for how to authenticate into your AWS account. Exactly one of role or creds should be configured.",
+										Description: "Configuration for how to authenticate into your AWS account. Exactly one of `role` or `creds` should be configured.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"role": {
@@ -414,9 +415,12 @@ func resourceEventDestinationsCreate(d *schema.ResourceData, m interface{}) (err
 	}
 
 	res, _, err := b.client.EventDestinationsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] EventDestinationsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceEventDestinationsGet(d, m)
 }
 
@@ -434,6 +438,7 @@ func resourceEventDestinationsGetDecode(d *schema.ResourceData, res *restapi.Eve
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] EventDestinationsGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -473,6 +478,7 @@ func resourceEventDestinationsUpdate(d *schema.ResourceData, m interface{}) (err
 
 	res, _, err := b.client.EventDestinationsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] EventDestinationsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -483,5 +489,8 @@ func resourceEventDestinationsUpdate(d *schema.ResourceData, m interface{}) (err
 func resourceEventDestinationsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.EventDestinationsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] EventDestinationsDelete: %s", err)
+	}
 	return err
 }

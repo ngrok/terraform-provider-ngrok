@@ -27,13 +27,13 @@ resource "ngrok_ssh_user_certificate" "example" {
 
 ### Optional
 
-- **certificate** (String) the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a -cert.pub certificate file on disk that should be referenced in your sshd_config configuration file with a HostCertificate directive
+- **certificate** (String) the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive
 - **created_at** (String) timestamp when the SSH User Certificate API resource was created, RFC 3339 format
-- **critical_options** (Map of String) A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: force-command and source-address. See the OpenSSH certificate protocol spec for additional details.
+- **critical_options** (Map of String) A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: `force-command` and `source-address`. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.
 - **description** (String) human-readable description of this SSH User Certificate. optional, max 255 bytes.
-- **extensions** (Map of String) A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: {"permit-pty": "", "permit-user-rc": ""} OpenSSH understands a number of predefined extensions. See the OpenSSH certificate protocol spec for additional details.
+- **extensions** (Map of String) A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: `{"permit-pty": "", "permit-user-rc": ""}` OpenSSH understands a number of predefined extensions. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.
 - **id** (String) The ID of this resource.
-- **key_type** (String) the key type of the public_key, one of rsa, ecdsa or ed25519
+- **key_type** (String) the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH User Certificate. optional, max 4096 bytes.
 - **ngrok_id** (String) unique identifier for this SSH User Certificate
 - **principals** (List of String) the list of principals included in the ssh user certificate. This is the list of usernames that the certificate holder may sign in as on a machine authorizinig the signing certificate authority. Dangerously, if no principals are specified, this certificate may be used to log in as any user.
@@ -41,6 +41,6 @@ resource "ngrok_ssh_user_certificate" "example" {
 - **ssh_certificate_authority_id** (String) the ssh certificate authority that is used to sign this ssh user certificate
 - **uri** (String) URI of the SSH User Certificate API resource
 - **valid_after** (String) the time when the ssh host certificate becomes valid, in RFC 3339 format.
-- **valid_until** (String) the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this valid_before.
+- **valid_until** (String) the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.
 
 

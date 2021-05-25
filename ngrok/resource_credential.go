@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -25,7 +26,7 @@ func resourceCredentials() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the bind rule. The bind rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of bind:*.example.com which will allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is equivalent to no acl at all and will explicitly permit all actions.",
+				Description: "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"created_at": {
@@ -71,7 +72,7 @@ func resourceCredentials() *schema.Resource {
 				Optional:    false,
 				Sensitive:   true,
 				ForceNew:    true,
-				Description: "the credential's authtoken that can be used to authenticate an ngrok client. This value is only available one time, on the API response from credential creation, otherwise it is null.",
+				Description: "the credential's authtoken that can be used to authenticate an ngrok client. **This value is only available one time, on the API response from credential creation, otherwise it is null.**",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -101,9 +102,12 @@ func resourceCredentialsCreate(d *schema.ResourceData, m interface{}) (err error
 	}
 
 	res, _, err := b.client.CredentialsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] CredentialsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceCredentialsGet(d, m)
 }
 
@@ -121,6 +125,7 @@ func resourceCredentialsGetDecode(d *schema.ResourceData, res *restapi.Credentia
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] CredentialsGet: %s", err)
 		return err
 	default:
 		d.Set("acl", res.ACL)
@@ -154,6 +159,7 @@ func resourceCredentialsUpdate(d *schema.ResourceData, m interface{}) (err error
 
 	res, _, err := b.client.CredentialsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] CredentialsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -164,5 +170,8 @@ func resourceCredentialsUpdate(d *schema.ResourceData, m interface{}) (err error
 func resourceCredentialsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.CredentialsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] CredentialsDelete: %s", err)
+	}
 	return err
 }

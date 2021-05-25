@@ -92,7 +92,7 @@ func expandItemSlice(in interface{}) *[]restapi.Item {
 	return &out
 }
 
-func flattenPage(obj *restapi.Page) interface{} {
+func flattenPaging(obj *restapi.Paging) interface{} {
 	if obj == nil {
 		return nil
 	}
@@ -104,18 +104,18 @@ func flattenPage(obj *restapi.Page) interface{} {
 	return []interface{}{m}
 }
 
-func flattenPageSlice(objs *[]restapi.Page) (sl []interface{}) {
+func flattenPagingSlice(objs *[]restapi.Paging) (sl []interface{}) {
 	if objs == nil {
 		return nil
 	}
 
 	for _, v := range *objs {
-		sl = append(sl, flattenPage(&v))
+		sl = append(sl, flattenPaging(&v))
 	}
 	return sl
 }
 
-func expandPage(in interface{}) *restapi.Page {
+func expandPaging(in interface{}) *restapi.Paging {
 	if in == nil {
 		return nil
 	}
@@ -126,7 +126,7 @@ func expandPage(in interface{}) *restapi.Page {
 	}
 
 	m := v.List()[0].(map[string]interface{})
-	var obj restapi.Page
+	var obj restapi.Paging
 	if v, ok := m["before_id"]; ok {
 		obj.BeforeID = expandString(v)
 	}
@@ -136,10 +136,10 @@ func expandPage(in interface{}) *restapi.Page {
 	return &obj
 }
 
-func expandPageSlice(in interface{}) *[]restapi.Page {
-	var out []restapi.Page
+func expandPagingSlice(in interface{}) *[]restapi.Paging {
+	var out []restapi.Paging
 	for _, v := range in.([]interface{}) {
-		out = append(out, *expandPage(v))
+		out = append(out, *expandPaging(v))
 	}
 	return &out
 }
@@ -3828,7 +3828,7 @@ func expandEventSourceItemSlice(in interface{}) *[]restapi.EventSourceItem {
 	return &out
 }
 
-func flattenEventSourcePage(obj *restapi.EventSourcePage) interface{} {
+func flattenEventSourcePaging(obj *restapi.EventSourcePaging) interface{} {
 	if obj == nil {
 		return nil
 	}
@@ -3839,18 +3839,18 @@ func flattenEventSourcePage(obj *restapi.EventSourcePage) interface{} {
 	return []interface{}{m}
 }
 
-func flattenEventSourcePageSlice(objs *[]restapi.EventSourcePage) (sl []interface{}) {
+func flattenEventSourcePagingSlice(objs *[]restapi.EventSourcePaging) (sl []interface{}) {
 	if objs == nil {
 		return nil
 	}
 
 	for _, v := range *objs {
-		sl = append(sl, flattenEventSourcePage(&v))
+		sl = append(sl, flattenEventSourcePaging(&v))
 	}
 	return sl
 }
 
-func expandEventSourcePage(in interface{}) *restapi.EventSourcePage {
+func expandEventSourcePaging(in interface{}) *restapi.EventSourcePaging {
 	if in == nil {
 		return nil
 	}
@@ -3861,17 +3861,17 @@ func expandEventSourcePage(in interface{}) *restapi.EventSourcePage {
 	}
 
 	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EventSourcePage
+	var obj restapi.EventSourcePaging
 	if v, ok := m["subscription_id"]; ok {
 		obj.SubscriptionID = *expandString(v)
 	}
 	return &obj
 }
 
-func expandEventSourcePageSlice(in interface{}) *[]restapi.EventSourcePage {
-	var out []restapi.EventSourcePage
+func expandEventSourcePagingSlice(in interface{}) *[]restapi.EventSourcePaging {
+	var out []restapi.EventSourcePaging
 	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventSourcePage(v))
+		out = append(out, *expandEventSourcePaging(v))
 	}
 	return &out
 }

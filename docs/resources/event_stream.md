@@ -30,7 +30,7 @@ resource "ngrok_event_stream" "example" {
 
 - **description** (String) Human-readable description of the Event Stream. Optional, max 255 bytes.
 - **destination_ids** (List of String) A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.
-- **event_type** (String) The protocol that determines which events will be collected. Supported values are tcp_connection_closed and http_request_complete.
+- **event_type** (String) The protocol that determines which events will be collected. Supported values are `tcp_connection_closed` and `http_request_complete`.
 - **fields** (List of String) A list of protocol-specific fields you want to collect on each event.
 - **id** (String) The ID of this resource.
 - **metadata** (String) Arbitrary user-defined machine-readable data of this Event Stream. Optional, max 4096 bytes.

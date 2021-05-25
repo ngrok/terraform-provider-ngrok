@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -25,7 +26,7 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a -cert.pub certificate file on disk that should be referenced in your sshd_config configuration file with a HostCertificate directive",
+				Description: "the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive",
 			},
 			"created_at": {
 				Type:        schema.TypeString,
@@ -43,7 +44,7 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: force-command and source-address. See the OpenSSH certificate protocol spec for additional details.",
+				Description: "A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: `force-command` and `source-address`. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"description": {
@@ -62,7 +63,7 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: {\"permit-pty\": \"\", \"permit-user-rc\": \"\"} OpenSSH understands a number of predefined extensions. See the OpenSSH certificate protocol spec for additional details.",
+				Description: "A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: `{\"permit-pty\": \"\", \"permit-user-rc\": \"\"}` OpenSSH understands a number of predefined extensions. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"key_type": {
@@ -72,7 +73,7 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the key type of the public_key, one of rsa, ecdsa or ed25519",
+				Description: "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`",
 			},
 			"metadata": {
 				Type:        schema.TypeString,
@@ -145,7 +146,7 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this valid_before.",
+				Description: "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.",
 			},
 		},
 	}
@@ -184,9 +185,12 @@ func resourceSSHUserCertificatesCreate(d *schema.ResourceData, m interface{}) (e
 	}
 
 	res, _, err := b.client.SSHUserCertificatesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] SSHUserCertificatesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceSSHUserCertificatesGet(d, m)
 }
 
@@ -204,6 +208,7 @@ func resourceSSHUserCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] SSHUserCertificatesGet: %s", err)
 		return err
 	default:
 		d.Set("certificate", res.Certificate)
@@ -241,6 +246,7 @@ func resourceSSHUserCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 
 	res, _, err := b.client.SSHUserCertificatesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] SSHUserCertificatesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -251,5 +257,8 @@ func resourceSSHUserCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 func resourceSSHUserCertificatesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.SSHUserCertificatesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] SSHUserCertificatesDelete: %s", err)
+	}
 	return err
 }

@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -25,7 +26,7 @@ func resourceIPPolicies() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the IP policy action. Supported values are allow or deny",
+				Description: "the IP policy action. Supported values are `allow` or `deny`",
 			},
 			"created_at": {
 				Type:        schema.TypeString,
@@ -91,9 +92,12 @@ func resourceIPPoliciesCreate(d *schema.ResourceData, m interface{}) (err error)
 	}
 
 	res, _, err := b.client.IPPoliciesCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] IPPoliciesCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceIPPoliciesGet(d, m)
 }
 
@@ -111,6 +115,7 @@ func resourceIPPoliciesGetDecode(d *schema.ResourceData, res *restapi.IPPolicy, 
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] IPPoliciesGet: %s", err)
 		return err
 	default:
 		d.Set("action", res.Action)
@@ -140,6 +145,7 @@ func resourceIPPoliciesUpdate(d *schema.ResourceData, m interface{}) (err error)
 
 	res, _, err := b.client.IPPoliciesUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] IPPoliciesUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -150,5 +156,8 @@ func resourceIPPoliciesUpdate(d *schema.ResourceData, m interface{}) (err error)
 func resourceIPPoliciesDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.IPPoliciesDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] IPPoliciesDelete: %s", err)
+	}
 	return err
 }

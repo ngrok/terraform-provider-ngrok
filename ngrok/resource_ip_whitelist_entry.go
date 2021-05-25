@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -91,9 +92,12 @@ func resourceIPWhitelistCreate(d *schema.ResourceData, m interface{}) (err error
 	}
 
 	res, _, err := b.client.IPWhitelistCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] IPWhitelistCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceIPWhitelistGet(d, m)
 }
 
@@ -111,6 +115,7 @@ func resourceIPWhitelistGetDecode(d *schema.ResourceData, res *restapi.IPWhiteli
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] IPWhitelistGet: %s", err)
 		return err
 	default:
 		d.Set("created_at", res.CreatedAt)
@@ -140,6 +145,7 @@ func resourceIPWhitelistUpdate(d *schema.ResourceData, m interface{}) (err error
 
 	res, _, err := b.client.IPWhitelistUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] IPWhitelistUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -150,5 +156,8 @@ func resourceIPWhitelistUpdate(d *schema.ResourceData, m interface{}) (err error
 func resourceIPWhitelistDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.IPWhitelistDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] IPWhitelistDelete: %s", err)
+	}
 	return err
 }

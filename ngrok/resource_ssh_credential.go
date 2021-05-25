@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -25,7 +26,7 @@ func resourceSSHCredentials() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the bind rule. The bind rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of bind:*.example.com which will allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is equivalent to no acl at all and will explicitly permit all actions.",
+				Description: "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"created_at": {
@@ -104,9 +105,12 @@ func resourceSSHCredentialsCreate(d *schema.ResourceData, m interface{}) (err er
 	}
 
 	res, _, err := b.client.SSHCredentialsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] SSHCredentialsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceSSHCredentialsGet(d, m)
 }
 
@@ -124,6 +128,7 @@ func resourceSSHCredentialsGetDecode(d *schema.ResourceData, res *restapi.SSHCre
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] SSHCredentialsGet: %s", err)
 		return err
 	default:
 		d.Set("acl", res.ACL)
@@ -157,6 +162,7 @@ func resourceSSHCredentialsUpdate(d *schema.ResourceData, m interface{}) (err er
 
 	res, _, err := b.client.SSHCredentialsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] SSHCredentialsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -167,5 +173,8 @@ func resourceSSHCredentialsUpdate(d *schema.ResourceData, m interface{}) (err er
 func resourceSSHCredentialsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.SSHCredentialsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] SSHCredentialsDelete: %s", err)
+	}
 	return err
 }

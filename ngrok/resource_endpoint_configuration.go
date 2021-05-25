@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -26,7 +27,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "backend module configuration or null",
+				Description: "backend module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -37,7 +38,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"backend": {
 							Type:        schema.TypeSet,
@@ -80,7 +81,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "basic auth module configuration or null",
+				Description: "basic auth module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -91,7 +92,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"auth_provider_id": {
 							Type:        schema.TypeString,
@@ -100,7 +101,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "determines how the basic auth credentials are validated. Currently only the value agent is supported which means that credentials will be validated against the username and password specified by the ngrok agent's -auth flag, if any.",
+							Description: "determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `-auth` flag, if any.",
 						},
 						"realm": {
 							Type:        schema.TypeString,
@@ -109,7 +110,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "an arbitrary string to be specified in as the 'realm' value in the WWW-Authenticate header. default is ngrok",
+							Description: "an arbitrary string to be specified in as the 'realm' value in the `WWW-Authenticate` header. default is `ngrok`",
 						},
 						"allow_options": {
 							Type:        schema.TypeBool,
@@ -118,7 +119,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true or false indicating whether to allow OPTIONS requests through without authentication which is necessary for CORS. default is false",
+							Description: "true or false indicating whether to allow OPTIONS requests through without authentication which is necessary for CORS. default is `false`",
 						},
 					},
 				},
@@ -130,7 +131,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "circuit breaker module configuration or null",
+				Description: "circuit breaker module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -141,7 +142,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"tripped_duration": {
 							Type:        schema.TypeInt,
@@ -198,7 +199,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "compression module configuration or null",
+				Description: "compression module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -209,7 +210,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 					},
 				},
@@ -239,7 +240,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "ip policy module configuration or null",
+				Description: "ip policy module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -250,7 +251,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"ip_policies": {
 							Type:        schema.TypeList,
@@ -293,7 +294,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "logging module configuration or null",
+				Description: "logging module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -304,7 +305,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"event_streams": {
 							Type:        schema.TypeList,
@@ -356,7 +357,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "mutual TLS module configuration or null",
+				Description: "mutual TLS module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -367,7 +368,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"certificate_authorities": {
 							Type:        schema.TypeList,
@@ -419,7 +420,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "oauth module configuration or null",
+				Description: "oauth module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -430,7 +431,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"provider": {
 							Type:        schema.TypeSet,
@@ -468,7 +469,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.",
+													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.",
 												},
 												"scopes": {
 													Type:        schema.TypeList,
@@ -477,7 +478,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)",
+													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 												"email_addresses": {
@@ -507,7 +508,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "a list of github teams identifiers. users will be allowed access to the endpoint if they are a member of any of these teams. identifiers should be in the 'slug' format qualified with the org name, e.g. org-name/team-name",
+													Description: "a list of github teams identifiers. users will be allowed access to the endpoint if they are a member of any of these teams. identifiers should be in the 'slug' format qualified with the org name, e.g. `org-name/team-name`",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 												"organizations": {
@@ -549,7 +550,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.",
+													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.",
 												},
 												"scopes": {
 													Type:        schema.TypeList,
@@ -558,7 +559,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)",
+													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 												"email_addresses": {
@@ -610,7 +611,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.",
+													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.",
 												},
 												"scopes": {
 													Type:        schema.TypeList,
@@ -619,7 +620,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)",
+													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 												"email_addresses": {
@@ -671,7 +672,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for client_id.",
+													Description: "the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.",
 												},
 												"scopes": {
 													Type:        schema.TypeList,
@@ -680,7 +681,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Optional:    true,
 													Sensitive:   false,
 													ForceNew:    false,
-													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both client_id and client_secret to set scopes)",
+													Description: "a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 												"email_addresses": {
@@ -765,7 +766,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "oidc module configuration or null",
+				Description: "oidc module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -776,7 +777,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"options_passthrough": {
 							Type:        schema.TypeBool,
@@ -862,7 +863,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "request headers module configuration or null",
+				Description: "request headers module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -873,7 +874,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"add": {
 							Type:         schema.TypeMap,
@@ -907,7 +908,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "response headers module configuration or null",
+				Description: "response headers module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -918,7 +919,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"add": {
 							Type:        schema.TypeMap,
@@ -951,7 +952,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "saml module configuration or null",
+				Description: "saml module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -962,7 +963,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"options_passthrough": {
 							Type:        schema.TypeBool,
@@ -1035,7 +1036,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "If true, the IdP may initiate a login directly (e.g. the user does not need to visit the endpoint first and then be redirected). The IdP should set the RelayState parameter to the target URL of the resource they want the user to be redirected to after the SAML login assertion has been processed.",
+							Description: "If true, the IdP may initiate a login directly (e.g. the user does not need to visit the endpoint first and then be redirected). The IdP should set the `RelayState` parameter to the target URL of the resource they want the user to be redirected to after the SAML login assertion has been processed.",
 						},
 						"authorized_groups": {
 							Type:        schema.TypeList,
@@ -1102,7 +1103,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "TLS termination module configuration or null",
+				Description: "TLS termination module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -1113,7 +1114,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"terminate_at": {
 							Type:        schema.TypeString,
@@ -1122,7 +1123,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "edge if the ngrok edge should terminate TLS traffic, upstream if TLS traffic should be passed through to the upstream ngrok agent / application server for termination. if upstream is chosen, most other modules will be disallowed because they rely on the ngrok edge being able to access the underlying traffic.",
+							Description: "`edge` if the ngrok edge should terminate TLS traffic, `upstream` if TLS traffic should be passed through to the upstream ngrok agent / application server for termination. if `upstream` is chosen, most other modules will be disallowed because they rely on the ngrok edge being able to access the underlying traffic.",
 						},
 						"min_version": {
 							Type:        schema.TypeString,
@@ -1131,7 +1132,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "The minimum TLS version used for termination and advertised to the client during the TLS handshake. if unspecified, ngrok will choose an industry-safe default. This value must be null if terminate_at is set to upstream.",
+							Description: "The minimum TLS version used for termination and advertised to the client during the TLS handshake. if unspecified, ngrok will choose an industry-safe default. This value must be null if `terminate_at` is set to `upstream`.",
 						},
 					},
 				},
@@ -1143,7 +1144,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "they type of traffic this endpoint configuration can be applied to. one of: http, https, tcp",
+				Description: "they type of traffic this endpoint configuration can be applied to. one of: `http`, `https`, `tcp`",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -1161,7 +1162,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "webhook validation module configuration or null",
+				Description: "webhook validation module configuration or `null`",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -1172,7 +1173,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Default:     true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "true if the module will be applied to traffic, false to disable. default true if unspecified",
+							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
 						},
 						"provider": {
 							Type:        schema.TypeString,
@@ -1181,7 +1182,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: SLACK, SNS, STRIPE, GITHUB, TWILIO, SHOPIFY, GITLAB, INTERCOM.",
+							Description: "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`.",
 						},
 						"secret": {
 							Type:        schema.TypeString,
@@ -1256,9 +1257,12 @@ func resourceEndpointConfigurationsCreate(d *schema.ResourceData, m interface{})
 	}
 
 	res, _, err := b.client.EndpointConfigurationsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] EndpointConfigurationsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceEndpointConfigurationsGet(d, m)
 }
 
@@ -1276,6 +1280,7 @@ func resourceEndpointConfigurationsGetDecode(d *schema.ResourceData, res *restap
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] EndpointConfigurationsGet: %s", err)
 		return err
 	default:
 		d.Set("backend", flattenEndpointBackend(res.Backend))
@@ -1361,6 +1366,7 @@ func resourceEndpointConfigurationsUpdate(d *schema.ResourceData, m interface{})
 
 	res, _, err := b.client.EndpointConfigurationsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] EndpointConfigurationsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -1371,5 +1377,8 @@ func resourceEndpointConfigurationsUpdate(d *schema.ResourceData, m interface{})
 func resourceEndpointConfigurationsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.EndpointConfigurationsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] EndpointConfigurationsDelete: %s", err)
+	}
 	return err
 }

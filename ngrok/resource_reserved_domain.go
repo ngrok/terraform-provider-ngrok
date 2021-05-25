@@ -4,6 +4,7 @@ package ngrok
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -388,9 +389,12 @@ func resourceReservedDomainsCreate(d *schema.ResourceData, m interface{}) (err e
 	}
 
 	res, _, err := b.client.ReservedDomainsCreate(context.Background(), &arg)
-	if err == nil {
-		d.SetId(res.ID)
+	if err != nil {
+		log.Printf("[ERROR] ReservedDomainsCreate: %s", err)
+		return err
 	}
+	d.SetId(res.ID)
+
 	return resourceReservedDomainsGet(d, m)
 }
 
@@ -408,6 +412,7 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 	case resp != nil && resp.StatusCode == 404:
 		d.SetId("")
 	case err != nil:
+		log.Printf("[ERROR] ReservedDomainsGet: %s", err)
 		return err
 	default:
 		d.Set("certificate", flattenRef(res.Certificate))
@@ -465,6 +470,7 @@ func resourceReservedDomainsUpdate(d *schema.ResourceData, m interface{}) (err e
 
 	res, _, err := b.client.ReservedDomainsUpdate(context.Background(), &arg)
 	if err != nil {
+		log.Printf("[ERROR] ReservedDomainsUpdate: %s", err)
 		return err
 	}
 	d.SetId(res.ID)
@@ -475,5 +481,8 @@ func resourceReservedDomainsUpdate(d *schema.ResourceData, m interface{}) (err e
 func resourceReservedDomainsDelete(d *schema.ResourceData, m interface{}) (err error) {
 	b := m.(*base)
 	_, _, err = b.client.ReservedDomainsDelete(context.Background(), &restapi.Item{ID: d.Id()})
+	if err != nil {
+		log.Printf("[ERROR] ReservedDomainsDelete: %s", err)
+	}
 	return err
 }

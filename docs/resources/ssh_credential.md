@@ -25,7 +25,7 @@ resource "ngrok_ssh_credential" "example" {
 
 ### Optional
 
-- **acl** (List of String) optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the bind rule. The bind rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule bind:example.ngrok.io. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of bind:*.example.com which will allow x.example.com, y.example.com, *.example.com, etc. A rule of '*' is equivalent to no acl at all and will explicitly permit all actions.
+- **acl** (List of String) optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.
 - **created_at** (String) timestamp when the ssh credential was created, RFC 3339 format
 - **description** (String) human-readable description of who or what will use the ssh credential to authenticate. Optional, max 255 bytes.
 - **id** (String) The ID of this resource.
