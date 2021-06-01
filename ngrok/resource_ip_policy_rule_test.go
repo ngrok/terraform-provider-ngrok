@@ -14,18 +14,19 @@ import (
 )
 
 var (
-	resourceIPPolicies_createConfig = `resource "ngrok_ip_policy" "example" {
-  action = "allow"
-  description = "API Outbound Gateway"
+	resourceIPPolicyRules_createConfig = `resource "ngrok_ip_policy_rule" "example" {
+  cidr = "212.3.14.0/24"
+  description = "nyc office"
+  ip_policy_id = "ipp_1rV56VrAxesFteoj4XZxaaYyvXo"
 }`
-	resourceIPPolicies_updateConfig = `resource "ngrok_ip_policy" "example" {
-  metadata = "metadata={\"pod-id\": \"b3d9c464-4f48-4783-a741-d7d7d5db310f\"}"
+	resourceIPPolicyRules_updateConfig = `resource "ngrok_ip_policy_rule" "example" {
+  cidr = "212.3.15.0/24"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("ip_policies", &resource.Sweeper{
-		Name: "ip_policies",
+	resource.AddTestSweepers("ip_policy_rules", &resource.Sweeper{
+		Name: "ip_policy_rules",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -34,14 +35,14 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPPoliciesList(ctx, nil)
+			list, _, err := conn.IPPolicyRulesList(ctx, nil)
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
-			for _, item := range list.IPPolicies {
+			for _, item := range list.IPPolicyRules {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.IPPoliciesDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.IPPolicyRulesDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -53,28 +54,28 @@ func init() {
 	})
 }
 
-func TestAccResourceIPPolicies(t *testing.T) {
-
+func TestAccResourceIPPolicyRules(t *testing.T) {
+	t.Skip("Test skipped.")
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyIPPolicies,
+		CheckDestroy: testAccCheckDestroyIPPolicyRules,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceIPPolicies_createConfig,
+				Config: resourceIPPolicyRules_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateIPPolicies,
+				// 	testAccCheckCreateIPPolicyRules,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyIPPolicies(s *terraform.State) (err error) {
+func testAccCheckDestroyIPPolicyRules(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateIPPolicies(s *terraform.State) (err error) {
+func testAccCheckCreateIPPolicyRules(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

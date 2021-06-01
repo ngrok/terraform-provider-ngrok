@@ -58,7 +58,7 @@ func init() {
 }
 
 func TestAccResourceSSHUserCertificates(t *testing.T) {
-	t.Skip("Test skipped. See: https://github.com/ngrok-private/ngrok/issues/4720")
+	t.Skip("Test skipped.")
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
