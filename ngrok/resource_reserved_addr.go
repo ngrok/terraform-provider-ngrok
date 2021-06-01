@@ -175,9 +175,7 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("endpoint_configuration", flattenRef(res.EndpointConfiguration))
-		if res.EndpointConfiguration != nil {
-			d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
-		}
+		d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("ngrok_id", res.ID)
 		d.Set("region", res.Region)

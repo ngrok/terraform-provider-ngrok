@@ -66,7 +66,7 @@ func init() {
 }
 
 func TestAccResourceEventDestinations(t *testing.T) {
-	t.Skip("Test skipped.")
+
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },

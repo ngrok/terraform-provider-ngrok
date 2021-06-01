@@ -54,7 +54,7 @@ func init() {
 }
 
 func TestAccResourceIPRestrictions(t *testing.T) {
-	t.Skip("Test skipped. See: https://github.com/ngrok-private/ngrok/issues/4716")
+	t.Skip("Test skipped.")
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },

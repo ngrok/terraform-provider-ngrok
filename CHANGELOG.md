@@ -1,3 +1,9 @@
+## 0.1.0 (June 1, 2021)
+
+ENHANCEMENTS:
+
+* Add a resource to manage IP Policy Rules.
+
 ## 0.0.27 (May 24, 2021)
 
 ENHANCEMENTS:

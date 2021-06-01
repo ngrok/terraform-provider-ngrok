@@ -32,6 +32,7 @@ func Provider() *schema.Provider {
 			"ngrok_event_stream":              resourceEventStreams(),
 			"ngrok_event_destination":         resourceEventDestinations(),
 			"ngrok_ip_policy":                 resourceIPPolicies(),
+			"ngrok_ip_policy_rule":            resourceIPPolicyRules(),
 			"ngrok_ip_restriction":            resourceIPRestrictions(),
 			"ngrok_ip_whitelist_entry":        resourceIPWhitelist(),
 			"ngrok_endpoint_configuration":    resourceEndpointConfigurations(),

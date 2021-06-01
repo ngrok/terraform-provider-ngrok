@@ -426,13 +426,9 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		d.Set("description", res.Description)
 		d.Set("domain", res.Domain)
 		d.Set("http_endpoint_configuration", flattenRef(res.HTTPEndpointConfiguration))
-		if res.HTTPEndpointConfiguration != nil {
-			d.Set("http_endpoint_configuration_id", res.HTTPEndpointConfiguration.ID)
-		}
+		d.Set("http_endpoint_configuration_id", res.HTTPEndpointConfiguration.ID)
 		d.Set("https_endpoint_configuration", flattenRef(res.HTTPSEndpointConfiguration))
-		if res.HTTPSEndpointConfiguration != nil {
-			d.Set("https_endpoint_configuration_id", res.HTTPSEndpointConfiguration.ID)
-		}
+		d.Set("https_endpoint_configuration_id", res.HTTPSEndpointConfiguration.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("ngrok_id", res.ID)
 		d.Set("region", res.Region)

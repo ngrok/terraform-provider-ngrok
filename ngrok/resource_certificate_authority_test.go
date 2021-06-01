@@ -55,7 +55,7 @@ func init() {
 }
 
 func TestAccResourceCertificateAuthorities(t *testing.T) {
-	t.Skip("Test skipped.")
+
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
