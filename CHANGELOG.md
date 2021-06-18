@@ -1,3 +1,9 @@
+## 0.1.1 (June 17, 2021)
+
+FIXED:
+
+* Correctly handle referenced resources by id.
+
 ## 0.1.0 (June 1, 2021)
 
 ENHANCEMENTS:

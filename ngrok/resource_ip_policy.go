@@ -13,11 +13,11 @@ import (
 
 func resourceIPPolicies() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceIPPoliciesCreate,
-		Read:   resourceIPPoliciesGet,
-		Update: resourceIPPoliciesUpdate,
-		Delete: resourceIPPoliciesDelete,
-
+		Create:      resourceIPPoliciesCreate,
+		Read:        resourceIPPoliciesGet,
+		Update:      resourceIPPoliciesUpdate,
+		Delete:      resourceIPPoliciesDelete,
+		Description: "IP Policies are reusable groups of CIDR ranges with an `allow` or `deny`\n action. They can be attached to endpoints via the Endpoint Configuration IP\n Policy module. They can also be used with IP Restrictions to control source\n IP ranges that can start tunnel sessions and connect to the API and dashboard.",
 		Schema: map[string]*schema.Schema{
 			"action": {
 				Type:        schema.TypeString,
@@ -46,6 +46,15 @@ func resourceIPPolicies() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of the source IPs of this IP policy. optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    false,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this IP policy",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -54,15 +63,6 @@ func resourceIPPolicies() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this IP policy",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -121,8 +121,8 @@ func resourceIPPoliciesGetDecode(d *schema.ResourceData, res *restapi.IPPolicy, 
 		d.Set("action", res.Action)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("uri", res.URI)
 	}
 	return nil
@@ -133,7 +133,7 @@ func resourceIPPoliciesUpdate(d *schema.ResourceData, m interface{}) (err error)
 
 	var arg restapi.IPPolicyUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

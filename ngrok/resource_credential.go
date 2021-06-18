@@ -13,11 +13,11 @@ import (
 
 func resourceCredentials() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCredentialsCreate,
-		Read:   resourceCredentialsGet,
-		Update: resourceCredentialsUpdate,
-		Delete: resourceCredentialsDelete,
-
+		Create:      resourceCredentialsCreate,
+		Read:        resourceCredentialsGet,
+		Update:      resourceCredentialsUpdate,
+		Delete:      resourceCredentialsDelete,
+		Description: "Tunnel Credentials are ngrok agent authtokens. They authorize the ngrok\n agent to connect the ngrok service as your account. They are installed with\n the `ngrok authtoken` command or by specifying it in the `ngrok.yml`\n configuration file with the `authtoken` property.",
 		Schema: map[string]*schema.Schema{
 			"acl": {
 				Type:        schema.TypeList,
@@ -47,6 +47,15 @@ func resourceCredentials() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of who or what will use the credential to authenticate. Optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    false,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique tunnel credential resource identifier",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -55,15 +64,6 @@ func resourceCredentials() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this credential. Optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique tunnel credential resource identifier",
 			},
 			"token": {
 				Type:        schema.TypeString,
@@ -131,8 +131,8 @@ func resourceCredentialsGetDecode(d *schema.ResourceData, res *restapi.Credentia
 		d.Set("acl", res.ACL)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("token", res.Token)
 		d.Set("uri", res.URI)
 	}
@@ -144,7 +144,7 @@ func resourceCredentialsUpdate(d *schema.ResourceData, m interface{}) (err error
 
 	var arg restapi.CredentialUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

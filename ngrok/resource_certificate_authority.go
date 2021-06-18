@@ -14,11 +14,11 @@ import (
 
 func resourceCertificateAuthorities() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCertificateAuthoritiesCreate,
-		Read:   resourceCertificateAuthoritiesGet,
-		Update: resourceCertificateAuthoritiesUpdate,
-		Delete: resourceCertificateAuthoritiesDelete,
-
+		Create:      resourceCertificateAuthoritiesCreate,
+		Read:        resourceCertificateAuthoritiesGet,
+		Update:      resourceCertificateAuthoritiesUpdate,
+		Delete:      resourceCertificateAuthoritiesDelete,
+		Description: "Certificate Authorities are x509 certificates that are used to sign other\n x509 certificates. Attach a Certificate Authority to the Mutual TLS module\n to verify that the TLS certificate presented by a client has been signed by\n this CA. Certificate Authorities  are used only for mTLS validation only and\n thus a private key is not included in the resource.",
 		Schema: map[string]*schema.Schema{
 			"ca_pem": {
 				Type:             schema.TypeString,
@@ -58,6 +58,15 @@ func resourceCertificateAuthorities() *schema.Resource {
 				Description: "extended set of actions the private key of this Certificate Authority can be used for",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this Certificate Authority",
+			},
 			"key_usages": {
 				Type:        schema.TypeList,
 				Required:    false,
@@ -76,15 +85,6 @@ func resourceCertificateAuthorities() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this Certificate Authority",
 			},
 			"not_after": {
 				Type:        schema.TypeString,
@@ -171,9 +171,9 @@ func resourceCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *restap
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("extended_key_usages", res.ExtendedKeyUsages)
+		d.Set("id", res.ID)
 		d.Set("key_usages", res.KeyUsages)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("not_after", res.NotAfter)
 		d.Set("not_before", res.NotBefore)
 		d.Set("subject_common_name", res.SubjectCommonName)
@@ -187,7 +187,7 @@ func resourceCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface{})
 
 	var arg restapi.CertificateAuthorityUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

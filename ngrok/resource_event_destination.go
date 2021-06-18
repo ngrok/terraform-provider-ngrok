@@ -46,6 +46,15 @@ func resourceEventDestinations() *schema.Resource {
 				ForceNew:    false,
 				Description: "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    false,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "Unique identifier for this Event Destination.",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -54,15 +63,6 @@ func resourceEventDestinations() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "Unique identifier for this Event Destination.",
 			},
 			"target": {
 				Type:        schema.TypeSet,
@@ -444,8 +444,8 @@ func resourceEventDestinationsGetDecode(d *schema.ResourceData, res *restapi.Eve
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("format", res.Format)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("target", flattenEventTarget(&res.Target))
 		d.Set("uri", res.URI)
 	}
@@ -457,7 +457,7 @@ func resourceEventDestinationsUpdate(d *schema.ResourceData, m interface{}) (err
 
 	var arg restapi.EventDestinationUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("metadata"); ok {

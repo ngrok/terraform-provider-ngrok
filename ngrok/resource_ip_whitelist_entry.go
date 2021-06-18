@@ -13,11 +13,11 @@ import (
 
 func resourceIPWhitelist() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceIPWhitelistCreate,
-		Read:   resourceIPWhitelistGet,
-		Update: resourceIPWhitelistUpdate,
-		Delete: resourceIPWhitelistDelete,
-
+		Create:      resourceIPWhitelistCreate,
+		Read:        resourceIPWhitelistGet,
+		Update:      resourceIPWhitelistUpdate,
+		Delete:      resourceIPWhitelistDelete,
+		Description: "The IP Whitelist is deprecated and will be removed. Use an IP Restriction\n with an `endpoints` type instead.",
 		Schema: map[string]*schema.Schema{
 			"created_at": {
 				Type:        schema.TypeString,
@@ -37,6 +37,15 @@ func resourceIPWhitelist() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of the source IPs for this IP whitelist entry. optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this IP whitelist entry",
+			},
 			"ip_net": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -54,15 +63,6 @@ func resourceIPWhitelist() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP whitelist entry. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this IP whitelist entry",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -120,9 +120,9 @@ func resourceIPWhitelistGetDecode(d *schema.ResourceData, res *restapi.IPWhiteli
 	default:
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("ip_net", res.IPNet)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("uri", res.URI)
 	}
 	return nil
@@ -133,7 +133,7 @@ func resourceIPWhitelistUpdate(d *schema.ResourceData, m interface{}) (err error
 
 	var arg restapi.IPWhitelistEntryUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

@@ -66,6 +66,15 @@ func resourceEventStreams() *schema.Resource {
 				Description: "A list of protocol-specific fields you want to collect on each event.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    false,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "Unique identifier for this Event Stream.",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -74,15 +83,6 @@ func resourceEventStreams() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "Arbitrary user-defined machine-readable data of this Event Stream. Optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "Unique identifier for this Event Stream.",
 			},
 			"sampling_rate": {
 				Type:        schema.TypeFloat,
@@ -161,8 +161,8 @@ func resourceEventStreamsGetDecode(d *schema.ResourceData, res *restapi.EventStr
 		d.Set("destination_ids", res.DestinationIDs)
 		d.Set("event_type", res.EventType)
 		d.Set("fields", res.Fields)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("sampling_rate", res.SamplingRate)
 		d.Set("uri", res.URI)
 	}
@@ -174,7 +174,7 @@ func resourceEventStreamsUpdate(d *schema.ResourceData, m interface{}) (err erro
 
 	var arg restapi.EventStreamUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("metadata"); ok {

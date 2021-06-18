@@ -13,11 +13,11 @@ import (
 
 func resourceSSHHostCertificates() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceSSHHostCertificatesCreate,
-		Read:   resourceSSHHostCertificatesGet,
-		Update: resourceSSHHostCertificatesUpdate,
-		Delete: resourceSSHHostCertificatesDelete,
-
+		Create:      resourceSSHHostCertificatesCreate,
+		Read:        resourceSSHHostCertificatesGet,
+		Update:      resourceSSHHostCertificatesUpdate,
+		Delete:      resourceSSHHostCertificatesDelete,
+		Description: "SSH Host Certificates along with the corresponding private key allows an SSH\n server to assert its authenticity to connecting SSH clients who trust the\n SSH Certificate Authority that was used to sign the certificate.",
 		Schema: map[string]*schema.Schema{
 			"certificate": {
 				Type:        schema.TypeString,
@@ -46,6 +46,15 @@ func resourceSSHHostCertificates() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of this SSH Host Certificate. optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this SSH Host Certificate",
+			},
 			"key_type": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -63,15 +72,6 @@ func resourceSSHHostCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this SSH Host Certificate. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this SSH Host Certificate",
 			},
 			"principals": {
 				Type:        schema.TypeList,
@@ -188,9 +188,9 @@ func resourceSSHHostCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 		d.Set("certificate", res.Certificate)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("key_type", res.KeyType)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("principals", res.Principals)
 		d.Set("public_key", res.PublicKey)
 		d.Set("ssh_certificate_authority_id", res.SSHCertificateAuthorityID)
@@ -206,7 +206,7 @@ func resourceSSHHostCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 
 	var arg restapi.SSHHostCertificateUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

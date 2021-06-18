@@ -3,20 +3,16 @@
 page_title: "ngrok_endpoint_configuration Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  Endpoint Configuration management
-  An Endpoint Configuration https://ngrok.com/docs/ngrok-link#api-endpoint-configurations describes
-  a ngrok network endpoint instance.
-  Endpoints are your gateway to ngrok features!
+  Endpoint Configurations are a reusable group of modules that encapsulate how
+   traffic to a domain or address is handled. Endpoint configurations are only
+   applied to Domains and TCP Addresses they have been attached to.
 ---
 
 # ngrok_endpoint_configuration (Resource)
 
-## Endpoint Configuration management
-
-An [Endpoint Configuration](https://ngrok.com/docs/ngrok-link#api-endpoint-configurations) describes
-a ngrok network endpoint instance.
-
-_Endpoints are your gateway to ngrok features!_
+Endpoint Configurations are a reusable group of modules that encapsulate how
+ traffic to a domain or address is handled. Endpoint configurations are only
+ applied to Domains and TCP Addresses they have been attached to.
 
 ## Example Usage
 
@@ -44,12 +40,11 @@ resource "ngrok_endpoint_configuration" "example" {
 - **compression** (Block Set) compression module configuration or `null` (see [below for nested schema](#nestedblock--compression))
 - **created_at** (String) timestamp when the endpoint configuration was created, RFC 3339 format
 - **description** (String) human-readable description of what this endpoint configuration will be do when applied or what traffic it will be applied to. Optional, max 255 bytes
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier of this endpoint configuration
 - **ip_policy** (Block Set) ip policy module configuration or `null` (see [below for nested schema](#nestedblock--ip_policy))
 - **logging** (Block Set) logging module configuration or `null` (see [below for nested schema](#nestedblock--logging))
 - **metadata** (String) arbitrary user-defined machine-readable data of this endpoint configuration. Optional, max 4096 bytes.
 - **mutual_tls** (Block Set) mutual TLS module configuration or `null` (see [below for nested schema](#nestedblock--mutual_tls))
-- **ngrok_id** (String) unique identifier of this endpoint configuration
 - **oauth** (Block Set) oauth module configuration or `null` (see [below for nested schema](#nestedblock--oauth))
 - **oidc** (Block Set) oidc module configuration or `null` (see [below for nested schema](#nestedblock--oidc))
 - **request_headers** (Block Set) request headers module configuration or `null` (see [below for nested schema](#nestedblock--request_headers))
@@ -73,7 +68,7 @@ Optional:
 
 Optional:
 
-- **ngrok_id** (String) a resource identifier
+- **id** (String) a resource identifier
 - **uri** (String) a uri for locating a resource
 
 
@@ -123,7 +118,7 @@ Optional:
 
 Optional:
 
-- **ngrok_id** (String) a resource identifier
+- **id** (String) a resource identifier
 - **uri** (String) a uri for locating a resource
 
 
@@ -141,7 +136,7 @@ Optional:
 
 Optional:
 
-- **ngrok_id** (String) a resource identifier
+- **id** (String) a resource identifier
 - **uri** (String) a uri for locating a resource
 
 
@@ -159,7 +154,7 @@ Optional:
 
 Optional:
 
-- **ngrok_id** (String) a resource identifier
+- **id** (String) a resource identifier
 - **uri** (String) a uri for locating a resource
 
 

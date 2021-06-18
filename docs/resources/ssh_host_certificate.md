@@ -3,12 +3,16 @@
 page_title: "ngrok_ssh_host_certificate Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  SSH Host Certificates along with the corresponding private key allows an SSH
+   server to assert its authenticity to connecting SSH clients who trust the
+   SSH Certificate Authority that was used to sign the certificate.
 ---
 
 # ngrok_ssh_host_certificate (Resource)
 
-
+SSH Host Certificates along with the corresponding private key allows an SSH
+ server to assert its authenticity to connecting SSH clients who trust the
+ SSH Certificate Authority that was used to sign the certificate.
 
 ## Example Usage
 
@@ -30,10 +34,9 @@ resource "ngrok_ssh_host_certificate" "example" {
 - **certificate** (String) the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive
 - **created_at** (String) timestamp when the SSH Host Certificate API resource was created, RFC 3339 format
 - **description** (String) human-readable description of this SSH Host Certificate. optional, max 255 bytes.
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this SSH Host Certificate
 - **key_type** (String) the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH Host Certificate. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this SSH Host Certificate
 - **principals** (List of String) the list of principals included in the ssh host certificate. This is the list of hostnames and/or IP addresses that are authorized to serve SSH traffic with this certificate. Dangerously, if no principals are specified, this certificate is considered valid for all hosts.
 - **public_key** (String) a public key in OpenSSH Authorized Keys format that this certificate signs
 - **ssh_certificate_authority_id** (String) the ssh certificate authority that is used to sign this ssh host certificate

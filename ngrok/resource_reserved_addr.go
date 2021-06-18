@@ -13,11 +13,11 @@ import (
 
 func resourceReservedAddrs() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceReservedAddrsCreate,
-		Read:   resourceReservedAddrsGet,
-		Update: resourceReservedAddrsUpdate,
-		Delete: resourceReservedAddrsDelete,
-
+		Create:      resourceReservedAddrsCreate,
+		Read:        resourceReservedAddrsGet,
+		Update:      resourceReservedAddrsUpdate,
+		Delete:      resourceReservedAddrsDelete,
+		Description: "Reserved Addresses are TCP addresses that can be used to listen for traffic.\n TCP address hostnames and ports are assigned by ngrok, they cannot be\n chosen.",
 		Schema: map[string]*schema.Schema{
 			"addr": {
 				Type:        schema.TypeString,
@@ -46,37 +46,6 @@ func resourceReservedAddrs() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of what this reserved address will be used for",
 			},
-			"endpoint_configuration": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "object reference to the endpoint configuration that will be applied to traffic to this address",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"ngrok_id": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "a resource identifier",
-						},
-						"uri": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "a uri for locating a resource",
-						},
-					},
-				},
-			},
 			"endpoint_configuration_id": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -86,6 +55,15 @@ func resourceReservedAddrs() *schema.Resource {
 				ForceNew:    false,
 				Description: "ID of an endpoint configuration of type tcp that will be used to handle inbound traffic to this address",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique reserved address resource identifier",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -94,15 +72,6 @@ func resourceReservedAddrs() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this reserved address. Optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique reserved address resource identifier",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -174,10 +143,9 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 		d.Set("addr", res.Addr)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
-		d.Set("endpoint_configuration", flattenRef(res.EndpointConfiguration))
 		d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("region", res.Region)
 		d.Set("uri", res.URI)
 	}
@@ -189,7 +157,7 @@ func resourceReservedAddrsUpdate(d *schema.ResourceData, m interface{}) (err err
 
 	var arg restapi.ReservedAddrUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

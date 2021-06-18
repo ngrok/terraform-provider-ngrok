@@ -13,11 +13,11 @@ import (
 
 func resourceSSHCertificateAuthorities() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceSSHCertificateAuthoritiesCreate,
-		Read:   resourceSSHCertificateAuthoritiesGet,
-		Update: resourceSSHCertificateAuthoritiesUpdate,
-		Delete: resourceSSHCertificateAuthoritiesDelete,
-
+		Create:      resourceSSHCertificateAuthoritiesCreate,
+		Read:        resourceSSHCertificateAuthoritiesGet,
+		Update:      resourceSSHCertificateAuthoritiesUpdate,
+		Delete:      resourceSSHCertificateAuthoritiesDelete,
+		Description: "An SSH Certificate Authority is a pair of an SSH Certificate and its private\n key that can be used to sign other SSH host and user certificates.",
 		Schema: map[string]*schema.Schema{
 			"created_at": {
 				Type:        schema.TypeString,
@@ -46,6 +46,15 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 				ForceNew:    true,
 				Description: "the type of elliptic curve to use when creating an ECDSA key",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this SSH Certificate Authority",
+			},
 			"key_size": {
 				Type:        schema.TypeInt,
 				Required:    false,
@@ -72,15 +81,6 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this SSH Certificate Authority",
 			},
 			"private_key_type": {
 				Type:        schema.TypeString,
@@ -162,9 +162,9 @@ func resourceSSHCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *res
 	default:
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("key_type", res.KeyType)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("public_key", res.PublicKey)
 		d.Set("uri", res.URI)
 	}
@@ -176,7 +176,7 @@ func resourceSSHCertificateAuthoritiesUpdate(d *schema.ResourceData, m interface
 
 	var arg restapi.SSHCertificateAuthorityUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

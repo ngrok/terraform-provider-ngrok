@@ -3,12 +3,20 @@
 page_title: "ngrok_certificate_authority Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  Certificate Authorities are x509 certificates that are used to sign other
+   x509 certificates. Attach a Certificate Authority to the Mutual TLS module
+   to verify that the TLS certificate presented by a client has been signed by
+   this CA. Certificate Authorities  are used only for mTLS validation only and
+   thus a private key is not included in the resource.
 ---
 
 # ngrok_certificate_authority (Resource)
 
-
+Certificate Authorities are x509 certificates that are used to sign other
+ x509 certificates. Attach a Certificate Authority to the Mutual TLS module
+ to verify that the TLS certificate presented by a client has been signed by
+ this CA. Certificate Authorities  are used only for mTLS validation only and
+ thus a private key is not included in the resource.
 
 ## Example Usage
 
@@ -29,10 +37,9 @@ resource "ngrok_certificate_authority" "example" {
 - **created_at** (String) timestamp when the Certificate Authority was created, RFC 3339 format
 - **description** (String) human-readable description of this Certificate Authority. optional, max 255 bytes.
 - **extended_key_usages** (List of String) extended set of actions the private key of this Certificate Authority can be used for
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this Certificate Authority
 - **key_usages** (List of String) set of actions the private key of this Certificate Authority can be used for
 - **metadata** (String) arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this Certificate Authority
 - **not_after** (String) timestamp when this Certificate Authority becomes invalid, RFC 3339 format
 - **not_before** (String) timestamp when this Certificate Authority becomes valid, RFC 3339 format
 - **subject_common_name** (String) subject common name of the Certificate Authority

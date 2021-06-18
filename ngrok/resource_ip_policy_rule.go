@@ -13,11 +13,11 @@ import (
 
 func resourceIPPolicyRules() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceIPPolicyRulesCreate,
-		Read:   resourceIPPolicyRulesGet,
-		Update: resourceIPPolicyRulesUpdate,
-		Delete: resourceIPPolicyRulesDelete,
-
+		Create:      resourceIPPolicyRulesCreate,
+		Read:        resourceIPPolicyRulesGet,
+		Update:      resourceIPPolicyRulesUpdate,
+		Delete:      resourceIPPolicyRulesDelete,
+		Description: "IP Policy Rules are the IPv4 or IPv6 CIDRs entries that\n make up an IP Policy.",
 		Schema: map[string]*schema.Schema{
 			"cidr": {
 				Type:        schema.TypeString,
@@ -46,36 +46,14 @@ func resourceIPPolicyRules() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of the source IPs of this IP rule. optional, max 255 bytes.",
 			},
-			"ip_policy": {
-				Type:        schema.TypeSet,
+			"id": {
+				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   false,
-				ForceNew:    true,
-				Description: "object describing the IP policy this IP Policy Rule belongs to",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"ngrok_id": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "a resource identifier",
-						},
-						"uri": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "a uri for locating a resource",
-						},
-					},
-				},
+				ForceNew:    false,
+				Description: "unique identifier for this IP policy rule",
 			},
 			"ip_policy_id": {
 				Type:        schema.TypeString,
@@ -94,15 +72,6 @@ func resourceIPPolicyRules() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this IP policy rule",
 			},
 			"uri": {
 				Type:        schema.TypeString,
@@ -164,10 +133,9 @@ func resourceIPPolicyRulesGetDecode(d *schema.ResourceData, res *restapi.IPPolic
 		d.Set("cidr", res.CIDR)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
-		d.Set("ip_policy", flattenRef(&res.IPPolicy))
+		d.Set("id", res.ID)
 		d.Set("ip_policy_id", res.IPPolicy.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("uri", res.URI)
 	}
 	return nil
@@ -178,7 +146,7 @@ func resourceIPPolicyRulesUpdate(d *schema.ResourceData, m interface{}) (err err
 
 	var arg restapi.IPPolicyRuleUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

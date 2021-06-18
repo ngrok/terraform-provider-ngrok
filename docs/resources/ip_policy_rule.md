@@ -3,12 +3,14 @@
 page_title: "ngrok_ip_policy_rule Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  IP Policy Rules are the IPv4 or IPv6 CIDRs entries that
+   make up an IP Policy.
 ---
 
 # ngrok_ip_policy_rule (Resource)
 
-
+IP Policy Rules are the IPv4 or IPv6 CIDRs entries that
+ make up an IP Policy.
 
 ## Example Usage
 
@@ -32,18 +34,8 @@ resource "ngrok_ip_policy_rule" "example" {
 - **cidr** (String) an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
 - **created_at** (String) timestamp when the IP policy rule was created, RFC 3339 format
 - **description** (String) human-readable description of the source IPs of this IP rule. optional, max 255 bytes.
-- **id** (String) The ID of this resource.
-- **ip_policy** (Block Set) object describing the IP policy this IP Policy Rule belongs to (see [below for nested schema](#nestedblock--ip_policy))
+- **id** (String) unique identifier for this IP policy rule
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this IP policy rule
 - **uri** (String) URI of the IP policy rule API resource
-
-<a id="nestedblock--ip_policy"></a>
-### Nested Schema for `ip_policy`
-
-Optional:
-
-- **ngrok_id** (String) a resource identifier
-- **uri** (String) a uri for locating a resource
 
 
