@@ -69,15 +69,6 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    true,
 				Description: "DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of *.ngrok.io",
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the reserved domain was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -150,15 +141,6 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    true,
 				Description: "reserve the domain in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)",
 			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the reserved domain API resource",
-			},
 		},
 	}
 }
@@ -224,7 +206,6 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		}
 		d.Set("certificate_management_policy", flattenReservedDomainCertPolicy(res.CertificateManagementPolicy))
 		d.Set("cname_target", res.CNAMETarget)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("domain", res.Domain)
 		if res.HTTPEndpointConfiguration != nil {
@@ -236,7 +217,6 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("region", res.Region)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

@@ -38,7 +38,6 @@ resource "ngrok_endpoint_configuration" "example" {
 - **basic_auth** (Block Set) basic auth module configuration or `null` (see [below for nested schema](#nestedblock--basic_auth))
 - **circuit_breaker** (Block Set) circuit breaker module configuration or `null` (see [below for nested schema](#nestedblock--circuit_breaker))
 - **compression** (Block Set) compression module configuration or `null` (see [below for nested schema](#nestedblock--compression))
-- **created_at** (String) timestamp when the endpoint configuration was created, RFC 3339 format
 - **description** (String) human-readable description of what this endpoint configuration will be do when applied or what traffic it will be applied to. Optional, max 255 bytes
 - **id** (String) unique identifier of this endpoint configuration
 - **ip_policy** (Block Set) ip policy module configuration or `null` (see [below for nested schema](#nestedblock--ip_policy))
@@ -52,7 +51,6 @@ resource "ngrok_endpoint_configuration" "example" {
 - **saml** (Block Set) saml module configuration or `null` (see [below for nested schema](#nestedblock--saml))
 - **tls_termination** (Block Set) TLS termination module configuration or `null` (see [below for nested schema](#nestedblock--tls_termination))
 - **type** (String) they type of traffic this endpoint configuration can be applied to. one of: `http`, `https`, `tcp`
-- **uri** (String) URI of the endpoint configuration API resource
 - **webhook_validation** (Block Set) webhook validation module configuration or `null` (see [below for nested schema](#nestedblock--webhook_validation))
 
 <a id="nestedblock--backend"></a>

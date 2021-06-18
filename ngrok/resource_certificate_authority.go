@@ -30,15 +30,6 @@ func resourceCertificateAuthorities() *schema.Resource {
 				Description:      "raw PEM of the Certificate Authority",
 				DiffSuppressFunc: transform.DiffSuppressWhitespace,
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the Certificate Authority was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -47,16 +38,6 @@ func resourceCertificateAuthorities() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "human-readable description of this Certificate Authority. optional, max 255 bytes.",
-			},
-			"extended_key_usages": {
-				Type:        schema.TypeList,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "extended set of actions the private key of this Certificate Authority can be used for",
-				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"id": {
 				Type:        schema.TypeString,
@@ -67,16 +48,6 @@ func resourceCertificateAuthorities() *schema.Resource {
 				ForceNew:    false,
 				Description: "unique identifier for this Certificate Authority",
 			},
-			"key_usages": {
-				Type:        schema.TypeList,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "set of actions the private key of this Certificate Authority can be used for",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -85,42 +56,6 @@ func resourceCertificateAuthorities() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.",
-			},
-			"not_after": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when this Certificate Authority becomes invalid, RFC 3339 format",
-			},
-			"not_before": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when this Certificate Authority becomes valid, RFC 3339 format",
-			},
-			"subject_common_name": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject common name of the Certificate Authority",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the Certificate Authority API resource",
 			},
 		},
 	}
@@ -168,16 +103,9 @@ func resourceCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *restap
 		return err
 	default:
 		d.Set("ca_pem", res.CAPEM)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
-		d.Set("extended_key_usages", res.ExtendedKeyUsages)
 		d.Set("id", res.ID)
-		d.Set("key_usages", res.KeyUsages)
 		d.Set("metadata", res.Metadata)
-		d.Set("not_after", res.NotAfter)
-		d.Set("not_before", res.NotBefore)
-		d.Set("subject_common_name", res.SubjectCommonName)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

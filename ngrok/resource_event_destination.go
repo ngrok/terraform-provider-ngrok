@@ -19,15 +19,6 @@ func resourceEventDestinations() *schema.Resource {
 		Delete: resourceEventDestinationsDelete,
 
 		Schema: map[string]*schema.Schema{
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "Timestamp when the Event Destination was created, RFC 3339 format.",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -50,7 +41,7 @@ func resourceEventDestinations() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    false,
+				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "Unique identifier for this Event Destination.",
@@ -372,15 +363,6 @@ func resourceEventDestinations() *schema.Resource {
 					},
 				},
 			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the Event Destination API resource.",
-			},
 			"verify_with_test_event": {
 				Type:        schema.TypeBool,
 				Required:    false,
@@ -441,13 +423,11 @@ func resourceEventDestinationsGetDecode(d *schema.ResourceData, res *restapi.Eve
 		log.Printf("[ERROR] EventDestinationsGet: %s", err)
 		return err
 	default:
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("format", res.Format)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("target", flattenEventTarget(&res.Target))
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

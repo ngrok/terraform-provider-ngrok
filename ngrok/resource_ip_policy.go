@@ -28,15 +28,6 @@ func resourceIPPolicies() *schema.Resource {
 				ForceNew:    true,
 				Description: "the IP policy action. Supported values are `allow` or `deny`",
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    false,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the IP policy was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -63,15 +54,6 @@ func resourceIPPolicies() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the IP Policy API resource",
 			},
 		},
 	}
@@ -119,11 +101,9 @@ func resourceIPPoliciesGetDecode(d *schema.ResourceData, res *restapi.IPPolicy, 
 		return err
 	default:
 		d.Set("action", res.Action)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

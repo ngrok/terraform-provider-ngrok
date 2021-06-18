@@ -19,15 +19,6 @@ func resourceIPRestrictions() *schema.Resource {
 		Delete:      resourceIPRestrictionsDelete,
 		Description: "An IP restriction is a restriction placed on the CIDRs that are allowed to\n initate traffic to a specific aspect of your ngrok account. An IP\n restriction has a type which defines the ingress it applies to. IP\n restrictions can be used to enforce the source IPs that can make API\n requests, log in to the dashboard, start ngrok agents, and connect to your\n public-facing endpoints.",
 		Schema: map[string]*schema.Schema{
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the IP restriction was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -44,7 +35,7 @@ func resourceIPRestrictions() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "true if the IP restriction will be enforce. if false, only warnings will be issued",
+				Description: "true if the IP restriction will be enforced. if false, only warnings will be issued",
 			},
 			"id": {
 				Type:        schema.TypeString,
@@ -82,15 +73,6 @@ func resourceIPRestrictions() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the IP restriction API resource",
 			},
 		},
 	}
@@ -143,13 +125,11 @@ func resourceIPRestrictionsGetDecode(d *schema.ResourceData, res *restapi.IPRest
 		log.Printf("[ERROR] IPRestrictionsGet: %s", err)
 		return err
 	default:
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("enforced", res.Enforced)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("type", res.Type)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

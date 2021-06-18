@@ -34,15 +34,8 @@ resource "ngrok_certificate_authority" "example" {
 ### Optional
 
 - **ca_pem** (String) raw PEM of the Certificate Authority
-- **created_at** (String) timestamp when the Certificate Authority was created, RFC 3339 format
 - **description** (String) human-readable description of this Certificate Authority. optional, max 255 bytes.
-- **extended_key_usages** (List of String) extended set of actions the private key of this Certificate Authority can be used for
 - **id** (String) unique identifier for this Certificate Authority
-- **key_usages** (List of String) set of actions the private key of this Certificate Authority can be used for
 - **metadata** (String) arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.
-- **not_after** (String) timestamp when this Certificate Authority becomes invalid, RFC 3339 format
-- **not_before** (String) timestamp when this Certificate Authority becomes valid, RFC 3339 format
-- **subject_common_name** (String) subject common name of the Certificate Authority
-- **uri** (String) URI of the Certificate Authority API resource
 
 

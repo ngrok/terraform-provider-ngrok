@@ -1,3 +1,9 @@
+## 0.1.2 (June 18, 2021)
+
+FIXED:
+
+* Remove many unnecessary fields.
+
 ## 0.1.1 (June 17, 2021)
 
 FIXED:

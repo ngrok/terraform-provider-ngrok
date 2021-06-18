@@ -38,12 +38,10 @@ resource "ngrok_ip_restriction" "example" {
 
 ### Optional
 
-- **created_at** (String) timestamp when the IP restriction was created, RFC 3339 format
 - **description** (String) human-readable description of this IP restriction. optional, max 255 bytes.
-- **enforced** (Boolean) true if the IP restriction will be enforce. if false, only warnings will be issued
+- **enforced** (Boolean) true if the IP restriction will be enforced. if false, only warnings will be issued
 - **id** (String) unique identifier for this IP restriction
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.
 - **type** (String) the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`
-- **uri** (String) URI of the IP restriction API resource
 
 

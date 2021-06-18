@@ -28,15 +28,6 @@ func resourceSSHHostCertificates() *schema.Resource {
 				ForceNew:    true,
 				Description: "the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive",
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the SSH Host Certificate API resource was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -100,15 +91,6 @@ func resourceSSHHostCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the ssh certificate authority that is used to sign this ssh host certificate",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the SSH Host Certificate API resource",
 			},
 			"valid_after": {
 				Type:        schema.TypeString,
@@ -186,7 +168,6 @@ func resourceSSHHostCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 		return err
 	default:
 		d.Set("certificate", res.Certificate)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("key_type", res.KeyType)
@@ -194,7 +175,6 @@ func resourceSSHHostCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 		d.Set("principals", res.Principals)
 		d.Set("public_key", res.PublicKey)
 		d.Set("ssh_certificate_authority_id", res.SSHCertificateAuthorityID)
-		d.Set("uri", res.URI)
 		d.Set("valid_after", res.ValidAfter)
 		d.Set("valid_until", res.ValidUntil)
 	}

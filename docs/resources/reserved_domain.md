@@ -38,14 +38,12 @@ resource "ngrok_reserved_domain" "example" {
 - **certificate_id** (String) ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.
 - **certificate_management_policy** (Block Set) configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled (see [below for nested schema](#nestedblock--certificate_management_policy))
 - **cname_target** (String) DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of *.ngrok.io
-- **created_at** (String) timestamp when the reserved domain was created, RFC 3339 format
 - **description** (String) human-readable description of what this reserved domain will be used for
 - **http_endpoint_configuration_id** (String) ID of an endpoint configuration of type http that will be used to handle inbound http traffic to this domain
 - **https_endpoint_configuration_id** (String) ID of an endpoint configuration of type https that will be used to handle inbound https traffic to this domain
 - **id** (String) unique reserved domain resource identifier
 - **metadata** (String) arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.
 - **region** (String) reserve the domain in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)
-- **uri** (String) URI of the reserved domain API resource
 
 ### Read-Only
 

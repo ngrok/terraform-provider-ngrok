@@ -26,11 +26,9 @@ resource "ngrok_ip_whitelist_entry" "example" {
 
 ### Optional
 
-- **created_at** (String) timestamp when the IP whitelist entry was created, RFC 3339 format
 - **description** (String) human-readable description of the source IPs for this IP whitelist entry. optional, max 255 bytes.
 - **id** (String) unique identifier for this IP whitelist entry
 - **ip_net** (String) an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or 10.1.0.0/16) of addresses that will be whitelisted to communicate with your tunnel endpoints
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP whitelist entry. optional, max 4096 bytes.
-- **uri** (String) URI of the IP whitelist entry API resource
 
 

@@ -30,15 +30,6 @@ func resourceTLSCertificates() *schema.Resource {
 				Description:      "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).",
 				DiffSuppressFunc: transform.DiffSuppressWhitespace,
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the TLS certificate was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -47,16 +38,6 @@ func resourceTLSCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "human-readable description of this TLS certificate. optional, max 255 bytes.",
-			},
-			"extended_key_usages": {
-				Type:        schema.TypeList,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "extended set of actions the private key of this TLS certificate can be used for",
-				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"id": {
 				Type:        schema.TypeString,
@@ -67,34 +48,6 @@ func resourceTLSCertificates() *schema.Resource {
 				ForceNew:    false,
 				Description: "unique identifier for this TLS certificate",
 			},
-			"issued_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp (in RFC 3339 format) when this TLS certificate was issued automatically, or null if this certificate was user-uploaded",
-			},
-			"issuer_common_name": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "issuer common name from the leaf of this TLS certificate",
-			},
-			"key_usages": {
-				Type:        schema.TypeList,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "set of actions the private key of this TLS certificate can be used for",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -104,24 +57,6 @@ func resourceTLSCertificates() *schema.Resource {
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.",
 			},
-			"not_after": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when this TLS certificate becomes invalid, RFC 3339 format",
-			},
-			"not_before": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when this TLS certificate becomes valid, RFC 3339 format",
-			},
 			"private_key_pem": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -130,24 +65,6 @@ func resourceTLSCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "private key for the TLS certificate, PEM-encoded. See [Private Keys](https://ngrok.com/docs/ngrok-link#tls-certificates-key).",
-			},
-			"private_key_type": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "type of the private key of this TLS certificate. One of rsa, ecdsa, or ed25519.",
-			},
-			"serial_number": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "serial number of the leaf of this TLS certificate",
 			},
 			"subject_alternative_names": {
 				Type:        schema.TypeSet,
@@ -181,69 +98,6 @@ func resourceTLSCertificates() *schema.Resource {
 						},
 					},
 				},
-			},
-			"subject_common_name": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject common name from the leaf of this TLS certificate",
-			},
-			"subject_country": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject country from the leaf of this TLS certificate",
-			},
-			"subject_locality": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject locality from the leaf of this TLS certificate",
-			},
-			"subject_organization": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject organization from the leaf of this TLS certificate",
-			},
-			"subject_organizational_unit": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject organizational unit from the leaf of this TLS certificate",
-			},
-			"subject_province": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "subject province from the leaf of this TLS certificate",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the TLS certificate API resource",
 			},
 		},
 	}
@@ -294,26 +148,10 @@ func resourceTLSCertificatesGetDecode(d *schema.ResourceData, res *restapi.TLSCe
 		return err
 	default:
 		d.Set("certificate_pem", res.CertificatePEM)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
-		d.Set("extended_key_usages", res.ExtendedKeyUsages)
 		d.Set("id", res.ID)
-		d.Set("issued_at", res.IssuedAt)
-		d.Set("issuer_common_name", res.IssuerCommonName)
-		d.Set("key_usages", res.KeyUsages)
 		d.Set("metadata", res.Metadata)
-		d.Set("not_after", res.NotAfter)
-		d.Set("not_before", res.NotBefore)
-		d.Set("private_key_type", res.PrivateKeyType)
-		d.Set("serial_number", res.SerialNumber)
 		d.Set("subject_alternative_names", flattenTLSCertificateSANs(&res.SubjectAlternativeNames))
-		d.Set("subject_common_name", res.SubjectCommonName)
-		d.Set("subject_country", res.SubjectCountry)
-		d.Set("subject_locality", res.SubjectLocality)
-		d.Set("subject_organization", res.SubjectOrganization)
-		d.Set("subject_organizational_unit", res.SubjectOrganizationalUnit)
-		d.Set("subject_province", res.SubjectProvince)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

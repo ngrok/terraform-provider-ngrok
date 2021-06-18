@@ -1103,7 +1103,7 @@ func (c *Client) EventSubscriptionsCreate(ctx context.Context, arg *EventSubscri
 	return &res, resp, err
 }
 
-// TODO
+// Delete an Event Subscription.
 func (c *Client) EventSubscriptionsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -1156,7 +1156,7 @@ func (c *Client) EventSubscriptionsList(ctx context.Context, arg *Paging) (*Even
 	return &res, resp, err
 }
 
-// TODO
+// Update an Event Subscription.
 func (c *Client) EventSubscriptionsUpdate(ctx context.Context, arg *EventSubscriptionUpdate) (*EventSubscription, *http.Response, error) {
 	var res EventSubscription
 	var path bytes.Buffer
@@ -1174,7 +1174,7 @@ func (c *Client) EventSubscriptionsUpdate(ctx context.Context, arg *EventSubscri
 	return &res, resp, err
 }
 
-// TODO
+// Add an additional type for which this event subscription will trigger
 func (c *Client) EventSourcesCreate(ctx context.Context, arg *EventSourceCreate) (*EventSource, *http.Response, error) {
 	var res EventSource
 	var path bytes.Buffer
@@ -1192,7 +1192,7 @@ func (c *Client) EventSourcesCreate(ctx context.Context, arg *EventSourceCreate)
 	return &res, resp, err
 }
 
-// TODO
+// Remove a type for which this event subscription will trigger
 func (c *Client) EventSourcesDelete(ctx context.Context, arg *EventSourceItem) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -1211,7 +1211,7 @@ func (c *Client) EventSourcesDelete(ctx context.Context, arg *EventSourceItem) (
 	return &res, resp, err
 }
 
-// TODO
+// Get the details for a given type that triggers for the given event subscription
 func (c *Client) EventSourcesGet(ctx context.Context, arg *EventSourceItem) (*EventSource, *http.Response, error) {
 	var res EventSource
 	var path bytes.Buffer
@@ -1230,7 +1230,7 @@ func (c *Client) EventSourcesGet(ctx context.Context, arg *EventSourceItem) (*Ev
 	return &res, resp, err
 }
 
-// TODO
+// List the types for which this event subscription will trigger
 func (c *Client) EventSourcesList(ctx context.Context, arg *EventSourcePaging) (*EventSourceList, *http.Response, error) {
 	var res EventSourceList
 	var path bytes.Buffer
@@ -1248,7 +1248,7 @@ func (c *Client) EventSourcesList(ctx context.Context, arg *EventSourcePaging) (
 	return &res, resp, err
 }
 
-// TODO
+// Update the type for which this event subscription will trigger
 func (c *Client) EventSourcesUpdate(ctx context.Context, arg *EventSourceUpdate) (*EventSource, *http.Response, error) {
 	var res EventSource
 	var path bytes.Buffer

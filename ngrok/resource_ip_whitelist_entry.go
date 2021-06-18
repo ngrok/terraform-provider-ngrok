@@ -19,15 +19,6 @@ func resourceIPWhitelist() *schema.Resource {
 		Delete:      resourceIPWhitelistDelete,
 		Description: "The IP Whitelist is deprecated and will be removed. Use an IP Restriction\n with an `endpoints` type instead.",
 		Schema: map[string]*schema.Schema{
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the IP whitelist entry was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -63,15 +54,6 @@ func resourceIPWhitelist() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP whitelist entry. optional, max 4096 bytes.",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the IP whitelist entry API resource",
 			},
 		},
 	}
@@ -118,12 +100,10 @@ func resourceIPWhitelistGetDecode(d *schema.ResourceData, res *restapi.IPWhiteli
 		log.Printf("[ERROR] IPWhitelistGet: %s", err)
 		return err
 	default:
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("ip_net", res.IPNet)
 		d.Set("metadata", res.Metadata)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }
