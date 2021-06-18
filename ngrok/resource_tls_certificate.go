@@ -14,11 +14,11 @@ import (
 
 func resourceTLSCertificates() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceTLSCertificatesCreate,
-		Read:   resourceTLSCertificatesGet,
-		Update: resourceTLSCertificatesUpdate,
-		Delete: resourceTLSCertificatesDelete,
-
+		Create:      resourceTLSCertificatesCreate,
+		Read:        resourceTLSCertificatesGet,
+		Update:      resourceTLSCertificatesUpdate,
+		Delete:      resourceTLSCertificatesDelete,
+		Description: "TLS Certificates are pairs of x509 certificates and their matching private\n key that can be used to terminate TLS traffic. TLS certificates are unused\n until they are attached to a Domain. TLS Certificates may also be\n provisioned by ngrok automatically for domains on which you have enabled\n automated certificate provisioning.",
 		Schema: map[string]*schema.Schema{
 			"certificate_pem": {
 				Type:             schema.TypeString,
@@ -58,6 +58,15 @@ func resourceTLSCertificates() *schema.Resource {
 				Description: "extended set of actions the private key of this TLS certificate can be used for",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this TLS certificate",
+			},
 			"issued_at": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -94,15 +103,6 @@ func resourceTLSCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this TLS certificate",
 			},
 			"not_after": {
 				Type:        schema.TypeString,
@@ -297,11 +297,11 @@ func resourceTLSCertificatesGetDecode(d *schema.ResourceData, res *restapi.TLSCe
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("extended_key_usages", res.ExtendedKeyUsages)
+		d.Set("id", res.ID)
 		d.Set("issued_at", res.IssuedAt)
 		d.Set("issuer_common_name", res.IssuerCommonName)
 		d.Set("key_usages", res.KeyUsages)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("not_after", res.NotAfter)
 		d.Set("not_before", res.NotBefore)
 		d.Set("private_key_type", res.PrivateKeyType)
@@ -323,7 +323,7 @@ func resourceTLSCertificatesUpdate(d *schema.ResourceData, m interface{}) (err e
 
 	var arg restapi.TLSCertificateUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

@@ -13,11 +13,11 @@ import (
 
 func resourceSSHUserCertificates() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceSSHUserCertificatesCreate,
-		Read:   resourceSSHUserCertificatesGet,
-		Update: resourceSSHUserCertificatesUpdate,
-		Delete: resourceSSHUserCertificatesDelete,
-
+		Create:      resourceSSHUserCertificatesCreate,
+		Read:        resourceSSHUserCertificatesGet,
+		Update:      resourceSSHUserCertificatesUpdate,
+		Delete:      resourceSSHUserCertificatesDelete,
+		Description: "SSH User Certificates are presented by SSH clients when connecting to an SSH\n server to authenticate their connection. The SSH server must trust the SSH\n Certificate Authority used to sign the certificate.",
 		Schema: map[string]*schema.Schema{
 			"certificate": {
 				Type:        schema.TypeString,
@@ -66,6 +66,15 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Description: "A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: `{\"permit-pty\": \"\", \"permit-user-rc\": \"\"}` OpenSSH understands a number of predefined extensions. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this SSH User Certificate",
+			},
 			"key_type": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -83,15 +92,6 @@ func resourceSSHUserCertificates() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this SSH User Certificate. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this SSH User Certificate",
 			},
 			"principals": {
 				Type:        schema.TypeList,
@@ -216,9 +216,9 @@ func resourceSSHUserCertificatesGetDecode(d *schema.ResourceData, res *restapi.S
 		d.Set("critical_options", res.CriticalOptions)
 		d.Set("description", res.Description)
 		d.Set("extensions", res.Extensions)
+		d.Set("id", res.ID)
 		d.Set("key_type", res.KeyType)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("principals", res.Principals)
 		d.Set("public_key", res.PublicKey)
 		d.Set("ssh_certificate_authority_id", res.SSHCertificateAuthorityID)
@@ -234,7 +234,7 @@ func resourceSSHUserCertificatesUpdate(d *schema.ResourceData, m interface{}) (e
 
 	var arg restapi.SSHUserCertificateUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

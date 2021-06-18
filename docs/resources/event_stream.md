@@ -32,7 +32,6 @@ resource "ngrok_event_stream" "example" {
 - **destination_ids** (List of String) A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.
 - **event_type** (String) The protocol that determines which events will be collected. Supported values are `tcp_connection_closed` and `http_request_complete`.
 - **fields** (List of String) A list of protocol-specific fields you want to collect on each event.
-- **id** (String) The ID of this resource.
 - **metadata** (String) Arbitrary user-defined machine-readable data of this Event Stream. Optional, max 4096 bytes.
 - **sampling_rate** (Number) The percentage of all events you would like to capture. Valid values range from 0.01, representing 1% of all events to 1.00, representing 100% of all events.
 - **uri** (String) URI of the Event Stream API resource.
@@ -40,6 +39,6 @@ resource "ngrok_event_stream" "example" {
 ### Read-Only
 
 - **created_at** (String) Timestamp when the Event Stream was created, RFC 3339 format.
-- **ngrok_id** (String) Unique identifier for this Event Stream.
+- **id** (String) Unique identifier for this Event Stream.
 
 

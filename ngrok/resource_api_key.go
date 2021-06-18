@@ -13,11 +13,11 @@ import (
 
 func resourceAPIKeys() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAPIKeysCreate,
-		Read:   resourceAPIKeysGet,
-		Update: resourceAPIKeysUpdate,
-		Delete: resourceAPIKeysDelete,
-
+		Create:      resourceAPIKeysCreate,
+		Read:        resourceAPIKeysGet,
+		Update:      resourceAPIKeysUpdate,
+		Delete:      resourceAPIKeysDelete,
+		Description: "API Keys are used to authenticate to the [ngrok\n API](https://ngrok.com/docs/api#authentication). You may use the API itself\n to provision and manage API Keys but you'll need to provision your first API\n key from the [API Keys page](https://dashboard.ngrok.com/api/keys) on your\n ngrok.com dashboard.",
 		Schema: map[string]*schema.Schema{
 			"created_at": {
 				Type:        schema.TypeString,
@@ -37,6 +37,15 @@ func resourceAPIKeys() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of what uses the API key to authenticate. optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique API key resource identifier",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -45,15 +54,6 @@ func resourceAPIKeys() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined data of this API key. optional, max 4096 bytes",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique API key resource identifier",
 			},
 			"token": {
 				Type:        schema.TypeString,
@@ -117,8 +117,8 @@ func resourceAPIKeysGetDecode(d *schema.ResourceData, res *restapi.APIKey, resp 
 	default:
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("token", res.Token)
 		d.Set("uri", res.URI)
 	}
@@ -130,7 +130,7 @@ func resourceAPIKeysUpdate(d *schema.ResourceData, m interface{}) (err error) {
 
 	var arg restapi.APIKeyUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

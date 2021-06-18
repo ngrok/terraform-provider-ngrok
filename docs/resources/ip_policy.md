@@ -3,12 +3,18 @@
 page_title: "ngrok_ip_policy Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  IP Policies are reusable groups of CIDR ranges with an allow or deny
+   action. They can be attached to endpoints via the Endpoint Configuration IP
+   Policy module. They can also be used with IP Restrictions to control source
+   IP ranges that can start tunnel sessions and connect to the API and dashboard.
 ---
 
 # ngrok_ip_policy (Resource)
 
-
+IP Policies are reusable groups of CIDR ranges with an `allow` or `deny`
+ action. They can be attached to endpoints via the Endpoint Configuration IP
+ Policy module. They can also be used with IP Restrictions to control source
+ IP ranges that can start tunnel sessions and connect to the API and dashboard.
 
 ## Example Usage
 
@@ -26,13 +32,12 @@ resource "ngrok_ip_policy" "example" {
 
 - **action** (String) the IP policy action. Supported values are `allow` or `deny`
 - **description** (String) human-readable description of the source IPs of this IP policy. optional, max 255 bytes.
-- **id** (String) The ID of this resource.
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.
 - **uri** (String) URI of the IP Policy API resource
 
 ### Read-Only
 
 - **created_at** (String) timestamp when the IP policy was created, RFC 3339 format
-- **ngrok_id** (String) unique identifier for this IP policy
+- **id** (String) unique identifier for this IP policy
 
 

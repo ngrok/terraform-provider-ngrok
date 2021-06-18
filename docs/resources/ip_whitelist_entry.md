@@ -3,12 +3,14 @@
 page_title: "ngrok_ip_whitelist_entry Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  The IP Whitelist is deprecated and will be removed. Use an IP Restriction
+   with an endpoints type instead.
 ---
 
 # ngrok_ip_whitelist_entry (Resource)
 
-
+The IP Whitelist is deprecated and will be removed. Use an IP Restriction
+ with an `endpoints` type instead.
 
 ## Example Usage
 
@@ -26,10 +28,9 @@ resource "ngrok_ip_whitelist_entry" "example" {
 
 - **created_at** (String) timestamp when the IP whitelist entry was created, RFC 3339 format
 - **description** (String) human-readable description of the source IPs for this IP whitelist entry. optional, max 255 bytes.
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this IP whitelist entry
 - **ip_net** (String) an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or 10.1.0.0/16) of addresses that will be whitelisted to communicate with your tunnel endpoints
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP whitelist entry. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this IP whitelist entry
 - **uri** (String) URI of the IP whitelist entry API resource
 
 

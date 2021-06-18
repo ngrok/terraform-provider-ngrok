@@ -3,12 +3,20 @@
 page_title: "ngrok_tls_certificate Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  TLS Certificates are pairs of x509 certificates and their matching private
+   key that can be used to terminate TLS traffic. TLS certificates are unused
+   until they are attached to a Domain. TLS Certificates may also be
+   provisioned by ngrok automatically for domains on which you have enabled
+   automated certificate provisioning.
 ---
 
 # ngrok_tls_certificate (Resource)
 
-
+TLS Certificates are pairs of x509 certificates and their matching private
+ key that can be used to terminate TLS traffic. TLS certificates are unused
+ until they are attached to a Domain. TLS Certificates may also be
+ provisioned by ngrok automatically for domains on which you have enabled
+ automated certificate provisioning.
 
 ## Example Usage
 
@@ -32,12 +40,11 @@ resource "ngrok_tls_certificate" "example" {
 - **created_at** (String) timestamp when the TLS certificate was created, RFC 3339 format
 - **description** (String) human-readable description of this TLS certificate. optional, max 255 bytes.
 - **extended_key_usages** (List of String) extended set of actions the private key of this TLS certificate can be used for
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this TLS certificate
 - **issued_at** (String) timestamp (in RFC 3339 format) when this TLS certificate was issued automatically, or null if this certificate was user-uploaded
 - **issuer_common_name** (String) issuer common name from the leaf of this TLS certificate
 - **key_usages** (List of String) set of actions the private key of this TLS certificate can be used for
 - **metadata** (String) arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this TLS certificate
 - **not_after** (String) timestamp when this TLS certificate becomes invalid, RFC 3339 format
 - **not_before** (String) timestamp when this TLS certificate becomes valid, RFC 3339 format
 - **private_key_type** (String) type of the private key of this TLS certificate. One of rsa, ecdsa, or ed25519.

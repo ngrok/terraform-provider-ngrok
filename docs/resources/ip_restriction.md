@@ -3,12 +3,22 @@
 page_title: "ngrok_ip_restriction Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  An IP restriction is a restriction placed on the CIDRs that are allowed to
+   initate traffic to a specific aspect of your ngrok account. An IP
+   restriction has a type which defines the ingress it applies to. IP
+   restrictions can be used to enforce the source IPs that can make API
+   requests, log in to the dashboard, start ngrok agents, and connect to your
+   public-facing endpoints.
 ---
 
 # ngrok_ip_restriction (Resource)
 
-
+An IP restriction is a restriction placed on the CIDRs that are allowed to
+ initate traffic to a specific aspect of your ngrok account. An IP
+ restriction has a type which defines the ingress it applies to. IP
+ restrictions can be used to enforce the source IPs that can make API
+ requests, log in to the dashboard, start ngrok agents, and connect to your
+ public-facing endpoints.
 
 ## Example Usage
 
@@ -31,9 +41,8 @@ resource "ngrok_ip_restriction" "example" {
 - **created_at** (String) timestamp when the IP restriction was created, RFC 3339 format
 - **description** (String) human-readable description of this IP restriction. optional, max 255 bytes.
 - **enforced** (Boolean) true if the IP restriction will be enforce. if false, only warnings will be issued
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this IP restriction
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this IP restriction
 - **type** (String) the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`
 - **uri** (String) URI of the IP restriction API resource
 

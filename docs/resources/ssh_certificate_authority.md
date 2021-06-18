@@ -3,12 +3,14 @@
 page_title: "ngrok_ssh_certificate_authority Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  An SSH Certificate Authority is a pair of an SSH Certificate and its private
+   key that can be used to sign other SSH host and user certificates.
 ---
 
 # ngrok_ssh_certificate_authority (Resource)
 
-
+An SSH Certificate Authority is a pair of an SSH Certificate and its private
+ key that can be used to sign other SSH host and user certificates.
 
 ## Example Usage
 
@@ -27,11 +29,10 @@ resource "ngrok_ssh_certificate_authority" "example" {
 - **created_at** (String) timestamp when the SSH Certificate Authority API resource was created, RFC 3339 format
 - **description** (String) human-readable description of this SSH Certificate Authority. optional, max 255 bytes.
 - **elliptic_curve** (String) the type of elliptic curve to use when creating an ECDSA key
-- **id** (String) The ID of this resource.
+- **id** (String) unique identifier for this SSH Certificate Authority
 - **key_size** (Number) the key size to use when creating an RSA key. one of `2048` or `4096`
 - **key_type** (String) the type of private key for this SSH Certificate Authority
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.
-- **ngrok_id** (String) unique identifier for this SSH Certificate Authority
 - **private_key_type** (String) the type of private key to generate. one of `rsa`, `ecdsa`, `ed25519`
 - **public_key** (String) raw public key for this SSH Certificate Authority
 - **uri** (String) URI of the SSH Certificate Authority API resource

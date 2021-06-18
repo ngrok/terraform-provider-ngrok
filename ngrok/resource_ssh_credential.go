@@ -13,11 +13,11 @@ import (
 
 func resourceSSHCredentials() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceSSHCredentialsCreate,
-		Read:   resourceSSHCredentialsGet,
-		Update: resourceSSHCredentialsUpdate,
-		Delete: resourceSSHCredentialsDelete,
-
+		Create:      resourceSSHCredentialsCreate,
+		Read:        resourceSSHCredentialsGet,
+		Update:      resourceSSHCredentialsUpdate,
+		Delete:      resourceSSHCredentialsDelete,
+		Description: "SSH Credentials are SSH public keys that can be used to start SSH tunnels\n via the ngrok SSH tunnel gateway.",
 		Schema: map[string]*schema.Schema{
 			"acl": {
 				Type:        schema.TypeList,
@@ -47,6 +47,15 @@ func resourceSSHCredentials() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of who or what will use the ssh credential to authenticate. Optional, max 255 bytes.",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique ssh credential resource identifier",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -55,15 +64,6 @@ func resourceSSHCredentials() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this ssh credential. Optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique ssh credential resource identifier",
 			},
 			"public_key": {
 				Type:        schema.TypeString,
@@ -134,8 +134,8 @@ func resourceSSHCredentialsGetDecode(d *schema.ResourceData, res *restapi.SSHCre
 		d.Set("acl", res.ACL)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("public_key", res.PublicKey)
 		d.Set("uri", res.URI)
 	}
@@ -147,7 +147,7 @@ func resourceSSHCredentialsUpdate(d *schema.ResourceData, m interface{}) (err er
 
 	var arg restapi.SSHCredentialUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

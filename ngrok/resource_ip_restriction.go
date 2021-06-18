@@ -9,16 +9,15 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
-	transform "github.com/ngrok/terraform-provider-ngrok/transform"
 )
 
 func resourceIPRestrictions() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceIPRestrictionsCreate,
-		Read:   resourceIPRestrictionsGet,
-		Update: resourceIPRestrictionsUpdate,
-		Delete: resourceIPRestrictionsDelete,
-
+		Create:      resourceIPRestrictionsCreate,
+		Read:        resourceIPRestrictionsGet,
+		Update:      resourceIPRestrictionsUpdate,
+		Delete:      resourceIPRestrictionsDelete,
+		Description: "An IP restriction is a restriction placed on the CIDRs that are allowed to\n initate traffic to a specific aspect of your ngrok account. An IP\n restriction has a type which defines the ingress it applies to. IP\n restrictions can be used to enforce the source IPs that can make API\n requests, log in to the dashboard, start ngrok agents, and connect to your\n public-facing endpoints.",
 		Schema: map[string]*schema.Schema{
 			"created_at": {
 				Type:        schema.TypeString,
@@ -47,6 +46,15 @@ func resourceIPRestrictions() *schema.Resource {
 				ForceNew:    false,
 				Description: "true if the IP restriction will be enforce. if false, only warnings will be issued",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier for this IP restriction",
+			},
 			"ip_policy_ids": {
 				Type:        schema.TypeList,
 				Required:    true,
@@ -65,15 +73,6 @@ func resourceIPRestrictions() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier for this IP restriction",
 			},
 			"type": {
 				Type:        schema.TypeString,
@@ -147,9 +146,8 @@ func resourceIPRestrictionsGetDecode(d *schema.ResourceData, res *restapi.IPRest
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("enforced", res.Enforced)
-		d.Set("ip_policy_ids", transform.ConvertRefSliceToStringSlice(&res.IPPolicies))
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("type", res.Type)
 		d.Set("uri", res.URI)
 	}
@@ -161,7 +159,7 @@ func resourceIPRestrictionsUpdate(d *schema.ResourceData, m interface{}) (err er
 
 	var arg restapi.IPRestrictionUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

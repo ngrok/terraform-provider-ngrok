@@ -18,7 +18,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 		Read:        resourceEndpointConfigurationsGet,
 		Update:      resourceEndpointConfigurationsUpdate,
 		Delete:      resourceEndpointConfigurationsDelete,
-		Description: "## Endpoint Configuration management\n\nAn [Endpoint Configuration](https://ngrok.com/docs/ngrok-link#api-endpoint-configurations) describes\na ngrok network endpoint instance.\n\n_Endpoints are your gateway to ngrok features!_",
+		Description: "Endpoint Configurations are a reusable group of modules that encapsulate how\n traffic to a domain or address is handled. Endpoint configurations are only\n applied to Domains and TCP Addresses they have been attached to.",
 		Schema: map[string]*schema.Schema{
 			"backend": {
 				Type:        schema.TypeSet,
@@ -50,7 +50,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Description: "backend to be used to back this endpoint",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"ngrok_id": {
+									"id": {
 										Type:        schema.TypeString,
 										Required:    false,
 										Computed:    true,
@@ -233,6 +233,15 @@ func resourceEndpointConfigurations() *schema.Resource {
 				ForceNew:    false,
 				Description: "human-readable description of what this endpoint configuration will be do when applied or what traffic it will be applied to. Optional, max 255 bytes",
 			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique identifier of this endpoint configuration",
+			},
 			"ip_policy": {
 				Type:        schema.TypeSet,
 				Required:    false,
@@ -263,7 +272,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Description: "",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"ngrok_id": {
+									"id": {
 										Type:        schema.TypeString,
 										Required:    false,
 										Computed:    true,
@@ -317,7 +326,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Description: "list of all EventStreams that will be used to configure and export this endpoint's logs",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"ngrok_id": {
+									"id": {
 										Type:        schema.TypeString,
 										Required:    false,
 										Computed:    true,
@@ -380,7 +389,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Description: "PEM-encoded CA certificates that will be used to validate. Multiple CAs may be provided by concatenating them together.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"ngrok_id": {
+									"id": {
 										Type:        schema.TypeString,
 										Required:    false,
 										Computed:    true,
@@ -403,15 +412,6 @@ func resourceEndpointConfigurations() *schema.Resource {
 						},
 					},
 				},
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique identifier of this endpoint configuration",
 			},
 			"oauth": {
 				Type:        schema.TypeSet,
@@ -1289,11 +1289,11 @@ func resourceEndpointConfigurationsGetDecode(d *schema.ResourceData, res *restap
 		d.Set("compression", flattenEndpointCompression(res.Compression))
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
+		d.Set("id", res.ID)
 		d.Set("ip_policy", flattenEndpointIPPolicy(res.IPPolicy))
 		d.Set("logging", flattenEndpointLogging(res.Logging))
 		d.Set("metadata", res.Metadata)
 		d.Set("mutual_tls", flattenEndpointMutualTLS(res.MutualTLS))
-		d.Set("ngrok_id", res.ID)
 		d.Set("oauth", flattenEndpointOAuth(res.OAuth))
 		d.Set("oidc", flattenEndpointOIDC(res.OIDC))
 		d.Set("request_headers", flattenEndpointRequestHeaders(res.RequestHeaders))
@@ -1312,7 +1312,7 @@ func resourceEndpointConfigurationsUpdate(d *schema.ResourceData, m interface{})
 
 	var arg restapi.EndpointConfigurationUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

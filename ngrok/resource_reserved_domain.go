@@ -13,43 +13,12 @@ import (
 
 func resourceReservedDomains() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceReservedDomainsCreate,
-		Read:   resourceReservedDomainsGet,
-		Update: resourceReservedDomainsUpdate,
-		Delete: resourceReservedDomainsDelete,
-
+		Create:      resourceReservedDomainsCreate,
+		Read:        resourceReservedDomainsGet,
+		Update:      resourceReservedDomainsUpdate,
+		Delete:      resourceReservedDomainsDelete,
+		Description: "Reserved Domains are hostnames that you can listen for traffic on. Domains\n can be used to listen for http, https or tls traffic. You may use a domain\n that you own by creating a CNAME record specified in the returned resource.\n This CNAME record points traffic for that domain to ngrok's edge servers.",
 		Schema: map[string]*schema.Schema{
-			"certificate": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "object referencing the TLS certificate used for connections to this domain. This can be either a user-uploaded certificate, the most recently issued automatic one, or null otherwise.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"ngrok_id": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "a resource identifier",
-						},
-						"uri": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "a uri for locating a resource",
-						},
-					},
-				},
-			},
 			"certificate_id": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -91,109 +60,6 @@ func resourceReservedDomains() *schema.Resource {
 					},
 				},
 			},
-			"certificate_management_status": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "status of the automatic certificate management for this domain, or null if automatic management is disabled",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"renews_at": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "timestamp when the next renewal will be requested, RFC 3339 format",
-						},
-						"provisioning_job": {
-							Type:        schema.TypeSet,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "status of the certificate provisioning job, or null if the certificiate isn't being provisioned or renewed",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"error_code": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "if present, an error code indicating why provisioning is failing. It may be either a temporary condition (INTERNAL_ERROR), or a permanent one the user must correct (DNS_ERROR).",
-									},
-									"msg": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "a message describing the current status or error",
-									},
-									"started_at": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "timestamp when the provisioning job started, RFC 3339 format",
-									},
-									"retries_at": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "timestamp when the provisioning job will be retried",
-									},
-									"ns_targets": {
-										Type:        schema.TypeList,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "if present, indicates the dns nameservers that the user must configure to complete the provisioning process of a wildcard certificate",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"zone": {
-													Type:        schema.TypeString,
-													Required:    false,
-													Computed:    true,
-													Optional:    true,
-													Sensitive:   false,
-													ForceNew:    true,
-													Description: "the zone that the nameservers need to be applied to",
-												},
-												"nameservers": {
-													Type:        schema.TypeList,
-													Required:    false,
-													Computed:    true,
-													Optional:    true,
-													Sensitive:   false,
-													ForceNew:    true,
-													Description: "the nameservers the user must add",
-													Elem:        &schema.Schema{Type: schema.TypeString},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
 			"cname_target": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -230,37 +96,6 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    true,
 				Description: "hostname of the reserved domain",
 			},
-			"http_endpoint_configuration": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "object referencing the endpoint configuration applied to http traffic on this domain",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"ngrok_id": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "a resource identifier",
-						},
-						"uri": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "a uri for locating a resource",
-						},
-					},
-				},
-			},
 			"http_endpoint_configuration_id": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -270,37 +105,6 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    false,
 				Description: "ID of an endpoint configuration of type http that will be used to handle inbound http traffic to this domain",
 			},
-			"https_endpoint_configuration": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "object referencing the endpoint configuration applied to https traffic on this domain",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"ngrok_id": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "a resource identifier",
-						},
-						"uri": {
-							Type:        schema.TypeString,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "a uri for locating a resource",
-						},
-					},
-				},
-			},
 			"https_endpoint_configuration_id": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -309,6 +113,15 @@ func resourceReservedDomains() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "ID of an endpoint configuration of type https that will be used to handle inbound https traffic to this domain",
+			},
+			"id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "unique reserved domain resource identifier",
 			},
 			"metadata": {
 				Type:        schema.TypeString,
@@ -327,15 +140,6 @@ func resourceReservedDomains() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the domain name to reserve. It may be a full domain name like app.example.com. If the name does not contain a '.' it will reserve that subdomain on ngrok.io.",
-			},
-			"ngrok_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "unique reserved domain resource identifier",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -376,10 +180,10 @@ func resourceReservedDomainsCreate(d *schema.ResourceData, m interface{}) (err e
 		arg.Metadata = *expandString(v)
 	}
 	if v, ok := d.GetOk("http_endpoint_configuration_id"); ok {
-		arg.HTTPEndpointConfigurationID = *expandString(v)
+		arg.HTTPEndpointConfigurationID = expandString(v)
 	}
 	if v, ok := d.GetOk("https_endpoint_configuration_id"); ok {
-		arg.HTTPSEndpointConfigurationID = *expandString(v)
+		arg.HTTPSEndpointConfigurationID = expandString(v)
 	}
 	if v, ok := d.GetOk("certificate_id"); ok {
 		arg.CertificateID = expandString(v)
@@ -415,22 +219,22 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		log.Printf("[ERROR] ReservedDomainsGet: %s", err)
 		return err
 	default:
-		d.Set("certificate", flattenRef(res.Certificate))
 		if res.Certificate != nil {
 			d.Set("certificate_id", res.Certificate.ID)
 		}
 		d.Set("certificate_management_policy", flattenReservedDomainCertPolicy(res.CertificateManagementPolicy))
-		d.Set("certificate_management_status", flattenReservedDomainCertStatus(res.CertificateManagementStatus))
 		d.Set("cname_target", res.CNAMETarget)
 		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("domain", res.Domain)
-		d.Set("http_endpoint_configuration", flattenRef(res.HTTPEndpointConfiguration))
-		d.Set("http_endpoint_configuration_id", res.HTTPEndpointConfiguration.ID)
-		d.Set("https_endpoint_configuration", flattenRef(res.HTTPSEndpointConfiguration))
-		d.Set("https_endpoint_configuration_id", res.HTTPSEndpointConfiguration.ID)
+		if res.HTTPEndpointConfiguration != nil {
+			d.Set("http_endpoint_configuration_id", res.HTTPEndpointConfiguration.ID)
+		}
+		if res.HTTPSEndpointConfiguration != nil {
+			d.Set("https_endpoint_configuration_id", res.HTTPSEndpointConfiguration.ID)
+		}
+		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("ngrok_id", res.ID)
 		d.Set("region", res.Region)
 		d.Set("uri", res.URI)
 	}
@@ -442,7 +246,7 @@ func resourceReservedDomainsUpdate(d *schema.ResourceData, m interface{}) (err e
 
 	var arg restapi.ReservedDomainUpdate
 	arg.ID = d.Id()
-	if v, ok := d.GetOk("ngrok_id"); ok {
+	if v, ok := d.GetOk("id"); ok {
 		arg.ID = *expandString(v)
 	}
 	if v, ok := d.GetOk("description"); ok {

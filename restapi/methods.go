@@ -662,6 +662,236 @@ func (c *Client) CredentialsUpdate(ctx context.Context, arg *CredentialUpdate) (
 	return &res, resp, err
 }
 
+// Create a new endpoint configuration
+func (c *Client) EndpointConfigurationsCreate(ctx context.Context, arg *EndpointConfigurationCreate) (*EndpointConfiguration, *http.Response, error) {
+	var res EndpointConfiguration
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an endpoint configuration. This operation will fail if the endpoint configuration is still referenced by any reserved domain or reserved address.
+func (c *Client) EndpointConfigurationsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Returns detailed information about an endpoint configuration
+func (c *Client) EndpointConfigurationsGet(ctx context.Context, arg *Item) (*EndpointConfiguration, *http.Response, error) {
+	var res EndpointConfiguration
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Returns a list of all endpoint configurations on this account
+func (c *Client) EndpointConfigurationsList(ctx context.Context, arg *Paging) (*EndpointConfigurationList, *http.Response, error) {
+	var res EndpointConfigurationList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Updates an endpoint configuration. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
+func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *EndpointConfigurationUpdate) (*EndpointConfiguration, *http.Response, error) {
+	var res EndpointConfiguration
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a TCP Edge
+func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEdge, *http.Response, error) {
+	var res TCPEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tcp_edges")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get a TCP Edge by ID
+func (c *Client) EdgesTCPGet(ctx context.Context, arg *Item) (*TCPEdge, *http.Response, error) {
+	var res TCPEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update a TCP Edge by ID
+func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEdge, *http.Response, error) {
+	var res TCPEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a TCP Edge by ID
+func (c *Client) EdgesTCPDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a TLS Edge
+func (c *Client) EdgesTLSCreate(ctx context.Context, arg *TLSEdgeCreate) (*TLSEdge, *http.Response, error) {
+	var res TLSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tls_edges")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Post(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get a TLS Edge by ID
+func (c *Client) EdgesTLSGet(ctx context.Context, arg *Item) (*TLSEdge, *http.Response, error) {
+	var res TLSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update a TLS Edge by ID
+func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEdge, *http.Response, error) {
+	var res TLSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, path.String(), arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a TLS Edge by ID
+func (c *Client) EdgesTLSDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Create a new Event Stream. It will not apply to anything until you associate it with one or more Endpoint Configs.
 func (c *Client) EventStreamsCreate(ctx context.Context, arg *EventStreamCreate) (*EventStream, *http.Response, error) {
 	var res EventStream
@@ -1376,94 +1606,6 @@ func (c *Client) IPWhitelistUpdate(ctx context.Context, arg *IPWhitelistEntryUpd
 	var res IPWhitelistEntry
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ip_whitelist/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Create a new endpoint configuration
-func (c *Client) EndpointConfigurationsCreate(ctx context.Context, arg *EndpointConfigurationCreate) (*EndpointConfiguration, *http.Response, error) {
-	var res EndpointConfiguration
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Delete an endpoint configuration. This operation will fail if the endpoint configuration is still referenced by any reserved domain or reserved address.
-func (c *Client) EndpointConfigurationsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Returns detailed information about an endpoint configuration
-func (c *Client) EndpointConfigurationsGet(ctx context.Context, arg *Item) (*EndpointConfiguration, *http.Response, error) {
-	var res EndpointConfiguration
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Returns a list of all endpoint configurations on this account
-func (c *Client) EndpointConfigurationsList(ctx context.Context, arg *Paging) (*EndpointConfigurationList, *http.Response, error) {
-	var res EndpointConfigurationList
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Updates an endpoint configuration. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
-func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *EndpointConfigurationUpdate) (*EndpointConfiguration, *http.Response, error) {
-	var res EndpointConfiguration
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 

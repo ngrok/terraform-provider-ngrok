@@ -3,12 +3,20 @@
 page_title: "ngrok_api_key Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
-  
+  API Keys are used to authenticate to the ngrok
+   API https://ngrok.com/docs/api#authentication. You may use the API itself
+   to provision and manage API Keys but you'll need to provision your first API
+   key from the API Keys page https://dashboard.ngrok.com/api/keys on your
+   ngrok.com dashboard.
 ---
 
 # ngrok_api_key (Resource)
 
-
+API Keys are used to authenticate to the [ngrok
+ API](https://ngrok.com/docs/api#authentication). You may use the API itself
+ to provision and manage API Keys but you'll need to provision your first API
+ key from the [API Keys page](https://dashboard.ngrok.com/api/keys) on your
+ ngrok.com dashboard.
 
 ## Example Usage
 
@@ -26,9 +34,8 @@ resource "ngrok_api_key" "example" {
 
 - **created_at** (String) timestamp when the api key was created, RFC 3339 format
 - **description** (String) human-readable description of what uses the API key to authenticate. optional, max 255 bytes.
-- **id** (String) The ID of this resource.
+- **id** (String) unique API key resource identifier
 - **metadata** (String) arbitrary user-defined data of this API key. optional, max 4096 bytes
-- **ngrok_id** (String) unique API key resource identifier
 - **token** (String, Sensitive) the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**
 - **uri** (String) URI to the API resource of this API key
 

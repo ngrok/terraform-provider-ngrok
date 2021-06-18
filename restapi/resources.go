@@ -417,560 +417,6 @@ type CredentialList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
-type EventStreamCreate struct {
-	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Event Stream. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each event.
-	Fields []string `json:"fields,omitempty"`
-	// The protocol that determines which events will be collected. Supported values
-	// are tcp_connection_closed and http_request_complete.
-	EventType string `json:"event_type,omitempty"`
-	// A list of Event Destination IDs which should be used for this Event Stream.
-	// Event Streams are required to have at least one Event Destination.
-	DestinationIDs []string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to capture. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate float64 `json:"sampling_rate,omitempty"`
-}
-
-type EventStreamUpdate struct {
-	// Unique identifier for this Event Stream.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
-	// 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// Human-readable description of the Event Stream. Optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each event.
-	Fields *[]string `json:"fields,omitempty"`
-	// A list of Event Destination IDs which should be used for this Event Stream.
-	// Event Streams are required to have at least one Event Destination.
-	DestinationIDs *[]string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to capture. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate *float64 `json:"sampling_rate,omitempty"`
-}
-
-type EventStreamList struct {
-	// The list of all Event Streams on this account.
-	EventStreams []EventStream `json:"event_streams,omitempty"`
-	// URI of the Event Stream list API resource.
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page.
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type EventStream struct {
-	// Unique identifier for this Event Stream.
-	ID string `json:"id,omitempty"`
-	// URI of the Event Stream API resource.
-	URI string `json:"uri,omitempty"`
-	// Timestamp when the Event Stream was created, RFC 3339 format.
-	CreatedAt string `json:"created_at,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Event Stream. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// A list of protocol-specific fields you want to collect on each event.
-	Fields []string `json:"fields,omitempty"`
-	// The protocol that determines which events will be collected. Supported values
-	// are tcp_connection_closed and http_request_complete.
-	EventType string `json:"event_type,omitempty"`
-	// A list of Event Destination IDs which should be used for this Event Stream.
-	// Event Streams are required to have at least one Event Destination.
-	DestinationIDs []string `json:"destination_ids,omitempty"`
-	// The percentage of all events you would like to capture. Valid values range from
-	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
-	SamplingRate float64 `json:"sampling_rate,omitempty"`
-}
-
-type EventDestinationCreate struct {
-	// Arbitrary user-defined machine-readable data of this Event Destination.
-	// Optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Human-readable description of the Event Destination. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is JSON.
-	Format string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your events. An event
-	// destination must contain exactly one of the following objects, leaving the rest
-	// null: kinesis, firehose, cloudwatch_logs, or s3.
-	Target              EventTarget `json:"target,omitempty"`
-	VerifyWithTestEvent *bool       `json:"verify_with_test_event,omitempty"`
-}
-
-type EventDestinationUpdate struct {
-	// Unique identifier for this Event Destination.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Event Destination.
-	// Optional, max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// Human-readable description of the Event Destination. Optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is JSON.
-	Format *string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your events. An event
-	// destination must contain exactly one of the following objects, leaving the rest
-	// null: kinesis, firehose, cloudwatch_logs, or s3.
-	Target              *EventTarget `json:"target,omitempty"`
-	VerifyWithTestEvent *bool        `json:"verify_with_test_event,omitempty"`
-}
-
-type EventDestination struct {
-	// Unique identifier for this Event Destination.
-	ID string `json:"id,omitempty"`
-	// Arbitrary user-defined machine-readable data of this Event Destination.
-	// Optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// Timestamp when the Event Destination was created, RFC 3339 format.
-	CreatedAt string `json:"created_at,omitempty"`
-	// Human-readable description of the Event Destination. Optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// The output format you would like to serialize events into when sending to their
-	// target. Currently the only accepted value is JSON.
-	Format string `json:"format,omitempty"`
-	// An object that encapsulates where and how to send your events. An event
-	// destination must contain exactly one of the following objects, leaving the rest
-	// null: kinesis, firehose, cloudwatch_logs, or s3.
-	Target EventTarget `json:"target,omitempty"`
-	// URI of the Event Destination API resource.
-	URI string `json:"uri,omitempty"`
-}
-
-type EventDestinationList struct {
-	// The list of all Event Destinations on this account.
-	EventDestinations []EventDestination `json:"event_destinations,omitempty"`
-	// URI of the Event Destinations list API resource.
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page.
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type EventTarget struct {
-	// Configuration used to send events to Amazon Kinesis Data Firehose.
-	Firehose *EventTargetFirehose `json:"firehose,omitempty"`
-	// Configuration used to send events to Amazon Kinesis.
-	Kinesis *EventTargetKinesis `json:"kinesis,omitempty"`
-	// Configuration used to send events to Amazon CloudWatch Logs.
-	CloudwatchLogs *EventTargetCloudwatchLogs `json:"cloudwatch_logs,omitempty"`
-	// Configuration used for internal debugging.
-	Debug *EventTargetDebug `json:"debug,omitempty"`
-}
-
-type EventTargetFirehose struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of role
-	// or creds should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the Firehose delivery stream to deposit
-	// events into.
-	DeliveryStreamARN string `json:"delivery_stream_arn,omitempty"`
-}
-
-type EventTargetKinesis struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of role
-	// or creds should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the Kinesis stream to deposit events into.
-	StreamARN string `json:"stream_arn,omitempty"`
-}
-
-type EventTargetCloudwatchLogs struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of role
-	// or creds should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the CloudWatch Logs group to deposit events
-	// into.
-	LogGroupARN string `json:"log_group_arn,omitempty"`
-}
-
-type EventTargetS3 struct {
-	// Configuration for how to authenticate into your AWS account. Exactly one of role
-	// or creds should be configured.
-	Auth AWSAuth `json:"auth,omitempty"`
-	// An Amazon Resource Name specifying the S3 bucket to deposit events into.
-	BucketARN string `json:"bucket_arn,omitempty"`
-	// An optional prefix to prepend to S3 object keys.
-	ObjectPrefix string `json:"object_prefix,omitempty"`
-	// Whether or not to compress files with gzip.
-	Compression bool `json:"compression,omitempty"`
-	// How many bytes we should accumulate into a single file before sending to S3.
-	MaxFileSize int64 `json:"max_file_size,omitempty"`
-	// How many seconds we should batch up events before sending them to S3.
-	MaxFileAge int64 `json:"max_file_age,omitempty"`
-}
-
-type EventTargetDebug struct {
-	// Whether or not to output to publisher service logs.
-	Log bool `json:"log,omitempty"`
-	// URL to send events to.
-	CallbackURL string `json:"callback_url,omitempty"`
-}
-
-type AWSAuth struct {
-	// A role for ngrok to assume on your behalf to deposit events into your AWS
-	// account.
-	Role *AWSRole `json:"role,omitempty"`
-	// Credentials to your AWS account if you prefer ngrok to sign in with long-term
-	// access keys.
-	Creds *AWSCredentials `json:"creds,omitempty"`
-}
-
-type AWSRole struct {
-	// An ARN that specifies the role that ngrok should use to deliver to the
-	// configured target.
-	RoleARN string `json:"role_arn,omitempty"`
-}
-
-type AWSCredentials struct {
-	// The ID portion of an AWS access key.
-	AWSAccessKeyID string `json:"aws_access_key_id,omitempty"`
-	// The secret portion of an AWS access key.
-	AWSSecretAccessKey *string `json:"aws_secret_access_key,omitempty"`
-}
-
-type SentEvent struct {
-	EventID string `json:"event_id,omitempty"`
-}
-
-type EventSubscriptionCreate struct {
-	// Arbitrary customer supplied information intended to be machine readable.
-	// Optional, max 4096 chars.
-	Metadata string `json:"metadata,omitempty"`
-	// Arbitrary customer supplied information intended to be human readable. Optional,
-	// max 255 chars.
-	Description string `json:"description,omitempty"`
-	// TODO
-	Sources []EventSourceReplace `json:"sources,omitempty"`
-	// TODO
-	DestinationIDs []string `json:"destination_ids,omitempty"`
-}
-
-type EventSubscriptionUpdate struct {
-	// Unique identifier for this Event Subscription.
-	ID string `json:"id,omitempty"`
-	// Arbitrary customer supplied information intended to be machine readable.
-	// Optional, max 4096 chars.
-	Metadata *string `json:"metadata,omitempty"`
-	// Arbitrary customer supplied information intended to be human readable. Optional,
-	// max 255 chars.
-	Description *string `json:"description,omitempty"`
-	// TODO
-	Sources *[]EventSourceReplace `json:"sources,omitempty"`
-	// TODO
-	DestinationIDs *[]string `json:"destination_ids,omitempty"`
-}
-
-type EventSubscriptionList struct {
-	// The list of all Event Subscriptions on this account.
-	EventSubscriptions []EventSubscription `json:"event_subscriptions,omitempty"`
-	// URI of the Event Subscriptions list API resource.
-	URI string `json:"uri,omitempty"`
-	// URI of next page, or null if there is no next page.
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type EventSubscription struct {
-	// Unique identifier for this Event Subscription.
-	ID string `json:"id,omitempty"`
-	// URI of the Event Subscription API resource.
-	URI string `json:"uri,omitempty"`
-	// When the Event Subscription was created (RFC 3339 format).
-	CreatedAt string `json:"created_at,omitempty"`
-	// Arbitrary customer supplied information intended to be machine readable.
-	// Optional, max 4096 chars.
-	Metadata string `json:"metadata,omitempty"`
-	// Arbitrary customer supplied information intended to be human readable. Optional,
-	// max 255 chars.
-	Description string `json:"description,omitempty"`
-	// TODO
-	Sources []EventSource `json:"sources,omitempty"`
-	// TODO
-	Destinations []Ref `json:"destinations,omitempty"`
-}
-
-type EventSourceReplace struct {
-	// TODO
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
-	Fields []string `json:"fields,omitempty"`
-}
-
-type EventSource struct {
-	// TODO
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
-	Fields []string `json:"fields,omitempty"`
-	// TODO
-	URI string `json:"uri,omitempty"`
-}
-
-type EventSourceList struct {
-	// TODO
-	Sources []EventSource `json:"sources,omitempty"`
-	// TODO
-	URI string `json:"uri,omitempty"`
-}
-
-type EventSourceCreate struct {
-	// TODO
-	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
-	Fields []string `json:"fields,omitempty"`
-}
-
-type EventSourceUpdate struct {
-	// TODO
-	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter *string `json:"filter,omitempty"`
-	// TODO
-	Fields *[]string `json:"fields,omitempty"`
-}
-
-// This is needed instead of Item because the parameters are different.
-type EventSourceItem struct {
-	// TODO
-	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
-	Type string `json:"type,omitempty"`
-}
-
-// This is needed instead of Paging because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
-type EventSourcePaging struct {
-	// TODO
-	SubscriptionID string `json:"subscription_id,omitempty"`
-}
-
-type IPPolicyCreate struct {
-	// human-readable description of the source IPs of this IP policy. optional, max
-	// 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy. optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are allow or deny
-	Action string `json:"action,omitempty"`
-}
-
-type IPPolicyUpdate struct {
-	ID string `json:"id,omitempty"`
-	// human-readable description of the source IPs of this IP policy. optional, max
-	// 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy. optional, max
-	// 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-}
-
-type IPPolicy struct {
-	// unique identifier for this IP policy
-	ID string `json:"id,omitempty"`
-	// URI of the IP Policy API resource
-	URI string `json:"uri,omitempty"`
-	// timestamp when the IP policy was created, RFC 3339 format
-	CreatedAt string `json:"created_at,omitempty"`
-	// human-readable description of the source IPs of this IP policy. optional, max
-	// 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy. optional, max
-	// 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are allow or deny
-	Action string `json:"action,omitempty"`
-}
-
-type IPPolicyList struct {
-	// the list of all IP policies on this account
-	IPPolicies []IPPolicy `json:"ip_policies,omitempty"`
-	// URI of the IP policy list API resource
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type IPPolicyRuleCreate struct {
-	// human-readable description of the source IPs of this IP rule. optional, max 255
-	// bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
-	CIDR string `json:"cidr,omitempty"`
-	// ID of the IP policy this IP policy rule will be attached to
-	IPPolicyID string `json:"ip_policy_id,omitempty"`
-}
-
-type IPPolicyRuleUpdate struct {
-	ID string `json:"id,omitempty"`
-	// human-readable description of the source IPs of this IP rule. optional, max 255
-	// bytes.
-	Description *string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
-	// max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
-	CIDR *string `json:"cidr,omitempty"`
-}
-
-type IPPolicyRule struct {
-	// unique identifier for this IP policy rule
-	ID string `json:"id,omitempty"`
-	// URI of the IP policy rule API resource
-	URI string `json:"uri,omitempty"`
-	// timestamp when the IP policy rule was created, RFC 3339 format
-	CreatedAt string `json:"created_at,omitempty"`
-	// human-readable description of the source IPs of this IP rule. optional, max 255
-	// bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
-	CIDR string `json:"cidr,omitempty"`
-	// object describing the IP policy this IP Policy Rule belongs to
-	IPPolicy Ref `json:"ip_policy,omitempty"`
-}
-
-type IPPolicyRuleList struct {
-	// the list of all IP policy rules on this account
-	IPPolicyRules []IPPolicyRule `json:"ip_policy_rules,omitempty"`
-	// URI of the IP policy rule list API resource
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type IPRestrictionCreate struct {
-	// human-readable description of this IP restriction. optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP restriction. optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
-	// issued
-	Enforced bool `json:"enforced,omitempty"`
-	// the type of IP restriction. this defines what traffic will be restricted with
-	// the attached policies. four values are currently supported: dashboard, api,
-	// agent, and endpoints
-	Type string `json:"type,omitempty"`
-	// the set of IP policy identifiers that are used to enforce the restriction
-	IPPolicyIDs []string `json:"ip_policy_ids,omitempty"`
-}
-
-type IPRestrictionUpdate struct {
-	ID string `json:"id,omitempty"`
-	// human-readable description of this IP restriction. optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP restriction. optional,
-	// max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
-	// issued
-	Enforced *bool `json:"enforced,omitempty"`
-	// the set of IP policy identifiers that are used to enforce the restriction
-	IPPolicyIDs []string `json:"ip_policy_ids,omitempty"`
-}
-
-type IPRestriction struct {
-	// unique identifier for this IP restriction
-	ID string `json:"id,omitempty"`
-	// URI of the IP restriction API resource
-	URI string `json:"uri,omitempty"`
-	// timestamp when the IP restriction was created, RFC 3339 format
-	CreatedAt string `json:"created_at,omitempty"`
-	// human-readable description of this IP restriction. optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP restriction. optional,
-	// max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
-	// issued
-	Enforced bool `json:"enforced,omitempty"`
-	// the type of IP restriction. this defines what traffic will be restricted with
-	// the attached policies. four values are currently supported: dashboard, api,
-	// agent, and endpoints
-	Type string `json:"type,omitempty"`
-	// the set of IP policies that are used to enforce the restriction
-	IPPolicies []Ref `json:"ip_policies,omitempty"`
-}
-
-type IPRestrictionList struct {
-	// the list of all IP restrictions on this account
-	IPRestrictions []IPRestriction `json:"ip_restrictions,omitempty"`
-	// URI of the IP resrtrictions list API resource
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type IPWhitelistEntryCreate struct {
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
-	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
-	// tunnel endpoints
-	IPNet string `json:"ip_net,omitempty"`
-}
-
-type IPWhitelistEntryUpdate struct {
-	ID string `json:"id,omitempty"`
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-}
-
-type IPWhitelistEntry struct {
-	// unique identifier for this IP whitelist entry
-	ID string `json:"id,omitempty"`
-	// URI of the IP whitelist entry API resource
-	URI string `json:"uri,omitempty"`
-	// timestamp when the IP whitelist entry was created, RFC 3339 format
-	CreatedAt string `json:"created_at,omitempty"`
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
-	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
-	// tunnel endpoints
-	IPNet string `json:"ip_net,omitempty"`
-}
-
-type IPWhitelistEntryList struct {
-	// the list of all IP whitelist entries on this account
-	Whitelist []IPWhitelistEntry `json:"whitelist,omitempty"`
-	// URI of the IP whitelist API resource
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
 type EndpointConfiguration struct {
 	// unique identifier of this endpoint configuration
 	ID string `json:"id,omitempty"`
@@ -1530,6 +976,654 @@ type EndpointBackendMutate struct {
 	BackendID string `json:"backend_id,omitempty"`
 }
 
+type TCPEdgeCreate struct {
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// edge modules
+	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
+	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+}
+
+type TCPEdgeUpdate struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// edge modules
+	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
+	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+}
+
+type TCPEdge struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// timestamp when the edge was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// URI of the edge API resource
+	URI string `json:"uri,omitempty"`
+	// edge modules
+	Backend       *EndpointBackend  `json:"backend,omitempty"`
+	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
+}
+
+type TLSEdgeCreate struct {
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// edge modules
+	Backend        *EndpointBackendMutate   `json:"backend,omitempty"`
+	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
+	MutualTLS      *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
+	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
+}
+
+type TLSEdgeUpdate struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// edge modules
+	Backend        *EndpointBackendMutate   `json:"backend,omitempty"`
+	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
+	MutualTLS      *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
+	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
+}
+
+type TLSEdge struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be do when applied or what
+	// traffic it will be applied to. Optional, max 255 bytes
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// timestamp when the edge configuration was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// URI of the edge API resource
+	URI string `json:"uri,omitempty"`
+	// edge modules
+	Backend        *EndpointBackend        `json:"backend,omitempty"`
+	IpRestriction  *EndpointIPPolicy       `json:"ip_restriction,omitempty"`
+	MutualTls      *EndpointMutualTLS      `json:"mutual_tls,omitempty"`
+	TlsTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
+}
+
+type EventStreamCreate struct {
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields []string `json:"fields,omitempty"`
+	// The protocol that determines which events will be collected. Supported values
+	// are tcp_connection_closed and http_request_complete.
+	EventType string `json:"event_type,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventStreamUpdate struct {
+	// Unique identifier for this Event Stream.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields *[]string `json:"fields,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs *[]string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate *float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventStreamList struct {
+	// The list of all Event Streams on this account.
+	EventStreams []EventStream `json:"event_streams,omitempty"`
+	// URI of the Event Stream list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventStream struct {
+	// Unique identifier for this Event Stream.
+	ID string `json:"id,omitempty"`
+	// URI of the Event Stream API resource.
+	URI string `json:"uri,omitempty"`
+	// Timestamp when the Event Stream was created, RFC 3339 format.
+	CreatedAt string `json:"created_at,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Stream. Optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Stream. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// A list of protocol-specific fields you want to collect on each event.
+	Fields []string `json:"fields,omitempty"`
+	// The protocol that determines which events will be collected. Supported values
+	// are tcp_connection_closed and http_request_complete.
+	EventType string `json:"event_type,omitempty"`
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+	// The percentage of all events you would like to capture. Valid values range from
+	// 0.01, representing 1% of all events to 1.00, representing 100% of all events.
+	SamplingRate float64 `json:"sampling_rate,omitempty"`
+}
+
+type EventDestinationCreate struct {
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is JSON.
+	Format string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
+	Target              EventTarget `json:"target,omitempty"`
+	VerifyWithTestEvent *bool       `json:"verify_with_test_event,omitempty"`
+}
+
+type EventDestinationUpdate struct {
+	// Unique identifier for this Event Destination.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is JSON.
+	Format *string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
+	Target              *EventTarget `json:"target,omitempty"`
+	VerifyWithTestEvent *bool        `json:"verify_with_test_event,omitempty"`
+}
+
+type EventDestination struct {
+	// Unique identifier for this Event Destination.
+	ID string `json:"id,omitempty"`
+	// Arbitrary user-defined machine-readable data of this Event Destination.
+	// Optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// Timestamp when the Event Destination was created, RFC 3339 format.
+	CreatedAt string `json:"created_at,omitempty"`
+	// Human-readable description of the Event Destination. Optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// The output format you would like to serialize events into when sending to their
+	// target. Currently the only accepted value is JSON.
+	Format string `json:"format,omitempty"`
+	// An object that encapsulates where and how to send your events. An event
+	// destination must contain exactly one of the following objects, leaving the rest
+	// null: kinesis, firehose, cloudwatch_logs, or s3.
+	Target EventTarget `json:"target,omitempty"`
+	// URI of the Event Destination API resource.
+	URI string `json:"uri,omitempty"`
+}
+
+type EventDestinationList struct {
+	// The list of all Event Destinations on this account.
+	EventDestinations []EventDestination `json:"event_destinations,omitempty"`
+	// URI of the Event Destinations list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventTarget struct {
+	// Configuration used to send events to Amazon Kinesis Data Firehose.
+	Firehose *EventTargetFirehose `json:"firehose,omitempty"`
+	// Configuration used to send events to Amazon Kinesis.
+	Kinesis *EventTargetKinesis `json:"kinesis,omitempty"`
+	// Configuration used to send events to Amazon CloudWatch Logs.
+	CloudwatchLogs *EventTargetCloudwatchLogs `json:"cloudwatch_logs,omitempty"`
+	// Configuration used for internal debugging.
+	Debug *EventTargetDebug `json:"debug,omitempty"`
+}
+
+type EventTargetFirehose struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the Firehose delivery stream to deposit
+	// events into.
+	DeliveryStreamARN string `json:"delivery_stream_arn,omitempty"`
+}
+
+type EventTargetKinesis struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the Kinesis stream to deposit events into.
+	StreamARN string `json:"stream_arn,omitempty"`
+}
+
+type EventTargetCloudwatchLogs struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the CloudWatch Logs group to deposit events
+	// into.
+	LogGroupARN string `json:"log_group_arn,omitempty"`
+}
+
+type EventTargetS3 struct {
+	// Configuration for how to authenticate into your AWS account. Exactly one of role
+	// or creds should be configured.
+	Auth AWSAuth `json:"auth,omitempty"`
+	// An Amazon Resource Name specifying the S3 bucket to deposit events into.
+	BucketARN string `json:"bucket_arn,omitempty"`
+	// An optional prefix to prepend to S3 object keys.
+	ObjectPrefix string `json:"object_prefix,omitempty"`
+	// Whether or not to compress files with gzip.
+	Compression bool `json:"compression,omitempty"`
+	// How many bytes we should accumulate into a single file before sending to S3.
+	MaxFileSize int64 `json:"max_file_size,omitempty"`
+	// How many seconds we should batch up events before sending them to S3.
+	MaxFileAge int64 `json:"max_file_age,omitempty"`
+}
+
+type EventTargetDebug struct {
+	// Whether or not to output to publisher service logs.
+	Log bool `json:"log,omitempty"`
+	// URL to send events to.
+	CallbackURL string `json:"callback_url,omitempty"`
+}
+
+type AWSAuth struct {
+	// A role for ngrok to assume on your behalf to deposit events into your AWS
+	// account.
+	Role *AWSRole `json:"role,omitempty"`
+	// Credentials to your AWS account if you prefer ngrok to sign in with long-term
+	// access keys.
+	Creds *AWSCredentials `json:"creds,omitempty"`
+}
+
+type AWSRole struct {
+	// An ARN that specifies the role that ngrok should use to deliver to the
+	// configured target.
+	RoleARN string `json:"role_arn,omitempty"`
+}
+
+type AWSCredentials struct {
+	// The ID portion of an AWS access key.
+	AWSAccessKeyID string `json:"aws_access_key_id,omitempty"`
+	// The secret portion of an AWS access key.
+	AWSSecretAccessKey *string `json:"aws_secret_access_key,omitempty"`
+}
+
+type SentEvent struct {
+	EventID string `json:"event_id,omitempty"`
+}
+
+type EventSubscriptionCreate struct {
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description string `json:"description,omitempty"`
+	// TODO
+	Sources []EventSourceReplace `json:"sources,omitempty"`
+	// TODO
+	DestinationIDs []string `json:"destination_ids,omitempty"`
+}
+
+type EventSubscriptionUpdate struct {
+	// Unique identifier for this Event Subscription.
+	ID string `json:"id,omitempty"`
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata *string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description *string `json:"description,omitempty"`
+	// TODO
+	Sources *[]EventSourceReplace `json:"sources,omitempty"`
+	// TODO
+	DestinationIDs *[]string `json:"destination_ids,omitempty"`
+}
+
+type EventSubscriptionList struct {
+	// The list of all Event Subscriptions on this account.
+	EventSubscriptions []EventSubscription `json:"event_subscriptions,omitempty"`
+	// URI of the Event Subscriptions list API resource.
+	URI string `json:"uri,omitempty"`
+	// URI of next page, or null if there is no next page.
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EventSubscription struct {
+	// Unique identifier for this Event Subscription.
+	ID string `json:"id,omitempty"`
+	// URI of the Event Subscription API resource.
+	URI string `json:"uri,omitempty"`
+	// When the Event Subscription was created (RFC 3339 format).
+	CreatedAt string `json:"created_at,omitempty"`
+	// Arbitrary customer supplied information intended to be machine readable.
+	// Optional, max 4096 chars.
+	Metadata string `json:"metadata,omitempty"`
+	// Arbitrary customer supplied information intended to be human readable. Optional,
+	// max 255 chars.
+	Description string `json:"description,omitempty"`
+	// TODO
+	Sources []EventSource `json:"sources,omitempty"`
+	// TODO
+	Destinations []Ref `json:"destinations,omitempty"`
+}
+
+type EventSourceReplace struct {
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+}
+
+type EventSource struct {
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+	// TODO
+	URI string `json:"uri,omitempty"`
+}
+
+type EventSourceList struct {
+	// TODO
+	Sources []EventSource `json:"sources,omitempty"`
+	// TODO
+	URI string `json:"uri,omitempty"`
+}
+
+type EventSourceCreate struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter string `json:"filter,omitempty"`
+	// TODO
+	Fields []string `json:"fields,omitempty"`
+}
+
+type EventSourceUpdate struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+	// TODO
+	Filter *string `json:"filter,omitempty"`
+	// TODO
+	Fields *[]string `json:"fields,omitempty"`
+}
+
+// This is needed instead of Item because the parameters are different.
+type EventSourceItem struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+	// TODO
+	Type string `json:"type,omitempty"`
+}
+
+// This is needed instead of Paging because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
+type EventSourcePaging struct {
+	// TODO
+	SubscriptionID string `json:"subscription_id,omitempty"`
+}
+
+type IPPolicyCreate struct {
+	// human-readable description of the source IPs of this IP policy. optional, max
+	// 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy. optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// the IP policy action. Supported values are allow or deny
+	Action string `json:"action,omitempty"`
+}
+
+type IPPolicyUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of the source IPs of this IP policy. optional, max
+	// 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy. optional, max
+	// 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+}
+
+type IPPolicy struct {
+	// unique identifier for this IP policy
+	ID string `json:"id,omitempty"`
+	// URI of the IP Policy API resource
+	URI string `json:"uri,omitempty"`
+	// timestamp when the IP policy was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of the source IPs of this IP policy. optional, max
+	// 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy. optional, max
+	// 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// the IP policy action. Supported values are allow or deny
+	Action string `json:"action,omitempty"`
+}
+
+type IPPolicyList struct {
+	// the list of all IP policies on this account
+	IPPolicies []IPPolicy `json:"ip_policies,omitempty"`
+	// URI of the IP policy list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type IPPolicyRuleCreate struct {
+	// human-readable description of the source IPs of this IP rule. optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
+	// max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
+	CIDR string `json:"cidr,omitempty"`
+	// ID of the IP policy this IP policy rule will be attached to
+	IPPolicyID string `json:"ip_policy_id,omitempty"`
+}
+
+type IPPolicyRuleUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of the source IPs of this IP rule. optional, max 255
+	// bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
+	// max 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
+	CIDR *string `json:"cidr,omitempty"`
+}
+
+type IPPolicyRule struct {
+	// unique identifier for this IP policy rule
+	ID string `json:"id,omitempty"`
+	// URI of the IP policy rule API resource
+	URI string `json:"uri,omitempty"`
+	// timestamp when the IP policy rule was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of the source IPs of this IP rule. optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP policy rule. optional,
+	// max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
+	CIDR string `json:"cidr,omitempty"`
+	// object describing the IP policy this IP Policy Rule belongs to
+	IPPolicy Ref `json:"ip_policy,omitempty"`
+}
+
+type IPPolicyRuleList struct {
+	// the list of all IP policy rules on this account
+	IPPolicyRules []IPPolicyRule `json:"ip_policy_rules,omitempty"`
+	// URI of the IP policy rule list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type IPRestrictionCreate struct {
+	// human-readable description of this IP restriction. optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP restriction. optional,
+	// max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// true if the IP restriction will be enforce. if false, only warnings will be
+	// issued
+	Enforced bool `json:"enforced,omitempty"`
+	// the type of IP restriction. this defines what traffic will be restricted with
+	// the attached policies. four values are currently supported: dashboard, api,
+	// agent, and endpoints
+	Type string `json:"type,omitempty"`
+	// the set of IP policy identifiers that are used to enforce the restriction
+	IPPolicyIDs []string `json:"ip_policy_ids,omitempty"`
+}
+
+type IPRestrictionUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this IP restriction. optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP restriction. optional,
+	// max 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// true if the IP restriction will be enforce. if false, only warnings will be
+	// issued
+	Enforced *bool `json:"enforced,omitempty"`
+	// the set of IP policy identifiers that are used to enforce the restriction
+	IPPolicyIDs []string `json:"ip_policy_ids,omitempty"`
+}
+
+type IPRestriction struct {
+	// unique identifier for this IP restriction
+	ID string `json:"id,omitempty"`
+	// URI of the IP restriction API resource
+	URI string `json:"uri,omitempty"`
+	// timestamp when the IP restriction was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this IP restriction. optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP restriction. optional,
+	// max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// true if the IP restriction will be enforce. if false, only warnings will be
+	// issued
+	Enforced bool `json:"enforced,omitempty"`
+	// the type of IP restriction. this defines what traffic will be restricted with
+	// the attached policies. four values are currently supported: dashboard, api,
+	// agent, and endpoints
+	Type string `json:"type,omitempty"`
+	// the set of IP policies that are used to enforce the restriction
+	IPPolicies []Ref `json:"ip_policies,omitempty"`
+}
+
+type IPRestrictionList struct {
+	// the list of all IP restrictions on this account
+	IPRestrictions []IPRestriction `json:"ip_restrictions,omitempty"`
+	// URI of the IP resrtrictions list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type IPWhitelistEntryCreate struct {
+	// human-readable description of the source IPs for this IP whitelist entry.
+	// optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP whitelist entry.
+	// optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
+	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
+	// tunnel endpoints
+	IPNet string `json:"ip_net,omitempty"`
+}
+
+type IPWhitelistEntryUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of the source IPs for this IP whitelist entry.
+	// optional, max 255 bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP whitelist entry.
+	// optional, max 4096 bytes.
+	Metadata *string `json:"metadata,omitempty"`
+}
+
+type IPWhitelistEntry struct {
+	// unique identifier for this IP whitelist entry
+	ID string `json:"id,omitempty"`
+	// URI of the IP whitelist entry API resource
+	URI string `json:"uri,omitempty"`
+	// timestamp when the IP whitelist entry was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of the source IPs for this IP whitelist entry.
+	// optional, max 255 bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this IP whitelist entry.
+	// optional, max 4096 bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
+	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
+	// tunnel endpoints
+	IPNet string `json:"ip_net,omitempty"`
+}
+
+type IPWhitelistEntryList struct {
+	// the list of all IP whitelist entries on this account
+	Whitelist []IPWhitelistEntry `json:"whitelist,omitempty"`
+	// URI of the IP whitelist API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type EndpointLoggingReplace struct {
 	ID     string                `json:"id,omitempty"`
 	Module EndpointLoggingMutate `json:"module,omitempty"`
@@ -1671,10 +1765,10 @@ type ReservedDomainCreate struct {
 	Metadata string `json:"metadata,omitempty"`
 	// ID of an endpoint configuration of type http that will be used to handle inbound
 	// http traffic to this domain
-	HTTPEndpointConfigurationID string `json:"http_endpoint_configuration_id,omitempty"`
+	HTTPEndpointConfigurationID *string `json:"http_endpoint_configuration_id,omitempty"`
 	// ID of an endpoint configuration of type https that will be used to handle
 	// inbound https traffic to this domain
-	HTTPSEndpointConfigurationID string `json:"https_endpoint_configuration_id,omitempty"`
+	HTTPSEndpointConfigurationID *string `json:"https_endpoint_configuration_id,omitempty"`
 	// ID of a user-uploaded TLS certificate to use for connections to targeting this
 	// domain. Optional, mutually exclusive with certificate_management_policy.
 	CertificateID *string `json:"certificate_id,omitempty"`

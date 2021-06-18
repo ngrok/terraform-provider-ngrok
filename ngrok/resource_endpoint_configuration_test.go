@@ -45,6 +45,7 @@ func init() {
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
+
 			for _, item := range list.EndpointConfigurations {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
@@ -55,6 +56,7 @@ func init() {
 					}
 				}
 			}
+
 			return nil
 		},
 	})
