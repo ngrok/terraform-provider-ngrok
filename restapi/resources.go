@@ -1298,9 +1298,10 @@ type EventSubscriptionCreate struct {
 	// Arbitrary customer supplied information intended to be human readable. Optional,
 	// max 255 chars.
 	Description string `json:"description,omitempty"`
-	// TODO
+	// Sources containing the types for which this event subscription will trigger
 	Sources []EventSourceReplace `json:"sources,omitempty"`
-	// TODO
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
 	DestinationIDs []string `json:"destination_ids,omitempty"`
 }
 
@@ -1313,9 +1314,10 @@ type EventSubscriptionUpdate struct {
 	// Arbitrary customer supplied information intended to be human readable. Optional,
 	// max 255 chars.
 	Description *string `json:"description,omitempty"`
-	// TODO
+	// Sources containing the types for which this event subscription will trigger
 	Sources *[]EventSourceReplace `json:"sources,omitempty"`
-	// TODO
+	// A list of Event Destination IDs which should be used for this Event Stream.
+	// Event Streams are required to have at least one Event Destination.
 	DestinationIDs *[]string `json:"destination_ids,omitempty"`
 }
 
@@ -1341,14 +1343,14 @@ type EventSubscription struct {
 	// Arbitrary customer supplied information intended to be human readable. Optional,
 	// max 255 chars.
 	Description string `json:"description,omitempty"`
-	// TODO
+	// Sources containing the types for which this event subscription will trigger
 	Sources []EventSource `json:"sources,omitempty"`
-	// TODO
+	// Destinations to which these events will be sent
 	Destinations []Ref `json:"destinations,omitempty"`
 }
 
 type EventSourceReplace struct {
-	// TODO
+	// Type of event for which an event subscription will trigger
 	Type string `json:"type,omitempty"`
 	// TODO
 	Filter string `json:"filter,omitempty"`
@@ -1357,27 +1359,28 @@ type EventSourceReplace struct {
 }
 
 type EventSource struct {
-	// TODO
+	// Type of event for which an event subscription will trigger
 	Type string `json:"type,omitempty"`
 	// TODO
 	Filter string `json:"filter,omitempty"`
 	// TODO
 	Fields []string `json:"fields,omitempty"`
-	// TODO
+	// URI of the Event Source API resource.
 	URI string `json:"uri,omitempty"`
 }
 
 type EventSourceList struct {
-	// TODO
+	// The list of all Event Sources for an Event Subscription
 	Sources []EventSource `json:"sources,omitempty"`
-	// TODO
+	// URI of the next page, or null if there is no next page.
 	URI string `json:"uri,omitempty"`
 }
 
 type EventSourceCreate struct {
-	// TODO
+	// The unique identifier for the Event Subscription that this Event Source is
+	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
+	// Type of event for which an event subscription will trigger
 	Type string `json:"type,omitempty"`
 	// TODO
 	Filter string `json:"filter,omitempty"`
@@ -1386,9 +1389,10 @@ type EventSourceCreate struct {
 }
 
 type EventSourceUpdate struct {
-	// TODO
+	// The unique identifier for the Event Subscription that this Event Source is
+	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
+	// Type of event for which an event subscription will trigger
 	Type string `json:"type,omitempty"`
 	// TODO
 	Filter *string `json:"filter,omitempty"`
@@ -1398,15 +1402,17 @@ type EventSourceUpdate struct {
 
 // This is needed instead of Item because the parameters are different.
 type EventSourceItem struct {
-	// TODO
+	// The unique identifier for the Event Subscription that this Event Source is
+	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
-	// TODO
+	// Type of event for which an event subscription will trigger
 	Type string `json:"type,omitempty"`
 }
 
 // This is needed instead of Paging because the parameters are different. We also don't need the typical pagination params because pagination of this isn't necessary or supported.
 type EventSourcePaging struct {
-	// TODO
+	// The unique identifier for the Event Subscription that this Event Source is
+	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
 }
 
@@ -1516,7 +1522,7 @@ type IPRestrictionCreate struct {
 	// arbitrary user-defined machine-readable data of this IP restriction. optional,
 	// max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
+	// true if the IP restriction will be enforced. if false, only warnings will be
 	// issued
 	Enforced bool `json:"enforced,omitempty"`
 	// the type of IP restriction. this defines what traffic will be restricted with
@@ -1534,7 +1540,7 @@ type IPRestrictionUpdate struct {
 	// arbitrary user-defined machine-readable data of this IP restriction. optional,
 	// max 4096 bytes.
 	Metadata *string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
+	// true if the IP restriction will be enforced. if false, only warnings will be
 	// issued
 	Enforced *bool `json:"enforced,omitempty"`
 	// the set of IP policy identifiers that are used to enforce the restriction
@@ -1553,7 +1559,7 @@ type IPRestriction struct {
 	// arbitrary user-defined machine-readable data of this IP restriction. optional,
 	// max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// true if the IP restriction will be enforce. if false, only warnings will be
+	// true if the IP restriction will be enforced. if false, only warnings will be
 	// issued
 	Enforced bool `json:"enforced,omitempty"`
 	// the type of IP restriction. this defines what traffic will be restricted with

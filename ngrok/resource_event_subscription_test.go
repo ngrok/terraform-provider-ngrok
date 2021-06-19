@@ -14,23 +14,22 @@ import (
 )
 
 var (
-	resourceEventStreams_createConfig = `resource "ngrok_event_stream" "example" {
+	resourceEventSubscriptions_createConfig = `resource "ngrok_event_subscription" "example" {
   description = "low sampling, basic HTTP logs"
-  destination_ids = [ "ed_1ro7aG1J2tGT6neX0PHJLTuzQ9E" ]
-  event_type = "http_request_complete"
-  fields = [ "http.request.method", "http.response.status_code", "conn.client_ip" ]
+  destination_ids = [ "ed_1ro7aylyqQ1LLMWNWrOISvlfveQ" ]
   metadata = "{\"environment\": \"staging\"}"
-  sampling_rate = 0.1
+  sources [ {
+    type = "http_request_complete"
+  } ]
 }`
-	resourceEventStreams_updateConfig = `resource "ngrok_event_stream" "example" {
+	resourceEventSubscriptions_updateConfig = `resource "ngrok_event_subscription" "example" {
   description = "medium sampling, basic HTTP logs"
-  sampling_rate = 0.3
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("event_streams", &resource.Sweeper{
-		Name: "event_streams",
+	resource.AddTestSweepers("event_subscriptions", &resource.Sweeper{
+		Name: "event_subscriptions",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -39,15 +38,15 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.EventStreamsList(ctx, nil)
+			list, _, err := conn.EventSubscriptionsList(ctx, nil)
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.EventStreams {
+			for _, item := range list.EventSubscriptions {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.EventStreamsDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.EventSubscriptionsDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -60,28 +59,28 @@ func init() {
 	})
 }
 
-func TestAccResourceEventStreams(t *testing.T) {
-	t.Skip("Test skipped.")
+func TestAccResourceEventSubscriptions(t *testing.T) {
+
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyEventStreams,
+		CheckDestroy: testAccCheckDestroyEventSubscriptions,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceEventStreams_createConfig,
+				Config: resourceEventSubscriptions_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateEventStreams,
+				// 	testAccCheckCreateEventSubscriptions,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyEventStreams(s *terraform.State) (err error) {
+func testAccCheckDestroyEventSubscriptions(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateEventStreams(s *terraform.State) (err error) {
+func testAccCheckCreateEventSubscriptions(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

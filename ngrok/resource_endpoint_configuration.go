@@ -215,15 +215,6 @@ func resourceEndpointConfigurations() *schema.Resource {
 					},
 				},
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the endpoint configuration was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -1146,15 +1137,6 @@ func resourceEndpointConfigurations() *schema.Resource {
 				ForceNew:    true,
 				Description: "they type of traffic this endpoint configuration can be applied to. one of: `http`, `https`, `tcp`",
 			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the endpoint configuration API resource",
-			},
 			"webhook_validation": {
 				Type:        schema.TypeSet,
 				Required:    false,
@@ -1287,7 +1269,6 @@ func resourceEndpointConfigurationsGetDecode(d *schema.ResourceData, res *restap
 		d.Set("basic_auth", flattenEndpointBasicAuth(res.BasicAuth))
 		d.Set("circuit_breaker", flattenEndpointCircuitBreaker(res.CircuitBreaker))
 		d.Set("compression", flattenEndpointCompression(res.Compression))
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("ip_policy", flattenEndpointIPPolicy(res.IPPolicy))
@@ -1301,7 +1282,6 @@ func resourceEndpointConfigurationsGetDecode(d *schema.ResourceData, res *restap
 		d.Set("saml", flattenEndpointSAML(res.SAML))
 		d.Set("tls_termination", flattenEndpointTLSTermination(res.TLSTermination))
 		d.Set("type", res.Type)
-		d.Set("uri", res.URI)
 		d.Set("webhook_validation", flattenEndpointWebhookValidation(res.WebhookValidation))
 	}
 	return nil

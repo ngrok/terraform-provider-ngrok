@@ -19,15 +19,6 @@ func resourceAPIKeys() *schema.Resource {
 		Delete:      resourceAPIKeysDelete,
 		Description: "API Keys are used to authenticate to the [ngrok\n API](https://ngrok.com/docs/api#authentication). You may use the API itself\n to provision and manage API Keys but you'll need to provision your first API\n key from the [API Keys page](https://dashboard.ngrok.com/api/keys) on your\n ngrok.com dashboard.",
 		Schema: map[string]*schema.Schema{
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the api key was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -63,15 +54,6 @@ func resourceAPIKeys() *schema.Resource {
 				Sensitive:   true,
 				ForceNew:    true,
 				Description: "the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI to the API resource of this API key",
 			},
 		},
 	}
@@ -115,12 +97,10 @@ func resourceAPIKeysGetDecode(d *schema.ResourceData, res *restapi.APIKey, resp 
 		log.Printf("[ERROR] APIKeysGet: %s", err)
 		return err
 	default:
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("token", res.Token)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

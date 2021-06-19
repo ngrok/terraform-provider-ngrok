@@ -28,15 +28,6 @@ func resourceIPPolicyRules() *schema.Resource {
 				ForceNew:    false,
 				Description: "an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.",
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the IP policy rule was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -72,15 +63,6 @@ func resourceIPPolicyRules() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the IP policy rule API resource",
 			},
 		},
 	}
@@ -131,12 +113,10 @@ func resourceIPPolicyRulesGetDecode(d *schema.ResourceData, res *restapi.IPPolic
 		return err
 	default:
 		d.Set("cidr", res.CIDR)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("ip_policy_id", res.IPPolicy.ID)
 		d.Set("metadata", res.Metadata)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

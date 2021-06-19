@@ -28,15 +28,6 @@ func resourceReservedAddrs() *schema.Resource {
 				ForceNew:    true,
 				Description: "hostname:port of the reserved address that was assigned at creation time",
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the reserved address was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -82,15 +73,6 @@ func resourceReservedAddrs() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "reserve the address in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the reserved address API resource",
 			},
 		},
 	}
@@ -141,13 +123,11 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 		return err
 	default:
 		d.Set("addr", res.Addr)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("region", res.Region)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

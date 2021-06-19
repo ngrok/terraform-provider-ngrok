@@ -26,7 +26,6 @@ resource "ngrok_ssh_certificate_authority" "example" {
 
 ### Optional
 
-- **created_at** (String) timestamp when the SSH Certificate Authority API resource was created, RFC 3339 format
 - **description** (String) human-readable description of this SSH Certificate Authority. optional, max 255 bytes.
 - **elliptic_curve** (String) the type of elliptic curve to use when creating an ECDSA key
 - **id** (String) unique identifier for this SSH Certificate Authority
@@ -35,6 +34,5 @@ resource "ngrok_ssh_certificate_authority" "example" {
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.
 - **private_key_type** (String) the type of private key to generate. one of `rsa`, `ecdsa`, `ed25519`
 - **public_key** (String) raw public key for this SSH Certificate Authority
-- **uri** (String) URI of the SSH Certificate Authority API resource
 
 

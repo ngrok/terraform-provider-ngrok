@@ -19,15 +19,6 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 		Delete:      resourceSSHCertificateAuthoritiesDelete,
 		Description: "An SSH Certificate Authority is a pair of an SSH Certificate and its private\n key that can be used to sign other SSH host and user certificates.",
 		Schema: map[string]*schema.Schema{
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the SSH Certificate Authority API resource was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -100,15 +91,6 @@ func resourceSSHCertificateAuthorities() *schema.Resource {
 				ForceNew:    true,
 				Description: "raw public key for this SSH Certificate Authority",
 			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the SSH Certificate Authority API resource",
-			},
 		},
 	}
 }
@@ -160,13 +142,11 @@ func resourceSSHCertificateAuthoritiesGetDecode(d *schema.ResourceData, res *res
 		log.Printf("[ERROR] SSHCertificateAuthoritiesGet: %s", err)
 		return err
 	default:
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("key_type", res.KeyType)
 		d.Set("metadata", res.Metadata)
 		d.Set("public_key", res.PublicKey)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }

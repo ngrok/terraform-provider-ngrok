@@ -37,15 +37,10 @@ resource "ngrok_event_destination" "example" {
 
 - **description** (String) Human-readable description of the Event Destination. Optional, max 255 bytes.
 - **format** (String) The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.
+- **id** (String) Unique identifier for this Event Destination.
 - **metadata** (String) Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.
 - **target** (Block Set) An object that encapsulates where and how to send your events. An event destination must contain exactly one of the following objects, leaving the rest null: `kinesis`, `firehose`, `cloudwatch_logs`, or `s3`. (see [below for nested schema](#nestedblock--target))
-- **uri** (String) URI of the Event Destination API resource.
 - **verify_with_test_event** (Boolean)
-
-### Read-Only
-
-- **created_at** (String) Timestamp when the Event Destination was created, RFC 3339 format.
-- **id** (String) Unique identifier for this Event Destination.
 
 <a id="nestedblock--target"></a>
 ### Nested Schema for `target`

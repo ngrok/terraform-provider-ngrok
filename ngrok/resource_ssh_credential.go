@@ -29,15 +29,6 @@ func resourceSSHCredentials() *schema.Resource {
 				Description: "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains and addresses the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			"created_at": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "timestamp when the ssh credential was created, RFC 3339 format",
-			},
 			"description": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -73,15 +64,6 @@ func resourceSSHCredentials() *schema.Resource {
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the PEM-encoded public key of the SSH keypair that will be used to authenticate",
-			},
-			"uri": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    true,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    true,
-				Description: "URI of the ssh credential API resource",
 			},
 		},
 	}
@@ -132,12 +114,10 @@ func resourceSSHCredentialsGetDecode(d *schema.ResourceData, res *restapi.SSHCre
 		return err
 	default:
 		d.Set("acl", res.ACL)
-		d.Set("created_at", res.CreatedAt)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("public_key", res.PublicKey)
-		d.Set("uri", res.URI)
 	}
 	return nil
 }
