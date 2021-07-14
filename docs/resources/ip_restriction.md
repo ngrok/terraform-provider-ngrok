@@ -35,6 +35,7 @@ resource "ngrok_ip_restriction" "example" {
 ### Required
 
 - **ip_policy_ids** (List of String) the set of IP policy identifiers that are used to enforce the restriction
+- **type** (String) the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`
 
 ### Optional
 
@@ -42,6 +43,5 @@ resource "ngrok_ip_restriction" "example" {
 - **enforced** (Boolean) true if the IP restriction will be enforced. if false, only warnings will be issued
 - **id** (String) unique identifier for this IP restriction
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.
-- **type** (String) the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`
 
 

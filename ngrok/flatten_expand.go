@@ -4052,6 +4052,62 @@ func expandEndpointBackendMutateSlice(in interface{}) *[]restapi.EndpointBackend
 	return &out
 }
 
+func flattenTCPEdgeList(obj *restapi.TCPEdgeList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["tcp_edges"] = flattenTCPEdgeSlice(&obj.TCPEdges)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenTCPEdgeListSlice(objs *[]restapi.TCPEdgeList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenTCPEdgeList(&v))
+	}
+	return sl
+}
+
+func expandTCPEdgeList(in interface{}) *restapi.TCPEdgeList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.TCPEdgeList
+	if v, ok := m["tcp_edges"]; ok {
+		obj.TCPEdges = *expandTCPEdgeSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandTCPEdgeListSlice(in interface{}) *[]restapi.TCPEdgeList {
+	var out []restapi.TCPEdgeList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandTCPEdgeList(v))
+	}
+	return &out
+}
+
 func flattenTCPEdgeCreate(obj *restapi.TCPEdgeCreate) interface{} {
 	if obj == nil {
 		return nil
@@ -4244,6 +4300,62 @@ func expandTCPEdgeSlice(in interface{}) *[]restapi.TCPEdge {
 	var out []restapi.TCPEdge
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandTCPEdge(v))
+	}
+	return &out
+}
+
+func flattenTLSEdgeList(obj *restapi.TLSEdgeList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["tls_edges"] = flattenTLSEdgeSlice(&obj.TLSEdges)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenTLSEdgeListSlice(objs *[]restapi.TLSEdgeList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenTLSEdgeList(&v))
+	}
+	return sl
+}
+
+func expandTLSEdgeList(in interface{}) *restapi.TLSEdgeList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.TLSEdgeList
+	if v, ok := m["tls_edges"]; ok {
+		obj.TLSEdges = *expandTLSEdgeSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandTLSEdgeListSlice(in interface{}) *[]restapi.TLSEdgeList {
+	var out []restapi.TLSEdgeList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandTLSEdgeList(v))
 	}
 	return &out
 }

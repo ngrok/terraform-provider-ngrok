@@ -22,9 +22,9 @@ func resourceCertificateAuthorities() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"ca_pem": {
 				Type:             schema.TypeString,
-				Required:         false,
+				Required:         true,
 				Computed:         false,
-				Optional:         true,
+				Optional:         false,
 				Sensitive:        false,
 				ForceNew:         true,
 				Description:      "raw PEM of the Certificate Authority",

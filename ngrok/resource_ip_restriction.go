@@ -67,9 +67,9 @@ func resourceIPRestrictions() *schema.Resource {
 			},
 			"type": {
 				Type:        schema.TypeString,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`",

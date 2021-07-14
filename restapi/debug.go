@@ -94,7 +94,9 @@ func (d Debug) makeRequest(ctx context.Context, body io.Reader) (context.Context
 				if err := decoder.Decode(&i); err == nil {
 					enc := json.NewEncoder(d.Stderr)
 					enc.SetIndent("", "  ")
-					enc.Encode(i)
+					if err := enc.Encode(i); err != nil {
+						panic(err)
+					}
 				}
 			}
 			fmt.Fprintln(d.Stderr)
@@ -132,7 +134,9 @@ func (d Debug) printResponse(r *http.Response) {
 		if err := json.Unmarshal(body, &i); err == nil {
 			enc := json.NewEncoder(d.Stdout)
 			enc.SetIndent("", "  ")
-			enc.Encode(i)
+			if err := enc.Encode(i); err != nil {
+				panic(err)
+			}
 		} else {
 			fmt.Fprint(d.Stdout, string(body))
 		}
@@ -167,7 +171,9 @@ func (d Debug) dryRunResponse(req *http.Request) (*http.Response, error) {
 	}
 	if req.Body != nil {
 		// if Verbose this causes the request to be printed to stderr
-		ioutil.ReadAll(req.Body)
+		if _, err := ioutil.ReadAll(req.Body); err != nil {
+			return nil, err
+		}
 	}
 	return emptyHTTPResponse(req), nil
 }

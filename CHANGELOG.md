@@ -1,3 +1,12 @@
+## 0.1.3 (July 13, 2021)
+
+FIXED:
+
+* Suppress capitalization diff on webhook validation provider
+* Mark fields transmitting secrets as sensitive
+* Suppress ID diff on automatically provisioned certificates
+* Additional create fields marked as required
+
 ## 0.1.2 (June 18, 2021)
 
 FIXED:

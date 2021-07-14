@@ -976,6 +976,15 @@ type EndpointBackendMutate struct {
 	BackendID string `json:"backend_id,omitempty"`
 }
 
+type TCPEdgeList struct {
+	// the list of all TCP Edges on this account
+	TCPEdges []TCPEdge `json:"tcp_edges,omitempty"`
+	// URI of the TCP Edge list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type TCPEdgeCreate struct {
 	// human-readable description of what this edge will be do when applied or what
 	// traffic it will be applied to. Optional, max 255 bytes
@@ -1018,6 +1027,15 @@ type TCPEdge struct {
 	// edge modules
 	Backend       *EndpointBackend  `json:"backend,omitempty"`
 	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
+}
+
+type TLSEdgeList struct {
+	// the list of all TLS Edges on this account
+	TLSEdges []TLSEdge `json:"tls_edges,omitempty"`
+	// URI of the TLS Edge list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
 type TLSEdgeCreate struct {
