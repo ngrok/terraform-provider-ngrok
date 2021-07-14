@@ -21,9 +21,9 @@ func resourceIPPolicyRules() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"cidr": {
 				Type:        schema.TypeString,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.",

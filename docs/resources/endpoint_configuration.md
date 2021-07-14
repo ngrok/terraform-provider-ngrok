@@ -186,7 +186,7 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
+- **client_secret** (String, Sensitive) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
@@ -198,7 +198,7 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
+- **client_secret** (String, Sensitive) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **organizations** (List of String) a list of github org identifiers. users who are members of any of the listed organizations will be allowed access. identifiers should be the organization's 'slug'
@@ -212,7 +212,7 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
+- **client_secret** (String, Sensitive) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
@@ -224,7 +224,7 @@ Optional:
 Optional:
 
 - **client_id** (String) the OAuth app client ID. retrieve it from the identity provider's dashboard where you created your own OAuth app. optional. if unspecified, ngrok will use its own managed oauth application which has additional restrictions. see the OAuth module docs for more details. if present, client_secret must be present as well.
-- **client_secret** (String) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
+- **client_secret** (String, Sensitive) the OAuth app client secret. retrieve if from the identity provider's dashboard where you created your own OAuth app. optional, see all of the caveats in the docs for `client_id`.
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
@@ -238,7 +238,7 @@ Optional:
 Optional:
 
 - **client_id** (String) The OIDC app's client ID and OIDC audience.
-- **client_secret** (String) The OIDC app's client secret.
+- **client_secret** (String, Sensitive) The OIDC app's client secret.
 - **cookie_prefix** (String) the prefix of the session cookie that ngrok sets on the http client to cache authentication. default is 'ngrok.'
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **inactivity_timeout** (Number) Integer number of seconds of inactivity after which if the user has not accessed the endpoint, their session will time out and they will be forced to reauthenticate.
@@ -307,6 +307,6 @@ Optional:
 
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`.
-- **secret** (String) a string secret used to validate requests from the given provider. All providers except AWS SNS require a secret
+- **secret** (String, Sensitive) a string secret used to validate requests from the given provider. All providers except AWS SNS require a secret
 
 

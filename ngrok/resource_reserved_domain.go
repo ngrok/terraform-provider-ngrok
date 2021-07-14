@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	restapi "github.com/ngrok/terraform-provider-ngrok/restapi"
+	transform "github.com/ngrok/terraform-provider-ngrok/transform"
 )
 
 func resourceReservedDomains() *schema.Resource {
@@ -20,13 +21,14 @@ func resourceReservedDomains() *schema.Resource {
 		Description: "Reserved Domains are hostnames that you can listen for traffic on. Domains\n can be used to listen for http, https or tls traffic. You may use a domain\n that you own by creating a CNAME record specified in the returned resource.\n This CNAME record points traffic for that domain to ngrok's edge servers.",
 		Schema: map[string]*schema.Schema{
 			"certificate_id": {
-				Type:        schema.TypeString,
-				Required:    false,
-				Computed:    false,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.",
+				Type:             schema.TypeString,
+				Required:         false,
+				Computed:         false,
+				Optional:         true,
+				Sensitive:        false,
+				ForceNew:         false,
+				Description:      "ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.",
+				DiffSuppressFunc: transform.DiffSuppressAutoCertId,
 			},
 			"certificate_management_policy": {
 				Type:        schema.TypeSet,

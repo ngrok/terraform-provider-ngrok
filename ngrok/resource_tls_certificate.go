@@ -22,9 +22,9 @@ func resourceTLSCertificates() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"certificate_pem": {
 				Type:             schema.TypeString,
-				Required:         false,
+				Required:         true,
 				Computed:         false,
-				Optional:         true,
+				Optional:         false,
 				Sensitive:        false,
 				ForceNew:         true,
 				Description:      "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).",

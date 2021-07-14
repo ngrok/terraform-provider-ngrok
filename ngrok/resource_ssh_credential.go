@@ -58,9 +58,9 @@ func resourceSSHCredentials() *schema.Resource {
 			},
 			"public_key": {
 				Type:        schema.TypeString,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the PEM-encoded public key of the SSH keypair that will be used to authenticate",

@@ -32,11 +32,11 @@ resource "ngrok_tls_certificate" "example" {
 
 ### Required
 
+- **certificate_pem** (String) chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).
 - **private_key_pem** (String) private key for the TLS certificate, PEM-encoded. See [Private Keys](https://ngrok.com/docs/ngrok-link#tls-certificates-key).
 
 ### Optional
 
-- **certificate_pem** (String) chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).
 - **description** (String) human-readable description of this TLS certificate. optional, max 255 bytes.
 - **id** (String) unique identifier for this TLS certificate
 - **metadata** (String) arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.

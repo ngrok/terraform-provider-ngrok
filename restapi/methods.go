@@ -785,7 +785,24 @@ func (c *Client) EdgesTCPGet(ctx context.Context, arg *Item) (*TCPEdge, *http.Re
 	return &res, resp, err
 }
 
-// Update a TCP Edge by ID
+// Returns a list of all TCP Edges on this account
+func (c *Client) EdgesTCPList(ctx context.Context, arg *Paging) (*TCPEdgeList, *http.Response, error) {
+	var res TCPEdgeList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tcp_edges")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Updates a TCP Edge by ID. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
 func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
 	var path bytes.Buffer
@@ -796,7 +813,7 @@ func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEd
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -856,7 +873,24 @@ func (c *Client) EdgesTLSGet(ctx context.Context, arg *Item) (*TLSEdge, *http.Re
 	return &res, resp, err
 }
 
-// Update a TLS Edge by ID
+// Returns a list of all TLS Edges on this account
+func (c *Client) EdgesTLSList(ctx context.Context, arg *Paging) (*TLSEdgeList, *http.Response, error) {
+	var res TLSEdgeList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tls_edges")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+
+	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+
+	resp, err := c.Get(ctx, path.String(), &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Updates a TLS Edge by ID. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
 func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEdge, *http.Response, error) {
 	var res TLSEdge
 	var path bytes.Buffer
@@ -867,7 +901,7 @@ func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEd
 	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, path.String(), arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
