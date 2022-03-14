@@ -17,7 +17,7 @@ func resourceIPRestrictions() *schema.Resource {
 		Read:        resourceIPRestrictionsGet,
 		Update:      resourceIPRestrictionsUpdate,
 		Delete:      resourceIPRestrictionsDelete,
-		Description: "An IP restriction is a restriction placed on the CIDRs that are allowed to\n initate traffic to a specific aspect of your ngrok account. An IP\n restriction has a type which defines the ingress it applies to. IP\n restrictions can be used to enforce the source IPs that can make API\n requests, log in to the dashboard, start ngrok agents, and connect to your\n public-facing endpoints.",
+		Description: "An IP restriction is a restriction placed on the CIDRs that are allowed to\n initiate traffic to a specific aspect of your ngrok account. An IP\n restriction has a type which defines the ingress it applies to. IP\n restrictions can be used to enforce the source IPs that can make API\n requests, log in to the dashboard, start ngrok agents, and connect to your\n public-facing endpoints.",
 		Schema: map[string]*schema.Schema{
 			"description": {
 				Type:        schema.TypeString,

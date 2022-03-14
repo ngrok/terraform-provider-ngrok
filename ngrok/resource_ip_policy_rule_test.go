@@ -17,7 +17,7 @@ var (
 	resourceIPPolicyRules_createConfig = `resource "ngrok_ip_policy_rule" "example" {
   cidr = "212.3.14.0/24"
   description = "nyc office"
-  ip_policy_id = "ipp_1rV56VrAxesFteoj4XZxaaYyvXo"
+  ip_policy_id = "ipp_25auGv9R7vPmi6NKs5Cxcyzc2Cm"
 }`
 	resourceIPPolicyRules_updateConfig = `resource "ngrok_ip_policy_rule" "example" {
   cidr = "212.3.15.0/24"
@@ -35,7 +35,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPPolicyRulesList(ctx, nil)
+			list, _, err := conn.IPPolicyRulesList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

@@ -101,7 +101,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `-auth` flag, if any.",
+							Description: "determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `--basic-auth` flag, if any.",
 						},
 						"realm": {
 							Type:        schema.TypeString,
@@ -1084,6 +1084,15 @@ func resourceEndpointConfigurations() *schema.Resource {
 							ForceNew:    true,
 							Description: "A public URL where the SP's metadata is hosted. If an IdP supports dynamic configuration, this is the URL it can use to retrieve the SP metadata.",
 						},
+						"nameid_format": {
+							Type:        schema.TypeString,
+							Required:    false,
+							Computed:    false,
+							Optional:    true,
+							Sensitive:   false,
+							ForceNew:    false,
+							Description: "Defines the name identifier format the SP expects the IdP to use in its assertions to identify subjects. If unspecified, a default value of `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent` will be used. A subset of the allowed values enumerated by the SAML specification are supported.",
+						},
 					},
 				},
 			},
@@ -1164,7 +1173,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:         true,
 							Sensitive:        false,
 							ForceNew:         false,
-							Description:      "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`.",
+							Description:      "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`, `SENDGRID`, `XERO`, `PAGERDUTY`.",
 							DiffSuppressFunc: transform.DiffSuppressCase,
 						},
 						"secret": {

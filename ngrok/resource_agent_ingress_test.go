@@ -14,19 +14,19 @@ import (
 )
 
 var (
-	resourceIPWhitelist_createConfig = `resource "ngrok_ip_whitelist_entry" "example" {
-  description = "outbound proxy servers"
-  ip_net = "10.1.1.0/24"
+	resourceAgentIngresses_createConfig = `resource "ngrok_agent_ingress" "example" {
+  description = "acme devices"
+  domain = "connect.acme.com"
 }`
-	resourceIPWhitelist_updateConfig = `resource "ngrok_ip_whitelist_entry" "example" {
-  description = "home office for alan"
-  metadata = "{\"type\": \"home office\", \"employee_name\": \"alan\"}"
+	resourceAgentIngresses_updateConfig = `resource "ngrok_agent_ingress" "example" {
+  description = "ACME Co. Device Ingress"
+  metadata = "{\"device_sku\": \"824JS4RZ1F8X\"}"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("ip_whitelist", &resource.Sweeper{
-		Name: "ip_whitelist",
+	resource.AddTestSweepers("agent_ingresses", &resource.Sweeper{
+		Name: "agent_ingresses",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -35,15 +35,15 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPWhitelistList(ctx, nil)
+			list, _, err := conn.AgentIngressesList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.Whitelist {
+			for _, item := range list.Ingresses {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.IPWhitelistDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.AgentIngressesDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -56,28 +56,28 @@ func init() {
 	})
 }
 
-func TestAccResourceIPWhitelist(t *testing.T) {
+func TestAccResourceAgentIngresses(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyIPWhitelist,
+		CheckDestroy: testAccCheckDestroyAgentIngresses,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceIPWhitelist_createConfig,
+				Config: resourceAgentIngresses_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateIPWhitelist,
+				// 	testAccCheckCreateAgentIngresses,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyIPWhitelist(s *terraform.State) (err error) {
+func testAccCheckDestroyAgentIngresses(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateIPWhitelist(s *terraform.State) (err error) {
+func testAccCheckCreateAgentIngresses(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

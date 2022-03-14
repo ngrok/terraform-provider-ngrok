@@ -34,7 +34,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.TLSCertificatesList(ctx, nil)
+			list, _, err := conn.TLSCertificatesList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

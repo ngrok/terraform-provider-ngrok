@@ -19,6 +19,15 @@ func resourceIPPolicyRules() *schema.Resource {
 		Delete:      resourceIPPolicyRulesDelete,
 		Description: "IP Policy Rules are the IPv4 or IPv6 CIDRs entries that\n make up an IP Policy.",
 		Schema: map[string]*schema.Schema{
+			"action": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    true,
+				Description: "the action to apply to the policy rule, either `allow` or `deny`",
+			},
 			"cidr": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -84,6 +93,9 @@ func resourceIPPolicyRulesCreate(d *schema.ResourceData, m interface{}) (err err
 	if v, ok := d.GetOk("ip_policy_id"); ok {
 		arg.IPPolicyID = *expandString(v)
 	}
+	if v, ok := d.GetOk("action"); ok {
+		arg.Action = expandString(v)
+	}
 
 	res, _, err := b.client.IPPolicyRulesCreate(context.Background(), &arg)
 	if err != nil {
@@ -112,6 +124,7 @@ func resourceIPPolicyRulesGetDecode(d *schema.ResourceData, res *restapi.IPPolic
 		log.Printf("[ERROR] IPPolicyRulesGet: %s", err)
 		return err
 	default:
+		d.Set("action", res.Action)
 		d.Set("cidr", res.CIDR)
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)

@@ -41,7 +41,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.EndpointConfigurationsList(ctx, nil)
+			list, _, err := conn.EndpointConfigurationsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

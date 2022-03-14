@@ -26,6 +26,7 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
+			"ngrok_agent_ingress":             resourceAgentIngresses(),
 			"ngrok_api_key":                   resourceAPIKeys(),
 			"ngrok_certificate_authority":     resourceCertificateAuthorities(),
 			"ngrok_credential":                resourceCredentials(),
@@ -35,7 +36,6 @@ func Provider() *schema.Provider {
 			"ngrok_ip_policy":                 resourceIPPolicies(),
 			"ngrok_ip_policy_rule":            resourceIPPolicyRules(),
 			"ngrok_ip_restriction":            resourceIPRestrictions(),
-			"ngrok_ip_whitelist_entry":        resourceIPWhitelist(),
 			"ngrok_reserved_addr":             resourceReservedAddrs(),
 			"ngrok_reserved_domain":           resourceReservedDomains(),
 			"ngrok_ssh_certificate_authority": resourceSSHCertificateAuthorities(),

@@ -20,7 +20,7 @@ Reserved Domains are hostnames that you can listen for traffic on. Domains
 
 ```terraform
 resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1rV51OQetZPK9V6vTWUVy3Onjir"
+  certificate_id = "cert_25auGELSEngiae3wzmLLesiZn8h"
   name = "myapp.mydomain.com"
   region = "us"
 }
@@ -35,6 +35,7 @@ resource "ngrok_reserved_domain" "example" {
 
 ### Optional
 
+- **acme_challenge_cname_target** (String) DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.
 - **certificate_id** (String) ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.
 - **certificate_management_policy** (Block Set) configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled (see [below for nested schema](#nestedblock--certificate_management_policy))
 - **cname_target** (String) DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of *.ngrok.io

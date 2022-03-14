@@ -63,6 +63,61 @@ type AbuseReportCreate struct {
 	Metadata string `json:"metadata,omitempty"`
 }
 
+type AgentIngressCreate struct {
+	// human-readable description of the use of this Agent Ingress. optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this Agent Ingress. optional,
+	// max 4096 bytes
+	Metadata string `json:"metadata,omitempty"`
+	// the domain that you own to be used as the base domain name to generate regional
+	// agent ingress domains.
+	Domain string `json:"domain,omitempty"`
+}
+
+type AgentIngressUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of the use of this Agent Ingress. optional, max 255
+	// bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this Agent Ingress. optional,
+	// max 4096 bytes
+	Metadata *string `json:"metadata,omitempty"`
+}
+
+type AgentIngress struct {
+	// unique Agent Ingress resource identifier
+	ID string `json:"id,omitempty"`
+	// URI to the API resource of this Agent ingress
+	URI string `json:"uri,omitempty"`
+	// human-readable description of the use of this Agent Ingress. optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this Agent Ingress. optional,
+	// max 4096 bytes
+	Metadata string `json:"metadata,omitempty"`
+	// the domain that you own to be used as the base domain name to generate regional
+	// agent ingress domains.
+	Domain string `json:"domain,omitempty"`
+	// a list of target values to use as the values of NS records for the domain
+	// property these values will delegate control over the domain to ngrok
+	NSTargets []string `json:"ns_targets,omitempty"`
+	// a list of regional agent ingress domains that are subdomains of the value of
+	// domain this value may increase over time as ngrok adds more regions
+	RegionDomains []string `json:"region_domains,omitempty"`
+	// timestamp when the Agent Ingress was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+}
+
+type AgentIngressList struct {
+	// the list of Agent Ingresses owned by this account
+	Ingresses []AgentIngress `json:"ingresses,omitempty"`
+	// URI of the Agent Ingress list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type APIKeyCreate struct {
 	// human-readable description of what uses the API key to authenticate. optional,
 	// max 255 bytes.
@@ -107,9 +162,11 @@ type APIKeyList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
-type PriorityBackend struct {
-	// unique identifier for this Priority backend
+type FailoverBackend struct {
+	// unique identifier for this Failover backend
 	ID string `json:"id,omitempty"`
+	// URI of the FailoverBackend API resource
+	URI string `json:"uri,omitempty"`
 	// timestamp when the backend was created, RFC 3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 	// human-readable description of this backend. Optional
@@ -120,7 +177,7 @@ type PriorityBackend struct {
 	Backends []string `json:"backends,omitempty"`
 }
 
-type PriorityBackendCreate struct {
+type FailoverBackendCreate struct {
 	// human-readable description of this backend. Optional
 	Description string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this backend. Optional
@@ -129,7 +186,7 @@ type PriorityBackendCreate struct {
 	Backends []string `json:"backends,omitempty"`
 }
 
-type PriorityBackendUpdate struct {
+type FailoverBackendUpdate struct {
 	ID string `json:"id,omitempty"`
 	// human-readable description of this backend. Optional
 	Description *string `json:"description,omitempty"`
@@ -139,18 +196,71 @@ type PriorityBackendUpdate struct {
 	Backends []string `json:"backends,omitempty"`
 }
 
-type PriorityBackendList struct {
-	// the list of all Priority backends on this account
-	Backends []PriorityBackend `json:"backends,omitempty"`
-	// URI of the Priority backends list API resource
+type FailoverBackendList struct {
+	// the list of all Failover backends on this account
+	Backends []FailoverBackend `json:"backends,omitempty"`
+	// URI of the Failover backends list API resource
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
+type HTTPResponseBackend struct {
+	ID string `json:"id,omitempty"`
+	// URI of the HTTPResponseBackend API resource
+	URI string `json:"uri,omitempty"`
+	// timestamp when the backend was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// body to return as fixed content
+	Body string `json:"body,omitempty"`
+	// headers to return
+	Headers map[string]string `json:"headers,omitempty"`
+	// status code to return
+	StatusCode int32 `json:"status_code,omitempty"`
+}
+
+type HTTPResponseBackendCreate struct {
+	// human-readable description of this backend. Optional
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata string `json:"metadata,omitempty"`
+	// body to return as fixed content
+	Body string `json:"body,omitempty"`
+	// headers to return
+	Headers map[string]string `json:"headers,omitempty"`
+	// status code to return
+	StatusCode *int32 `json:"status_code,omitempty"`
+}
+
+type HTTPResponseBackendUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable description of this backend. Optional
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this backend. Optional
+	Metadata *string `json:"metadata,omitempty"`
+	// body to return as fixed content
+	Body *string `json:"body,omitempty"`
+	// headers to return
+	Headers *map[string]string `json:"headers,omitempty"`
+	// status code to return
+	StatusCode *int32 `json:"status_code,omitempty"`
+}
+
+type HTTPResponseBackendList struct {
+	Backends    []HTTPResponseBackend `json:"backends,omitempty"`
+	URI         string                `json:"uri,omitempty"`
+	NextPageURI *string               `json:"next_page_uri,omitempty"`
+}
+
 type StaticBackend struct {
 	// unique identifier for this static backend
 	ID string `json:"id,omitempty"`
+	// URI of the StaticBackend API resource
+	URI string `json:"uri,omitempty"`
 	// timestamp when the backend was created, RFC 3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 	// human-readable description of this backend. Optional
@@ -203,6 +313,8 @@ type StaticBackendList struct {
 type TunnelGroupBackend struct {
 	// unique identifier for this TunnelGroup backend
 	ID string `json:"id,omitempty"`
+	// URI of the TunnelGroupBackend API resource
+	URI string `json:"uri,omitempty"`
 	// timestamp when the backend was created, RFC 3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 	// human-readable description of this backend. Optional
@@ -211,6 +323,8 @@ type TunnelGroupBackend struct {
 	Metadata string `json:"metadata,omitempty"`
 	// labels to watch for tunnels on, e.g. app->foo, dc->bar
 	Labels map[string]string `json:"labels,omitempty"`
+	// tunnels matching this backend
+	Tunnels []Ref `json:"tunnels,omitempty"`
 }
 
 type TunnelGroupBackendCreate struct {
@@ -244,6 +358,8 @@ type TunnelGroupBackendList struct {
 type WeightedBackend struct {
 	// unique identifier for this Weighted backend
 	ID string `json:"id,omitempty"`
+	// URI of the WeightedBackend API resource
+	URI string `json:"uri,omitempty"`
 	// timestamp when the backend was created, RFC 3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 	// human-readable description of this backend. Optional
@@ -557,7 +673,7 @@ type EndpointWebhookValidation struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// a string indicating which webhook provider will be sending webhooks to this
 	// endpoint. Value must be one of the supported providers: SLACK, SNS, STRIPE,
-	// GITHUB, TWILIO, SHOPIFY, GITLAB, INTERCOM.
+	// GITHUB, TWILIO, SHOPIFY, GITLAB, INTERCOM, SENDGRID, XERO, PAGERDUTY.
 	Provider string `json:"provider,omitempty"`
 	// a string secret used to validate requests from the given provider. All providers
 	// except AWS SNS require a secret
@@ -603,13 +719,24 @@ type EndpointTLSTermination struct {
 	MinVersion *string `json:"min_version,omitempty"`
 }
 
+type EndpointTLSTerminationAtEdge struct {
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+	// The minimum TLS version used for termination and advertised to the client during
+	// the TLS handshake. if unspecified, ngrok will choose an industry-safe default.
+	// This value must be null if terminate_at is set to upstream.
+	MinVersion *string `json:"min_version,omitempty"`
+}
+
 type EndpointBasicAuth struct {
 	// true if the module will be applied to traffic, false to disable. default true if
 	// unspecified
 	Enabled *bool `json:"enabled,omitempty"`
 	// determines how the basic auth credentials are validated. Currently only the
 	// value agent is supported which means that credentials will be validated against
-	// the username and password specified by the ngrok agent's -auth flag, if any.
+	// the username and password specified by the ngrok agent's --basic-auth flag, if
+	// any.
 	AuthProviderID string `json:"auth_provider_id,omitempty"`
 	// an arbitrary string to be specified in as the 'realm' value in the
 	// WWW-Authenticate header. default is ngrok
@@ -892,6 +1019,11 @@ type EndpointSAML struct {
 	// A public URL where the SP's metadata is hosted. If an IdP supports dynamic
 	// configuration, this is the URL it can use to retrieve the SP metadata.
 	MetadataURL string `json:"metadata_url,omitempty"`
+	// Defines the name identifier format the SP expects the IdP to use in its
+	// assertions to identify subjects. If unspecified, a default value of
+	// urn:oasis:names:tc:SAML:2.0:nameid-format:persistent will be used. A subset of
+	// the allowed values enumerated by the SAML specification are supported.
+	NameIDFormat string `json:"nameid_format,omitempty"`
 }
 
 type EndpointSAMLMutate struct {
@@ -931,6 +1063,11 @@ type EndpointSAMLMutate struct {
 	// If present, only users who are a member of one of the listed groups may access
 	// the target endpoint.
 	AuthorizedGroups []string `json:"authorized_groups,omitempty"`
+	// Defines the name identifier format the SP expects the IdP to use in its
+	// assertions to identify subjects. If unspecified, a default value of
+	// urn:oasis:names:tc:SAML:2.0:nameid-format:persistent will be used. A subset of
+	// the allowed values enumerated by the SAML specification are supported.
+	NameIDFormat string `json:"nameid_format,omitempty"`
 }
 
 type EndpointOIDC struct {
@@ -976,6 +1113,293 @@ type EndpointBackendMutate struct {
 	BackendID string `json:"backend_id,omitempty"`
 }
 
+type EndpointWebsocketTCPConverter struct {
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+type EdgeRouteItem struct {
+	// unique identifier of this edge
+	EdgeID string `json:"edge_id,omitempty"`
+	// unique identifier of this edge route
+	ID string `json:"id,omitempty"`
+}
+
+type HTTPSEdgeRouteCreate struct {
+	// unique identifier of this edge
+	EdgeID string `json:"edge_id,omitempty"`
+	// Type of match to use for this route. Valid values are "exact_path" and
+	// "path_prefix".
+	MatchType string `json:"match_type,omitempty"`
+	// Route selector: "/blog" or "example.com" or "example.com/blog"
+	Match string `json:"match,omitempty"`
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// backend module configuration or null
+	Backend *EndpointBackendMutate `json:"backend,omitempty"`
+	// ip restriction module configuration or null
+	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+	// circuit breaker module configuration or null
+	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
+	// compression module configuration or null
+	Compression *EndpointCompression `json:"compression,omitempty"`
+	// request headers module configuration or null
+	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
+	// response headers module configuration or null
+	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
+	// webhook verification module configuration or null
+	WebhookVerification *EndpointWebhookValidation `json:"webhook_verification,omitempty"`
+	// oauth module configuration or null
+	OAuth *EndpointOAuth `json:"oauth,omitempty"`
+	// saml module configuration or null
+	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
+	// oidc module configuration or null
+	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// websocket to tcp adapter configuration or null
+	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+}
+
+type HTTPSEdgeRouteUpdate struct {
+	// unique identifier of this edge
+	EdgeID string `json:"edge_id,omitempty"`
+	// unique identifier of this edge route
+	ID string `json:"id,omitempty"`
+	// Type of match to use for this route. Valid values are "exact_path" and
+	// "path_prefix".
+	MatchType string `json:"match_type,omitempty"`
+	// Route selector: "/blog" or "example.com" or "example.com/blog"
+	Match string `json:"match,omitempty"`
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// backend module configuration or null
+	Backend *EndpointBackendMutate `json:"backend,omitempty"`
+	// ip restriction module configuration or null
+	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+	// circuit breaker module configuration or null
+	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
+	// compression module configuration or null
+	Compression *EndpointCompression `json:"compression,omitempty"`
+	// request headers module configuration or null
+	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
+	// response headers module configuration or null
+	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
+	// webhook verification module configuration or null
+	WebhookVerification *EndpointWebhookValidation `json:"webhook_verification,omitempty"`
+	// oauth module configuration or null
+	OAuth *EndpointOAuth `json:"oauth,omitempty"`
+	// saml module configuration or null
+	SAML *EndpointSAMLMutate `json:"saml,omitempty"`
+	// oidc module configuration or null
+	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// websocket to tcp adapter configuration or null
+	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+}
+
+type HTTPSEdgeRoute struct {
+	// unique identifier of this edge
+	EdgeID string `json:"edge_id,omitempty"`
+	// unique identifier of this edge route
+	ID string `json:"id,omitempty"`
+	// timestamp when the edge configuration was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// Type of match to use for this route. Valid values are "exact_path" and
+	// "path_prefix".
+	MatchType string `json:"match_type,omitempty"`
+	// Route selector: "/blog" or "example.com" or "example.com/blog"
+	Match string `json:"match,omitempty"`
+	// URI of the edge API resource
+	URI string `json:"uri,omitempty"`
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// backend module configuration or null
+	Backend *EndpointBackend `json:"backend,omitempty"`
+	// ip restriction module configuration or null
+	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
+	// circuit breaker module configuration or null
+	CircuitBreaker *EndpointCircuitBreaker `json:"circuit_breaker,omitempty"`
+	// compression module configuration or null
+	Compression *EndpointCompression `json:"compression,omitempty"`
+	// request headers module configuration or null
+	RequestHeaders *EndpointRequestHeaders `json:"request_headers,omitempty"`
+	// response headers module configuration or null
+	ResponseHeaders *EndpointResponseHeaders `json:"response_headers,omitempty"`
+	// webhook verification module configuration or null
+	WebhookVerification *EndpointWebhookValidation `json:"webhook_verification,omitempty"`
+	// oauth module configuration or null
+	OAuth *EndpointOAuth `json:"oauth,omitempty"`
+	// saml module configuration or null
+	SAML *EndpointSAML `json:"saml,omitempty"`
+	// oidc module configuration or null
+	OIDC *EndpointOIDC `json:"oidc,omitempty"`
+	// websocket to tcp adapter configuration or null
+	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+}
+
+type HTTPSEdgeList struct {
+	// the list of all HTTPS Edges on this account
+	HTTPSEdges []HTTPSEdge `json:"https_edges,omitempty"`
+	// URI of the HTTPS Edge list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type HTTPSEdgeCreate struct {
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge; optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
+	// edge modules
+	MutualTLS      *EndpointMutualTLSMutate      `json:"mutual_tls,omitempty"`
+	TLSTermination *EndpointTLSTerminationAtEdge `json:"tls_termination,omitempty"`
+}
+
+type HTTPSEdgeUpdate struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description *string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge; optional, max 4096
+	// bytes.
+	Metadata *string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
+	// edge modules
+	MutualTLS      *EndpointMutualTLSMutate      `json:"mutual_tls,omitempty"`
+	TLSTermination *EndpointTLSTerminationAtEdge `json:"tls_termination,omitempty"`
+}
+
+type HTTPSEdge struct {
+	// unique identifier of this edge
+	ID string `json:"id,omitempty"`
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
+	Description string `json:"description,omitempty"`
+	// arbitrary user-defined machine-readable data of this edge; optional, max 4096
+	// bytes.
+	Metadata string `json:"metadata,omitempty"`
+	// timestamp when the edge configuration was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// URI of the edge API resource
+	URI string `json:"uri,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
+	// edge modules
+	MutualTls      *EndpointMutualTLS      `json:"mutual_tls,omitempty"`
+	TlsTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
+	// routes
+	Routes []HTTPSEdgeRoute `json:"routes,omitempty"`
+}
+
+type EdgeBackendReplace struct {
+	ID     string                `json:"id,omitempty"`
+	Module EndpointBackendMutate `json:"module,omitempty"`
+}
+
+type EdgeIPRestrictionReplace struct {
+	ID     string                 `json:"id,omitempty"`
+	Module EndpointIPPolicyMutate `json:"module,omitempty"`
+}
+
+type EdgeMutualTLSReplace struct {
+	ID     string                  `json:"id,omitempty"`
+	Module EndpointMutualTLSMutate `json:"module,omitempty"`
+}
+
+type EdgeTLSTerminationReplace struct {
+	ID     string                 `json:"id,omitempty"`
+	Module EndpointTLSTermination `json:"module,omitempty"`
+}
+
+type EdgeTLSTerminationAtEdgeReplace struct {
+	ID     string                       `json:"id,omitempty"`
+	Module EndpointTLSTerminationAtEdge `json:"module,omitempty"`
+}
+
+type EdgeRouteBackendReplace struct {
+	EdgeID string                `json:"edge_id,omitempty"`
+	ID     string                `json:"id,omitempty"`
+	Module EndpointBackendMutate `json:"module,omitempty"`
+}
+
+type EdgeRouteIPRestrictionReplace struct {
+	EdgeID string                 `json:"edge_id,omitempty"`
+	ID     string                 `json:"id,omitempty"`
+	Module EndpointIPPolicyMutate `json:"module,omitempty"`
+}
+
+type EdgeRouteRequestHeadersReplace struct {
+	EdgeID string                 `json:"edge_id,omitempty"`
+	ID     string                 `json:"id,omitempty"`
+	Module EndpointRequestHeaders `json:"module,omitempty"`
+}
+
+type EdgeRouteResponseHeadersReplace struct {
+	EdgeID string                  `json:"edge_id,omitempty"`
+	ID     string                  `json:"id,omitempty"`
+	Module EndpointResponseHeaders `json:"module,omitempty"`
+}
+
+type EdgeRouteCompressionReplace struct {
+	EdgeID string              `json:"edge_id,omitempty"`
+	ID     string              `json:"id,omitempty"`
+	Module EndpointCompression `json:"module,omitempty"`
+}
+
+type EdgeRouteCircuitBreakerReplace struct {
+	EdgeID string                 `json:"edge_id,omitempty"`
+	ID     string                 `json:"id,omitempty"`
+	Module EndpointCircuitBreaker `json:"module,omitempty"`
+}
+
+type EdgeRouteWebhookVerificationReplace struct {
+	EdgeID string                    `json:"edge_id,omitempty"`
+	ID     string                    `json:"id,omitempty"`
+	Module EndpointWebhookValidation `json:"module,omitempty"`
+}
+
+type EdgeRouteOAuthReplace struct {
+	EdgeID string        `json:"edge_id,omitempty"`
+	ID     string        `json:"id,omitempty"`
+	Module EndpointOAuth `json:"module,omitempty"`
+}
+
+type EdgeRouteSAMLReplace struct {
+	EdgeID string             `json:"edge_id,omitempty"`
+	ID     string             `json:"id,omitempty"`
+	Module EndpointSAMLMutate `json:"module,omitempty"`
+}
+
+type EdgeRouteOIDCReplace struct {
+	EdgeID string       `json:"edge_id,omitempty"`
+	ID     string       `json:"id,omitempty"`
+	Module EndpointOIDC `json:"module,omitempty"`
+}
+
+type EdgeRouteWebsocketTCPConverterReplace struct {
+	EdgeID string                        `json:"edge_id,omitempty"`
+	ID     string                        `json:"id,omitempty"`
+	Module EndpointWebsocketTCPConverter `json:"module,omitempty"`
+}
+
 type TCPEdgeList struct {
 	// the list of all TCP Edges on this account
 	TCPEdges []TCPEdge `json:"tcp_edges,omitempty"`
@@ -986,12 +1410,14 @@ type TCPEdgeList struct {
 }
 
 type TCPEdgeCreate struct {
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
 	Metadata string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
@@ -1000,12 +1426,14 @@ type TCPEdgeCreate struct {
 type TCPEdgeUpdate struct {
 	// unique identifier of this edge
 	ID string `json:"id,omitempty"`
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description *string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
 	Metadata *string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
@@ -1014,8 +1442,8 @@ type TCPEdgeUpdate struct {
 type TCPEdge struct {
 	// unique identifier of this edge
 	ID string `json:"id,omitempty"`
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
@@ -1024,6 +1452,8 @@ type TCPEdge struct {
 	CreatedAt string `json:"created_at,omitempty"`
 	// URI of the edge API resource
 	URI string `json:"uri,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend       *EndpointBackend  `json:"backend,omitempty"`
 	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
@@ -1039,12 +1469,14 @@ type TLSEdgeList struct {
 }
 
 type TLSEdgeCreate struct {
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
 	Metadata string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend        *EndpointBackendMutate   `json:"backend,omitempty"`
 	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
@@ -1055,12 +1487,14 @@ type TLSEdgeCreate struct {
 type TLSEdgeUpdate struct {
 	// unique identifier of this edge
 	ID string `json:"id,omitempty"`
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description *string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
 	Metadata *string `json:"metadata,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend        *EndpointBackendMutate   `json:"backend,omitempty"`
 	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
@@ -1071,8 +1505,8 @@ type TLSEdgeUpdate struct {
 type TLSEdge struct {
 	// unique identifier of this edge
 	ID string `json:"id,omitempty"`
-	// human-readable description of what this edge will be do when applied or what
-	// traffic it will be applied to. Optional, max 255 bytes
+	// human-readable description of what this edge will be used for; optional, max 255
+	// bytes.
 	Description string `json:"description,omitempty"`
 	// arbitrary user-defined machine-readable data of this edge. Optional, max 4096
 	// bytes.
@@ -1081,11 +1515,52 @@ type TLSEdge struct {
 	CreatedAt string `json:"created_at,omitempty"`
 	// URI of the edge API resource
 	URI string `json:"uri,omitempty"`
+	// hostports served by this edge
+	Hostports *[]string `json:"hostports,omitempty"`
 	// edge modules
 	Backend        *EndpointBackend        `json:"backend,omitempty"`
 	IpRestriction  *EndpointIPPolicy       `json:"ip_restriction,omitempty"`
 	MutualTls      *EndpointMutualTLS      `json:"mutual_tls,omitempty"`
 	TlsTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
+}
+
+type Endpoint struct {
+	// unique endpoint resource identifier
+	ID string `json:"id,omitempty"`
+	// identifier of the region this endpoint belongs to
+	Region string `json:"region,omitempty"`
+	// timestamp when the endpoint was created in RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+	// timestamp when the endpoint was updated in RFC 3339 format
+	UpdatedAt string `json:"updated_at,omitempty"`
+	// URL of the hostport served by this endpoint
+	PublicURL string `json:"public_url,omitempty"`
+	// protocol served by this endpoint. one of http, https, tcp, or tls
+	Proto string `json:"proto,omitempty"`
+	// hostport served by this endpoint (hostname:port)
+	Hostport string `json:"hostport,omitempty"`
+	// whether the endpoint is ephemeral (served directly by an agent-initiated tunnel)
+	// or edge (served by an edge)
+	Type string `json:"type,omitempty"`
+	// user-supplied metadata of the associated tunnel or edge object
+	Metadata string `json:"metadata,omitempty"`
+	// the domain reserved for this endpoint
+	Domain *Ref `json:"domain,omitempty"`
+	// the address reserved for this endpoint
+	TCPAddr *Ref `json:"tcp_addr,omitempty"`
+	// the tunnel serving requests to this endpoint, if this is an ephemeral endpoint
+	Tunnel *Ref `json:"tunnel,omitempty"`
+	// the edge serving requests to this endpoint, if this is an edge endpoint
+	Edge *Ref `json:"edge,omitempty"`
+}
+
+type EndpointList struct {
+	// the list of all active endpoints on this account
+	Endpoints []Endpoint `json:"endpoints,omitempty"`
+	// URI of the endpoints list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
 type EventStreamCreate struct {
@@ -1318,8 +1793,8 @@ type EventSubscriptionCreate struct {
 	Description string `json:"description,omitempty"`
 	// Sources containing the types for which this event subscription will trigger
 	Sources []EventSourceReplace `json:"sources,omitempty"`
-	// A list of Event Destination IDs which should be used for this Event Stream.
-	// Event Streams are required to have at least one Event Destination.
+	// A list of Event Destination IDs which should be used for this Event
+	// Subscription.
 	DestinationIDs []string `json:"destination_ids,omitempty"`
 }
 
@@ -1334,8 +1809,8 @@ type EventSubscriptionUpdate struct {
 	Description *string `json:"description,omitempty"`
 	// Sources containing the types for which this event subscription will trigger
 	Sources *[]EventSourceReplace `json:"sources,omitempty"`
-	// A list of Event Destination IDs which should be used for this Event Stream.
-	// Event Streams are required to have at least one Event Destination.
+	// A list of Event Destination IDs which should be used for this Event
+	// Subscription.
 	DestinationIDs *[]string `json:"destination_ids,omitempty"`
 }
 
@@ -1441,8 +1916,10 @@ type IPPolicyCreate struct {
 	// arbitrary user-defined machine-readable data of this IP policy. optional, max
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are allow or deny
-	Action string `json:"action,omitempty"`
+	// this field is deprecated. Please leave it empty and use the ip policy rule
+	// object's "action" field instead. It is temporarily retained for backwards
+	// compatibility reasons.
+	Action *string `json:"action,omitempty"`
 }
 
 type IPPolicyUpdate struct {
@@ -1468,8 +1945,10 @@ type IPPolicy struct {
 	// arbitrary user-defined machine-readable data of this IP policy. optional, max
 	// 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// the IP policy action. Supported values are allow or deny
-	Action string `json:"action,omitempty"`
+	// this field is deprecated. Please leave it empty and use the ip policy rule
+	// object's "action" field instead. It is temporarily retained for backwards
+	// compatibility reasons.
+	Action *string `json:"action,omitempty"`
 }
 
 type IPPolicyList struct {
@@ -1492,6 +1971,8 @@ type IPPolicyRuleCreate struct {
 	CIDR string `json:"cidr,omitempty"`
 	// ID of the IP policy this IP policy rule will be attached to
 	IPPolicyID string `json:"ip_policy_id,omitempty"`
+	// the action to apply to the policy rule, either allow or deny
+	Action *string `json:"action,omitempty"`
 }
 
 type IPPolicyRuleUpdate struct {
@@ -1523,6 +2004,8 @@ type IPPolicyRule struct {
 	CIDR string `json:"cidr,omitempty"`
 	// object describing the IP policy this IP Policy Rule belongs to
 	IPPolicy Ref `json:"ip_policy,omitempty"`
+	// the action to apply to the policy rule, either allow or deny
+	Action string `json:"action,omitempty"`
 }
 
 type IPPolicyRuleList struct {
@@ -1592,57 +2075,6 @@ type IPRestrictionList struct {
 	// the list of all IP restrictions on this account
 	IPRestrictions []IPRestriction `json:"ip_restrictions,omitempty"`
 	// URI of the IP resrtrictions list API resource
-	URI string `json:"uri,omitempty"`
-	// URI of the next page, or null if there is no next page
-	NextPageURI *string `json:"next_page_uri,omitempty"`
-}
-
-type IPWhitelistEntryCreate struct {
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
-	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
-	// tunnel endpoints
-	IPNet string `json:"ip_net,omitempty"`
-}
-
-type IPWhitelistEntryUpdate struct {
-	ID string `json:"id,omitempty"`
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description *string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata *string `json:"metadata,omitempty"`
-}
-
-type IPWhitelistEntry struct {
-	// unique identifier for this IP whitelist entry
-	ID string `json:"id,omitempty"`
-	// URI of the IP whitelist entry API resource
-	URI string `json:"uri,omitempty"`
-	// timestamp when the IP whitelist entry was created, RFC 3339 format
-	CreatedAt string `json:"created_at,omitempty"`
-	// human-readable description of the source IPs for this IP whitelist entry.
-	// optional, max 255 bytes.
-	Description string `json:"description,omitempty"`
-	// arbitrary user-defined machine-readable data of this IP whitelist entry.
-	// optional, max 4096 bytes.
-	Metadata string `json:"metadata,omitempty"`
-	// an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or
-	// 10.1.0.0/16) of addresses that will be whitelisted to communicate with your
-	// tunnel endpoints
-	IPNet string `json:"ip_net,omitempty"`
-}
-
-type IPWhitelistEntryList struct {
-	// the list of all IP whitelist entries on this account
-	Whitelist []IPWhitelistEntry `json:"whitelist,omitempty"`
-	// URI of the IP whitelist API resource
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
@@ -1729,7 +2161,7 @@ type ReservedAddrCreate struct {
 	Region string `json:"region,omitempty"`
 	// ID of an endpoint configuration of type tcp that will be used to handle inbound
 	// traffic to this address
-	EndpointConfigurationID string `json:"endpoint_configuration_id,omitempty"`
+	EndpointConfigurationID *string `json:"endpoint_configuration_id,omitempty"`
 }
 
 type ReservedAddrUpdate struct {
@@ -1860,6 +2292,11 @@ type ReservedDomain struct {
 	// status of the automatic certificate management for this domain, or null if
 	// automatic management is disabled
 	CertificateManagementStatus *ReservedDomainCertStatus `json:"certificate_management_status,omitempty"`
+	// DNS CNAME target for the host _acme-challenge.example.com, where example.com is
+	// your reserved domain name. This is required to issue certificates for wildcard,
+	// non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok
+	// subdomains.
+	ACMEChallengeCNAMETarget *string `json:"acme_challenge_cname_target,omitempty"`
 }
 
 type ReservedDomainList struct {
@@ -1888,13 +2325,6 @@ type ReservedDomainCertStatus struct {
 	ProvisioningJob *ReservedDomainCertJob `json:"provisioning_job,omitempty"`
 }
 
-type ReservedDomainCertNSTarget struct {
-	// the zone that the nameservers need to be applied to
-	Zone string `json:"zone,omitempty"`
-	// the nameservers the user must add
-	Nameservers []string `json:"nameservers,omitempty"`
-}
-
 type ReservedDomainCertJob struct {
 	// if present, an error code indicating why provisioning is failing. It may be
 	// either a temporary condition (INTERNAL_ERROR), or a permanent one the user must
@@ -1906,9 +2336,6 @@ type ReservedDomainCertJob struct {
 	StartedAt string `json:"started_at,omitempty"`
 	// timestamp when the provisioning job will be retried
 	RetriesAt *string `json:"retries_at,omitempty"`
-	// if present, indicates the dns nameservers that the user must configure to
-	// complete the provisioning process of a wildcard certificate
-	NSTargets []ReservedDomainCertNSTarget `json:"ns_targets,omitempty"`
 }
 
 type RootResponse struct {
@@ -2367,7 +2794,7 @@ type TunnelSessionsUpdate struct {
 type Tunnel struct {
 	// unique tunnel resource identifier
 	ID string `json:"id,omitempty"`
-	// URL of the tunnel's public endpoint
+	// URL of the ephemeral tunnel's public endpoint
 	PublicURL string `json:"public_url,omitempty"`
 	// timestamp when the tunnel was initiated in RFC 3339 format
 	StartedAt string `json:"started_at,omitempty"`
@@ -2377,12 +2804,23 @@ type Tunnel struct {
 	// top-level  (https://ngrok.com/docs#config_metadata)metadata configuration
 	// option.
 	Metadata string `json:"metadata,omitempty"`
-	// tunnel protocol. one of http, https, tcp or tls
+	// tunnel protocol for ephemeral tunnels. one of http, https, tcp or tls
 	Proto string `json:"proto,omitempty"`
 	// identifier of tune region where the tunnel is running
 	Region string `json:"region,omitempty"`
 	// reference object pointing to the tunnel session on which this tunnel was started
 	TunnelSession Ref `json:"tunnel_session,omitempty"`
+	// the ephemeral endpoint this tunnel is associated with, if this is an
+	// agent-initiated tunnel
+	Endpoint *Ref `json:"endpoint,omitempty"`
+	// the labels the tunnel group backends will match against, if this is a backend
+	// tunnel
+	Labels map[string]string `json:"labels,omitempty"`
+	// tunnel group backends served by this backend tunnel
+	Backends *[]Ref `json:"backends,omitempty"`
+	// upstream address the ngrok agent forwards traffic over this tunnel to. this may
+	// be expressed as a URL or a network address.
+	ForwardsTo string `json:"forwards_to,omitempty"`
 }
 
 type TunnelList struct {

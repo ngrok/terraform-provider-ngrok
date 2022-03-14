@@ -77,7 +77,7 @@ Optional:
 Optional:
 
 - **allow_options** (Boolean) true or false indicating whether to allow OPTIONS requests through without authentication which is necessary for CORS. default is `false`
-- **auth_provider_id** (String) determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `-auth` flag, if any.
+- **auth_provider_id** (String) determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `--basic-auth` flag, if any.
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
 - **realm** (String) an arbitrary string to be specified in as the 'realm' value in the `WWW-Authenticate` header. default is `ngrok`
 
@@ -285,6 +285,7 @@ Optional:
 - **inactivity_timeout** (Number) Integer number of seconds of inactivity after which if the user has not accessed the endpoint, their session will time out and they will be forced to reauthenticate.
 - **maximum_duration** (Number) Integer number of seconds of the maximum duration of an authenticated session. After this period is exceeded, a user must reauthenticate.
 - **metadata_url** (String) A public URL where the SP's metadata is hosted. If an IdP supports dynamic configuration, this is the URL it can use to retrieve the SP metadata.
+- **nameid_format** (String) Defines the name identifier format the SP expects the IdP to use in its assertions to identify subjects. If unspecified, a default value of `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent` will be used. A subset of the allowed values enumerated by the SAML specification are supported.
 - **options_passthrough** (Boolean) Do not enforce authentication on HTTP OPTIONS requests. necessary if you are supporting CORS.
 - **request_signing_certificate_pem** (String) PEM-encoded x.509 certificate of the key pair that is used to sign all SAML requests that the ngrok SP makes to the IdP. Many IdPs do not support request signing verification, but we highly recommend specifying this in the IdP's configuration if it is supported.
 - **single_logout_url** (String) The public URL of the SP's Single Logout Service. This is where the IdP will redirect to during a single logout flow. This will optionally need to be specified to the IdP as configuration.
@@ -306,7 +307,7 @@ Optional:
 Optional:
 
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
-- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`.
+- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`, `SENDGRID`, `XERO`, `PAGERDUTY`.
 - **secret** (String, Sensitive) a string secret used to validate requests from the given provider. All providers except AWS SNS require a secret
 
 

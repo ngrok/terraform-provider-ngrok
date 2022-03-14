@@ -1,3 +1,9 @@
+## 0.1.4 (Unreleased)
+
+ENHANCEMENTS:
+
+* Added `nameid_format` field to the SAML endpoint configuration.
+
 ## 0.1.3 (July 13, 2021)
 
 FIXED:

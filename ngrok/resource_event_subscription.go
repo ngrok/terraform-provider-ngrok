@@ -35,7 +35,7 @@ func resourceEventSubscriptions() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    false,
-				Description: "A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.",
+				Description: "A list of Event Destination IDs which should be used for this Event Subscription.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"id": {

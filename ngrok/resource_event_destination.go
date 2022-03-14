@@ -97,9 +97,9 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"role_arn": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
@@ -119,18 +119,18 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",
@@ -185,9 +185,9 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"role_arn": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
@@ -207,18 +207,18 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",
@@ -273,9 +273,9 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"role_arn": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "An ARN that specifies the role that ngrok should use to deliver to the configured target.",
@@ -295,18 +295,18 @@ func resourceEventDestinations() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 															"aws_access_key_id": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The ID portion of an AWS access key.",
 															},
 															"aws_secret_access_key": {
 																Type:        schema.TypeString,
-																Required:    false,
+																Required:    true,
 																Computed:    false,
-																Optional:    true,
+																Optional:    false,
 																Sensitive:   false,
 																ForceNew:    false,
 																Description: "The secret portion of an AWS access key.",

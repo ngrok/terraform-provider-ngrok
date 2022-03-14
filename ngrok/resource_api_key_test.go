@@ -34,7 +34,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.APIKeysList(ctx, nil)
+			list, _, err := conn.APIKeysList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
