@@ -93,6 +93,7 @@ func (d Debug) makeRequest(ctx context.Context, body io.Reader) (context.Context
 				var i interface{}
 				if err := decoder.Decode(&i); err == nil {
 					enc := json.NewEncoder(d.Stderr)
+					enc.SetEscapeHTML(false)
 					enc.SetIndent("", "  ")
 					if err := enc.Encode(i); err != nil {
 						panic(err)
@@ -133,6 +134,7 @@ func (d Debug) printResponse(r *http.Response) {
 		var i interface{}
 		if err := json.Unmarshal(body, &i); err == nil {
 			enc := json.NewEncoder(d.Stdout)
+			enc.SetEscapeHTML(false)
 			enc.SetIndent("", "  ")
 			if err := enc.Encode(i); err != nil {
 				panic(err)

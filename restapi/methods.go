@@ -8,6 +8,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/url"
 	"text/template"
 )
 
@@ -18,10 +19,9 @@ func (c *Client) AbuseReportsCreate(ctx context.Context, arg *AbuseReportCreate)
 	if err := template.Must(template.New("").Parse("/abuse_reports")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -35,11 +35,106 @@ func (c *Client) AbuseReportsGet(ctx context.Context, arg *Item) (*AbuseReport, 
 	if err := template.Must(template.New("").Parse("/abuse_reports/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Agent Ingress. The ngrok agent can be configured to connect to ngrok via the new set of addresses on the returned Agent Ingress.
+func (c *Client) AgentIngressesCreate(ctx context.Context, arg *AgentIngressCreate) (*AgentIngress, *http.Response, error) {
+	var res AgentIngress
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/agent_ingresses")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an Agent Ingress by ID
+func (c *Client) AgentIngressesDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/agent_ingresses/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get the details of an Agent Ingress by ID.
+func (c *Client) AgentIngressesGet(ctx context.Context, arg *Item) (*AgentIngress, *http.Response, error) {
+	var res AgentIngress
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/agent_ingresses/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Agent Ingresses owned by this account
+func (c *Client) AgentIngressesList(ctx context.Context, arg *Paging) (*AgentIngressList, *http.Response, error) {
+	var res AgentIngressList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/agent_ingresses")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update attributes of an Agent Ingress by ID.
+func (c *Client) AgentIngressesUpdate(ctx context.Context, arg *AgentIngressUpdate) (*AgentIngress, *http.Response, error) {
+	var res AgentIngress
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/agent_ingresses/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -53,10 +148,9 @@ func (c *Client) APIKeysCreate(ctx context.Context, arg *APIKeyCreate) (*APIKey,
 	if err := template.Must(template.New("").Parse("/api_keys")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -70,11 +164,10 @@ func (c *Client) APIKeysDelete(ctx context.Context, arg *Item) (*Empty, *http.Re
 	if err := template.Must(template.New("").Parse("/api_keys/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -88,11 +181,10 @@ func (c *Client) APIKeysGet(ctx context.Context, arg *Item) (*APIKey, *http.Resp
 	if err := template.Must(template.New("").Parse("/api_keys/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -106,10 +198,22 @@ func (c *Client) APIKeysList(ctx context.Context, arg *Paging) (*APIKeyList, *ht
 	if err := template.Must(template.New("").Parse("/api_keys")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -123,99 +227,197 @@ func (c *Client) APIKeysUpdate(ctx context.Context, arg *APIKeyUpdate) (*APIKey,
 	if err := template.Must(template.New("").Parse("/api_keys/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// Create a new Priority backend
-func (c *Client) PriorityBackendsCreate(ctx context.Context, arg *PriorityBackendCreate) (*PriorityBackend, *http.Response, error) {
-	var res PriorityBackend
+// Create a new Failover backend
+func (c *Client) FailoverBackendsCreate(ctx context.Context, arg *FailoverBackendCreate) (*FailoverBackend, *http.Response, error) {
+	var res FailoverBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/priority")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/failover")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// Delete a Priority backend by ID. TODO what if used?
-func (c *Client) PriorityBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+// Delete a Failover backend by ID. TODO what if used?
+func (c *Client) FailoverBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/priority/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/failover/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// Get detailed information about a Priority backend by ID
-func (c *Client) PriorityBackendsGet(ctx context.Context, arg *Item) (*PriorityBackend, *http.Response, error) {
-	var res PriorityBackend
+// Get detailed information about a Failover backend by ID
+func (c *Client) FailoverBackendsGet(ctx context.Context, arg *Item) (*FailoverBackend, *http.Response, error) {
+	var res FailoverBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/priority/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/failover/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// List all Priority backends on this account
-func (c *Client) PriorityBackendsList(ctx context.Context, arg *Paging) (*PriorityBackendList, *http.Response, error) {
-	var res PriorityBackendList
+// List all Failover backends on this account
+func (c *Client) FailoverBackendsList(ctx context.Context, arg *Paging) (*FailoverBackendList, *http.Response, error) {
+	var res FailoverBackendList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/priority")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/failover")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// Update Priority backend by ID
-func (c *Client) PriorityBackendsUpdate(ctx context.Context, arg *PriorityBackendUpdate) (*PriorityBackend, *http.Response, error) {
-	var res PriorityBackend
+// Update Failover backend by ID
+func (c *Client) FailoverBackendsUpdate(ctx context.Context, arg *FailoverBackendUpdate) (*FailoverBackend, *http.Response, error) {
+	var res FailoverBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/priority/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/failover/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPResponseBackendsCreate(ctx context.Context, arg *HTTPResponseBackendCreate) (*HTTPResponseBackend, *http.Response, error) {
+	var res HTTPResponseBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/http_response")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPResponseBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/http_response/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPResponseBackendsGet(ctx context.Context, arg *Item) (*HTTPResponseBackend, *http.Response, error) {
+	var res HTTPResponseBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/http_response/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPResponseBackendsList(ctx context.Context, arg *Paging) (*HTTPResponseBackendList, *http.Response, error) {
+	var res HTTPResponseBackendList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/http_response")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPResponseBackendsUpdate(ctx context.Context, arg *HTTPResponseBackendUpdate) (*HTTPResponseBackend, *http.Response, error) {
+	var res HTTPResponseBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/backends/http_response/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -229,10 +431,9 @@ func (c *Client) StaticBackendsCreate(ctx context.Context, arg *StaticBackendCre
 	if err := template.Must(template.New("").Parse("/backends/static")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -246,11 +447,10 @@ func (c *Client) StaticBackendsDelete(ctx context.Context, arg *Item) (*Empty, *
 	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -264,11 +464,10 @@ func (c *Client) StaticBackendsGet(ctx context.Context, arg *Item) (*StaticBacke
 	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -282,10 +481,22 @@ func (c *Client) StaticBackendsList(ctx context.Context, arg *Paging) (*StaticBa
 	if err := template.Must(template.New("").Parse("/backends/static")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -299,11 +510,10 @@ func (c *Client) StaticBackendsUpdate(ctx context.Context, arg *StaticBackendUpd
 	if err := template.Must(template.New("").Parse("/backends/static/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -314,13 +524,12 @@ func (c *Client) StaticBackendsUpdate(ctx context.Context, arg *StaticBackendUpd
 func (c *Client) TunnelGroupBackendsCreate(ctx context.Context, arg *TunnelGroupBackendCreate) (*TunnelGroupBackend, *http.Response, error) {
 	var res TunnelGroupBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/tunnel-group")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/tunnel_group")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -331,14 +540,13 @@ func (c *Client) TunnelGroupBackendsCreate(ctx context.Context, arg *TunnelGroup
 func (c *Client) TunnelGroupBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/tunnel-group/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/tunnel_group/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -349,14 +557,13 @@ func (c *Client) TunnelGroupBackendsDelete(ctx context.Context, arg *Item) (*Emp
 func (c *Client) TunnelGroupBackendsGet(ctx context.Context, arg *Item) (*TunnelGroupBackend, *http.Response, error) {
 	var res TunnelGroupBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/tunnel-group/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/tunnel_group/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -367,13 +574,25 @@ func (c *Client) TunnelGroupBackendsGet(ctx context.Context, arg *Item) (*Tunnel
 func (c *Client) TunnelGroupBackendsList(ctx context.Context, arg *Paging) (*TunnelGroupBackendList, *http.Response, error) {
 	var res TunnelGroupBackendList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/tunnel-group")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/tunnel_group")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -384,14 +603,13 @@ func (c *Client) TunnelGroupBackendsList(ctx context.Context, arg *Paging) (*Tun
 func (c *Client) TunnelGroupBackendsUpdate(ctx context.Context, arg *TunnelGroupBackendUpdate) (*TunnelGroupBackend, *http.Response, error) {
 	var res TunnelGroupBackend
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/backends/tunnel-group/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/backends/tunnel_group/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -405,10 +623,9 @@ func (c *Client) WeightedBackendsCreate(ctx context.Context, arg *WeightedBacken
 	if err := template.Must(template.New("").Parse("/backends/weighted")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -422,11 +639,10 @@ func (c *Client) WeightedBackendsDelete(ctx context.Context, arg *Item) (*Empty,
 	if err := template.Must(template.New("").Parse("/backends/weighted/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -440,11 +656,10 @@ func (c *Client) WeightedBackendsGet(ctx context.Context, arg *Item) (*WeightedB
 	if err := template.Must(template.New("").Parse("/backends/weighted/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -458,10 +673,22 @@ func (c *Client) WeightedBackendsList(ctx context.Context, arg *Paging) (*Weight
 	if err := template.Must(template.New("").Parse("/backends/weighted")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -475,11 +702,10 @@ func (c *Client) WeightedBackendsUpdate(ctx context.Context, arg *WeightedBacken
 	if err := template.Must(template.New("").Parse("/backends/weighted/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -493,10 +719,9 @@ func (c *Client) CertificateAuthoritiesCreate(ctx context.Context, arg *Certific
 	if err := template.Must(template.New("").Parse("/certificate_authorities")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -510,11 +735,10 @@ func (c *Client) CertificateAuthoritiesDelete(ctx context.Context, arg *Item) (*
 	if err := template.Must(template.New("").Parse("/certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -528,11 +752,10 @@ func (c *Client) CertificateAuthoritiesGet(ctx context.Context, arg *Item) (*Cer
 	if err := template.Must(template.New("").Parse("/certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -546,10 +769,22 @@ func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *Paging) (*
 	if err := template.Must(template.New("").Parse("/certificate_authorities")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -563,11 +798,10 @@ func (c *Client) CertificateAuthoritiesUpdate(ctx context.Context, arg *Certific
 	if err := template.Must(template.New("").Parse("/certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -581,10 +815,9 @@ func (c *Client) CredentialsCreate(ctx context.Context, arg *CredentialCreate) (
 	if err := template.Must(template.New("").Parse("/credentials")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -598,11 +831,10 @@ func (c *Client) CredentialsDelete(ctx context.Context, arg *Item) (*Empty, *htt
 	if err := template.Must(template.New("").Parse("/credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -616,11 +848,10 @@ func (c *Client) CredentialsGet(ctx context.Context, arg *Item) (*Credential, *h
 	if err := template.Must(template.New("").Parse("/credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -634,10 +865,22 @@ func (c *Client) CredentialsList(ctx context.Context, arg *Paging) (*CredentialL
 	if err := template.Must(template.New("").Parse("/credentials")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -651,11 +894,10 @@ func (c *Client) CredentialsUpdate(ctx context.Context, arg *CredentialUpdate) (
 	if err := template.Must(template.New("").Parse("/credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -669,10 +911,9 @@ func (c *Client) EndpointConfigurationsCreate(ctx context.Context, arg *Endpoint
 	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -686,11 +927,10 @@ func (c *Client) EndpointConfigurationsDelete(ctx context.Context, arg *Item) (*
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -704,11 +944,10 @@ func (c *Client) EndpointConfigurationsGet(ctx context.Context, arg *Item) (*End
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -722,10 +961,22 @@ func (c *Client) EndpointConfigurationsList(ctx context.Context, arg *Paging) (*
 	if err := template.Must(template.New("").Parse("/endpoint_configurations")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -739,11 +990,834 @@ func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *Endpoint
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create an HTTPS Edge Route
+func (c *Client) EdgesHTTPSRoutesCreate(ctx context.Context, arg *HTTPSEdgeRouteCreate) (*HTTPSEdgeRoute, *http.Response, error) {
+	var res HTTPSEdgeRoute
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get an HTTPS Edge Route by ID
+func (c *Client) EdgesHTTPSRoutesGet(ctx context.Context, arg *EdgeRouteItem) (*HTTPSEdgeRoute, *http.Response, error) {
+	var res HTTPSEdgeRoute
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Updates an HTTPS Edge Route by ID. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
+func (c *Client) EdgesHTTPSRoutesUpdate(ctx context.Context, arg *HTTPSEdgeRouteUpdate) (*HTTPSEdgeRoute, *http.Response, error) {
+	var res HTTPSEdgeRoute
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an HTTPS Edge Route by ID
+func (c *Client) EdgesHTTPSRoutesDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create an HTTPS Edge
+func (c *Client) EdgesHTTPSCreate(ctx context.Context, arg *HTTPSEdgeCreate) (*HTTPSEdge, *http.Response, error) {
+	var res HTTPSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get an HTTPS Edge by ID
+func (c *Client) EdgesHTTPSGet(ctx context.Context, arg *Item) (*HTTPSEdge, *http.Response, error) {
+	var res HTTPSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Returns a list of all HTTPS Edges on this account
+func (c *Client) EdgesHTTPSList(ctx context.Context, arg *Paging) (*HTTPSEdgeList, *http.Response, error) {
+	var res HTTPSEdgeList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Updates an HTTPS Edge by ID. If a module is not specified in the update, it will not be modified. However, each module configuration that is specified will completely replace the existing value. There is no way to delete an existing module via this API, instead use the delete module API.
+func (c *Client) EdgesHTTPSUpdate(ctx context.Context, arg *HTTPSEdgeUpdate) (*HTTPSEdge, *http.Response, error) {
+	var res HTTPSEdge
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an HTTPS Edge by ID
+func (c *Client) EdgesHTTPSDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeMutualTLSModuleReplace(ctx context.Context, arg *EdgeMutualTLSReplace) (*EndpointMutualTLS, *http.Response, error) {
+	var res EndpointMutualTLS
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeMutualTLSModuleGet(ctx context.Context, arg *Item) (*EndpointMutualTLS, *http.Response, error) {
+	var res EndpointMutualTLS
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeMutualTLSModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeTLSTerminationModuleReplace(ctx context.Context, arg *EdgeTLSTerminationAtEdgeReplace) (*EndpointTLSTermination, *http.Response, error) {
+	var res EndpointTLSTermination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeTLSTerminationModuleGet(ctx context.Context, arg *Item) (*EndpointTLSTermination, *http.Response, error) {
+	var res EndpointTLSTermination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) HTTPSEdgeTLSTerminationModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteBackendModuleReplace(ctx context.Context, arg *EdgeRouteBackendReplace) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteBackendModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteBackendModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteIPRestrictionModuleReplace(ctx context.Context, arg *EdgeRouteIPRestrictionReplace) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteIPRestrictionModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteIPRestrictionModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteRequestHeadersModuleReplace(ctx context.Context, arg *EdgeRouteRequestHeadersReplace) (*EndpointRequestHeaders, *http.Response, error) {
+	var res EndpointRequestHeaders
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteRequestHeadersModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointRequestHeaders, *http.Response, error) {
+	var res EndpointRequestHeaders
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteRequestHeadersModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteResponseHeadersModuleReplace(ctx context.Context, arg *EdgeRouteResponseHeadersReplace) (*EndpointResponseHeaders, *http.Response, error) {
+	var res EndpointResponseHeaders
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteResponseHeadersModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointResponseHeaders, *http.Response, error) {
+	var res EndpointResponseHeaders
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteResponseHeadersModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCompressionModuleReplace(ctx context.Context, arg *EdgeRouteCompressionReplace) (*EndpointCompression, *http.Response, error) {
+	var res EndpointCompression
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCompressionModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointCompression, *http.Response, error) {
+	var res EndpointCompression
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCompressionModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCircuitBreakerModuleReplace(ctx context.Context, arg *EdgeRouteCircuitBreakerReplace) (*EndpointCircuitBreaker, *http.Response, error) {
+	var res EndpointCircuitBreaker
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCircuitBreakerModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointCircuitBreaker, *http.Response, error) {
+	var res EndpointCircuitBreaker
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteCircuitBreakerModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebhookVerificationModuleReplace(ctx context.Context, arg *EdgeRouteWebhookVerificationReplace) (*EndpointWebhookValidation, *http.Response, error) {
+	var res EndpointWebhookValidation
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/webhook_verification")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebhookVerificationModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointWebhookValidation, *http.Response, error) {
+	var res EndpointWebhookValidation
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/webhook_verification")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebhookVerificationModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/webhook_verification")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOAuthModuleReplace(ctx context.Context, arg *EdgeRouteOAuthReplace) (*EndpointOAuth, *http.Response, error) {
+	var res EndpointOAuth
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOAuthModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointOAuth, *http.Response, error) {
+	var res EndpointOAuth
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOAuthModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteSAMLModuleReplace(ctx context.Context, arg *EdgeRouteSAMLReplace) (*EndpointSAML, *http.Response, error) {
+	var res EndpointSAML
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteSAMLModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointSAML, *http.Response, error) {
+	var res EndpointSAML
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteSAMLModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOIDCModuleReplace(ctx context.Context, arg *EdgeRouteOIDCReplace) (*EndpointOIDC, *http.Response, error) {
+	var res EndpointOIDC
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOIDCModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointOIDC, *http.Response, error) {
+	var res EndpointOIDC
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteOIDCModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebsocketTCPConverterModuleReplace(ctx context.Context, arg *EdgeRouteWebsocketTCPConverterReplace) (*EndpointWebsocketTCPConverter, *http.Response, error) {
+	var res EndpointWebsocketTCPConverter
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/websocket_tcp_converter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebsocketTCPConverterModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointWebsocketTCPConverter, *http.Response, error) {
+	var res EndpointWebsocketTCPConverter
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/websocket_tcp_converter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteWebsocketTCPConverterModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/websocket_tcp_converter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -754,13 +1828,12 @@ func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *Endpoint
 func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tcp_edges")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tcp")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -771,14 +1844,13 @@ func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEd
 func (c *Client) EdgesTCPGet(ctx context.Context, arg *Item) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -789,13 +1861,25 @@ func (c *Client) EdgesTCPGet(ctx context.Context, arg *Item) (*TCPEdge, *http.Re
 func (c *Client) EdgesTCPList(ctx context.Context, arg *Paging) (*TCPEdgeList, *http.Response, error) {
 	var res TCPEdgeList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tcp_edges")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tcp")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -806,14 +1890,13 @@ func (c *Client) EdgesTCPList(ctx context.Context, arg *Paging) (*TCPEdgeList, *
 func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -824,14 +1907,109 @@ func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEd
 func (c *Client) EdgesTCPDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tcp_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeBackendModuleReplace(ctx context.Context, arg *EdgeBackendReplace) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeBackendModuleGet(ctx context.Context, arg *Item) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeBackendModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeIPRestrictionModuleReplace(ctx context.Context, arg *EdgeIPRestrictionReplace) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeIPRestrictionModuleGet(ctx context.Context, arg *Item) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeIPRestrictionModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -842,13 +2020,12 @@ func (c *Client) EdgesTCPDelete(ctx context.Context, arg *Item) (*Empty, *http.R
 func (c *Client) EdgesTLSCreate(ctx context.Context, arg *TLSEdgeCreate) (*TLSEdge, *http.Response, error) {
 	var res TLSEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tls_edges")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tls")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -859,14 +2036,13 @@ func (c *Client) EdgesTLSCreate(ctx context.Context, arg *TLSEdgeCreate) (*TLSEd
 func (c *Client) EdgesTLSGet(ctx context.Context, arg *Item) (*TLSEdge, *http.Response, error) {
 	var res TLSEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -877,13 +2053,25 @@ func (c *Client) EdgesTLSGet(ctx context.Context, arg *Item) (*TLSEdge, *http.Re
 func (c *Client) EdgesTLSList(ctx context.Context, arg *Paging) (*TLSEdgeList, *http.Response, error) {
 	var res TLSEdgeList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tls_edges")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tls")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -894,14 +2082,13 @@ func (c *Client) EdgesTLSList(ctx context.Context, arg *Paging) (*TLSEdgeList, *
 func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEdge, *http.Response, error) {
 	var res TLSEdge
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -912,14 +2099,251 @@ func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEd
 func (c *Client) EdgesTLSDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/tls_edges/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeBackendModuleReplace(ctx context.Context, arg *EdgeBackendReplace) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeBackendModuleGet(ctx context.Context, arg *Item) (*EndpointBackend, *http.Response, error) {
+	var res EndpointBackend
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeBackendModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeIPRestrictionModuleReplace(ctx context.Context, arg *EdgeIPRestrictionReplace) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeIPRestrictionModuleGet(ctx context.Context, arg *Item) (*EndpointIPPolicy, *http.Response, error) {
+	var res EndpointIPPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeIPRestrictionModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeMutualTLSModuleReplace(ctx context.Context, arg *EdgeMutualTLSReplace) (*EndpointMutualTLS, *http.Response, error) {
+	var res EndpointMutualTLS
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeMutualTLSModuleGet(ctx context.Context, arg *Item) (*EndpointMutualTLS, *http.Response, error) {
+	var res EndpointMutualTLS
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeMutualTLSModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTLSTerminationModuleReplace(ctx context.Context, arg *EdgeTLSTerminationReplace) (*EndpointTLSTermination, *http.Response, error) {
+	var res EndpointTLSTermination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTLSTerminationModuleGet(ctx context.Context, arg *Item) (*EndpointTLSTermination, *http.Response, error) {
+	var res EndpointTLSTermination
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTLSTerminationModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all active endpoints on the account
+func (c *Client) EndpointsList(ctx context.Context, arg *Paging) (*EndpointList, *http.Response, error) {
+	var res EndpointList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoints")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get the status of an endpoint by ID
+func (c *Client) EndpointsGet(ctx context.Context, arg *Item) (*Endpoint, *http.Response, error) {
+	var res Endpoint
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoints/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -933,10 +2357,9 @@ func (c *Client) EventStreamsCreate(ctx context.Context, arg *EventStreamCreate)
 	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -950,11 +2373,10 @@ func (c *Client) EventStreamsDelete(ctx context.Context, arg *Item) (*Empty, *ht
 	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -968,11 +2390,10 @@ func (c *Client) EventStreamsGet(ctx context.Context, arg *Item) (*EventStream, 
 	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -986,10 +2407,22 @@ func (c *Client) EventStreamsList(ctx context.Context, arg *Paging) (*EventStrea
 	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1003,11 +2436,10 @@ func (c *Client) EventStreamsUpdate(ctx context.Context, arg *EventStreamUpdate)
 	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1021,28 +2453,26 @@ func (c *Client) EventDestinationsCreate(ctx context.Context, arg *EventDestinat
 	if err := template.Must(template.New("").Parse("/event_destinations")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
 }
 
-// Delete an Event Destination. If the Event Destination is still referenced by an Event Stream, this will throw an error until that Event Stream has removed that reference.
+// Delete an Event Destination. If the Event Destination is still referenced by an Event Subscription.
 func (c *Client) EventDestinationsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1056,11 +2486,10 @@ func (c *Client) EventDestinationsGet(ctx context.Context, arg *Item) (*EventDes
 	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1074,10 +2503,22 @@ func (c *Client) EventDestinationsList(ctx context.Context, arg *Paging) (*Event
 	if err := template.Must(template.New("").Parse("/event_destinations")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1091,11 +2532,10 @@ func (c *Client) EventDestinationsUpdate(ctx context.Context, arg *EventDestinat
 	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1109,11 +2549,10 @@ func (c *Client) EventDestinationsSendTestEvent(ctx context.Context, arg *Item) 
 	if err := template.Must(template.New("").Parse("/event_destinations/{{ .ID }}/send_test_event")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1127,10 +2566,9 @@ func (c *Client) EventSubscriptionsCreate(ctx context.Context, arg *EventSubscri
 	if err := template.Must(template.New("").Parse("/event_subscriptions")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1144,11 +2582,10 @@ func (c *Client) EventSubscriptionsDelete(ctx context.Context, arg *Item) (*Empt
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1162,11 +2599,10 @@ func (c *Client) EventSubscriptionsGet(ctx context.Context, arg *Item) (*EventSu
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1180,10 +2616,22 @@ func (c *Client) EventSubscriptionsList(ctx context.Context, arg *Paging) (*Even
 	if err := template.Must(template.New("").Parse("/event_subscriptions")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1197,11 +2645,10 @@ func (c *Client) EventSubscriptionsUpdate(ctx context.Context, arg *EventSubscri
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1215,11 +2662,10 @@ func (c *Client) EventSourcesCreate(ctx context.Context, arg *EventSourceCreate)
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .SubscriptionID }}/sources")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.SubscriptionID = ""
 
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1233,12 +2679,11 @@ func (c *Client) EventSourcesDelete(ctx context.Context, arg *EventSourceItem) (
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .SubscriptionID }}/sources/{{ .Type }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.SubscriptionID = ""
 	arg.Type = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1252,12 +2697,11 @@ func (c *Client) EventSourcesGet(ctx context.Context, arg *EventSourceItem) (*Ev
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .SubscriptionID }}/sources/{{ .Type }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.SubscriptionID = ""
 	arg.Type = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1271,11 +2715,10 @@ func (c *Client) EventSourcesList(ctx context.Context, arg *EventSourcePaging) (
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .SubscriptionID }}/sources")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.SubscriptionID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1289,12 +2732,11 @@ func (c *Client) EventSourcesUpdate(ctx context.Context, arg *EventSourceUpdate)
 	if err := template.Must(template.New("").Parse("/event_subscriptions/{{ .SubscriptionID }}/sources/{{ .Type }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.SubscriptionID = ""
 	arg.Type = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1308,10 +2750,9 @@ func (c *Client) IPPoliciesCreate(ctx context.Context, arg *IPPolicyCreate) (*IP
 	if err := template.Must(template.New("").Parse("/ip_policies")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1325,11 +2766,10 @@ func (c *Client) IPPoliciesDelete(ctx context.Context, arg *Item) (*Empty, *http
 	if err := template.Must(template.New("").Parse("/ip_policies/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1343,11 +2783,10 @@ func (c *Client) IPPoliciesGet(ctx context.Context, arg *Item) (*IPPolicy, *http
 	if err := template.Must(template.New("").Parse("/ip_policies/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1361,10 +2800,22 @@ func (c *Client) IPPoliciesList(ctx context.Context, arg *Paging) (*IPPolicyList
 	if err := template.Must(template.New("").Parse("/ip_policies")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1378,11 +2829,10 @@ func (c *Client) IPPoliciesUpdate(ctx context.Context, arg *IPPolicyUpdate) (*IP
 	if err := template.Must(template.New("").Parse("/ip_policies/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1396,10 +2846,9 @@ func (c *Client) IPPolicyRulesCreate(ctx context.Context, arg *IPPolicyRuleCreat
 	if err := template.Must(template.New("").Parse("/ip_policy_rules")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1413,11 +2862,10 @@ func (c *Client) IPPolicyRulesDelete(ctx context.Context, arg *Item) (*Empty, *h
 	if err := template.Must(template.New("").Parse("/ip_policy_rules/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1431,11 +2879,10 @@ func (c *Client) IPPolicyRulesGet(ctx context.Context, arg *Item) (*IPPolicyRule
 	if err := template.Must(template.New("").Parse("/ip_policy_rules/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1449,10 +2896,22 @@ func (c *Client) IPPolicyRulesList(ctx context.Context, arg *Paging) (*IPPolicyR
 	if err := template.Must(template.New("").Parse("/ip_policy_rules")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1466,11 +2925,10 @@ func (c *Client) IPPolicyRulesUpdate(ctx context.Context, arg *IPPolicyRuleUpdat
 	if err := template.Must(template.New("").Parse("/ip_policy_rules/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1484,10 +2942,9 @@ func (c *Client) IPRestrictionsCreate(ctx context.Context, arg *IPRestrictionCre
 	if err := template.Must(template.New("").Parse("/ip_restrictions")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1501,11 +2958,10 @@ func (c *Client) IPRestrictionsDelete(ctx context.Context, arg *Item) (*Empty, *
 	if err := template.Must(template.New("").Parse("/ip_restrictions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1519,11 +2975,10 @@ func (c *Client) IPRestrictionsGet(ctx context.Context, arg *Item) (*IPRestricti
 	if err := template.Must(template.New("").Parse("/ip_restrictions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1537,10 +2992,22 @@ func (c *Client) IPRestrictionsList(ctx context.Context, arg *Paging) (*IPRestri
 	if err := template.Must(template.New("").Parse("/ip_restrictions")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1554,99 +3021,10 @@ func (c *Client) IPRestrictionsUpdate(ctx context.Context, arg *IPRestrictionUpd
 	if err := template.Must(template.New("").Parse("/ip_restrictions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Create a new IP whitelist entry that will restrict traffic to all tunnel endpoints on the account.
-func (c *Client) IPWhitelistCreate(ctx context.Context, arg *IPWhitelistEntryCreate) (*IPWhitelistEntry, *http.Response, error) {
-	var res IPWhitelistEntry
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/ip_whitelist")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Delete an IP whitelist entry.
-func (c *Client) IPWhitelistDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/ip_whitelist/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Get detailed information about an IP whitelist entry by ID.
-func (c *Client) IPWhitelistGet(ctx context.Context, arg *Item) (*IPWhitelistEntry, *http.Response, error) {
-	var res IPWhitelistEntry
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/ip_whitelist/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// List all IP whitelist entries on this account
-func (c *Client) IPWhitelistList(ctx context.Context, arg *Paging) (*IPWhitelistEntryList, *http.Response, error) {
-	var res IPWhitelistEntryList
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/ip_whitelist")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Update attributes of an IP whitelist entry by ID
-func (c *Client) IPWhitelistUpdate(ctx context.Context, arg *IPWhitelistEntryUpdate) (*IPWhitelistEntry, *http.Response, error) {
-	var res IPWhitelistEntry
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/ip_whitelist/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-	arg.ID = ""
-
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1659,11 +3037,10 @@ func (c *Client) EndpointLoggingModuleReplace(ctx context.Context, arg *Endpoint
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1676,11 +3053,10 @@ func (c *Client) EndpointLoggingModuleGet(ctx context.Context, arg *Item) (*Endp
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1693,11 +3069,10 @@ func (c *Client) EndpointLoggingModuleDelete(ctx context.Context, arg *Item) (*E
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1710,11 +3085,10 @@ func (c *Client) EndpointBasicAuthModuleReplace(ctx context.Context, arg *Endpoi
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/basic_auth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1727,11 +3101,10 @@ func (c *Client) EndpointBasicAuthModuleGet(ctx context.Context, arg *Item) (*En
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/basic_auth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1744,11 +3117,10 @@ func (c *Client) EndpointBasicAuthModuleDelete(ctx context.Context, arg *Item) (
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/basic_auth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1761,11 +3133,10 @@ func (c *Client) EndpointCircuitBreakerModuleReplace(ctx context.Context, arg *E
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1778,11 +3149,10 @@ func (c *Client) EndpointCircuitBreakerModuleGet(ctx context.Context, arg *Item)
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1795,11 +3165,10 @@ func (c *Client) EndpointCircuitBreakerModuleDelete(ctx context.Context, arg *It
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/circuit_breaker")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1812,11 +3181,10 @@ func (c *Client) EndpointCompressionModuleReplace(ctx context.Context, arg *Endp
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1829,11 +3197,10 @@ func (c *Client) EndpointCompressionModuleGet(ctx context.Context, arg *Item) (*
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1846,11 +3213,10 @@ func (c *Client) EndpointCompressionModuleDelete(ctx context.Context, arg *Item)
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/compression")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1863,11 +3229,10 @@ func (c *Client) EndpointTLSTerminationModuleReplace(ctx context.Context, arg *E
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1880,11 +3245,10 @@ func (c *Client) EndpointTLSTerminationModuleGet(ctx context.Context, arg *Item)
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1897,11 +3261,10 @@ func (c *Client) EndpointTLSTerminationModuleDelete(ctx context.Context, arg *It
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1914,11 +3277,10 @@ func (c *Client) EndpointIPPolicyModuleReplace(ctx context.Context, arg *Endpoin
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/ip_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1931,11 +3293,10 @@ func (c *Client) EndpointIPPolicyModuleGet(ctx context.Context, arg *Item) (*End
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/ip_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1948,11 +3309,10 @@ func (c *Client) EndpointIPPolicyModuleDelete(ctx context.Context, arg *Item) (*
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/ip_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1965,11 +3325,10 @@ func (c *Client) EndpointMutualTLSModuleReplace(ctx context.Context, arg *Endpoi
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1982,11 +3341,10 @@ func (c *Client) EndpointMutualTLSModuleGet(ctx context.Context, arg *Item) (*En
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -1999,11 +3357,10 @@ func (c *Client) EndpointMutualTLSModuleDelete(ctx context.Context, arg *Item) (
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/mutual_tls")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2016,11 +3373,10 @@ func (c *Client) EndpointRequestHeadersModuleReplace(ctx context.Context, arg *E
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2033,11 +3389,10 @@ func (c *Client) EndpointRequestHeadersModuleGet(ctx context.Context, arg *Item)
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2050,11 +3405,10 @@ func (c *Client) EndpointRequestHeadersModuleDelete(ctx context.Context, arg *It
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/request_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2067,11 +3421,10 @@ func (c *Client) EndpointResponseHeadersModuleReplace(ctx context.Context, arg *
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2084,11 +3437,10 @@ func (c *Client) EndpointResponseHeadersModuleGet(ctx context.Context, arg *Item
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2101,11 +3453,10 @@ func (c *Client) EndpointResponseHeadersModuleDelete(ctx context.Context, arg *I
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/response_headers")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2118,11 +3469,10 @@ func (c *Client) EndpointOAuthModuleReplace(ctx context.Context, arg *EndpointOA
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2135,11 +3485,10 @@ func (c *Client) EndpointOAuthModuleGet(ctx context.Context, arg *Item) (*Endpoi
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2152,11 +3501,10 @@ func (c *Client) EndpointOAuthModuleDelete(ctx context.Context, arg *Item) (*Emp
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oauth")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2169,11 +3517,10 @@ func (c *Client) EndpointWebhookValidationModuleReplace(ctx context.Context, arg
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/webhook_validation")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2186,11 +3533,10 @@ func (c *Client) EndpointWebhookValidationModuleGet(ctx context.Context, arg *It
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/webhook_validation")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2203,11 +3549,10 @@ func (c *Client) EndpointWebhookValidationModuleDelete(ctx context.Context, arg 
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/webhook_validation")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2220,11 +3565,10 @@ func (c *Client) EndpointSAMLModuleReplace(ctx context.Context, arg *EndpointSAM
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2237,11 +3581,10 @@ func (c *Client) EndpointSAMLModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2254,11 +3597,10 @@ func (c *Client) EndpointSAMLModuleDelete(ctx context.Context, arg *Item) (*Empt
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/saml")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2271,11 +3613,10 @@ func (c *Client) EndpointOIDCModuleReplace(ctx context.Context, arg *EndpointOID
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2288,11 +3629,10 @@ func (c *Client) EndpointOIDCModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2305,11 +3645,10 @@ func (c *Client) EndpointOIDCModuleDelete(ctx context.Context, arg *Item) (*Empt
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/oidc")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2322,11 +3661,10 @@ func (c *Client) EndpointBackendModuleReplace(ctx context.Context, arg *Endpoint
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Put(ctx, path.String(), arg.Module, &res)
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2339,11 +3677,10 @@ func (c *Client) EndpointBackendModuleGet(ctx context.Context, arg *Item) (*Endp
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2356,11 +3693,10 @@ func (c *Client) EndpointBackendModuleDelete(ctx context.Context, arg *Item) (*E
 	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/backend")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2374,10 +3710,9 @@ func (c *Client) ReservedAddrsCreate(ctx context.Context, arg *ReservedAddrCreat
 	if err := template.Must(template.New("").Parse("/reserved_addrs")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2391,11 +3726,10 @@ func (c *Client) ReservedAddrsDelete(ctx context.Context, arg *Item) (*Empty, *h
 	if err := template.Must(template.New("").Parse("/reserved_addrs/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2409,11 +3743,10 @@ func (c *Client) ReservedAddrsGet(ctx context.Context, arg *Item) (*ReservedAddr
 	if err := template.Must(template.New("").Parse("/reserved_addrs/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2427,10 +3760,22 @@ func (c *Client) ReservedAddrsList(ctx context.Context, arg *Paging) (*ReservedA
 	if err := template.Must(template.New("").Parse("/reserved_addrs")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2444,11 +3789,10 @@ func (c *Client) ReservedAddrsUpdate(ctx context.Context, arg *ReservedAddrUpdat
 	if err := template.Must(template.New("").Parse("/reserved_addrs/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2462,11 +3806,10 @@ func (c *Client) ReservedAddrsDeleteEndpointConfig(ctx context.Context, arg *Ite
 	if err := template.Must(template.New("").Parse("/reserved_addrs/{{ .ID }}/endpoint_configuration")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2480,10 +3823,9 @@ func (c *Client) ReservedDomainsCreate(ctx context.Context, arg *ReservedDomainC
 	if err := template.Must(template.New("").Parse("/reserved_domains")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2497,11 +3839,10 @@ func (c *Client) ReservedDomainsDelete(ctx context.Context, arg *Item) (*Empty, 
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2515,11 +3856,10 @@ func (c *Client) ReservedDomainsGet(ctx context.Context, arg *Item) (*ReservedDo
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2533,10 +3873,22 @@ func (c *Client) ReservedDomainsList(ctx context.Context, arg *Paging) (*Reserve
 	if err := template.Must(template.New("").Parse("/reserved_domains")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2550,11 +3902,10 @@ func (c *Client) ReservedDomainsUpdate(ctx context.Context, arg *ReservedDomainU
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2568,11 +3919,10 @@ func (c *Client) ReservedDomainsDeleteCertificateManagementPolicy(ctx context.Co
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}/certificate_management_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2586,11 +3936,10 @@ func (c *Client) ReservedDomainsDeleteCertificate(ctx context.Context, arg *Item
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}/certificate")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2604,11 +3953,10 @@ func (c *Client) ReservedDomainsDeleteHTTPEndpointConfig(ctx context.Context, ar
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}/http_endpoint_configuration")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2622,11 +3970,10 @@ func (c *Client) ReservedDomainsDeleteHTTPSEndpointConfig(ctx context.Context, a
 	if err := template.Must(template.New("").Parse("/reserved_domains/{{ .ID }}/https_endpoint_configuration")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2639,10 +3986,9 @@ func (c *Client) RootGet(ctx context.Context, arg *Empty) (*RootResponse, *http.
 	if err := template.Must(template.New("").Parse("/")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2656,10 +4002,9 @@ func (c *Client) SSHCertificateAuthoritiesCreate(ctx context.Context, arg *SSHCe
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2673,11 +4018,10 @@ func (c *Client) SSHCertificateAuthoritiesDelete(ctx context.Context, arg *Item)
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2691,11 +4035,10 @@ func (c *Client) SSHCertificateAuthoritiesGet(ctx context.Context, arg *Item) (*
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2709,10 +4052,22 @@ func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *Paging)
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2726,11 +4081,10 @@ func (c *Client) SSHCertificateAuthoritiesUpdate(ctx context.Context, arg *SSHCe
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2744,10 +4098,9 @@ func (c *Client) SSHCredentialsCreate(ctx context.Context, arg *SSHCredentialCre
 	if err := template.Must(template.New("").Parse("/ssh_credentials")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2761,11 +4114,10 @@ func (c *Client) SSHCredentialsDelete(ctx context.Context, arg *Item) (*Empty, *
 	if err := template.Must(template.New("").Parse("/ssh_credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2779,11 +4131,10 @@ func (c *Client) SSHCredentialsGet(ctx context.Context, arg *Item) (*SSHCredenti
 	if err := template.Must(template.New("").Parse("/ssh_credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2797,10 +4148,22 @@ func (c *Client) SSHCredentialsList(ctx context.Context, arg *Paging) (*SSHCrede
 	if err := template.Must(template.New("").Parse("/ssh_credentials")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2814,11 +4177,10 @@ func (c *Client) SSHCredentialsUpdate(ctx context.Context, arg *SSHCredentialUpd
 	if err := template.Must(template.New("").Parse("/ssh_credentials/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2832,10 +4194,9 @@ func (c *Client) SSHHostCertificatesCreate(ctx context.Context, arg *SSHHostCert
 	if err := template.Must(template.New("").Parse("/ssh_host_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2849,11 +4210,10 @@ func (c *Client) SSHHostCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	if err := template.Must(template.New("").Parse("/ssh_host_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2867,11 +4227,10 @@ func (c *Client) SSHHostCertificatesGet(ctx context.Context, arg *Item) (*SSHHos
 	if err := template.Must(template.New("").Parse("/ssh_host_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2885,10 +4244,22 @@ func (c *Client) SSHHostCertificatesList(ctx context.Context, arg *Paging) (*SSH
 	if err := template.Must(template.New("").Parse("/ssh_host_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2902,11 +4273,10 @@ func (c *Client) SSHHostCertificatesUpdate(ctx context.Context, arg *SSHHostCert
 	if err := template.Must(template.New("").Parse("/ssh_host_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2920,10 +4290,9 @@ func (c *Client) SSHUserCertificatesCreate(ctx context.Context, arg *SSHUserCert
 	if err := template.Must(template.New("").Parse("/ssh_user_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2937,11 +4306,10 @@ func (c *Client) SSHUserCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	if err := template.Must(template.New("").Parse("/ssh_user_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2955,11 +4323,10 @@ func (c *Client) SSHUserCertificatesGet(ctx context.Context, arg *Item) (*SSHUse
 	if err := template.Must(template.New("").Parse("/ssh_user_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2973,10 +4340,22 @@ func (c *Client) SSHUserCertificatesList(ctx context.Context, arg *Paging) (*SSH
 	if err := template.Must(template.New("").Parse("/ssh_user_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -2990,11 +4369,10 @@ func (c *Client) SSHUserCertificatesUpdate(ctx context.Context, arg *SSHUserCert
 	if err := template.Must(template.New("").Parse("/ssh_user_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3008,10 +4386,9 @@ func (c *Client) TLSCertificatesCreate(ctx context.Context, arg *TLSCertificateC
 	if err := template.Must(template.New("").Parse("/tls_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3025,11 +4402,10 @@ func (c *Client) TLSCertificatesDelete(ctx context.Context, arg *Item) (*Empty, 
 	if err := template.Must(template.New("").Parse("/tls_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Delete(ctx, path.String(), &res)
+	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3043,11 +4419,10 @@ func (c *Client) TLSCertificatesGet(ctx context.Context, arg *Item) (*TLSCertifi
 	if err := template.Must(template.New("").Parse("/tls_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3061,10 +4436,22 @@ func (c *Client) TLSCertificatesList(ctx context.Context, arg *Paging) (*TLSCert
 	if err := template.Must(template.New("").Parse("/tls_certificates")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3078,11 +4465,10 @@ func (c *Client) TLSCertificatesUpdate(ctx context.Context, arg *TLSCertificateU
 	if err := template.Must(template.New("").Parse("/tls_certificates/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Patch(ctx, path.String(), arg, &res)
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3096,10 +4482,22 @@ func (c *Client) TunnelSessionsList(ctx context.Context, arg *Paging) (*TunnelSe
 	if err := template.Must(template.New("").Parse("/tunnel_sessions")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
-
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3113,11 +4511,10 @@ func (c *Client) TunnelSessionsGet(ctx context.Context, arg *Item) (*TunnelSessi
 	if err := template.Must(template.New("").Parse("/tunnel_sessions/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Get(ctx, path.String(), &res)
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3131,11 +4528,10 @@ func (c *Client) TunnelSessionsRestart(ctx context.Context, arg *Item) (*Empty, 
 	if err := template.Must(template.New("").Parse("/tunnel_sessions/{{ .ID }}/restart")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3149,11 +4545,10 @@ func (c *Client) TunnelSessionsStop(ctx context.Context, arg *Item) (*Empty, *ht
 	if err := template.Must(template.New("").Parse("/tunnel_sessions/{{ .ID }}/stop")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3167,11 +4562,10 @@ func (c *Client) TunnelSessionsUpdate(ctx context.Context, arg *TunnelSessionsUp
 	if err := template.Must(template.New("").Parse("/tunnel_sessions/{{ .ID }}/update")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
-
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	uri := path.String()
 	arg.ID = ""
 
-	resp, err := c.Post(ctx, path.String(), arg, &res)
+	resp, err := c.Post(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -3185,10 +4579,39 @@ func (c *Client) TunnelsList(ctx context.Context, arg *Paging) (*TunnelList, *ht
 	if err := template.Must(template.New("").Parse("/tunnels")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
-	// setting URI parameters to zero isn't really necessary but it makes the generated examples in the documentation pretty
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
 
-	resp, err := c.Get(ctx, path.String(), &res)
+// Get the status of a tunnel by ID
+func (c *Client) TunnelsGet(ctx context.Context, arg *Item) (*Tunnel, *http.Response, error) {
+	var res Tunnel
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/tunnels/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}

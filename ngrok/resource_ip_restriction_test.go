@@ -15,11 +15,11 @@ import (
 
 var (
 	resourceIPRestrictions_createConfig = `resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1rV5CMI1Aw8MiqWtjlQCyDDEWnQ" ]
+  ip_policy_ids = [ "ipp_25auGwa4eEWUeCOBfCZkwtwqFey" ]
   type = "dashboard"
 }`
 	resourceIPRestrictions_updateConfig = `resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1rV5CMI1Aw8MiqWtjlQCyDDEWnQ", "ipp_1rV5COeFhKWjXHrEfCGNBXCA4ka" ]
+  ip_policy_ids = [ "ipp_25auGwa4eEWUeCOBfCZkwtwqFey", "ipp_25auH2BpgoNpNLfKedwIJjEqwrm" ]
 }`
 )
 
@@ -34,7 +34,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPRestrictionsList(ctx, nil)
+			list, _, err := conn.IPRestrictionsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

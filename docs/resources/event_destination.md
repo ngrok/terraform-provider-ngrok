@@ -71,7 +71,7 @@ Optional:
 <a id="nestedblock--target--cloudwatch_logs--auth--creds"></a>
 ### Nested Schema for `target.cloudwatch_logs.auth.role`
 
-Optional:
+Required:
 
 - **aws_access_key_id** (String) The ID portion of an AWS access key.
 - **aws_secret_access_key** (String) The secret portion of an AWS access key.
@@ -80,7 +80,7 @@ Optional:
 <a id="nestedblock--target--cloudwatch_logs--auth--role"></a>
 ### Nested Schema for `target.cloudwatch_logs.auth.role`
 
-Optional:
+Required:
 
 - **role_arn** (String) An ARN that specifies the role that ngrok should use to deliver to the configured target.
 
@@ -115,7 +115,7 @@ Optional:
 <a id="nestedblock--target--firehose--auth--creds"></a>
 ### Nested Schema for `target.firehose.auth.role`
 
-Optional:
+Required:
 
 - **aws_access_key_id** (String) The ID portion of an AWS access key.
 - **aws_secret_access_key** (String) The secret portion of an AWS access key.
@@ -124,7 +124,7 @@ Optional:
 <a id="nestedblock--target--firehose--auth--role"></a>
 ### Nested Schema for `target.firehose.auth.role`
 
-Optional:
+Required:
 
 - **role_arn** (String) An ARN that specifies the role that ngrok should use to deliver to the configured target.
 
@@ -150,7 +150,7 @@ Optional:
 <a id="nestedblock--target--kinesis--auth--creds"></a>
 ### Nested Schema for `target.kinesis.auth.role`
 
-Optional:
+Required:
 
 - **aws_access_key_id** (String) The ID portion of an AWS access key.
 - **aws_secret_access_key** (String) The secret portion of an AWS access key.
@@ -159,7 +159,7 @@ Optional:
 <a id="nestedblock--target--kinesis--auth--role"></a>
 ### Nested Schema for `target.kinesis.auth.role`
 
-Optional:
+Required:
 
 - **role_arn** (String) An ARN that specifies the role that ngrok should use to deliver to the configured target.
 

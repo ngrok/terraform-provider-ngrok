@@ -19,7 +19,7 @@ var (
   region = "us"
 }`
 	resourceReservedAddrs_updateConfig = `resource "ngrok_reserved_addr" "example" {
-  endpoint_configuration_id = "ec_1rV52nyVMhAzUojsbhyljDvazMp"
+  endpoint_configuration_id = "ec_25auGH5WozRiPuURsa21MQgTm6h"
   metadata = "{\"proto\": \"ssh\"}"
 }`
 )
@@ -35,7 +35,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.ReservedAddrsList(ctx, nil)
+			list, _, err := conn.ReservedAddrsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

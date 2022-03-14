@@ -92,7 +92,7 @@ func resourceReservedAddrsCreate(d *schema.ResourceData, m interface{}) (err err
 		arg.Region = *expandString(v)
 	}
 	if v, ok := d.GetOk("endpoint_configuration_id"); ok {
-		arg.EndpointConfigurationID = *expandString(v)
+		arg.EndpointConfigurationID = expandString(v)
 	}
 
 	res, _, err := b.client.ReservedAddrsCreate(context.Background(), &arg)
@@ -124,7 +124,9 @@ func resourceReservedAddrsGetDecode(d *schema.ResourceData, res *restapi.Reserve
 	default:
 		d.Set("addr", res.Addr)
 		d.Set("description", res.Description)
-		d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
+		if res.EndpointConfiguration != nil {
+			d.Set("endpoint_configuration_id", res.EndpointConfiguration.ID)
+		}
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
 		d.Set("region", res.Region)

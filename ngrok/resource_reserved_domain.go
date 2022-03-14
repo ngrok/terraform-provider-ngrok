@@ -20,6 +20,15 @@ func resourceReservedDomains() *schema.Resource {
 		Delete:      resourceReservedDomainsDelete,
 		Description: "Reserved Domains are hostnames that you can listen for traffic on. Domains\n can be used to listen for http, https or tls traffic. You may use a domain\n that you own by creating a CNAME record specified in the returned resource.\n This CNAME record points traffic for that domain to ngrok's edge servers.",
 		Schema: map[string]*schema.Schema{
+			"acme_challenge_cname_target": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    true,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    true,
+				Description: "DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.",
+			},
 			"certificate_id": {
 				Type:             schema.TypeString,
 				Required:         false,
@@ -203,6 +212,7 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		log.Printf("[ERROR] ReservedDomainsGet: %s", err)
 		return err
 	default:
+		d.Set("acme_challenge_cname_target", res.ACMEChallengeCNAMETarget)
 		if res.Certificate != nil {
 			d.Set("certificate_id", res.Certificate.ID)
 		}

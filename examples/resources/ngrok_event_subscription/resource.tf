@@ -1,10 +1,10 @@
 
 resource "ngrok_event_subscription" "example" {
-  description = "low sampling, basic HTTP logs"
-  destination_ids = [ "ed_1ro7aylyqQ1LLMWNWrOISvlfveQ" ]
+  description = "ip policy creations"
+  destination_ids = [ "ed_25auH2H0JNlDGXUH01Z3sZdgFFM" ]
   metadata = "{\"environment\": \"staging\"}"
   sources [ {
-    type = "http_request_complete"
+    type = "ip_policy_created.v0"
   } ]
 }
 

@@ -15,7 +15,7 @@ import (
 
 var (
 	resourceReservedDomains_createConfig = `resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1rV51OQetZPK9V6vTWUVy3Onjir"
+  certificate_id = "cert_25auGELSEngiae3wzmLLesiZn8h"
   name = "myapp.mydomain.com"
   region = "us"
 }`
@@ -24,8 +24,8 @@ var (
     authority = "letsencrypt"
   }
   description = "point-of-sale new york #302"
-  http_endpoint_configuration_id = "ec_1rV51lrJYw0LLC6pbNFmjW1KJLE"
-  https_endpoint_configuration_id = "ec_1rV51lUKrRn6BLvLOWq2Ug0nINj"
+  http_endpoint_configuration_id = "ec_25auGIsAiev7qhPq90LDAKui4rr"
+  https_endpoint_configuration_id = "ec_25auGJLgKOstJTQXqphwKPVY6bE"
   metadata = "{env: \"staging\", \"connector_id\":\"64698fcc-5f5c-4b63-910e-8669d04bd943\"}"
 }`
 )
@@ -41,7 +41,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.ReservedDomainsList(ctx, nil)
+			list, _, err := conn.ReservedDomainsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

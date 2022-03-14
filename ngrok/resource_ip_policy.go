@@ -21,12 +21,12 @@ func resourceIPPolicies() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"action": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Required:    false,
 				Computed:    false,
-				Optional:    false,
+				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "the IP policy action. Supported values are `allow` or `deny`",
+				Description: "this field is deprecated. Please leave it empty and use the ip policy rule object's \"action\" field instead. It is temporarily retained for backwards compatibility reasons.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -70,7 +70,7 @@ func resourceIPPoliciesCreate(d *schema.ResourceData, m interface{}) (err error)
 		arg.Metadata = *expandString(v)
 	}
 	if v, ok := d.GetOk("action"); ok {
-		arg.Action = *expandString(v)
+		arg.Action = expandString(v)
 	}
 
 	res, _, err := b.client.IPPoliciesCreate(context.Background(), &arg)

@@ -1,6 +1,6 @@
 
 resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_1rV51OQetZPK9V6vTWUVy3Onjir"
+  certificate_id = "cert_25auGELSEngiae3wzmLLesiZn8h"
   name = "myapp.mydomain.com"
   region = "us"
 }

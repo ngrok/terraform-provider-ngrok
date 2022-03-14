@@ -4,7 +4,7 @@ page_title: "ngrok_ip_restriction Resource - terraform-provider-ngrok"
 subcategory: ""
 description: |-
   An IP restriction is a restriction placed on the CIDRs that are allowed to
-   initate traffic to a specific aspect of your ngrok account. An IP
+   initiate traffic to a specific aspect of your ngrok account. An IP
    restriction has a type which defines the ingress it applies to. IP
    restrictions can be used to enforce the source IPs that can make API
    requests, log in to the dashboard, start ngrok agents, and connect to your
@@ -14,7 +14,7 @@ description: |-
 # ngrok_ip_restriction (Resource)
 
 An IP restriction is a restriction placed on the CIDRs that are allowed to
- initate traffic to a specific aspect of your ngrok account. An IP
+ initiate traffic to a specific aspect of your ngrok account. An IP
  restriction has a type which defines the ingress it applies to. IP
  restrictions can be used to enforce the source IPs that can make API
  requests, log in to the dashboard, start ngrok agents, and connect to your
@@ -24,7 +24,7 @@ An IP restriction is a restriction placed on the CIDRs that are allowed to
 
 ```terraform
 resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_1rV5CMI1Aw8MiqWtjlQCyDDEWnQ" ]
+  ip_policy_ids = [ "ipp_25auGwa4eEWUeCOBfCZkwtwqFey" ]
   type = "dashboard"
 }
 ```

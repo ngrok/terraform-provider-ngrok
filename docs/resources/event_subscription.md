@@ -14,11 +14,11 @@ description: |-
 
 ```terraform
 resource "ngrok_event_subscription" "example" {
-  description = "low sampling, basic HTTP logs"
-  destination_ids = [ "ed_1ro7aylyqQ1LLMWNWrOISvlfveQ" ]
+  description = "ip policy creations"
+  destination_ids = [ "ed_25auH2H0JNlDGXUH01Z3sZdgFFM" ]
   metadata = "{\"environment\": \"staging\"}"
   sources [ {
-    type = "http_request_complete"
+    type = "ip_policy_created.v0"
   } ]
 }
 ```
@@ -29,7 +29,7 @@ resource "ngrok_event_subscription" "example" {
 ### Optional
 
 - **description** (String) Arbitrary customer supplied information intended to be human readable. Optional, max 255 chars.
-- **destination_ids** (List of String) A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.
+- **destination_ids** (List of String) A list of Event Destination IDs which should be used for this Event Subscription.
 - **id** (String) Unique identifier for this Event Subscription.
 - **metadata** (String) Arbitrary customer supplied information intended to be machine readable. Optional, max 4096 chars.
 - **sources** (Block List) Sources containing the types for which this event subscription will trigger (see [below for nested schema](#nestedblock--sources))

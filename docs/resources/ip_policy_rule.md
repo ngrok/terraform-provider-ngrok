@@ -18,7 +18,7 @@ IP Policy Rules are the IPv4 or IPv6 CIDRs entries that
 resource "ngrok_ip_policy_rule" "example" {
   cidr = "212.3.14.0/24"
   description = "nyc office"
-  ip_policy_id = "ipp_1rV56VrAxesFteoj4XZxaaYyvXo"
+  ip_policy_id = "ipp_25auGv9R7vPmi6NKs5Cxcyzc2Cm"
 }
 ```
 
@@ -32,6 +32,7 @@ resource "ngrok_ip_policy_rule" "example" {
 
 ### Optional
 
+- **action** (String) the action to apply to the policy rule, either `allow` or `deny`
 - **description** (String) human-readable description of the source IPs of this IP rule. optional, max 255 bytes.
 - **id** (String) unique identifier for this IP policy rule
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.
