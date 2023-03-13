@@ -14,20 +14,22 @@ import (
 )
 
 var (
-	resourceIPPolicyRules_createConfig = `resource "ngrok_ip_policy_rule" "example" {
-  action = "allow"
-  cidr = "212.3.14.0/24"
-  description = "nyc office"
-  ip_policy_id = "ipp_26rOydjEUNZSLTi8bYXBg278qUT"
+	resourceTunnelGroupBackends_createConfig = `resource "ngrok_tunnel_group_backend" "example" {
+  description = "acme tunnel group"
+  labels = {
+    baz = "qux"
+    foo = "bar"
+  }
+  metadata = "{\"environment\": \"staging\"}"
 }`
-	resourceIPPolicyRules_updateConfig = `resource "ngrok_ip_policy_rule" "example" {
-  cidr = "212.3.15.0/24"
+	resourceTunnelGroupBackends_updateConfig = `resource "ngrok_tunnel_group_backend" "example" {
+  metadata = "{\"environment\": \"production\"}"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("ip_policy_rules", &resource.Sweeper{
-		Name: "ip_policy_rules",
+	resource.AddTestSweepers("tunnel_group_backends", &resource.Sweeper{
+		Name: "tunnel_group_backends",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -36,15 +38,15 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPPolicyRulesList(ctx, &restapi.Paging{})
+			list, _, err := conn.TunnelGroupBackendsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.IPPolicyRules {
+			for _, item := range list.Backends {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.IPPolicyRulesDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.TunnelGroupBackendsDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -57,28 +59,28 @@ func init() {
 	})
 }
 
-func TestAccResourceIPPolicyRules(t *testing.T) {
-	t.Skip("Test skipped.")
+func TestAccResourceTunnelGroupBackends(t *testing.T) {
+
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyIPPolicyRules,
+		CheckDestroy: testAccCheckDestroyTunnelGroupBackends,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceIPPolicyRules_createConfig,
+				Config: resourceTunnelGroupBackends_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateIPPolicyRules,
+				// 	testAccCheckCreateTunnelGroupBackends,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyIPPolicyRules(s *terraform.State) (err error) {
+func testAccCheckDestroyTunnelGroupBackends(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateIPPolicyRules(s *terraform.State) (err error) {
+func testAccCheckCreateTunnelGroupBackends(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

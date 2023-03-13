@@ -46,6 +46,15 @@ func resourceAPIKeys() *schema.Resource {
 				ForceNew:    false,
 				Description: "arbitrary user-defined data of this API key. optional, max 4096 bytes",
 			},
+			"owner_id": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    true,
+				Description: "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.",
+			},
 			"token": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -68,6 +77,12 @@ func resourceAPIKeysCreate(d *schema.ResourceData, m interface{}) (err error) {
 	}
 	if v, ok := d.GetOk("metadata"); ok {
 		arg.Metadata = *expandString(v)
+	}
+	if v, ok := d.GetOk("owner_id"); ok {
+		arg.OwnerId = expandString(v)
+	}
+	if v, ok := d.GetOk("owner_email"); ok {
+		arg.OwnerEmail = *expandString(v)
 	}
 
 	res, _, err := b.client.APIKeysCreate(context.Background(), &arg)
@@ -100,6 +115,7 @@ func resourceAPIKeysGetDecode(d *schema.ResourceData, res *restapi.APIKey, resp 
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("metadata", res.Metadata)
+		d.Set("owner_id", res.OwnerId)
 		d.Set("token", res.Token)
 	}
 	return nil

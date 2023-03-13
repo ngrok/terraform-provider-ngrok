@@ -14,20 +14,19 @@ import (
 )
 
 var (
-	resourceIPPolicyRules_createConfig = `resource "ngrok_ip_policy_rule" "example" {
-  action = "allow"
-  cidr = "212.3.14.0/24"
-  description = "nyc office"
-  ip_policy_id = "ipp_26rOydjEUNZSLTi8bYXBg278qUT"
+	resourceFailoverBackends_createConfig = `resource "ngrok_failover_backend" "example" {
+  backends = [ "bkdhr_26rOyncxuCZ0JdIjYiEDGlsh1lO" ]
+  description = "acme failover"
+  metadata = "{\"environment\": \"staging\"}"
 }`
-	resourceIPPolicyRules_updateConfig = `resource "ngrok_ip_policy_rule" "example" {
-  cidr = "212.3.15.0/24"
+	resourceFailoverBackends_updateConfig = `resource "ngrok_failover_backend" "example" {
+  metadata = "{\"environment\": \"production\"}"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("ip_policy_rules", &resource.Sweeper{
-		Name: "ip_policy_rules",
+	resource.AddTestSweepers("failover_backends", &resource.Sweeper{
+		Name: "failover_backends",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -36,15 +35,15 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.IPPolicyRulesList(ctx, &restapi.Paging{})
+			list, _, err := conn.FailoverBackendsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.IPPolicyRules {
+			for _, item := range list.Backends {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.IPPolicyRulesDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.FailoverBackendsDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -57,28 +56,28 @@ func init() {
 	})
 }
 
-func TestAccResourceIPPolicyRules(t *testing.T) {
-	t.Skip("Test skipped.")
+func TestAccResourceFailoverBackends(t *testing.T) {
+	t.Skip("References other ngrok IDs by string, not terraform reference; test gen needs to be updated for this")
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyIPPolicyRules,
+		CheckDestroy: testAccCheckDestroyFailoverBackends,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceIPPolicyRules_createConfig,
+				Config: resourceFailoverBackends_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateIPPolicyRules,
+				// 	testAccCheckCreateFailoverBackends,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyIPPolicyRules(s *terraform.State) (err error) {
+func testAccCheckDestroyFailoverBackends(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateIPPolicyRules(s *terraform.State) (err error) {
+func testAccCheckCreateFailoverBackends(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

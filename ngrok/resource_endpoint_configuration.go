@@ -287,60 +287,6 @@ func resourceEndpointConfigurations() *schema.Resource {
 					},
 				},
 			},
-			"logging": {
-				Type:        schema.TypeSet,
-				Required:    false,
-				Computed:    false,
-				Optional:    true,
-				Sensitive:   false,
-				ForceNew:    false,
-				Description: "logging module configuration or `null`",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"enabled": {
-							Type:        schema.TypeBool,
-							Required:    false,
-							Computed:    false,
-							Optional:    true,
-							Default:     true,
-							Sensitive:   false,
-							ForceNew:    false,
-							Description: "`true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified",
-						},
-						"event_streams": {
-							Type:        schema.TypeList,
-							Required:    false,
-							Computed:    true,
-							Optional:    true,
-							Sensitive:   false,
-							ForceNew:    true,
-							Description: "list of all EventStreams that will be used to configure and export this endpoint's logs",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"id": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    false,
-										Description: "a resource identifier",
-									},
-									"uri": {
-										Type:        schema.TypeString,
-										Required:    false,
-										Computed:    true,
-										Optional:    true,
-										Sensitive:   false,
-										ForceNew:    true,
-										Description: "a uri for locating a resource",
-									},
-								},
-							},
-						},
-					},
-				},
-			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -693,6 +639,250 @@ func resourceEndpointConfigurations() *schema.Resource {
 													Sensitive:   false,
 													ForceNew:    false,
 													Description: "a list of email domains of users authenticated by identity provider who are allowed access to the endpoint",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+											},
+										},
+									},
+									"linkedin": {
+										Type:        schema.TypeSet,
+										Required:    false,
+										Computed:    false,
+										Optional:    true,
+										Sensitive:   false,
+										ForceNew:    false,
+										Description: "configuration for using linkedin as the identity provider",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"client_id": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+												},
+												"client_secret": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   true,
+													ForceNew:    false,
+													Description: "",
+												},
+												"scopes": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_addresses": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_domains": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+											},
+										},
+									},
+									"gitlab": {
+										Type:        schema.TypeSet,
+										Required:    false,
+										Computed:    false,
+										Optional:    true,
+										Sensitive:   false,
+										ForceNew:    false,
+										Description: "configuration for using gitlab as the identity provider",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"client_id": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+												},
+												"client_secret": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   true,
+													ForceNew:    false,
+													Description: "",
+												},
+												"scopes": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_addresses": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_domains": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+											},
+										},
+									},
+									"twitch": {
+										Type:        schema.TypeSet,
+										Required:    false,
+										Computed:    false,
+										Optional:    true,
+										Sensitive:   false,
+										ForceNew:    false,
+										Description: "configuration for using twitch as the identity provider",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"client_id": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+												},
+												"client_secret": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   true,
+													ForceNew:    false,
+													Description: "",
+												},
+												"scopes": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_addresses": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_domains": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+											},
+										},
+									},
+									"amazon": {
+										Type:        schema.TypeSet,
+										Required:    false,
+										Computed:    false,
+										Optional:    true,
+										Sensitive:   false,
+										ForceNew:    false,
+										Description: "configuration for using amazon as the identity provider",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"client_id": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+												},
+												"client_secret": {
+													Type:        schema.TypeString,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   true,
+													ForceNew:    false,
+													Description: "",
+												},
+												"scopes": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_addresses": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
+													Elem:        &schema.Schema{Type: schema.TypeString},
+												},
+												"email_domains": {
+													Type:        schema.TypeList,
+													Required:    false,
+													Computed:    false,
+													Optional:    true,
+													Sensitive:   false,
+													ForceNew:    false,
+													Description: "",
 													Elem:        &schema.Schema{Type: schema.TypeString},
 												},
 											},
@@ -1173,7 +1363,7 @@ func resourceEndpointConfigurations() *schema.Resource {
 							Optional:         true,
 							Sensitive:        false,
 							ForceNew:         false,
-							Description:      "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`, `SENDGRID`, `XERO`, `PAGERDUTY`.",
+							Description:      "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers defined at https://ngrok.com/docs/cloud-edge/modules/webhook",
 							DiffSuppressFunc: transform.DiffSuppressCase,
 						},
 						"secret": {
@@ -1235,9 +1425,6 @@ func resourceEndpointConfigurationsCreate(d *schema.ResourceData, m interface{})
 	if v, ok := d.GetOk("oauth"); ok {
 		arg.OAuth = expandEndpointOAuth(v)
 	}
-	if v, ok := d.GetOk("logging"); ok {
-		arg.Logging = expandEndpointLoggingMutate(v)
-	}
 	if v, ok := d.GetOk("saml"); ok {
 		arg.SAML = expandEndpointSAMLMutate(v)
 	}
@@ -1282,7 +1469,6 @@ func resourceEndpointConfigurationsGetDecode(d *schema.ResourceData, res *restap
 		d.Set("description", res.Description)
 		d.Set("id", res.ID)
 		d.Set("ip_policy", flattenEndpointIPPolicy(res.IPPolicy))
-		d.Set("logging", flattenEndpointLogging(res.Logging))
 		d.Set("metadata", res.Metadata)
 		d.Set("mutual_tls", flattenEndpointMutualTLS(res.MutualTLS))
 		d.Set("oauth", flattenEndpointOAuth(res.OAuth))
@@ -1340,9 +1526,6 @@ func resourceEndpointConfigurationsUpdate(d *schema.ResourceData, m interface{})
 	}
 	if v, ok := d.GetOk("oauth"); ok {
 		arg.OAuth = expandEndpointOAuth(v)
-	}
-	if v, ok := d.GetOk("logging"); ok {
-		arg.Logging = expandEndpointLoggingMutate(v)
 	}
 	if v, ok := d.GetOk("saml"); ok {
 		arg.SAML = expandEndpointSAMLMutate(v)

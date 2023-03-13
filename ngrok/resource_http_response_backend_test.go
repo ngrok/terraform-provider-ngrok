@@ -14,22 +14,23 @@ import (
 )
 
 var (
-	resourceEventSubscriptions_createConfig = `resource "ngrok_event_subscription" "example" {
-  description = "ip policy creations"
-  destination_ids = [ "ed_26rOygIJTeAVyFkkw0z9hqMSv0p" ]
+	resourceHTTPResponseBackends_createConfig = `resource "ngrok_http_response_backend" "example" {
+  body = "I'm a teapot"
+  description = "acme http response"
+  headers = {
+    Content-Type = "text/plain"
+  }
   metadata = "{\"environment\": \"staging\"}"
-  sources [ {
-    type = "ip_policy_created.v0"
-  } ]
+  status_code = 418
 }`
-	resourceEventSubscriptions_updateConfig = `resource "ngrok_event_subscription" "example" {
-  description = "IP Policy Creations"
+	resourceHTTPResponseBackends_updateConfig = `resource "ngrok_http_response_backend" "example" {
+  metadata = "{\"environment\": \"production\"}"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("event_subscriptions", &resource.Sweeper{
-		Name: "event_subscriptions",
+	resource.AddTestSweepers("http_response_backends", &resource.Sweeper{
+		Name: "http_response_backends",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -38,15 +39,15 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.EventSubscriptionsList(ctx, &restapi.Paging{})
+			list, _, err := conn.HTTPResponseBackendsList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.EventSubscriptions {
+			for _, item := range list.Backends {
 				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
 				if item.Description != "" && item.Metadata != "" {
-					_, _, err := conn.EventSubscriptionsDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.HTTPResponseBackendsDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -59,28 +60,28 @@ func init() {
 	})
 }
 
-func TestAccResourceEventSubscriptions(t *testing.T) {
-
+func TestAccResourceHTTPResponseBackends(t *testing.T) {
+	t.Skip("Headers need to be diff-suppressed / canonicalized, but https://github.com/hashicorp/terraform-plugin-sdk/issues/477#issuecomment-646351613")
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyEventSubscriptions,
+		CheckDestroy: testAccCheckDestroyHTTPResponseBackends,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceEventSubscriptions_createConfig,
+				Config: resourceHTTPResponseBackends_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateEventSubscriptions,
+				// 	testAccCheckCreateHTTPResponseBackends,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyEventSubscriptions(s *terraform.State) (err error) {
+func testAccCheckDestroyHTTPResponseBackends(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateEventSubscriptions(s *terraform.State) (err error) {
+func testAccCheckCreateHTTPResponseBackends(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }
