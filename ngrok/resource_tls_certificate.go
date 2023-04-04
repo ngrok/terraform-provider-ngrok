@@ -27,7 +27,7 @@ func resourceTLSCertificates() *schema.Resource {
 				Optional:         false,
 				Sensitive:        false,
 				ForceNew:         true,
-				Description:      "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/api#tls-certificates-pem).",
+				Description:      "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](/cloud-edge/endpoints#certificate-chains).",
 				DiffSuppressFunc: transform.DiffSuppressWhitespace,
 			},
 			"description": {
@@ -64,7 +64,7 @@ func resourceTLSCertificates() *schema.Resource {
 				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "private key for the TLS certificate, PEM-encoded. See [Private Keys](https://ngrok.com/docs/ngrok-link#tls-certificates-key).",
+				Description: "private key for the TLS certificate, PEM-encoded. See [Private Keys](/cloud-edge/endpoints#private-keys).",
 			},
 			"subject_alternative_names": {
 				Type:        schema.TypeSet,

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptrace"
 	"strings"
@@ -127,9 +126,9 @@ func (d Debug) printResponse(r *http.Response) {
 	}
 
 	if d.Stdout != nil && (r.StatusCode < 400 || d.Verbose) {
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 		r.Body.Close()
-		r.Body = ioutil.NopCloser(bytes.NewReader(body))
+		r.Body = io.NopCloser(bytes.NewReader(body))
 
 		var i interface{}
 		if err := json.Unmarshal(body, &i); err == nil {
@@ -153,7 +152,7 @@ func (eofReader) Read([]byte) (int, error) {
 
 func emptyHTTPResponse(req *http.Request) *http.Response {
 	return &http.Response{
-		Body:    ioutil.NopCloser(eofReader{}),
+		Body:    io.NopCloser(eofReader{}),
 		Header:  http.Header{},
 		Trailer: http.Header{},
 		Request: req,
@@ -173,7 +172,7 @@ func (d Debug) dryRunResponse(req *http.Request) (*http.Response, error) {
 	}
 	if req.Body != nil {
 		// if Verbose this causes the request to be printed to stderr
-		if _, err := ioutil.ReadAll(req.Body); err != nil {
+		if _, err := io.ReadAll(req.Body); err != nil {
 			return nil, err
 		}
 	}

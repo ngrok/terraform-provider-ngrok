@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -248,7 +247,7 @@ func errorFromResponse(res *http.Response) error {
 
 	var v Error
 
-	b, err := ioutil.ReadAll(res.Body)
+	b, err := io.ReadAll(res.Body)
 	if err != nil {
 		v.Msg = "incomplete error response"
 	} else if err = json.Unmarshal(b, &v); err != nil {

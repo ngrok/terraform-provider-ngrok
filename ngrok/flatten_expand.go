@@ -684,6 +684,8 @@ func flattenAPIKeyCreate(obj *restapi.APIKeyCreate) interface{} {
 	m := make(map[string]interface{})
 	m["description"] = obj.Description
 	m["metadata"] = obj.Metadata
+	m["owner_id"] = obj.OwnerID
+	m["owner_email"] = obj.OwnerEmail
 
 	return []interface{}{m}
 }
@@ -716,6 +718,12 @@ func expandAPIKeyCreate(in interface{}) *restapi.APIKeyCreate {
 	}
 	if v, ok := m["metadata"]; ok {
 		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
+	}
+	if v, ok := m["owner_email"]; ok {
+		obj.OwnerEmail = *expandString(v)
 	}
 	return &obj
 }
@@ -796,6 +804,7 @@ func flattenAPIKey(obj *restapi.APIKey) interface{} {
 	m["metadata"] = obj.Metadata
 	m["created_at"] = obj.CreatedAt
 	m["token"] = obj.Token
+	m["owner_id"] = obj.OwnerID
 
 	return []interface{}{m}
 }
@@ -840,6 +849,9 @@ func expandAPIKey(in interface{}) *restapi.APIKey {
 	}
 	if v, ok := m["token"]; ok {
 		obj.Token = expandString(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
 	}
 	return &obj
 }
@@ -904,6 +916,586 @@ func expandAPIKeyListSlice(in interface{}) *[]restapi.APIKeyList {
 	var out []restapi.APIKeyList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandAPIKeyList(v))
+	}
+	return &out
+}
+
+func flattenApplicationSession(obj *restapi.ApplicationSession) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["uri"] = obj.URI
+	m["public_url"] = obj.PublicURL
+	m["browser_session"] = flattenBrowserSession(&obj.BrowserSession)
+	m["application_user"] = flattenRef(obj.ApplicationUser)
+	m["created_at"] = obj.CreatedAt
+	m["last_active"] = obj.LastActive
+	m["expires_at"] = obj.ExpiresAt
+	m["endpoint"] = flattenRef(obj.Endpoint)
+	m["edge"] = flattenRef(obj.Edge)
+	m["route"] = flattenRef(obj.Route)
+
+	return []interface{}{m}
+}
+
+func flattenApplicationSessionSlice(objs *[]restapi.ApplicationSession) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenApplicationSession(&v))
+	}
+	return sl
+}
+
+func expandApplicationSession(in interface{}) *restapi.ApplicationSession {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ApplicationSession
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["public_url"]; ok {
+		obj.PublicURL = *expandString(v)
+	}
+	if v, ok := m["browser_session"]; ok {
+		obj.BrowserSession = *expandBrowserSession(v)
+	}
+	if v, ok := m["application_user"]; ok {
+		obj.ApplicationUser = expandRef(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["last_active"]; ok {
+		obj.LastActive = *expandString(v)
+	}
+	if v, ok := m["expires_at"]; ok {
+		obj.ExpiresAt = *expandString(v)
+	}
+	if v, ok := m["endpoint"]; ok {
+		obj.Endpoint = expandRef(v)
+	}
+	if v, ok := m["edge"]; ok {
+		obj.Edge = expandRef(v)
+	}
+	if v, ok := m["route"]; ok {
+		obj.Route = expandRef(v)
+	}
+	return &obj
+}
+
+func expandApplicationSessionSlice(in interface{}) *[]restapi.ApplicationSession {
+	var out []restapi.ApplicationSession
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandApplicationSession(v))
+	}
+	return &out
+}
+
+func flattenApplicationSessionList(obj *restapi.ApplicationSessionList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["application_sessions"] = flattenApplicationSessionSlice(&obj.ApplicationSessions)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenApplicationSessionListSlice(objs *[]restapi.ApplicationSessionList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenApplicationSessionList(&v))
+	}
+	return sl
+}
+
+func expandApplicationSessionList(in interface{}) *restapi.ApplicationSessionList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ApplicationSessionList
+	if v, ok := m["application_sessions"]; ok {
+		obj.ApplicationSessions = *expandApplicationSessionSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandApplicationSessionListSlice(in interface{}) *[]restapi.ApplicationSessionList {
+	var out []restapi.ApplicationSessionList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandApplicationSessionList(v))
+	}
+	return &out
+}
+
+func flattenBrowserSession(obj *restapi.BrowserSession) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["user_agent"] = flattenUserAgent(&obj.UserAgent)
+	m["ip_address"] = obj.IPAddress
+	m["location"] = flattenLocation(obj.Location)
+
+	return []interface{}{m}
+}
+
+func flattenBrowserSessionSlice(objs *[]restapi.BrowserSession) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenBrowserSession(&v))
+	}
+	return sl
+}
+
+func expandBrowserSession(in interface{}) *restapi.BrowserSession {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.BrowserSession
+	if v, ok := m["user_agent"]; ok {
+		obj.UserAgent = *expandUserAgent(v)
+	}
+	if v, ok := m["ip_address"]; ok {
+		obj.IPAddress = *expandString(v)
+	}
+	if v, ok := m["location"]; ok {
+		obj.Location = expandLocation(v)
+	}
+	return &obj
+}
+
+func expandBrowserSessionSlice(in interface{}) *[]restapi.BrowserSession {
+	var out []restapi.BrowserSession
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandBrowserSession(v))
+	}
+	return &out
+}
+
+func flattenUserAgent(obj *restapi.UserAgent) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["raw"] = obj.Raw
+	m["browser_name"] = obj.BrowserName
+	m["browser_version"] = obj.BrowserVersion
+	m["device_type"] = obj.DeviceType
+	m["os_name"] = obj.OSName
+	m["os_version"] = obj.OSVersion
+
+	return []interface{}{m}
+}
+
+func flattenUserAgentSlice(objs *[]restapi.UserAgent) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenUserAgent(&v))
+	}
+	return sl
+}
+
+func expandUserAgent(in interface{}) *restapi.UserAgent {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.UserAgent
+	if v, ok := m["raw"]; ok {
+		obj.Raw = *expandString(v)
+	}
+	if v, ok := m["browser_name"]; ok {
+		obj.BrowserName = *expandString(v)
+	}
+	if v, ok := m["browser_version"]; ok {
+		obj.BrowserVersion = *expandString(v)
+	}
+	if v, ok := m["device_type"]; ok {
+		obj.DeviceType = *expandString(v)
+	}
+	if v, ok := m["os_name"]; ok {
+		obj.OSName = *expandString(v)
+	}
+	if v, ok := m["os_version"]; ok {
+		obj.OSVersion = *expandString(v)
+	}
+	return &obj
+}
+
+func expandUserAgentSlice(in interface{}) *[]restapi.UserAgent {
+	var out []restapi.UserAgent
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandUserAgent(v))
+	}
+	return &out
+}
+
+func flattenLocation(obj *restapi.Location) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["country_code"] = obj.CountryCode
+	m["latitude"] = obj.Latitude
+	m["longitude"] = obj.Longitude
+	m["lat_long_radius_km"] = obj.LatLongRadiusKm
+
+	return []interface{}{m}
+}
+
+func flattenLocationSlice(objs *[]restapi.Location) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenLocation(&v))
+	}
+	return sl
+}
+
+func expandLocation(in interface{}) *restapi.Location {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.Location
+	if v, ok := m["country_code"]; ok {
+		obj.CountryCode = expandString(v)
+	}
+	if v, ok := m["latitude"]; ok {
+		obj.Latitude = expandFloat64(v)
+	}
+	if v, ok := m["longitude"]; ok {
+		obj.Longitude = expandFloat64(v)
+	}
+	if v, ok := m["lat_long_radius_km"]; ok {
+		obj.LatLongRadiusKm = expandUint64(v)
+	}
+	return &obj
+}
+
+func expandLocationSlice(in interface{}) *[]restapi.Location {
+	var out []restapi.Location
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandLocation(v))
+	}
+	return &out
+}
+
+func flattenApplicationUser(obj *restapi.ApplicationUser) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["uri"] = obj.URI
+	m["identity_provider"] = flattenIdentityProvider(&obj.IdentityProvider)
+	m["provider_user_id"] = obj.ProviderUserID
+	m["username"] = obj.Username
+	m["email"] = obj.Email
+	m["name"] = obj.Name
+	m["created_at"] = obj.CreatedAt
+	m["last_active"] = obj.LastActive
+	m["last_login"] = obj.LastLogin
+
+	return []interface{}{m}
+}
+
+func flattenApplicationUserSlice(objs *[]restapi.ApplicationUser) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenApplicationUser(&v))
+	}
+	return sl
+}
+
+func expandApplicationUser(in interface{}) *restapi.ApplicationUser {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ApplicationUser
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["identity_provider"]; ok {
+		obj.IdentityProvider = *expandIdentityProvider(v)
+	}
+	if v, ok := m["provider_user_id"]; ok {
+		obj.ProviderUserID = *expandString(v)
+	}
+	if v, ok := m["username"]; ok {
+		obj.Username = *expandString(v)
+	}
+	if v, ok := m["email"]; ok {
+		obj.Email = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["last_active"]; ok {
+		obj.LastActive = *expandString(v)
+	}
+	if v, ok := m["last_login"]; ok {
+		obj.LastLogin = *expandString(v)
+	}
+	return &obj
+}
+
+func expandApplicationUserSlice(in interface{}) *[]restapi.ApplicationUser {
+	var out []restapi.ApplicationUser
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandApplicationUser(v))
+	}
+	return &out
+}
+
+func flattenApplicationUserList(obj *restapi.ApplicationUserList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["application_users"] = flattenApplicationUserSlice(&obj.ApplicationUsers)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenApplicationUserListSlice(objs *[]restapi.ApplicationUserList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenApplicationUserList(&v))
+	}
+	return sl
+}
+
+func expandApplicationUserList(in interface{}) *restapi.ApplicationUserList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ApplicationUserList
+	if v, ok := m["application_users"]; ok {
+		obj.ApplicationUsers = *expandApplicationUserSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandApplicationUserListSlice(in interface{}) *[]restapi.ApplicationUserList {
+	var out []restapi.ApplicationUserList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandApplicationUserList(v))
+	}
+	return &out
+}
+
+func flattenIdentityProvider(obj *restapi.IdentityProvider) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["url"] = obj.URL
+
+	return []interface{}{m}
+}
+
+func flattenIdentityProviderSlice(objs *[]restapi.IdentityProvider) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenIdentityProvider(&v))
+	}
+	return sl
+}
+
+func expandIdentityProvider(in interface{}) *restapi.IdentityProvider {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.IdentityProvider
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["url"]; ok {
+		obj.URL = *expandString(v)
+	}
+	return &obj
+}
+
+func expandIdentityProviderSlice(in interface{}) *[]restapi.IdentityProvider {
+	var out []restapi.IdentityProvider
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandIdentityProvider(v))
+	}
+	return &out
+}
+
+func flattenAuditEventDashLogin(obj *restapi.AuditEventDashLogin) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["account_id"] = obj.AccountId
+	m["user_id"] = obj.UserId
+	m["remote_addr"] = obj.RemoteAddr
+	m["email"] = obj.Email
+
+	return []interface{}{m}
+}
+
+func flattenAuditEventDashLoginSlice(objs *[]restapi.AuditEventDashLogin) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAuditEventDashLogin(&v))
+	}
+	return sl
+}
+
+func expandAuditEventDashLogin(in interface{}) *restapi.AuditEventDashLogin {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AuditEventDashLogin
+	if v, ok := m["account_id"]; ok {
+		obj.AccountId = *expandString(v)
+	}
+	if v, ok := m["user_id"]; ok {
+		obj.UserId = *expandString(v)
+	}
+	if v, ok := m["remote_addr"]; ok {
+		obj.RemoteAddr = *expandString(v)
+	}
+	if v, ok := m["email"]; ok {
+		obj.Email = *expandString(v)
+	}
+	return &obj
+}
+
+func expandAuditEventDashLoginSlice(in interface{}) *[]restapi.AuditEventDashLogin {
+	var out []restapi.AuditEventDashLogin
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAuditEventDashLogin(v))
 	}
 	return &out
 }
@@ -2461,6 +3053,8 @@ func flattenCredentialCreate(obj *restapi.CredentialCreate) interface{} {
 	m["description"] = obj.Description
 	m["metadata"] = obj.Metadata
 	m["acl"] = obj.ACL
+	m["owner_id"] = obj.OwnerID
+	m["owner_email"] = obj.OwnerEmail
 
 	return []interface{}{m}
 }
@@ -2496,6 +3090,12 @@ func expandCredentialCreate(in interface{}) *restapi.CredentialCreate {
 	}
 	if v, ok := m["acl"]; ok {
 		obj.ACL = *expandStringSlice(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
+	}
+	if v, ok := m["owner_email"]; ok {
+		obj.OwnerEmail = *expandString(v)
 	}
 	return &obj
 }
@@ -2581,6 +3181,7 @@ func flattenCredential(obj *restapi.Credential) interface{} {
 	m["metadata"] = obj.Metadata
 	m["token"] = obj.Token
 	m["acl"] = obj.ACL
+	m["owner_id"] = obj.OwnerID
 
 	return []interface{}{m}
 }
@@ -2628,6 +3229,9 @@ func expandCredential(in interface{}) *restapi.Credential {
 	}
 	if v, ok := m["acl"]; ok {
 		obj.ACL = *expandStringSlice(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
 	}
 	return &obj
 }
@@ -2718,7 +3322,6 @@ func flattenEndpointConfiguration(obj *restapi.EndpointConfiguration) interface{
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["webhook_validation"] = flattenEndpointWebhookValidation(obj.WebhookValidation)
 	m["oauth"] = flattenEndpointOAuth(obj.OAuth)
-	m["logging"] = flattenEndpointLogging(obj.Logging)
 	m["saml"] = flattenEndpointSAML(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["backend"] = flattenEndpointBackend(obj.Backend)
@@ -2796,9 +3399,6 @@ func expandEndpointConfiguration(in interface{}) *restapi.EndpointConfiguration 
 	}
 	if v, ok := m["oauth"]; ok {
 		obj.OAuth = expandEndpointOAuth(v)
-	}
-	if v, ok := m["logging"]; ok {
-		obj.Logging = expandEndpointLogging(v)
 	}
 	if v, ok := m["saml"]; ok {
 		obj.SAML = expandEndpointSAML(v)
@@ -2895,7 +3495,6 @@ func flattenEndpointConfigurationUpdate(obj *restapi.EndpointConfigurationUpdate
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["webhook_validation"] = flattenEndpointWebhookValidation(obj.WebhookValidation)
 	m["oauth"] = flattenEndpointOAuth(obj.OAuth)
-	m["logging"] = flattenEndpointLoggingMutate(obj.Logging)
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
@@ -2965,9 +3564,6 @@ func expandEndpointConfigurationUpdate(in interface{}) *restapi.EndpointConfigur
 	if v, ok := m["oauth"]; ok {
 		obj.OAuth = expandEndpointOAuth(v)
 	}
-	if v, ok := m["logging"]; ok {
-		obj.Logging = expandEndpointLoggingMutate(v)
-	}
 	if v, ok := m["saml"]; ok {
 		obj.SAML = expandEndpointSAMLMutate(v)
 	}
@@ -3007,7 +3603,6 @@ func flattenEndpointConfigurationCreate(obj *restapi.EndpointConfigurationCreate
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["webhook_validation"] = flattenEndpointWebhookValidation(obj.WebhookValidation)
 	m["oauth"] = flattenEndpointOAuth(obj.OAuth)
-	m["logging"] = flattenEndpointLoggingMutate(obj.Logging)
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
@@ -3076,9 +3671,6 @@ func expandEndpointConfigurationCreate(in interface{}) *restapi.EndpointConfigur
 	}
 	if v, ok := m["oauth"]; ok {
 		obj.OAuth = expandEndpointOAuth(v)
-	}
-	if v, ok := m["logging"]; ok {
-		obj.Logging = expandEndpointLoggingMutate(v)
 	}
 	if v, ok := m["saml"]; ok {
 		obj.SAML = expandEndpointSAMLMutate(v)
@@ -3476,110 +4068,6 @@ func expandEndpointBasicAuthSlice(in interface{}) *[]restapi.EndpointBasicAuth {
 	return &out
 }
 
-func flattenEndpointLogging(obj *restapi.EndpointLogging) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["enabled"] = obj.Enabled
-	m["event_streams"] = flattenRefSlice(&obj.EventStreams)
-
-	return []interface{}{m}
-}
-
-func flattenEndpointLoggingSlice(objs *[]restapi.EndpointLogging) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEndpointLogging(&v))
-	}
-	return sl
-}
-
-func expandEndpointLogging(in interface{}) *restapi.EndpointLogging {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EndpointLogging
-	if v, ok := m["enabled"]; ok {
-		obj.Enabled = expandBool(v)
-	}
-	if v, ok := m["event_streams"]; ok {
-		obj.EventStreams = *expandRefSlice(v)
-	}
-	return &obj
-}
-
-func expandEndpointLoggingSlice(in interface{}) *[]restapi.EndpointLogging {
-	var out []restapi.EndpointLogging
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEndpointLogging(v))
-	}
-	return &out
-}
-
-func flattenEndpointLoggingMutate(obj *restapi.EndpointLoggingMutate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["enabled"] = obj.Enabled
-	m["event_stream_ids"] = obj.EventStreamIDs
-
-	return []interface{}{m}
-}
-
-func flattenEndpointLoggingMutateSlice(objs *[]restapi.EndpointLoggingMutate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEndpointLoggingMutate(&v))
-	}
-	return sl
-}
-
-func expandEndpointLoggingMutate(in interface{}) *restapi.EndpointLoggingMutate {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EndpointLoggingMutate
-	if v, ok := m["enabled"]; ok {
-		obj.Enabled = expandBool(v)
-	}
-	if v, ok := m["event_stream_ids"]; ok {
-		obj.EventStreamIDs = *expandStringSlice(v)
-	}
-	return &obj
-}
-
-func expandEndpointLoggingMutateSlice(in interface{}) *[]restapi.EndpointLoggingMutate {
-	var out []restapi.EndpointLoggingMutate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEndpointLoggingMutate(v))
-	}
-	return &out
-}
-
 func flattenEndpointRequestHeaders(obj *restapi.EndpointRequestHeaders) interface{} {
 	if obj == nil {
 		return nil
@@ -3946,6 +4434,10 @@ func flattenEndpointOAuthProvider(obj *restapi.EndpointOAuthProvider) interface{
 	m["facebook"] = flattenEndpointOAuthFacebook(obj.Facebook)
 	m["microsoft"] = flattenEndpointOAuthMicrosoft(obj.Microsoft)
 	m["google"] = flattenEndpointOAuthGoogle(obj.Google)
+	m["linkedin"] = flattenEndpointOAuthLinkedIn(obj.Linkedin)
+	m["gitlab"] = flattenEndpointOAuthGitLab(obj.Gitlab)
+	m["twitch"] = flattenEndpointOAuthTwitch(obj.Twitch)
+	m["amazon"] = flattenEndpointOAuthAmazon(obj.Amazon)
 
 	return []interface{}{m}
 }
@@ -3984,6 +4476,18 @@ func expandEndpointOAuthProvider(in interface{}) *restapi.EndpointOAuthProvider 
 	}
 	if v, ok := m["google"]; ok {
 		obj.Google = expandEndpointOAuthGoogle(v)
+	}
+	if v, ok := m["linkedin"]; ok {
+		obj.Linkedin = expandEndpointOAuthLinkedIn(v)
+	}
+	if v, ok := m["gitlab"]; ok {
+		obj.Gitlab = expandEndpointOAuthGitLab(v)
+	}
+	if v, ok := m["twitch"]; ok {
+		obj.Twitch = expandEndpointOAuthTwitch(v)
+	}
+	if v, ok := m["amazon"]; ok {
+		obj.Amazon = expandEndpointOAuthAmazon(v)
 	}
 	return &obj
 }
@@ -4043,19 +4547,19 @@ func expandEndpointOAuthGitHub(in interface{}) *restapi.EndpointOAuthGitHub {
 		obj.ClientSecret = expandString(v)
 	}
 	if v, ok := m["scopes"]; ok {
-		obj.Scopes = *expandStringSlice(v)
+		obj.Scopes = expandStringSlice(v)
 	}
 	if v, ok := m["email_addresses"]; ok {
-		obj.EmailAddresses = *expandStringSlice(v)
+		obj.EmailAddresses = expandStringSlice(v)
 	}
 	if v, ok := m["email_domains"]; ok {
-		obj.EmailDomains = *expandStringSlice(v)
+		obj.EmailDomains = expandStringSlice(v)
 	}
 	if v, ok := m["teams"]; ok {
-		obj.Teams = *expandStringSlice(v)
+		obj.Teams = expandStringSlice(v)
 	}
 	if v, ok := m["organizations"]; ok {
-		obj.Organizations = *expandStringSlice(v)
+		obj.Organizations = expandStringSlice(v)
 	}
 	return &obj
 }
@@ -4256,6 +4760,262 @@ func expandEndpointOAuthGoogleSlice(in interface{}) *[]restapi.EndpointOAuthGoog
 	var out []restapi.EndpointOAuthGoogle
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEndpointOAuthGoogle(v))
+	}
+	return &out
+}
+
+func flattenEndpointOAuthLinkedIn(obj *restapi.EndpointOAuthLinkedIn) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
+	m["scopes"] = obj.Scopes
+	m["email_addresses"] = obj.EmailAddresses
+	m["email_domains"] = obj.EmailDomains
+
+	return []interface{}{m}
+}
+
+func flattenEndpointOAuthLinkedInSlice(objs *[]restapi.EndpointOAuthLinkedIn) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointOAuthLinkedIn(&v))
+	}
+	return sl
+}
+
+func expandEndpointOAuthLinkedIn(in interface{}) *restapi.EndpointOAuthLinkedIn {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointOAuthLinkedIn
+	if v, ok := m["client_id"]; ok {
+		obj.ClientID = expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = expandString(v)
+	}
+	if v, ok := m["scopes"]; ok {
+		obj.Scopes = *expandStringSlice(v)
+	}
+	if v, ok := m["email_addresses"]; ok {
+		obj.EmailAddresses = *expandStringSlice(v)
+	}
+	if v, ok := m["email_domains"]; ok {
+		obj.EmailDomains = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointOAuthLinkedInSlice(in interface{}) *[]restapi.EndpointOAuthLinkedIn {
+	var out []restapi.EndpointOAuthLinkedIn
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointOAuthLinkedIn(v))
+	}
+	return &out
+}
+
+func flattenEndpointOAuthGitLab(obj *restapi.EndpointOAuthGitLab) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
+	m["scopes"] = obj.Scopes
+	m["email_addresses"] = obj.EmailAddresses
+	m["email_domains"] = obj.EmailDomains
+
+	return []interface{}{m}
+}
+
+func flattenEndpointOAuthGitLabSlice(objs *[]restapi.EndpointOAuthGitLab) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointOAuthGitLab(&v))
+	}
+	return sl
+}
+
+func expandEndpointOAuthGitLab(in interface{}) *restapi.EndpointOAuthGitLab {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointOAuthGitLab
+	if v, ok := m["client_id"]; ok {
+		obj.ClientID = expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = expandString(v)
+	}
+	if v, ok := m["scopes"]; ok {
+		obj.Scopes = *expandStringSlice(v)
+	}
+	if v, ok := m["email_addresses"]; ok {
+		obj.EmailAddresses = *expandStringSlice(v)
+	}
+	if v, ok := m["email_domains"]; ok {
+		obj.EmailDomains = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointOAuthGitLabSlice(in interface{}) *[]restapi.EndpointOAuthGitLab {
+	var out []restapi.EndpointOAuthGitLab
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointOAuthGitLab(v))
+	}
+	return &out
+}
+
+func flattenEndpointOAuthTwitch(obj *restapi.EndpointOAuthTwitch) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
+	m["scopes"] = obj.Scopes
+	m["email_addresses"] = obj.EmailAddresses
+	m["email_domains"] = obj.EmailDomains
+
+	return []interface{}{m}
+}
+
+func flattenEndpointOAuthTwitchSlice(objs *[]restapi.EndpointOAuthTwitch) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointOAuthTwitch(&v))
+	}
+	return sl
+}
+
+func expandEndpointOAuthTwitch(in interface{}) *restapi.EndpointOAuthTwitch {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointOAuthTwitch
+	if v, ok := m["client_id"]; ok {
+		obj.ClientID = expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = expandString(v)
+	}
+	if v, ok := m["scopes"]; ok {
+		obj.Scopes = *expandStringSlice(v)
+	}
+	if v, ok := m["email_addresses"]; ok {
+		obj.EmailAddresses = *expandStringSlice(v)
+	}
+	if v, ok := m["email_domains"]; ok {
+		obj.EmailDomains = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointOAuthTwitchSlice(in interface{}) *[]restapi.EndpointOAuthTwitch {
+	var out []restapi.EndpointOAuthTwitch
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointOAuthTwitch(v))
+	}
+	return &out
+}
+
+func flattenEndpointOAuthAmazon(obj *restapi.EndpointOAuthAmazon) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["client_id"] = obj.ClientID
+	m["client_secret"] = obj.ClientSecret
+	m["scopes"] = obj.Scopes
+	m["email_addresses"] = obj.EmailAddresses
+	m["email_domains"] = obj.EmailDomains
+
+	return []interface{}{m}
+}
+
+func flattenEndpointOAuthAmazonSlice(objs *[]restapi.EndpointOAuthAmazon) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointOAuthAmazon(&v))
+	}
+	return sl
+}
+
+func expandEndpointOAuthAmazon(in interface{}) *restapi.EndpointOAuthAmazon {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointOAuthAmazon
+	if v, ok := m["client_id"]; ok {
+		obj.ClientID = expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = expandString(v)
+	}
+	if v, ok := m["scopes"]; ok {
+		obj.Scopes = *expandStringSlice(v)
+	}
+	if v, ok := m["email_addresses"]; ok {
+		obj.EmailAddresses = *expandStringSlice(v)
+	}
+	if v, ok := m["email_domains"]; ok {
+		obj.EmailDomains = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointOAuthAmazonSlice(in interface{}) *[]restapi.EndpointOAuthAmazon {
+	var out []restapi.EndpointOAuthAmazon
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointOAuthAmazon(v))
 	}
 	return &out
 }
@@ -6928,278 +7688,6 @@ func expandEndpointListSlice(in interface{}) *[]restapi.EndpointList {
 	return &out
 }
 
-func flattenEventStreamCreate(obj *restapi.EventStreamCreate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["fields"] = obj.Fields
-	m["event_type"] = obj.EventType
-	m["destination_ids"] = obj.DestinationIDs
-	m["sampling_rate"] = obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenEventStreamCreateSlice(objs *[]restapi.EventStreamCreate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEventStreamCreate(&v))
-	}
-	return sl
-}
-
-func expandEventStreamCreate(in interface{}) *restapi.EventStreamCreate {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EventStreamCreate
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = *expandStringSlice(v)
-	}
-	if v, ok := m["event_type"]; ok {
-		obj.EventType = *expandString(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = *expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = *expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandEventStreamCreateSlice(in interface{}) *[]restapi.EventStreamCreate {
-	var out []restapi.EventStreamCreate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventStreamCreate(v))
-	}
-	return &out
-}
-
-func flattenEventStreamUpdate(obj *restapi.EventStreamUpdate) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["id"] = obj.ID
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["fields"] = obj.Fields
-	m["destination_ids"] = obj.DestinationIDs
-	m["sampling_rate"] = obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenEventStreamUpdateSlice(objs *[]restapi.EventStreamUpdate) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEventStreamUpdate(&v))
-	}
-	return sl
-}
-
-func expandEventStreamUpdate(in interface{}) *restapi.EventStreamUpdate {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EventStreamUpdate
-	if v, ok := m["id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = expandStringSlice(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandEventStreamUpdateSlice(in interface{}) *[]restapi.EventStreamUpdate {
-	var out []restapi.EventStreamUpdate
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventStreamUpdate(v))
-	}
-	return &out
-}
-
-func flattenEventStreamList(obj *restapi.EventStreamList) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["event_streams"] = flattenEventStreamSlice(&obj.EventStreams)
-	m["uri"] = obj.URI
-	m["next_page_uri"] = obj.NextPageURI
-
-	return []interface{}{m}
-}
-
-func flattenEventStreamListSlice(objs *[]restapi.EventStreamList) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEventStreamList(&v))
-	}
-	return sl
-}
-
-func expandEventStreamList(in interface{}) *restapi.EventStreamList {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EventStreamList
-	if v, ok := m["event_streams"]; ok {
-		obj.EventStreams = *expandEventStreamSlice(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	if v, ok := m["next_page_uri"]; ok {
-		obj.NextPageURI = expandString(v)
-	}
-	return &obj
-}
-
-func expandEventStreamListSlice(in interface{}) *[]restapi.EventStreamList {
-	var out []restapi.EventStreamList
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventStreamList(v))
-	}
-	return &out
-}
-
-func flattenEventStream(obj *restapi.EventStream) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["id"] = obj.ID
-	m["uri"] = obj.URI
-	m["created_at"] = obj.CreatedAt
-	m["metadata"] = obj.Metadata
-	m["description"] = obj.Description
-	m["fields"] = obj.Fields
-	m["event_type"] = obj.EventType
-	m["destination_ids"] = obj.DestinationIDs
-	m["sampling_rate"] = obj.SamplingRate
-
-	return []interface{}{m}
-}
-
-func flattenEventStreamSlice(objs *[]restapi.EventStream) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEventStream(&v))
-	}
-	return sl
-}
-
-func expandEventStream(in interface{}) *restapi.EventStream {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EventStream
-	if v, ok := m["id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["uri"]; ok {
-		obj.URI = *expandString(v)
-	}
-	if v, ok := m["created_at"]; ok {
-		obj.CreatedAt = *expandString(v)
-	}
-	if v, ok := m["metadata"]; ok {
-		obj.Metadata = *expandString(v)
-	}
-	if v, ok := m["description"]; ok {
-		obj.Description = *expandString(v)
-	}
-	if v, ok := m["fields"]; ok {
-		obj.Fields = *expandStringSlice(v)
-	}
-	if v, ok := m["event_type"]; ok {
-		obj.EventType = *expandString(v)
-	}
-	if v, ok := m["destination_ids"]; ok {
-		obj.DestinationIDs = *expandStringSlice(v)
-	}
-	if v, ok := m["sampling_rate"]; ok {
-		obj.SamplingRate = *expandFloat64(v)
-	}
-	return &obj
-}
-
-func expandEventStreamSlice(in interface{}) *[]restapi.EventStream {
-	var out []restapi.EventStream
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEventStream(v))
-	}
-	return &out
-}
-
 func flattenEventDestinationCreate(obj *restapi.EventDestinationCreate) interface{} {
 	if obj == nil {
 		return nil
@@ -7470,6 +7958,7 @@ func flattenEventTarget(obj *restapi.EventTarget) interface{} {
 	m["kinesis"] = flattenEventTargetKinesis(obj.Kinesis)
 	m["cloudwatch_logs"] = flattenEventTargetCloudwatchLogs(obj.CloudwatchLogs)
 	m["debug"] = flattenEventTargetDebug(obj.Debug)
+	m["datadog"] = flattenEventTargetDatadog(obj.Datadog)
 
 	return []interface{}{m}
 }
@@ -7508,6 +7997,9 @@ func expandEventTarget(in interface{}) *restapi.EventTarget {
 	}
 	if v, ok := m["debug"]; ok {
 		obj.Debug = expandEventTargetDebug(v)
+	}
+	if v, ok := m["datadog"]; ok {
+		obj.Datadog = expandEventTargetDatadog(v)
 	}
 	return &obj
 }
@@ -7792,6 +8284,66 @@ func expandEventTargetDebugSlice(in interface{}) *[]restapi.EventTargetDebug {
 	var out []restapi.EventTargetDebug
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEventTargetDebug(v))
+	}
+	return &out
+}
+
+func flattenEventTargetDatadog(obj *restapi.EventTargetDatadog) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["api_key"] = obj.ApiKey
+	m["ddtags"] = obj.Ddtags
+	m["service"] = obj.Service
+	m["ddsite"] = obj.Ddsite
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetDatadogSlice(objs *[]restapi.EventTargetDatadog) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetDatadog(&v))
+	}
+	return sl
+}
+
+func expandEventTargetDatadog(in interface{}) *restapi.EventTargetDatadog {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetDatadog
+	if v, ok := m["api_key"]; ok {
+		obj.ApiKey = expandString(v)
+	}
+	if v, ok := m["ddtags"]; ok {
+		obj.Ddtags = expandString(v)
+	}
+	if v, ok := m["service"]; ok {
+		obj.Service = expandString(v)
+	}
+	if v, ok := m["ddsite"]; ok {
+		obj.Ddsite = expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetDatadogSlice(in interface{}) *[]restapi.EventTargetDatadog {
+	var out []restapi.EventTargetDatadog
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetDatadog(v))
 	}
 	return &out
 }
@@ -9388,58 +9940,6 @@ func expandIPRestrictionListSlice(in interface{}) *[]restapi.IPRestrictionList {
 	return &out
 }
 
-func flattenEndpointLoggingReplace(obj *restapi.EndpointLoggingReplace) interface{} {
-	if obj == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["id"] = obj.ID
-	m["module"] = flattenEndpointLoggingMutate(&obj.Module)
-
-	return []interface{}{m}
-}
-
-func flattenEndpointLoggingReplaceSlice(objs *[]restapi.EndpointLoggingReplace) (sl []interface{}) {
-	if objs == nil {
-		return nil
-	}
-
-	for _, v := range *objs {
-		sl = append(sl, flattenEndpointLoggingReplace(&v))
-	}
-	return sl
-}
-
-func expandEndpointLoggingReplace(in interface{}) *restapi.EndpointLoggingReplace {
-	if in == nil {
-		return nil
-	}
-	v := in.(*schema.Set)
-
-	if v.Len() == 0 {
-		return nil
-	}
-
-	m := v.List()[0].(map[string]interface{})
-	var obj restapi.EndpointLoggingReplace
-	if v, ok := m["id"]; ok {
-		obj.ID = *expandString(v)
-	}
-	if v, ok := m["module"]; ok {
-		obj.Module = *expandEndpointLoggingMutate(v)
-	}
-	return &obj
-}
-
-func expandEndpointLoggingReplaceSlice(in interface{}) *[]restapi.EndpointLoggingReplace {
-	var out []restapi.EndpointLoggingReplace
-	for _, v := range in.([]interface{}) {
-		out = append(out, *expandEndpointLoggingReplace(v))
-	}
-	return &out
-}
-
 func flattenEndpointBasicAuthReplace(obj *restapi.EndpointBasicAuthReplace) interface{} {
 	if obj == nil {
 		return nil
@@ -10375,6 +10875,7 @@ func flattenReservedDomainCreate(obj *restapi.ReservedDomainCreate) interface{} 
 
 	m := make(map[string]interface{})
 	m["name"] = obj.Name
+	m["domain"] = obj.Domain
 	m["region"] = obj.Region
 	m["description"] = obj.Description
 	m["metadata"] = obj.Metadata
@@ -10411,6 +10912,9 @@ func expandReservedDomainCreate(in interface{}) *restapi.ReservedDomainCreate {
 	var obj restapi.ReservedDomainCreate
 	if v, ok := m["name"]; ok {
 		obj.Name = *expandString(v)
+	}
+	if v, ok := m["domain"]; ok {
+		obj.Domain = *expandString(v)
 	}
 	if v, ok := m["region"]; ok {
 		obj.Region = *expandString(v)
@@ -10457,6 +10961,7 @@ func flattenReservedDomainUpdate(obj *restapi.ReservedDomainUpdate) interface{} 
 	m["https_endpoint_configuration_id"] = obj.HTTPSEndpointConfigurationID
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
+	m["region"] = obj.Region
 
 	return []interface{}{m}
 }
@@ -10504,6 +11009,9 @@ func expandReservedDomainUpdate(in interface{}) *restapi.ReservedDomainUpdate {
 	}
 	if v, ok := m["certificate_management_policy"]; ok {
 		obj.CertificateManagementPolicy = expandReservedDomainCertPolicy(v)
+	}
+	if v, ok := m["region"]; ok {
+		obj.Region = expandString(v)
 	}
 	return &obj
 }
@@ -11146,6 +11654,8 @@ func flattenSSHCredentialCreate(obj *restapi.SSHCredentialCreate) interface{} {
 	m["metadata"] = obj.Metadata
 	m["acl"] = obj.ACL
 	m["public_key"] = obj.PublicKey
+	m["owner_id"] = obj.OwnerID
+	m["owner_email"] = obj.OwnerEmail
 
 	return []interface{}{m}
 }
@@ -11184,6 +11694,12 @@ func expandSSHCredentialCreate(in interface{}) *restapi.SSHCredentialCreate {
 	}
 	if v, ok := m["public_key"]; ok {
 		obj.PublicKey = *expandString(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
+	}
+	if v, ok := m["owner_email"]; ok {
+		obj.OwnerEmail = *expandString(v)
 	}
 	return &obj
 }
@@ -11269,6 +11785,7 @@ func flattenSSHCredential(obj *restapi.SSHCredential) interface{} {
 	m["metadata"] = obj.Metadata
 	m["public_key"] = obj.PublicKey
 	m["acl"] = obj.ACL
+	m["owner_id"] = obj.OwnerID
 
 	return []interface{}{m}
 }
@@ -11316,6 +11833,9 @@ func expandSSHCredential(in interface{}) *restapi.SSHCredential {
 	}
 	if v, ok := m["acl"]; ok {
 		obj.ACL = *expandStringSlice(v)
+	}
+	if v, ok := m["owner_id"]; ok {
+		obj.OwnerID = expandString(v)
 	}
 	return &obj
 }
@@ -12565,7 +13085,7 @@ func expandTunnel(in interface{}) *restapi.Tunnel {
 		obj.Endpoint = expandRef(v)
 	}
 	if v, ok := m["labels"]; ok {
-		obj.Labels = *expandStringMap(v)
+		obj.Labels = expandStringMap(v)
 	}
 	if v, ok := m["backends"]; ok {
 		obj.Backends = expandRefSlice(v)

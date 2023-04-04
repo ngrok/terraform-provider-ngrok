@@ -15,7 +15,6 @@ import (
 
 var (
 	resourceIPPolicies_createConfig = `resource "ngrok_ip_policy" "example" {
-  action = "allow"
   description = "API Outbound Gateway"
 }`
 	resourceIPPolicies_updateConfig = `resource "ngrok_ip_policy" "example" {

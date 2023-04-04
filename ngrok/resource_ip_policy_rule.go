@@ -21,9 +21,9 @@ func resourceIPPolicyRules() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"action": {
 				Type:        schema.TypeString,
-				Required:    false,
+				Required:    true,
 				Computed:    false,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "the action to apply to the policy rule, either `allow` or `deny`",

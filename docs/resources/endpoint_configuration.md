@@ -41,7 +41,6 @@ resource "ngrok_endpoint_configuration" "example" {
 - **description** (String) human-readable description of what this endpoint configuration will be do when applied or what traffic it will be applied to. Optional, max 255 bytes
 - **id** (String) unique identifier of this endpoint configuration
 - **ip_policy** (Block Set) ip policy module configuration or `null` (see [below for nested schema](#nestedblock--ip_policy))
-- **logging** (Block Set) logging module configuration or `null` (see [below for nested schema](#nestedblock--logging))
 - **metadata** (String) arbitrary user-defined machine-readable data of this endpoint configuration. Optional, max 4096 bytes.
 - **mutual_tls** (Block Set) mutual TLS module configuration or `null` (see [below for nested schema](#nestedblock--mutual_tls))
 - **oauth** (Block Set) oauth module configuration or `null` (see [below for nested schema](#nestedblock--oauth))
@@ -109,28 +108,10 @@ Optional:
 Optional:
 
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
-- **ip_policies** (Block List) (see [below for nested schema](#nestedblock--ip_policy--ip_policies))
+- **ip_policies** (Block List) list of all IP policies that will be used to check if a source IP is allowed access to the endpoint (see [below for nested schema](#nestedblock--ip_policy--ip_policies))
 
 <a id="nestedblock--ip_policy--ip_policies"></a>
 ### Nested Schema for `ip_policy.ip_policies`
-
-Optional:
-
-- **id** (String) a resource identifier
-- **uri** (String) a uri for locating a resource
-
-
-
-<a id="nestedblock--logging"></a>
-### Nested Schema for `logging`
-
-Optional:
-
-- **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
-- **event_streams** (Block List) list of all EventStreams that will be used to configure and export this endpoint's logs (see [below for nested schema](#nestedblock--logging--event_streams))
-
-<a id="nestedblock--logging--event_streams"></a>
-### Nested Schema for `logging.event_streams`
 
 Optional:
 
@@ -175,10 +156,26 @@ Optional:
 
 Optional:
 
+- **amazon** (Block Set) configuration for using amazon as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--amazon))
 - **facebook** (Block Set) configuration for using facebook as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--facebook))
 - **github** (Block Set) configuration for using github as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--github))
+- **gitlab** (Block Set) configuration for using gitlab as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--gitlab))
 - **google** (Block Set) configuration for using google as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--google))
+- **linkedin** (Block Set) configuration for using linkedin as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--linkedin))
 - **microsoft** (Block Set) configuration for using microsoft as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--microsoft))
+- **twitch** (Block Set) configuration for using twitch as the identity provider (see [below for nested schema](#nestedblock--oauth--provider--twitch))
+
+<a id="nestedblock--oauth--provider--amazon"></a>
+### Nested Schema for `oauth.provider.amazon`
+
+Optional:
+
+- **client_id** (String)
+- **client_secret** (String, Sensitive)
+- **email_addresses** (List of String)
+- **email_domains** (List of String)
+- **scopes** (List of String)
+
 
 <a id="nestedblock--oauth--provider--facebook"></a>
 ### Nested Schema for `oauth.provider.facebook`
@@ -206,6 +203,18 @@ Optional:
 - **teams** (List of String) a list of github teams identifiers. users will be allowed access to the endpoint if they are a member of any of these teams. identifiers should be in the 'slug' format qualified with the org name, e.g. `org-name/team-name`
 
 
+<a id="nestedblock--oauth--provider--gitlab"></a>
+### Nested Schema for `oauth.provider.gitlab`
+
+Optional:
+
+- **client_id** (String)
+- **client_secret** (String, Sensitive)
+- **email_addresses** (List of String)
+- **email_domains** (List of String)
+- **scopes** (List of String)
+
+
 <a id="nestedblock--oauth--provider--google"></a>
 ### Nested Schema for `oauth.provider.google`
 
@@ -218,6 +227,18 @@ Optional:
 - **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
 
 
+<a id="nestedblock--oauth--provider--linkedin"></a>
+### Nested Schema for `oauth.provider.linkedin`
+
+Optional:
+
+- **client_id** (String)
+- **client_secret** (String, Sensitive)
+- **email_addresses** (List of String)
+- **email_domains** (List of String)
+- **scopes** (List of String)
+
+
 <a id="nestedblock--oauth--provider--microsoft"></a>
 ### Nested Schema for `oauth.provider.microsoft`
 
@@ -228,6 +249,18 @@ Optional:
 - **email_addresses** (List of String) a list of email addresses of users authenticated by identity provider who are allowed access to the endpoint
 - **email_domains** (List of String) a list of email domains of users authenticated by identity provider who are allowed access to the endpoint
 - **scopes** (List of String) a list of provider-specific OAuth scopes with the permissions your OAuth app would like to ask for. these may not be set if you are using the ngrok-managed oauth app (i.e. you must pass both `client_id` and `client_secret` to set scopes)
+
+
+<a id="nestedblock--oauth--provider--twitch"></a>
+### Nested Schema for `oauth.provider.twitch`
+
+Optional:
+
+- **client_id** (String)
+- **client_secret** (String, Sensitive)
+- **email_addresses** (List of String)
+- **email_domains** (List of String)
+- **scopes** (List of String)
 
 
 
@@ -307,7 +340,7 @@ Optional:
 Optional:
 
 - **enabled** (Boolean) `true` if the module will be applied to traffic, `false` to disable. default `true` if unspecified
-- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`, `SENDGRID`, `XERO`, `PAGERDUTY`.
+- **provider** (String) a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers defined at https://ngrok.com/docs/cloud-edge/modules/webhook
 - **secret** (String, Sensitive) a string secret used to validate requests from the given provider. All providers except AWS SNS require a secret
 
 

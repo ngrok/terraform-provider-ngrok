@@ -237,6 +237,132 @@ func (c *Client) APIKeysUpdate(ctx context.Context, arg *APIKeyUpdate) (*APIKey,
 	return &res, resp, err
 }
 
+// Get an application session by ID.
+func (c *Client) ApplicationSessionsGet(ctx context.Context, arg *Item) (*ApplicationSession, *http.Response, error) {
+	var res ApplicationSession
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/sessions/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an application session by ID.
+func (c *Client) ApplicationSessionsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/sessions/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all application sessions for this account.
+func (c *Client) ApplicationSessionsList(ctx context.Context, arg *Paging) (*ApplicationSessionList, *http.Response, error) {
+	var res ApplicationSessionList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/sessions")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get an application user by ID.
+func (c *Client) ApplicationUsersGet(ctx context.Context, arg *Item) (*ApplicationUser, *http.Response, error) {
+	var res ApplicationUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an application user by ID.
+func (c *Client) ApplicationUsersDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all application users for this account.
+func (c *Client) ApplicationUsersList(ctx context.Context, arg *Paging) (*ApplicationUserList, *http.Response, error) {
+	var res ApplicationUserList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/app/users")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Create a new Failover backend
 func (c *Client) FailoverBackendsCreate(ctx context.Context, arg *FailoverBackendCreate) (*FailoverBackend, *http.Response, error) {
 	var res FailoverBackend
@@ -253,7 +379,7 @@ func (c *Client) FailoverBackendsCreate(ctx context.Context, arg *FailoverBacken
 	return &res, resp, err
 }
 
-// Delete a Failover backend by ID. TODO what if used?
+// Delete a Failover backend by ID.
 func (c *Client) FailoverBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -440,7 +566,7 @@ func (c *Client) StaticBackendsCreate(ctx context.Context, arg *StaticBackendCre
 	return &res, resp, err
 }
 
-// Delete a static backend by ID. TODO what if used?
+// Delete a static backend by ID.
 func (c *Client) StaticBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -536,7 +662,7 @@ func (c *Client) TunnelGroupBackendsCreate(ctx context.Context, arg *TunnelGroup
 	return &res, resp, err
 }
 
-// Delete a TunnelGroup backend by ID. TODO what if used?
+// Delete a TunnelGroup backend by ID.
 func (c *Client) TunnelGroupBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -632,7 +758,7 @@ func (c *Client) WeightedBackendsCreate(ctx context.Context, arg *WeightedBacken
 	return &res, resp, err
 }
 
-// Delete a Weighted backend by ID. TODO what if used?
+// Delete a Weighted backend by ID.
 func (c *Client) WeightedBackendsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
@@ -2350,103 +2476,7 @@ func (c *Client) EndpointsGet(ctx context.Context, arg *Item) (*Endpoint, *http.
 	return &res, resp, err
 }
 
-// Create a new Event Stream. It will not apply to anything until you associate it with one or more Endpoint Configs.
-func (c *Client) EventStreamsCreate(ctx context.Context, arg *EventStreamCreate) (*EventStream, *http.Response, error) {
-	var res EventStream
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-
-	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Delete an Event Stream. Associated Event Destinations will be preserved.
-func (c *Client) EventStreamsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Get detailed information about an Event Stream by ID.
-func (c *Client) EventStreamsGet(ctx context.Context, arg *Item) (*EventStream, *http.Response, error) {
-	var res EventStream
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// List all Event Streams available on this account.
-func (c *Client) EventStreamsList(ctx context.Context, arg *Paging) (*EventStreamList, *http.Response, error) {
-	var res EventStreamList
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/event_streams")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	pathUrl, err := url.Parse(uri)
-	if err != nil {
-		panic(err)
-	}
-	params := url.Values{}
-	if arg.BeforeID != nil {
-		params.Add("before_id", *arg.BeforeID)
-	}
-	if arg.Limit != nil {
-		params.Add("limit", *arg.Limit)
-	}
-	pathUrl.RawQuery = params.Encode()
-	uri = pathUrl.String()
-
-	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Update attributes of an Event Stream by ID.
-func (c *Client) EventStreamsUpdate(ctx context.Context, arg *EventStreamUpdate) (*EventStream, *http.Response, error) {
-	var res EventStream
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/event_streams/{{ .ID }}")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-// Create a new Event Destination. It will not apply to anything until it is associated with an Event Stream, and that Event Stream is associated with an Endpoint Config.
+// Create a new Event Destination. It will not apply to anything until it is associated with an Event Subscription.
 func (c *Client) EventDestinationsCreate(ctx context.Context, arg *EventDestinationCreate) (*EventDestination, *http.Response, error) {
 	var res EventDestination
 	var path bytes.Buffer
@@ -3025,54 +3055,6 @@ func (c *Client) IPRestrictionsUpdate(ctx context.Context, arg *IPRestrictionUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-func (c *Client) EndpointLoggingModuleReplace(ctx context.Context, arg *EndpointLoggingReplace) (*EndpointLogging, *http.Response, error) {
-	var res EndpointLogging
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-func (c *Client) EndpointLoggingModuleGet(ctx context.Context, arg *Item) (*EndpointLogging, *http.Response, error) {
-	var res EndpointLogging
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
-		err = nil
-	}
-	return &res, resp, err
-}
-
-func (c *Client) EndpointLoggingModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
-	var res Empty
-	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/endpoint_configurations/{{ .ID }}/logging")).Execute(&path, arg); err != nil {
-		panic(err)
-	}
-	uri := path.String()
-	arg.ID = ""
-
-	resp, err := c.Delete(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
 		err = nil
 	}

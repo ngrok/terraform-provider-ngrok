@@ -28,6 +28,9 @@ func Provider() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"ngrok_agent_ingress":             resourceAgentIngresses(),
 			"ngrok_api_key":                   resourceAPIKeys(),
+			"ngrok_failover_backend":          resourceFailoverBackends(),
+			"ngrok_http_response_backend":     resourceHTTPResponseBackends(),
+			"ngrok_tunnel_group_backend":      resourceTunnelGroupBackends(),
 			"ngrok_certificate_authority":     resourceCertificateAuthorities(),
 			"ngrok_credential":                resourceCredentials(),
 			"ngrok_endpoint_configuration":    resourceEndpointConfigurations(),
