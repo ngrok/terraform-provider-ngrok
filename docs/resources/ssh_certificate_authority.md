@@ -15,6 +15,9 @@ An SSH Certificate Authority is a pair of an SSH Certificate and its private
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_ssh_certificate_authority" "example" {
   description = "Staging Environment Hosts"
   private_key_type = "ed25519"

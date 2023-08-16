@@ -1,3 +1,5 @@
+# Code generated for API Clients. DO NOT EDIT.
+
 TEST?=$$(go list ./... | grep -v 'vendor')
 SWEEP?=us
 HOSTNAME=ngrok.com
@@ -16,7 +18,6 @@ install: build
 		mv ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
 
 test:
-		go test -i $(TEST) || exit 1
 		echo $(TEST) | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
 testacc:
