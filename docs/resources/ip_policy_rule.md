@@ -15,10 +15,14 @@ IP Policy Rules are the IPv4 or IPv6 CIDRs entries that
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_ip_policy_rule" "example" {
+  action = "allow"
   cidr = "212.3.14.0/24"
   description = "nyc office"
-  ip_policy_id = "ipp_25auGv9R7vPmi6NKs5Cxcyzc2Cm"
+  ip_policy_id = "ipp_26rOydjEUNZSLTi8bYXBg278qUT"
 }
 ```
 
@@ -27,12 +31,12 @@ resource "ngrok_ip_policy_rule" "example" {
 
 ### Required
 
+- **action** (String) the action to apply to the policy rule, either `allow` or `deny`
 - **cidr** (String) an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.
 - **ip_policy_id** (String) ID of the IP policy this IP policy rule will be attached to
 
 ### Optional
 
-- **action** (String) the action to apply to the policy rule, either `allow` or `deny`
 - **description** (String) human-readable description of the source IPs of this IP rule. optional, max 255 bytes.
 - **id** (String) unique identifier for this IP policy rule
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.

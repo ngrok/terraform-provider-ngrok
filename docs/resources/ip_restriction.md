@@ -23,8 +23,11 @@ An IP restriction is a restriction placed on the CIDRs that are allowed to
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_25auGwa4eEWUeCOBfCZkwtwqFey" ]
+  ip_policy_ids = [ "ipp_26rOyhglKmVz5ABMOwZwPFBFXBZ" ]
   type = "dashboard"
 }
 ```

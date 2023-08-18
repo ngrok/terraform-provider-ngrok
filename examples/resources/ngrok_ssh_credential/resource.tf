@@ -1,3 +1,5 @@
+# Code generated for API Clients. DO NOT EDIT.
+
 
 resource "ngrok_ssh_credential" "example" {
   acl = [ "bind:1.tcp.ngrok.io:20002", "bind:132.devices.company.com" ]

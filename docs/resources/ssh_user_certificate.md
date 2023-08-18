@@ -17,12 +17,15 @@ SSH User Certificates are presented by SSH clients when connecting to an SSH
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_ssh_user_certificate" "example" {
   description = "temporary access to staging machine"
   principals = [ "ec2-user", "root" ]
   public_key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBK58lFzmWlDimDtBz78wVT4oauA8PjY0CiXTCEIsBNC6UwOJvZ0jdSaYNhDaa7dRV84DfBb/gKzqlXC7cVMZjl0= alan@work-laptop"
-  ssh_certificate_authority_id = "sshca_25auH5JtiUPW9eMiXYzujvcpkGW"
-  valid_until = "2022-05-26T08:23:47Z"
+  ssh_certificate_authority_id = "sshca_26rOyirnW8khUZJ8xjNfPu3GPdi"
+  valid_until = "2022-06-22T22:21:34-05:00"
 }
 ```
 
@@ -43,7 +46,7 @@ resource "ngrok_ssh_user_certificate" "example" {
 - **id** (String) unique identifier for this SSH User Certificate
 - **key_type** (String) the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH User Certificate. optional, max 4096 bytes.
-- **principals** (List of String) the list of principals included in the ssh user certificate. This is the list of usernames that the certificate holder may sign in as on a machine authorizinig the signing certificate authority. Dangerously, if no principals are specified, this certificate may be used to log in as any user.
+- **principals** (List of String) the list of principals included in the ssh user certificate. This is the list of usernames that the certificate holder may sign in as on a machine authorizing the signing certificate authority. Dangerously, if no principals are specified, this certificate may be used to log in as any user.
 - **valid_after** (String) the time when the ssh host certificate becomes valid, in RFC 3339 format.
 - **valid_until** (String) the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.
 
