@@ -21,6 +21,9 @@ API Keys are used to authenticate to the [ngrok
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_api_key" "example" {
   description = "ad-hoc dev testing"
   metadata = "{\"environment\":\"dev\"}"
@@ -35,6 +38,7 @@ resource "ngrok_api_key" "example" {
 - **description** (String) human-readable description of what uses the API key to authenticate. optional, max 255 bytes.
 - **id** (String) unique API key resource identifier
 - **metadata** (String) arbitrary user-defined data of this API key. optional, max 4096 bytes
+- **owner_id** (String) If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.
 - **token** (String, Sensitive) the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**
 
 

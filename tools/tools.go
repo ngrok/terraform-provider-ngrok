@@ -1,4 +1,7 @@
+//go:build tools
 // +build tools
+
+// Code generated for API Clients. DO NOT EDIT.
 
 package tools
 

@@ -13,6 +13,9 @@ description: |-
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_event_destination" "example" {
   description = "kinesis dev stream"
   format = "json"
@@ -48,6 +51,7 @@ resource "ngrok_event_destination" "example" {
 Optional:
 
 - **cloudwatch_logs** (Block Set) Configuration used to send events to Amazon CloudWatch Logs. (see [below for nested schema](#nestedblock--target--cloudwatch_logs))
+- **datadog** (Block Set) Configuration used to send events to Datadog. (see [below for nested schema](#nestedblock--target--datadog))
 - **debug** (Block Set) Configuration used for internal debugging. (see [below for nested schema](#nestedblock--target--debug))
 - **firehose** (Block Set) Configuration used to send events to Amazon Kinesis Data Firehose. (see [below for nested schema](#nestedblock--target--firehose))
 - **kinesis** (Block Set) Configuration used to send events to Amazon Kinesis. (see [below for nested schema](#nestedblock--target--kinesis))
@@ -85,6 +89,17 @@ Required:
 - **role_arn** (String) An ARN that specifies the role that ngrok should use to deliver to the configured target.
 
 
+
+
+<a id="nestedblock--target--datadog"></a>
+### Nested Schema for `target.datadog`
+
+Optional:
+
+- **api_key** (String) Datadog API key to use.
+- **ddsite** (String) Datadog site to send event to.
+- **ddtags** (String) Tags to send with the event.
+- **service** (String) Service name to send with the event.
 
 
 <a id="nestedblock--target--debug"></a>

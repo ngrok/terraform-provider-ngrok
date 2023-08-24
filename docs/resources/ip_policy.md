@@ -19,8 +19,10 @@ IP Policies are reusable groups of CIDR ranges with an `allow` or `deny`
 ## Example Usage
 
 ```terraform
+# Code generated for API Clients. DO NOT EDIT.
+
+
 resource "ngrok_ip_policy" "example" {
-  action = "allow"
   description = "API Outbound Gateway"
 }
 ```
