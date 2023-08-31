@@ -1,3 +1,5 @@
+<!-- Code generated for API Clients. DO NOT EDIT. -->
+
 # ngrok Terraform provider
 
 Please see the [docs](docs/index.md) directory for more information.

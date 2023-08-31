@@ -1,3 +1,5 @@
+<!-- Code generated for API Clients. DO NOT EDIT. -->
+
 # Ngrok Provider
 
 The ngrok provider is used to configure your [ngrok](https://ngrok.com/) infrastructure.
