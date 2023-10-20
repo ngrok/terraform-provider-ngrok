@@ -40,7 +40,7 @@ func resourceSSHCredentials() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "unique ssh credential resource identifier",

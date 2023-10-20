@@ -31,11 +31,14 @@ resource "ngrok_reserved_addr" "example" {
 
 ### Optional
 
-- **addr** (String) hostname:port of the reserved address that was assigned at creation time
 - **description** (String) human-readable description of what this reserved address will be used for
 - **endpoint_configuration_id** (String) ID of an endpoint configuration of type tcp that will be used to handle inbound traffic to this address
-- **id** (String) unique reserved address resource identifier
 - **metadata** (String) arbitrary user-defined machine-readable data of this reserved address. Optional, max 4096 bytes.
 - **region** (String) reserve the address in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)
+
+### Read-Only
+
+- **addr** (String) hostname:port of the reserved address that was assigned at creation time
+- **id** (String) unique reserved address resource identifier
 
 

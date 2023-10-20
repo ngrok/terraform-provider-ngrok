@@ -776,6 +776,9 @@ type CredentialCreate struct {
 	// User. Only admins may specify an owner other than themselves. Both owner_id and
 	// owner_email may not be specified.
 	OwnerEmail string `json:"owner_email,omitempty"`
+	// Only authorized accounts may supply a pre-computed token that will be associated
+	// with the created credentials.
+	PrecomputedToken *string `json:"precomputed_token,omitempty"`
 }
 
 type CredentialUpdate struct {
@@ -980,8 +983,8 @@ type EndpointWebhookValidation struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// a string indicating which webhook provider will be sending webhooks to this
 	// endpoint. Value must be one of the supported providers defined at
-	// https://ngrok.com/docs/cloud-edge/modules/webhook
-	// (https://ngrok.com/docs/cloud-edge/modules/webhook)
+	// https://ngrok.com/docs/cloud-edge/modules/webhook-verification
+	// (https://ngrok.com/docs/cloud-edge/modules/webhook-verification)
 	Provider string `json:"provider,omitempty"`
 	// a string secret used to validate requests from the given provider. All providers
 	// except AWS SNS require a secret
@@ -2482,8 +2485,10 @@ type ReservedDomainCreate struct {
 	Name string `json:"name,omitempty"`
 	// hostname of the reserved domain
 	Domain string `json:"domain,omitempty"`
-	// reserve the domain in this geographic ngrok datacenter. Optional, default is us.
-	// (au, eu, ap, us, jp, in, sa)
+	// deprecated: With the launch of the ngrok Global Network domains traffic is now
+	// handled globally. This field applied only to endpoints. Note that agents may
+	// still connect to specific regions. Optional, null by default. (au, eu, ap, us,
+	// jp, in, sa)
 	Region string `json:"region,omitempty"`
 	// human-readable description of what this reserved domain will be used for
 	Description string `json:"description,omitempty"`
@@ -2525,8 +2530,10 @@ type ReservedDomainUpdate struct {
 	// null if automatic management is disabled. Optional, mutually exclusive with
 	// certificate_id.
 	CertificateManagementPolicy *ReservedDomainCertPolicy `json:"certificate_management_policy,omitempty"`
-	// reserve the domain in this geographic ngrok datacenter. Optional, default is us.
-	// (au, eu, ap, us, jp, in, sa)
+	// deprecated: With the launch of the ngrok Global Network domains traffic is now
+	// handled globally. This field applied only to endpoints. Note that agents may
+	// still connect to specific regions. Optional, null by default. (au, eu, ap, us,
+	// jp, in, sa)
 	Region *string `json:"region,omitempty"`
 }
 
@@ -2544,11 +2551,13 @@ type ReservedDomain struct {
 	Metadata string `json:"metadata,omitempty"`
 	// hostname of the reserved domain
 	Domain string `json:"domain,omitempty"`
-	// reserve the domain in this geographic ngrok datacenter. Optional, default is us.
-	// (au, eu, ap, us, jp, in, sa)
+	// deprecated: With the launch of the ngrok Global Network domains traffic is now
+	// handled globally. This field applied only to endpoints. Note that agents may
+	// still connect to specific regions. Optional, null by default. (au, eu, ap, us,
+	// jp, in, sa)
 	Region string `json:"region,omitempty"`
 	// DNS CNAME target for a custom hostname, or null if the reserved domain is a
-	// subdomain of *.ngrok.io
+	// subdomain of an ngrok owned domain (e.g. *.ngrok.app)
 	CNAMETarget *string `json:"cname_target,omitempty"`
 	// object referencing the endpoint configuration applied to http traffic on this
 	// domain
