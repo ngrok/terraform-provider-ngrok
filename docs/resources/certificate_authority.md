@@ -41,7 +41,10 @@ resource "ngrok_certificate_authority" "example" {
 ### Optional
 
 - **description** (String) human-readable description of this Certificate Authority. optional, max 255 bytes.
-- **id** (String) unique identifier for this Certificate Authority
 - **metadata** (String) arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.
+
+### Read-Only
+
+- **id** (String) unique identifier for this Certificate Authority
 
 

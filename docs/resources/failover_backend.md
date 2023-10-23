@@ -35,10 +35,13 @@ resource "ngrok_failover_backend" "example" {
 ### Optional
 
 - **backends** (List of String) the ids of the child backends in order
-- **created_at** (String) timestamp when the backend was created, RFC 3339 format
 - **description** (String) human-readable description of this backend. Optional
-- **id** (String) unique identifier for this Failover backend
 - **metadata** (String) arbitrary user-defined machine-readable data of this backend. Optional
+
+### Read-Only
+
+- **created_at** (String) timestamp when the backend was created, RFC 3339 format
+- **id** (String) unique identifier for this Failover backend
 - **uri** (String) URI of the FailoverBackend API resource
 
 

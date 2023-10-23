@@ -41,16 +41,19 @@ resource "ngrok_tls_certificate" "example" {
 ### Optional
 
 - **description** (String) human-readable description of this TLS certificate. optional, max 255 bytes.
-- **id** (String) unique identifier for this TLS certificate
 - **metadata** (String) arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.
-- **subject_alternative_names** (Block Set) subject alternative names (SANs) from the leaf of this TLS certificate (see [below for nested schema](#nestedblock--subject_alternative_names))
 
-<a id="nestedblock--subject_alternative_names"></a>
+### Read-Only
+
+- **id** (String) unique identifier for this TLS certificate
+- **subject_alternative_names** (Set of Object) subject alternative names (SANs) from the leaf of this TLS certificate (see [below for nested schema](#nestedatt--subject_alternative_names))
+
+<a id="nestedatt--subject_alternative_names"></a>
 ### Nested Schema for `subject_alternative_names`
 
-Optional:
+Read-Only:
 
-- **dns_names** (List of String) set of additional domains (including wildcards) this TLS certificate is valid for
-- **ips** (List of String) set of IP addresses this TLS certificate is also valid for
+- **dns_names** (List of String)
+- **ips** (List of String)
 
 

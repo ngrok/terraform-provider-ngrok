@@ -33,23 +33,23 @@ resource "ngrok_tunnel_group_backend" "example" {
 
 ### Optional
 
-- **created_at** (String) timestamp when the backend was created, RFC 3339 format
 - **description** (String) human-readable description of this backend. Optional
 - **labels** (Map of String) labels to watch for tunnels on, e.g. app->foo, dc->bar
 - **metadata** (String) arbitrary user-defined machine-readable data of this backend. Optional
-- **tunnels** (Block List) tunnels matching this backend (see [below for nested schema](#nestedblock--tunnels))
-- **uri** (String) URI of the TunnelGroupBackend API resource
 
 ### Read-Only
 
+- **created_at** (String) timestamp when the backend was created, RFC 3339 format
 - **id** (String) unique identifier for this TunnelGroup backend
+- **tunnels** (List of Object) tunnels matching this backend (see [below for nested schema](#nestedatt--tunnels))
+- **uri** (String) URI of the TunnelGroupBackend API resource
 
-<a id="nestedblock--tunnels"></a>
+<a id="nestedatt--tunnels"></a>
 ### Nested Schema for `tunnels`
 
-Optional:
+Read-Only:
 
-- **id** (String) a resource identifier
-- **uri** (String) a uri for locating a resource
+- **id** (String)
+- **uri** (String)
 
 

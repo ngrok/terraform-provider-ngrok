@@ -38,7 +38,10 @@ resource "ngrok_ip_policy_rule" "example" {
 ### Optional
 
 - **description** (String) human-readable description of the source IPs of this IP rule. optional, max 255 bytes.
-- **id** (String) unique identifier for this IP policy rule
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.
+
+### Read-Only
+
+- **id** (String) unique identifier for this IP policy rule
 
 

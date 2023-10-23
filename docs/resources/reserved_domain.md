@@ -34,18 +34,21 @@ resource "ngrok_reserved_domain" "example" {
 
 ### Optional
 
-- **acme_challenge_cname_target** (String) DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.
 - **certificate_id** (String) ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.
 - **certificate_management_policy** (Block Set) configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled (see [below for nested schema](#nestedblock--certificate_management_policy))
-- **cname_target** (String) DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of *.ngrok.io
 - **description** (String) human-readable description of what this reserved domain will be used for
 - **domain** (String) hostname of the reserved domain
 - **http_endpoint_configuration_id** (String) ID of an endpoint configuration of type http that will be used to handle inbound http traffic to this domain
 - **https_endpoint_configuration_id** (String) ID of an endpoint configuration of type https that will be used to handle inbound https traffic to this domain
-- **id** (String) unique reserved domain resource identifier
 - **metadata** (String) arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.
 - **name** (String) the domain name to reserve. It may be a full domain name like app.example.com. If the name does not contain a '.' it will reserve that subdomain on ngrok.io.
-- **region** (String) reserve the domain in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)
+- **region** (String) deprecated: With the launch of the ngrok Global Network domains traffic is now handled globally. This field applied only to endpoints. Note that agents may still connect to specific regions. Optional, null by default. (au, eu, ap, us, jp, in, sa)
+
+### Read-Only
+
+- **acme_challenge_cname_target** (String) DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.
+- **cname_target** (String) DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of an ngrok owned domain (e.g. *.ngrok.app)
+- **id** (String) unique reserved domain resource identifier
 
 <a id="nestedblock--certificate_management_policy"></a>
 ### Nested Schema for `certificate_management_policy`

@@ -44,7 +44,10 @@ resource "ngrok_ip_restriction" "example" {
 
 - **description** (String) human-readable description of this IP restriction. optional, max 255 bytes.
 - **enforced** (Boolean) true if the IP restriction will be enforced. if false, only warnings will be issued
-- **id** (String) unique identifier for this IP restriction
 - **metadata** (String) arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.
+
+### Read-Only
+
+- **id** (String) unique identifier for this IP restriction
 
 

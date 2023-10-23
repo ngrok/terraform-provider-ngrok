@@ -40,7 +40,7 @@ func resourceCredentials() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "unique tunnel credential resource identifier",
@@ -94,6 +94,9 @@ func resourceCredentialsCreate(d *schema.ResourceData, m interface{}) (err error
 	}
 	if v, ok := d.GetOk("owner_email"); ok {
 		arg.OwnerEmail = *expandString(v)
+	}
+	if v, ok := d.GetOk("precomputed_token"); ok {
+		arg.PrecomputedToken = expandString(v)
 	}
 
 	res, _, err := b.client.CredentialsCreate(context.Background(), &arg)
