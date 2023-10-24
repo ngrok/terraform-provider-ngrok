@@ -33,9 +33,12 @@ resource "ngrok_event_subscription" "example" {
 
 - **description** (String) Arbitrary customer supplied information intended to be human readable. Optional, max 255 chars.
 - **destination_ids** (List of String) A list of Event Destination IDs which should be used for this Event Subscription.
-- **id** (String) Unique identifier for this Event Subscription.
 - **metadata** (String) Arbitrary customer supplied information intended to be machine readable. Optional, max 4096 chars.
 - **sources** (Block List) Sources containing the types for which this event subscription will trigger (see [below for nested schema](#nestedblock--sources))
+
+### Read-Only
+
+- **id** (String) Unique identifier for this Event Subscription.
 
 <a id="nestedblock--sources"></a>
 ### Nested Schema for `sources`
@@ -45,6 +48,9 @@ Optional:
 - **fields** (List of String) TODO
 - **filter** (String) TODO
 - **type** (String) Type of event for which an event subscription will trigger
+
+Read-Only:
+
 - **uri** (String) URI of the Event Source API resource.
 
 

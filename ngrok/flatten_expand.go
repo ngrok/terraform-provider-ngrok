@@ -3917,6 +3917,7 @@ func flattenCredentialCreate(obj *restapi.CredentialCreate) interface{} {
 	m["acl"] = obj.ACL
 	m["owner_id"] = obj.OwnerID
 	m["owner_email"] = obj.OwnerEmail
+	m["precomputed_token"] = obj.PrecomputedToken
 
 	return []interface{}{m}
 }
@@ -3958,6 +3959,9 @@ func expandCredentialCreate(in interface{}) *restapi.CredentialCreate {
 	}
 	if v, ok := m["owner_email"]; ok {
 		obj.OwnerEmail = *expandString(v)
+	}
+	if v, ok := m["precomputed_token"]; ok {
+		obj.PrecomputedToken = expandString(v)
 	}
 	return &obj
 }

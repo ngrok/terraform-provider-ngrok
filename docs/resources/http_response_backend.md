@@ -33,15 +33,15 @@ resource "ngrok_http_response_backend" "example" {
 ### Optional
 
 - **body** (String) body to return as fixed content
-- **created_at** (String) timestamp when the backend was created, RFC 3339 format
 - **description** (String) human-readable description of this backend. Optional
 - **headers** (Map of String) headers to return
 - **metadata** (String) arbitrary user-defined machine-readable data of this backend. Optional
 - **status_code** (Number) status code to return
-- **uri** (String) URI of the HTTPResponseBackend API resource
 
 ### Read-Only
 
+- **created_at** (String) timestamp when the backend was created, RFC 3339 format
 - **id** (String) The ID of this resource.
+- **uri** (String) URI of the HTTPResponseBackend API resource
 
 

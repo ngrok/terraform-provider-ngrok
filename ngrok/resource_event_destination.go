@@ -39,7 +39,7 @@ func resourceEventDestinations() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "Unique identifier for this Event Destination.",

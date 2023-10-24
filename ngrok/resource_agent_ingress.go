@@ -118,7 +118,7 @@ func resourceAgentIngresses() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "URI to the API resource of this Agent ingress",

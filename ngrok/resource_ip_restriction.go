@@ -39,7 +39,7 @@ func resourceIPRestrictions() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    false,
 				Computed:    true,
-				Optional:    true,
+				Optional:    false,
 				Sensitive:   false,
 				ForceNew:    false,
 				Description: "unique identifier for this IP restriction",

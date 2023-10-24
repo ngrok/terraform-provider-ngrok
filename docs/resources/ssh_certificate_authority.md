@@ -31,11 +31,14 @@ resource "ngrok_ssh_certificate_authority" "example" {
 
 - **description** (String) human-readable description of this SSH Certificate Authority. optional, max 255 bytes.
 - **elliptic_curve** (String) the type of elliptic curve to use when creating an ECDSA key
-- **id** (String) unique identifier for this SSH Certificate Authority
 - **key_size** (Number) the key size to use when creating an RSA key. one of `2048` or `4096`
-- **key_type** (String) the type of private key for this SSH Certificate Authority
 - **metadata** (String) arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.
 - **private_key_type** (String) the type of private key to generate. one of `rsa`, `ecdsa`, `ed25519`
+
+### Read-Only
+
+- **id** (String) unique identifier for this SSH Certificate Authority
+- **key_type** (String) the type of private key for this SSH Certificate Authority
 - **public_key** (String) raw public key for this SSH Certificate Authority
 
 
