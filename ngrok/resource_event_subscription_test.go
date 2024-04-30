@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"reflect"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -42,8 +43,14 @@ func init() {
 			}
 
 			for _, item := range list.EventSubscriptions {
-				// Assume items with empty Description and Metadata are system defined (i.e. API Keys)
-				if item.Description != "" && item.Metadata != "" {
+				// Assume items with empty Description or Metadata are system defined
+				// (i.e. API Keys) so do not sweep them for cleanup.
+				// However, not all items have Description and Metadata fields, so need to reflect.
+				iv := reflect.ValueOf(item)
+				dv := iv.FieldByName("Description")
+				mv := iv.FieldByName("Metadata")
+				shouldKeep := (dv.IsValid() && dv.IsZero()) || (mv.IsValid() && mv.IsZero())
+				if !shouldKeep {
 					_, _, err := conn.EventSubscriptionsDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {

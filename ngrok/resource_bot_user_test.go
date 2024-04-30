@@ -13,19 +13,18 @@ import (
 )
 
 var (
-	resourceAgentIngresses_createConfig = `resource "ngrok_agent_ingress" "example" {
-  description = "acme devices"
-  domain = "connect.acme.com"
+	resourceBotUsers_createConfig = `resource "ngrok_bot_user" "example" {
+  name = "new bot user from API"
 }`
-	resourceAgentIngresses_updateConfig = `resource "ngrok_agent_ingress" "example" {
-  description = "ACME Co. Device Ingress"
-  metadata = "{\"device_sku\": \"824JS4RZ1F8X\"}"
+	resourceBotUsers_updateConfig = `resource "ngrok_bot_user" "example" {
+  active = false
+  name = "inactive bot user from API"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("agent_ingresses", &resource.Sweeper{
-		Name: "agent_ingresses",
+	resource.AddTestSweepers("bot_users", &resource.Sweeper{
+		Name: "bot_users",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -34,12 +33,12 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.AgentIngressesList(ctx, &restapi.Paging{})
+			list, _, err := conn.BotUsersList(ctx, &restapi.Paging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.Ingresses {
+			for _, item := range list.BotUsers {
 				// Assume items with empty Description or Metadata are system defined
 				// (i.e. API Keys) so do not sweep them for cleanup.
 				// However, not all items have Description and Metadata fields, so need to reflect.
@@ -48,7 +47,7 @@ func init() {
 				mv := iv.FieldByName("Metadata")
 				shouldKeep := (dv.IsValid() && dv.IsZero()) || (mv.IsValid() && mv.IsZero())
 				if !shouldKeep {
-					_, _, err := conn.AgentIngressesDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.BotUsersDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -61,28 +60,28 @@ func init() {
 	})
 }
 
-func TestAccResourceAgentIngresses(t *testing.T) {
+func TestAccResourceBotUsers(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyAgentIngresses,
+		CheckDestroy: testAccCheckDestroyBotUsers,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceAgentIngresses_createConfig,
+				Config: resourceBotUsers_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateAgentIngresses,
+				// 	testAccCheckCreateBotUsers,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyAgentIngresses(s *terraform.State) (err error) {
+func testAccCheckDestroyBotUsers(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateAgentIngresses(s *terraform.State) (err error) {
+func testAccCheckCreateBotUsers(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

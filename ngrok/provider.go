@@ -31,6 +31,7 @@ func Provider() *schema.Provider {
 			"ngrok_failover_backend":          resourceFailoverBackends(),
 			"ngrok_http_response_backend":     resourceHTTPResponseBackends(),
 			"ngrok_tunnel_group_backend":      resourceTunnelGroupBackends(),
+			"ngrok_bot_user":                  resourceBotUsers(),
 			"ngrok_certificate_authority":     resourceCertificateAuthorities(),
 			"ngrok_credential":                resourceCredentials(),
 			"ngrok_event_destination":         resourceEventDestinations(),

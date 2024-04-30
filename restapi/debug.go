@@ -127,7 +127,7 @@ func (d Debug) printResponse(r *http.Response) {
 		}
 	}
 
-	if d.Stdout != nil && (r.StatusCode < 400 || d.Verbose) {
+	if d.Stdout != nil && (r.StatusCode < http.StatusBadRequest || d.Verbose) {
 		body, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		r.Body = io.NopCloser(bytes.NewReader(body))

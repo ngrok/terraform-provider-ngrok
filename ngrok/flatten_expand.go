@@ -3650,6 +3650,234 @@ func expandWeightedBackendListSlice(in interface{}) *[]restapi.WeightedBackendLi
 	return &out
 }
 
+func flattenBotUser(obj *restapi.BotUser) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["uri"] = obj.URI
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+	m["created_at"] = obj.CreatedAt
+
+	return []interface{}{m}
+}
+
+func flattenBotUserSlice(objs *[]restapi.BotUser) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenBotUser(&v))
+	}
+	return sl
+}
+
+func expandBotUser(in interface{}) *restapi.BotUser {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.BotUser
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = *expandBool(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	return &obj
+}
+
+func expandBotUserSlice(in interface{}) *[]restapi.BotUser {
+	var out []restapi.BotUser
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandBotUser(v))
+	}
+	return &out
+}
+
+func flattenBotUserCreate(obj *restapi.BotUserCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+
+	return []interface{}{m}
+}
+
+func flattenBotUserCreateSlice(objs *[]restapi.BotUserCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenBotUserCreate(&v))
+	}
+	return sl
+}
+
+func expandBotUserCreate(in interface{}) *restapi.BotUserCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.BotUserCreate
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = expandBool(v)
+	}
+	return &obj
+}
+
+func expandBotUserCreateSlice(in interface{}) *[]restapi.BotUserCreate {
+	var out []restapi.BotUserCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandBotUserCreate(v))
+	}
+	return &out
+}
+
+func flattenBotUserUpdate(obj *restapi.BotUserUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+
+	return []interface{}{m}
+}
+
+func flattenBotUserUpdateSlice(objs *[]restapi.BotUserUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenBotUserUpdate(&v))
+	}
+	return sl
+}
+
+func expandBotUserUpdate(in interface{}) *restapi.BotUserUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.BotUserUpdate
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = expandBool(v)
+	}
+	return &obj
+}
+
+func expandBotUserUpdateSlice(in interface{}) *[]restapi.BotUserUpdate {
+	var out []restapi.BotUserUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandBotUserUpdate(v))
+	}
+	return &out
+}
+
+func flattenBotUserList(obj *restapi.BotUserList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["bot_users"] = flattenBotUserSlice(&obj.BotUsers)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenBotUserListSlice(objs *[]restapi.BotUserList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenBotUserList(&v))
+	}
+	return sl
+}
+
+func expandBotUserList(in interface{}) *restapi.BotUserList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.BotUserList
+	if v, ok := m["bot_users"]; ok {
+		obj.BotUsers = *expandBotUserSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandBotUserListSlice(in interface{}) *[]restapi.BotUserList {
+	var out []restapi.BotUserList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandBotUserList(v))
+	}
+	return &out
+}
+
 func flattenCertificateAuthorityCreate(obj *restapi.CertificateAuthorityCreate) interface{} {
 	if obj == nil {
 		return nil
@@ -6314,6 +6542,226 @@ func expandEndpointWebsocketTCPConverterSlice(in interface{}) *[]restapi.Endpoin
 	return &out
 }
 
+func flattenEndpointUserAgentFilter(obj *restapi.EndpointUserAgentFilter) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["allow"] = obj.UserAgentFilterAllow
+	m["deny"] = obj.UserAgentFilterDeny
+
+	return []interface{}{m}
+}
+
+func flattenEndpointUserAgentFilterSlice(objs *[]restapi.EndpointUserAgentFilter) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointUserAgentFilter(&v))
+	}
+	return sl
+}
+
+func expandEndpointUserAgentFilter(in interface{}) *restapi.EndpointUserAgentFilter {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointUserAgentFilter
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["allow"]; ok {
+		obj.UserAgentFilterAllow = *expandStringSlice(v)
+	}
+	if v, ok := m["deny"]; ok {
+		obj.UserAgentFilterDeny = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointUserAgentFilterSlice(in interface{}) *[]restapi.EndpointUserAgentFilter {
+	var out []restapi.EndpointUserAgentFilter
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointUserAgentFilter(v))
+	}
+	return &out
+}
+
+func flattenEndpointPolicy(obj *restapi.EndpointPolicy) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["inbound"] = flattenEndpointRuleSlice(&obj.Inbound)
+	m["outbound"] = flattenEndpointRuleSlice(&obj.Outbound)
+
+	return []interface{}{m}
+}
+
+func flattenEndpointPolicySlice(objs *[]restapi.EndpointPolicy) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointPolicy(&v))
+	}
+	return sl
+}
+
+func expandEndpointPolicy(in interface{}) *restapi.EndpointPolicy {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointPolicy
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["inbound"]; ok {
+		obj.Inbound = *expandEndpointRuleSlice(v)
+	}
+	if v, ok := m["outbound"]; ok {
+		obj.Outbound = *expandEndpointRuleSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointPolicySlice(in interface{}) *[]restapi.EndpointPolicy {
+	var out []restapi.EndpointPolicy
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointPolicy(v))
+	}
+	return &out
+}
+
+func flattenEndpointRule(obj *restapi.EndpointRule) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["expressions"] = obj.Expressions
+	m["actions"] = flattenEndpointActionSlice(&obj.Actions)
+	m["name"] = obj.Name
+
+	return []interface{}{m}
+}
+
+func flattenEndpointRuleSlice(objs *[]restapi.EndpointRule) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointRule(&v))
+	}
+	return sl
+}
+
+func expandEndpointRule(in interface{}) *restapi.EndpointRule {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointRule
+	if v, ok := m["expressions"]; ok {
+		obj.Expressions = *expandStringSlice(v)
+	}
+	if v, ok := m["actions"]; ok {
+		obj.Actions = *expandEndpointActionSlice(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEndpointRuleSlice(in interface{}) *[]restapi.EndpointRule {
+	var out []restapi.EndpointRule
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointRule(v))
+	}
+	return &out
+}
+
+func flattenEndpointAction(obj *restapi.EndpointAction) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["type"] = obj.Type
+	m["config"] = obj.Config
+
+	return []interface{}{m}
+}
+
+func flattenEndpointActionSlice(objs *[]restapi.EndpointAction) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointAction(&v))
+	}
+	return sl
+}
+
+func expandEndpointAction(in interface{}) *restapi.EndpointAction {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointAction
+	if v, ok := m["type"]; ok {
+		obj.Type = *expandString(v)
+	}
+	if v, ok := m["config"]; ok {
+		obj.Config = *expandAny(v)
+	}
+	return &obj
+}
+
+func expandEndpointActionSlice(in interface{}) *[]restapi.EndpointAction {
+	var out []restapi.EndpointAction
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointAction(v))
+	}
+	return &out
+}
+
 func flattenEdgeRouteItem(obj *restapi.EdgeRouteItem) interface{} {
 	if obj == nil {
 		return nil
@@ -6388,6 +6836,8 @@ func flattenHTTPSEdgeRouteCreate(obj *restapi.HTTPSEdgeRouteCreate) interface{} 
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
+	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -6463,6 +6913,12 @@ func expandHTTPSEdgeRouteCreate(in interface{}) *restapi.HTTPSEdgeRouteCreate {
 	if v, ok := m["websocket_tcp_converter"]; ok {
 		obj.WebsocketTCPConverter = expandEndpointWebsocketTCPConverter(v)
 	}
+	if v, ok := m["user_agent_filter"]; ok {
+		obj.UserAgentFilter = expandEndpointUserAgentFilter(v)
+	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -6497,6 +6953,8 @@ func flattenHTTPSEdgeRouteUpdate(obj *restapi.HTTPSEdgeRouteUpdate) interface{} 
 	m["saml"] = flattenEndpointSAMLMutate(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
+	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -6575,6 +7033,12 @@ func expandHTTPSEdgeRouteUpdate(in interface{}) *restapi.HTTPSEdgeRouteUpdate {
 	if v, ok := m["websocket_tcp_converter"]; ok {
 		obj.WebsocketTCPConverter = expandEndpointWebsocketTCPConverter(v)
 	}
+	if v, ok := m["user_agent_filter"]; ok {
+		obj.UserAgentFilter = expandEndpointUserAgentFilter(v)
+	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -6611,6 +7075,8 @@ func flattenHTTPSEdgeRoute(obj *restapi.HTTPSEdgeRoute) interface{} {
 	m["saml"] = flattenEndpointSAML(obj.SAML)
 	m["oidc"] = flattenEndpointOIDC(obj.OIDC)
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
+	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -6694,6 +7160,12 @@ func expandHTTPSEdgeRoute(in interface{}) *restapi.HTTPSEdgeRoute {
 	}
 	if v, ok := m["websocket_tcp_converter"]; ok {
 		obj.WebsocketTCPConverter = expandEndpointWebsocketTCPConverter(v)
+	}
+	if v, ok := m["user_agent_filter"]; ok {
+		obj.UserAgentFilter = expandEndpointUserAgentFilter(v)
+	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
 	}
 	return &obj
 }
@@ -7230,6 +7702,58 @@ func expandEdgeTLSTerminationAtEdgeReplaceSlice(in interface{}) *[]restapi.EdgeT
 	var out []restapi.EdgeTLSTerminationAtEdgeReplace
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEdgeTLSTerminationAtEdgeReplace(v))
+	}
+	return &out
+}
+
+func flattenEdgePolicyReplace(obj *restapi.EdgePolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgePolicyReplaceSlice(objs *[]restapi.EdgePolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgePolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgePolicyReplace(in interface{}) *restapi.EdgePolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgePolicyReplace
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgePolicyReplaceSlice(in interface{}) *[]restapi.EdgePolicyReplace {
+	var out []restapi.EdgePolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgePolicyReplace(v))
 	}
 	return &out
 }
@@ -7850,6 +8374,118 @@ func expandEdgeRouteWebsocketTCPConverterReplaceSlice(in interface{}) *[]restapi
 	return &out
 }
 
+func flattenEdgeRouteUserAgentFilterReplace(obj *restapi.EdgeRouteUserAgentFilterReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["edge_id"] = obj.EdgeID
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointUserAgentFilter(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeRouteUserAgentFilterReplaceSlice(objs *[]restapi.EdgeRouteUserAgentFilterReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeRouteUserAgentFilterReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeRouteUserAgentFilterReplace(in interface{}) *restapi.EdgeRouteUserAgentFilterReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeRouteUserAgentFilterReplace
+	if v, ok := m["edge_id"]; ok {
+		obj.EdgeID = *expandString(v)
+	}
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointUserAgentFilter(v)
+	}
+	return &obj
+}
+
+func expandEdgeRouteUserAgentFilterReplaceSlice(in interface{}) *[]restapi.EdgeRouteUserAgentFilterReplace {
+	var out []restapi.EdgeRouteUserAgentFilterReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeRouteUserAgentFilterReplace(v))
+	}
+	return &out
+}
+
+func flattenEdgeRoutePolicyReplace(obj *restapi.EdgeRoutePolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["edge_id"] = obj.EdgeID
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeRoutePolicyReplaceSlice(objs *[]restapi.EdgeRoutePolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeRoutePolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeRoutePolicyReplace(in interface{}) *restapi.EdgeRoutePolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeRoutePolicyReplace
+	if v, ok := m["edge_id"]; ok {
+		obj.EdgeID = *expandString(v)
+	}
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgeRoutePolicyReplaceSlice(in interface{}) *[]restapi.EdgeRoutePolicyReplace {
+	var out []restapi.EdgeRoutePolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeRoutePolicyReplace(v))
+	}
+	return &out
+}
+
 func flattenTCPEdgeList(obj *restapi.TCPEdgeList) interface{} {
 	if obj == nil {
 		return nil
@@ -7917,6 +8553,7 @@ func flattenTCPEdgeCreate(obj *restapi.TCPEdgeCreate) interface{} {
 	m["hostports"] = obj.Hostports
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -7959,6 +8596,9 @@ func expandTCPEdgeCreate(in interface{}) *restapi.TCPEdgeCreate {
 	if v, ok := m["ip_restriction"]; ok {
 		obj.IPRestriction = expandEndpointIPPolicyMutate(v)
 	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -7982,6 +8622,7 @@ func flattenTCPEdgeUpdate(obj *restapi.TCPEdgeUpdate) interface{} {
 	m["hostports"] = obj.Hostports
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -8027,6 +8668,9 @@ func expandTCPEdgeUpdate(in interface{}) *restapi.TCPEdgeUpdate {
 	if v, ok := m["ip_restriction"]; ok {
 		obj.IPRestriction = expandEndpointIPPolicyMutate(v)
 	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -8052,6 +8696,7 @@ func flattenTCPEdge(obj *restapi.TCPEdge) interface{} {
 	m["hostports"] = obj.Hostports
 	m["backend"] = flattenEndpointBackend(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicy(obj.IpRestriction)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -8102,6 +8747,9 @@ func expandTCPEdge(in interface{}) *restapi.TCPEdge {
 	}
 	if v, ok := m["ip_restriction"]; ok {
 		obj.IpRestriction = expandEndpointIPPolicy(v)
+	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
 	}
 	return &obj
 }
@@ -8183,6 +8831,7 @@ func flattenTLSEdgeCreate(obj *restapi.TLSEdgeCreate) interface{} {
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -8231,6 +8880,9 @@ func expandTLSEdgeCreate(in interface{}) *restapi.TLSEdgeCreate {
 	if v, ok := m["tls_termination"]; ok {
 		obj.TLSTermination = expandEndpointTLSTermination(v)
 	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -8256,6 +8908,7 @@ func flattenTLSEdgeUpdate(obj *restapi.TLSEdgeUpdate) interface{} {
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -8307,6 +8960,9 @@ func expandTLSEdgeUpdate(in interface{}) *restapi.TLSEdgeUpdate {
 	if v, ok := m["tls_termination"]; ok {
 		obj.TLSTermination = expandEndpointTLSTermination(v)
 	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
+	}
 	return &obj
 }
 
@@ -8334,6 +8990,7 @@ func flattenTLSEdge(obj *restapi.TLSEdge) interface{} {
 	m["ip_restriction"] = flattenEndpointIPPolicy(obj.IpRestriction)
 	m["mutual_tls"] = flattenEndpointMutualTLS(obj.MutualTls)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TlsTermination)
+	m["policy"] = flattenEndpointPolicy(obj.Policy)
 
 	return []interface{}{m}
 }
@@ -8390,6 +9047,9 @@ func expandTLSEdge(in interface{}) *restapi.TLSEdge {
 	}
 	if v, ok := m["tls_termination"]; ok {
 		obj.TlsTermination = expandEndpointTLSTermination(v)
+	}
+	if v, ok := m["policy"]; ok {
+		obj.Policy = expandEndpointPolicy(v)
 	}
 	return &obj
 }
@@ -8550,6 +9210,170 @@ func expandEndpointListSlice(in interface{}) *[]restapi.EndpointList {
 	var out []restapi.EndpointList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEndpointList(v))
+	}
+	return &out
+}
+
+func flattenAgentSessionEvent(obj *restapi.AgentSessionEvent) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["session"] = flattenRef(&obj.Session)
+	m["credential"] = flattenRef(obj.Credential)
+	m["agent_ip"] = obj.AgentIP
+	m["ingress_server_ip"] = obj.IngressServerIP
+	m["region"] = obj.Region
+	m["ingress_hostname"] = obj.IngressHostname
+	m["user_agent"] = obj.UserAgent
+	m["metadata"] = obj.Metadata
+	m["os"] = obj.OS
+	m["arch"] = obj.Arch
+	m["transport"] = obj.Transport
+	m["started_at"] = obj.StartedAt
+	m["expires_at"] = obj.ExpiresAt
+	m["stopped_at"] = obj.StoppedAt
+	m["deprecated"] = flattenAgentDeprecated(obj.Deprecated)
+	m["error"] = obj.Error
+
+	return []interface{}{m}
+}
+
+func flattenAgentSessionEventSlice(objs *[]restapi.AgentSessionEvent) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAgentSessionEvent(&v))
+	}
+	return sl
+}
+
+func expandAgentSessionEvent(in interface{}) *restapi.AgentSessionEvent {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AgentSessionEvent
+	if v, ok := m["session"]; ok {
+		obj.Session = *expandRef(v)
+	}
+	if v, ok := m["credential"]; ok {
+		obj.Credential = expandRef(v)
+	}
+	if v, ok := m["agent_ip"]; ok {
+		obj.AgentIP = *expandString(v)
+	}
+	if v, ok := m["ingress_server_ip"]; ok {
+		obj.IngressServerIP = *expandString(v)
+	}
+	if v, ok := m["region"]; ok {
+		obj.Region = *expandString(v)
+	}
+	if v, ok := m["ingress_hostname"]; ok {
+		obj.IngressHostname = *expandString(v)
+	}
+	if v, ok := m["user_agent"]; ok {
+		obj.UserAgent = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["os"]; ok {
+		obj.OS = *expandString(v)
+	}
+	if v, ok := m["arch"]; ok {
+		obj.Arch = *expandString(v)
+	}
+	if v, ok := m["transport"]; ok {
+		obj.Transport = *expandString(v)
+	}
+	if v, ok := m["started_at"]; ok {
+		obj.StartedAt = *expandString(v)
+	}
+	if v, ok := m["expires_at"]; ok {
+		obj.ExpiresAt = expandString(v)
+	}
+	if v, ok := m["stopped_at"]; ok {
+		obj.StoppedAt = expandString(v)
+	}
+	if v, ok := m["deprecated"]; ok {
+		obj.Deprecated = expandAgentDeprecated(v)
+	}
+	if v, ok := m["error"]; ok {
+		obj.Error = *expandString(v)
+	}
+	return &obj
+}
+
+func expandAgentSessionEventSlice(in interface{}) *[]restapi.AgentSessionEvent {
+	var out []restapi.AgentSessionEvent
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAgentSessionEvent(v))
+	}
+	return &out
+}
+
+func flattenAgentDeprecated(obj *restapi.AgentDeprecated) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["upcoming_minimum_version"] = obj.UpcomingMinimumVersion
+	m["upcoming_enforcement_date"] = obj.UpcomingEnforcementDate
+	m["message"] = obj.Message
+
+	return []interface{}{m}
+}
+
+func flattenAgentDeprecatedSlice(objs *[]restapi.AgentDeprecated) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenAgentDeprecated(&v))
+	}
+	return sl
+}
+
+func expandAgentDeprecated(in interface{}) *restapi.AgentDeprecated {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.AgentDeprecated
+	if v, ok := m["upcoming_minimum_version"]; ok {
+		obj.UpcomingMinimumVersion = *expandString(v)
+	}
+	if v, ok := m["upcoming_enforcement_date"]; ok {
+		obj.UpcomingEnforcementDate = *expandString(v)
+	}
+	if v, ok := m["message"]; ok {
+		obj.Message = *expandString(v)
+	}
+	return &obj
+}
+
+func expandAgentDeprecatedSlice(in interface{}) *[]restapi.AgentDeprecated {
+	var out []restapi.AgentDeprecated
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandAgentDeprecated(v))
 	}
 	return &out
 }
@@ -13896,4 +14720,8 @@ func expandStringMap(vs interface{}) *map[string]string {
 		out[k] = v.(string)
 	}
 	return &out
+}
+
+func expandAny(v interface{}) *any {
+	return &v
 }
