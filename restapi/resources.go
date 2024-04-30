@@ -690,6 +690,43 @@ type WeightedBackendList struct {
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
+type BotUser struct {
+	// unique API key resource identifier
+	ID string `json:"id,omitempty"`
+	// URI to the API resource of this bot user
+	URI string `json:"uri,omitempty"`
+	// human-readable name used to identify the bot
+	Name string `json:"name,omitempty"`
+	// whether or not the bot is active
+	Active bool `json:"active,omitempty"`
+	// timestamp when the api key was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+}
+
+type BotUserCreate struct {
+	// human-readable name used to identify the bot
+	Name string `json:"name,omitempty"`
+	// whether or not the bot is active
+	Active *bool `json:"active,omitempty"`
+}
+
+type BotUserUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable name used to identify the bot
+	Name *string `json:"name,omitempty"`
+	// whether or not the bot is active
+	Active *bool `json:"active,omitempty"`
+}
+
+type BotUserList struct {
+	// the list of all bot users on this account
+	BotUsers []BotUser `json:"bot_users,omitempty"`
+	// URI of the bot users list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
 type CertificateAuthorityCreate struct {
 	// human-readable description of this Certificate Authority. optional, max 255
 	// bytes.
@@ -1454,6 +1491,38 @@ type EndpointWebsocketTCPConverter struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
+type EndpointUserAgentFilter struct {
+	Enabled              *bool    `json:"enabled,omitempty"`
+	UserAgentFilterAllow []string `json:"allow,omitempty"`
+	UserAgentFilterDeny  []string `json:"deny,omitempty"`
+}
+
+type EndpointPolicy struct {
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+	// the inbound rules of the traffic policy.
+	Inbound []EndpointRule `json:"inbound,omitempty"`
+	// the outbound rules on the traffic policy.
+	Outbound []EndpointRule `json:"outbound,omitempty"`
+}
+
+type EndpointRule struct {
+	// cel expressions that filter traffic the policy rule applies to.
+	Expressions []string `json:"expressions,omitempty"`
+	// the set of actions on a policy rule.
+	Actions []EndpointAction `json:"actions,omitempty"`
+	// the name of the rule that is part of the traffic policy.
+	Name string `json:"name,omitempty"`
+}
+
+type EndpointAction struct {
+	// the type of action on the policy rule.
+	Type string `json:"type,omitempty"`
+	// the configuration for the action on the policy rule.
+	Config any `json:"config,omitempty"`
+}
+
 type EdgeRouteItem struct {
 	// unique identifier of this edge
 	EdgeID string `json:"edge_id,omitempty"`
@@ -1497,6 +1566,9 @@ type HTTPSEdgeRouteCreate struct {
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
 	// websocket to tcp adapter configuration or null
 	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type HTTPSEdgeRouteUpdate struct {
@@ -1537,6 +1609,9 @@ type HTTPSEdgeRouteUpdate struct {
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
 	// websocket to tcp adapter configuration or null
 	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type HTTPSEdgeRoute struct {
@@ -1581,6 +1656,9 @@ type HTTPSEdgeRoute struct {
 	OIDC *EndpointOIDC `json:"oidc,omitempty"`
 	// websocket to tcp adapter configuration or null
 	WebsocketTCPConverter *EndpointWebsocketTCPConverter `json:"websocket_tcp_converter,omitempty"`
+	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type HTTPSEdgeList struct {
@@ -1669,6 +1747,11 @@ type EdgeTLSTerminationAtEdgeReplace struct {
 	Module EndpointTLSTerminationAtEdge `json:"module,omitempty"`
 }
 
+type EdgePolicyReplace struct {
+	ID     string         `json:"id,omitempty"`
+	Module EndpointPolicy `json:"module,omitempty"`
+}
+
 type EdgeRouteBackendReplace struct {
 	EdgeID string                `json:"edge_id,omitempty"`
 	ID     string                `json:"id,omitempty"`
@@ -1735,6 +1818,18 @@ type EdgeRouteWebsocketTCPConverterReplace struct {
 	Module EndpointWebsocketTCPConverter `json:"module,omitempty"`
 }
 
+type EdgeRouteUserAgentFilterReplace struct {
+	EdgeID string                  `json:"edge_id,omitempty"`
+	ID     string                  `json:"id,omitempty"`
+	Module EndpointUserAgentFilter `json:"module,omitempty"`
+}
+
+type EdgeRoutePolicyReplace struct {
+	EdgeID string         `json:"edge_id,omitempty"`
+	ID     string         `json:"id,omitempty"`
+	Module EndpointPolicy `json:"module,omitempty"`
+}
+
 type TCPEdgeList struct {
 	// the list of all TCP Edges on this account
 	TCPEdges []TCPEdge `json:"tcp_edges,omitempty"`
@@ -1756,6 +1851,8 @@ type TCPEdgeCreate struct {
 	// edge modules
 	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type TCPEdgeUpdate struct {
@@ -1772,6 +1869,8 @@ type TCPEdgeUpdate struct {
 	// edge modules
 	Backend       *EndpointBackendMutate  `json:"backend,omitempty"`
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type TCPEdge struct {
@@ -1792,6 +1891,8 @@ type TCPEdge struct {
 	// edge modules
 	Backend       *EndpointBackend  `json:"backend,omitempty"`
 	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type TLSEdgeList struct {
@@ -1817,6 +1918,8 @@ type TLSEdgeCreate struct {
 	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
 	MutualTLS      *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
 	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type TLSEdgeUpdate struct {
@@ -1835,6 +1938,8 @@ type TLSEdgeUpdate struct {
 	IPRestriction  *EndpointIPPolicyMutate  `json:"ip_restriction,omitempty"`
 	MutualTLS      *EndpointMutualTLSMutate `json:"mutual_tls,omitempty"`
 	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type TLSEdge struct {
@@ -1857,6 +1962,8 @@ type TLSEdge struct {
 	IpRestriction  *EndpointIPPolicy       `json:"ip_restriction,omitempty"`
 	MutualTls      *EndpointMutualTLS      `json:"mutual_tls,omitempty"`
 	TlsTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
+	// the traffic policy associated with this edge or null
+	Policy *EndpointPolicy `json:"policy,omitempty"`
 }
 
 type Endpoint struct {
@@ -1896,6 +2003,54 @@ type EndpointList struct {
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type AgentSessionEvent struct {
+	// a reference to the session to which this event corresponds
+	Session Ref `json:"session,omitempty"`
+	// a reference to the credential used to authenticate this session
+	Credential *Ref `json:"credential,omitempty"`
+	// the ip address from which the agent is connecting
+	AgentIP string `json:"agent_ip,omitempty"`
+	// the ip address of the ingress server to which the agent is connecting
+	IngressServerIP string `json:"ingress_server_ip,omitempty"`
+	// the region of the tunnel server
+	Region string `json:"region,omitempty"`
+	// the hostname of the tunnel server
+	IngressHostname string `json:"ingress_hostname,omitempty"`
+	// the user agent provided to the tunnel server by the agent
+	UserAgent string `json:"user_agent,omitempty"`
+	// the session metadata provided by the agent on connection
+	Metadata string `json:"metadata,omitempty"`
+	// the operating system of the machine on which the agent is running
+	OS string `json:"os,omitempty"`
+	// the CPU architecture of the machine on which the agent is running
+	Arch string `json:"arch,omitempty"`
+	// the transport protocol used internally by the agent "muxado" for agents and
+	// agent libraries, "ssh" for reverse SSH tunnels
+	Transport string `json:"transport,omitempty"`
+	// the time at which the session started
+	StartedAt string `json:"started_at,omitempty"`
+	// the time at which the session expires
+	ExpiresAt *string `json:"expires_at,omitempty"`
+	// the time at which the session stopped
+	StoppedAt *string `json:"stopped_at,omitempty"`
+	// If the current agent version is deprecated, informs when support will be dropped
+	// and the next minimum supported version
+	Deprecated *AgentDeprecated `json:"deprecated,omitempty"`
+	// on a failed session start, an explanation of the failure on a successful session
+	// start, the empty string on a session stop, the reason for the session stop
+	Error string `json:"error,omitempty"`
+}
+
+type AgentDeprecated struct {
+	// the upcoming minimum supported agent version
+	UpcomingMinimumVersion string `json:"upcoming_minimum_version,omitempty"`
+	// the date by which the current agent must be upgraded to the upcoming minimum
+	// version
+	UpcomingEnforcementDate string `json:"upcoming_enforcement_date,omitempty"`
+	// additional information about the agent deprecation
+	Message string `json:"message,omitempty"`
 }
 
 type EventDestinationCreate struct {

@@ -935,6 +935,102 @@ func (c *Client) WeightedBackendsUpdate(ctx context.Context, arg *WeightedBacken
 	return &res, resp, err
 }
 
+// Create a new bot user
+func (c *Client) BotUsersCreate(ctx context.Context, arg *BotUserCreate) (*BotUser, *http.Response, error) {
+	var res BotUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/bot_users")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a bot user by ID
+func (c *Client) BotUsersDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/bot_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get the details of a Bot User by ID.
+func (c *Client) BotUsersGet(ctx context.Context, arg *Item) (*BotUser, *http.Response, error) {
+	var res BotUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/bot_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all bot users in this account.
+func (c *Client) BotUsersList(ctx context.Context, arg *Paging) (*BotUserList, *http.Response, error) {
+	var res BotUserList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/bot_users")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update attributes of a bot user by ID.
+func (c *Client) BotUsersUpdate(ctx context.Context, arg *BotUserUpdate) (*BotUser, *http.Response, error) {
+	var res BotUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/bot_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Upload a new Certificate Authority
 func (c *Client) CertificateAuthoritiesCreate(ctx context.Context, arg *CertificateAuthorityCreate) (*CertificateAuthority, *http.Response, error) {
 	var res CertificateAuthority
@@ -2047,6 +2143,108 @@ func (c *Client) EdgeRouteWebsocketTCPConverterModuleDelete(ctx context.Context,
 	return &res, resp, err
 }
 
+func (c *Client) EdgeRouteUserAgentFilterModuleReplace(ctx context.Context, arg *EdgeRouteUserAgentFilterReplace) (*EndpointUserAgentFilter, *http.Response, error) {
+	var res EndpointUserAgentFilter
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/user_agent_filter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteUserAgentFilterModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointUserAgentFilter, *http.Response, error) {
+	var res EndpointUserAgentFilter
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/user_agent_filter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteUserAgentFilterModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/user_agent_filter")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRoutePolicyModuleReplace(ctx context.Context, arg *EdgeRoutePolicyReplace) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRoutePolicyModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRoutePolicyModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Create a TCP Edge
 func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
@@ -2227,6 +2425,54 @@ func (c *Client) TCPEdgeIPRestrictionModuleDelete(ctx context.Context, arg *Item
 	var res Empty
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/ip_restriction")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgePolicyModuleReplace(ctx context.Context, arg *EdgePolicyReplace) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgePolicyModuleGet(ctx context.Context, arg *Item) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -2515,6 +2761,54 @@ func (c *Client) TLSEdgeTLSTerminationModuleDelete(ctx context.Context, arg *Ite
 	var res Empty
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/tls_termination")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgePolicyModuleReplace(ctx context.Context, arg *EdgePolicyReplace) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgePolicyModuleGet(ctx context.Context, arg *Item) (*EndpointPolicy, *http.Response, error) {
+	var res EndpointPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()

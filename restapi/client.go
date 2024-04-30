@@ -189,7 +189,7 @@ func (c *Client) ReadResponse(req *http.Request, out interface{}) (*http.Respons
 
 	c.debug.printResponse(r)
 
-	if r.StatusCode >= 400 {
+	if r.StatusCode >= http.StatusBadRequest {
 		return r, errorFromResponse(r)
 	}
 	if out != nil {
