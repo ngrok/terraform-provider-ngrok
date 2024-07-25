@@ -6762,6 +6762,58 @@ func expandEndpointActionSlice(in interface{}) *[]restapi.EndpointAction {
 	return &out
 }
 
+func flattenEndpointTrafficPolicy(obj *restapi.EndpointTrafficPolicy) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["value"] = obj.Value
+
+	return []interface{}{m}
+}
+
+func flattenEndpointTrafficPolicySlice(objs *[]restapi.EndpointTrafficPolicy) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointTrafficPolicy(&v))
+	}
+	return sl
+}
+
+func expandEndpointTrafficPolicy(in interface{}) *restapi.EndpointTrafficPolicy {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointTrafficPolicy
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["value"]; ok {
+		obj.Value = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEndpointTrafficPolicySlice(in interface{}) *[]restapi.EndpointTrafficPolicy {
+	var out []restapi.EndpointTrafficPolicy
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointTrafficPolicy(v))
+	}
+	return &out
+}
+
 func flattenEdgeRouteItem(obj *restapi.EdgeRouteItem) interface{} {
 	if obj == nil {
 		return nil
@@ -6838,6 +6890,7 @@ func flattenHTTPSEdgeRouteCreate(obj *restapi.HTTPSEdgeRouteCreate) interface{} 
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -6919,6 +6972,9 @@ func expandHTTPSEdgeRouteCreate(in interface{}) *restapi.HTTPSEdgeRouteCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -6955,6 +7011,7 @@ func flattenHTTPSEdgeRouteUpdate(obj *restapi.HTTPSEdgeRouteUpdate) interface{} 
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -7039,6 +7096,9 @@ func expandHTTPSEdgeRouteUpdate(in interface{}) *restapi.HTTPSEdgeRouteUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -7077,6 +7137,7 @@ func flattenHTTPSEdgeRoute(obj *restapi.HTTPSEdgeRoute) interface{} {
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -7166,6 +7227,9 @@ func expandHTTPSEdgeRoute(in interface{}) *restapi.HTTPSEdgeRoute {
 	}
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
 	}
 	return &obj
 }
@@ -7754,6 +7818,58 @@ func expandEdgePolicyReplaceSlice(in interface{}) *[]restapi.EdgePolicyReplace {
 	var out []restapi.EdgePolicyReplace
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEdgePolicyReplace(v))
+	}
+	return &out
+}
+
+func flattenEdgeTrafficPolicyReplace(obj *restapi.EdgeTrafficPolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointTrafficPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeTrafficPolicyReplaceSlice(objs *[]restapi.EdgeTrafficPolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeTrafficPolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeTrafficPolicyReplace(in interface{}) *restapi.EdgeTrafficPolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeTrafficPolicyReplace
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointTrafficPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgeTrafficPolicyReplaceSlice(in interface{}) *[]restapi.EdgeTrafficPolicyReplace {
+	var out []restapi.EdgeTrafficPolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeTrafficPolicyReplace(v))
 	}
 	return &out
 }
@@ -8486,6 +8602,62 @@ func expandEdgeRoutePolicyReplaceSlice(in interface{}) *[]restapi.EdgeRoutePolic
 	return &out
 }
 
+func flattenEdgeRouteTrafficPolicyReplace(obj *restapi.EdgeRouteTrafficPolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["edge_id"] = obj.EdgeID
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointTrafficPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeRouteTrafficPolicyReplaceSlice(objs *[]restapi.EdgeRouteTrafficPolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeRouteTrafficPolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeRouteTrafficPolicyReplace(in interface{}) *restapi.EdgeRouteTrafficPolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeRouteTrafficPolicyReplace
+	if v, ok := m["edge_id"]; ok {
+		obj.EdgeID = *expandString(v)
+	}
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointTrafficPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgeRouteTrafficPolicyReplaceSlice(in interface{}) *[]restapi.EdgeRouteTrafficPolicyReplace {
+	var out []restapi.EdgeRouteTrafficPolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeRouteTrafficPolicyReplace(v))
+	}
+	return &out
+}
+
 func flattenTCPEdgeList(obj *restapi.TCPEdgeList) interface{} {
 	if obj == nil {
 		return nil
@@ -8554,6 +8726,7 @@ func flattenTCPEdgeCreate(obj *restapi.TCPEdgeCreate) interface{} {
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8599,6 +8772,9 @@ func expandTCPEdgeCreate(in interface{}) *restapi.TCPEdgeCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8623,6 +8799,7 @@ func flattenTCPEdgeUpdate(obj *restapi.TCPEdgeUpdate) interface{} {
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8671,6 +8848,9 @@ func expandTCPEdgeUpdate(in interface{}) *restapi.TCPEdgeUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8697,6 +8877,7 @@ func flattenTCPEdge(obj *restapi.TCPEdge) interface{} {
 	m["backend"] = flattenEndpointBackend(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicy(obj.IpRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8750,6 +8931,9 @@ func expandTCPEdge(in interface{}) *restapi.TCPEdge {
 	}
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
 	}
 	return &obj
 }
@@ -8832,6 +9016,7 @@ func flattenTLSEdgeCreate(obj *restapi.TLSEdgeCreate) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8883,6 +9068,9 @@ func expandTLSEdgeCreate(in interface{}) *restapi.TLSEdgeCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8909,6 +9097,7 @@ func flattenTLSEdgeUpdate(obj *restapi.TLSEdgeUpdate) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8963,6 +9152,9 @@ func expandTLSEdgeUpdate(in interface{}) *restapi.TLSEdgeUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8991,6 +9183,7 @@ func flattenTLSEdge(obj *restapi.TLSEdge) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLS(obj.MutualTls)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TlsTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -9050,6 +9243,9 @@ func expandTLSEdge(in interface{}) *restapi.TLSEdge {
 	}
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
 	}
 	return &obj
 }
@@ -9649,6 +9845,7 @@ func flattenEventTarget(obj *restapi.EventTarget) interface{} {
 	m["cloudwatch_logs"] = flattenEventTargetCloudwatchLogs(obj.CloudwatchLogs)
 	m["debug"] = flattenEventTargetDebug(obj.Debug)
 	m["datadog"] = flattenEventTargetDatadog(obj.Datadog)
+	m["azure_logs_ingestion"] = flattenEventTargetAzureLogsIngestion(obj.AzureLogsIngestion)
 
 	return []interface{}{m}
 }
@@ -9690,6 +9887,9 @@ func expandEventTarget(in interface{}) *restapi.EventTarget {
 	}
 	if v, ok := m["datadog"]; ok {
 		obj.Datadog = expandEventTargetDatadog(v)
+	}
+	if v, ok := m["azure_logs_ingestion"]; ok {
+		obj.AzureLogsIngestion = expandEventTargetAzureLogsIngestion(v)
 	}
 	return &obj
 }
@@ -10034,6 +10234,74 @@ func expandEventTargetDatadogSlice(in interface{}) *[]restapi.EventTargetDatadog
 	var out []restapi.EventTargetDatadog
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEventTargetDatadog(v))
+	}
+	return &out
+}
+
+func flattenEventTargetAzureLogsIngestion(obj *restapi.EventTargetAzureLogsIngestion) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["tenant_id"] = obj.TenantId
+	m["client_id"] = obj.ClientId
+	m["client_secret"] = obj.ClientSecret
+	m["logs_ingestion_uri"] = obj.LogsIngestionURI
+	m["data_collection_rule_id"] = obj.DataCollectionRuleId
+	m["data_collection_stream_name"] = obj.DataCollectionStreamName
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetAzureLogsIngestionSlice(objs *[]restapi.EventTargetAzureLogsIngestion) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetAzureLogsIngestion(&v))
+	}
+	return sl
+}
+
+func expandEventTargetAzureLogsIngestion(in interface{}) *restapi.EventTargetAzureLogsIngestion {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetAzureLogsIngestion
+	if v, ok := m["tenant_id"]; ok {
+		obj.TenantId = *expandString(v)
+	}
+	if v, ok := m["client_id"]; ok {
+		obj.ClientId = *expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = *expandString(v)
+	}
+	if v, ok := m["logs_ingestion_uri"]; ok {
+		obj.LogsIngestionURI = *expandString(v)
+	}
+	if v, ok := m["data_collection_rule_id"]; ok {
+		obj.DataCollectionRuleId = *expandString(v)
+	}
+	if v, ok := m["data_collection_stream_name"]; ok {
+		obj.DataCollectionStreamName = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetAzureLogsIngestionSlice(in interface{}) *[]restapi.EventTargetAzureLogsIngestion {
+	var out []restapi.EventTargetAzureLogsIngestion
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetAzureLogsIngestion(v))
 	}
 	return &out
 }
@@ -12573,6 +12841,7 @@ func flattenReservedDomainCreate(obj *restapi.ReservedDomainCreate) interface{} 
 	m["https_endpoint_configuration_id"] = obj.HTTPSEndpointConfigurationID
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
+	m["error_redirect_url"] = obj.ErrorRedirectUrl
 
 	return []interface{}{m}
 }
@@ -12627,6 +12896,9 @@ func expandReservedDomainCreate(in interface{}) *restapi.ReservedDomainCreate {
 	if v, ok := m["certificate_management_policy"]; ok {
 		obj.CertificateManagementPolicy = expandReservedDomainCertPolicy(v)
 	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectUrl = expandString(v)
+	}
 	return &obj
 }
 
@@ -12652,6 +12924,7 @@ func flattenReservedDomainUpdate(obj *restapi.ReservedDomainUpdate) interface{} 
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["region"] = obj.Region
+	m["error_redirect_url"] = obj.ErrorRedirectUrl
 
 	return []interface{}{m}
 }
@@ -12703,6 +12976,9 @@ func expandReservedDomainUpdate(in interface{}) *restapi.ReservedDomainUpdate {
 	if v, ok := m["region"]; ok {
 		obj.Region = expandString(v)
 	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectUrl = expandString(v)
+	}
 	return &obj
 }
 
@@ -12734,6 +13010,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["certificate_management_status"] = flattenReservedDomainCertStatus(obj.CertificateManagementStatus)
 	m["acme_challenge_cname_target"] = obj.ACMEChallengeCNAMETarget
+	m["error_redirect_url"] = obj.ErrorRedirectURL
 
 	return []interface{}{m}
 }
@@ -12802,6 +13079,9 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	}
 	if v, ok := m["acme_challenge_cname_target"]; ok {
 		obj.ACMEChallengeCNAMETarget = expandString(v)
+	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectURL = expandString(v)
 	}
 	return &obj
 }

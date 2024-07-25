@@ -2245,6 +2245,57 @@ func (c *Client) EdgeRoutePolicyModuleDelete(ctx context.Context, arg *EdgeRoute
 	return &res, resp, err
 }
 
+func (c *Client) EdgeRouteTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeRouteTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteTrafficPolicyModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteTrafficPolicyModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Create a TCP Edge
 func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEdge, *http.Response, error) {
 	var res TCPEdge
@@ -2473,6 +2524,54 @@ func (c *Client) TCPEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Emp
 	var res Empty
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleGet(ctx context.Context, arg *Item) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -2809,6 +2908,54 @@ func (c *Client) TLSEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Emp
 	var res Empty
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleGet(ctx context.Context, arg *Item) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
