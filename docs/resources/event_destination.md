@@ -53,11 +53,25 @@ resource "ngrok_event_destination" "example" {
 
 Optional:
 
+- **azure_logs_ingestion** (Block Set) (see [below for nested schema](#nestedblock--target--azure_logs_ingestion))
 - **cloudwatch_logs** (Block Set) Configuration used to send events to Amazon CloudWatch Logs. (see [below for nested schema](#nestedblock--target--cloudwatch_logs))
 - **datadog** (Block Set) Configuration used to send events to Datadog. (see [below for nested schema](#nestedblock--target--datadog))
 - **debug** (Block Set) Configuration used for internal debugging. (see [below for nested schema](#nestedblock--target--debug))
 - **firehose** (Block Set) Configuration used to send events to Amazon Kinesis Data Firehose. (see [below for nested schema](#nestedblock--target--firehose))
 - **kinesis** (Block Set) Configuration used to send events to Amazon Kinesis. (see [below for nested schema](#nestedblock--target--kinesis))
+
+<a id="nestedblock--target--azure_logs_ingestion"></a>
+### Nested Schema for `target.azure_logs_ingestion`
+
+Required:
+
+- **client_id** (String) Client ID for the application client
+- **client_secret** (String) Client Secret for the application client
+- **data_collection_rule_id** (String) Data collection rule immutable ID
+- **data_collection_stream_name** (String) Data collection stream name to use as destination, located instide the DCR
+- **logs_ingestion_uri** (String) Data collection endpoint logs ingestion URI
+- **tenant_id** (String) Tenant ID for the Azure account
+
 
 <a id="nestedblock--target--cloudwatch_logs"></a>
 ### Nested Schema for `target.cloudwatch_logs`

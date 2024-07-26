@@ -38,6 +38,7 @@ resource "ngrok_reserved_domain" "example" {
 - **certificate_management_policy** (Block Set) configuration for automatic management of TLS certificates for this domain, or null if automatic management is disabled (see [below for nested schema](#nestedblock--certificate_management_policy))
 - **description** (String) human-readable description of what this reserved domain will be used for
 - **domain** (String) hostname of the reserved domain
+- **error_redirect_url** (String) Custom URL with CEL Expression Variable support for redirecting when an ngrok error occurs. Max 10000 bytes.
 - **http_endpoint_configuration_id** (String) ID of an endpoint configuration of type http that will be used to handle inbound http traffic to this domain
 - **https_endpoint_configuration_id** (String) ID of an endpoint configuration of type https that will be used to handle inbound https traffic to this domain
 - **metadata** (String) arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.
