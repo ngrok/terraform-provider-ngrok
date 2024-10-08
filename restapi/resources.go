@@ -1523,6 +1523,14 @@ type EndpointAction struct {
 	Config any `json:"config,omitempty"`
 }
 
+type EndpointTrafficPolicy struct {
+	// true if the module will be applied to traffic, false to disable. default true if
+	// unspecified
+	Enabled *bool `json:"enabled,omitempty"`
+	// the traffic policy that should be applied to the traffic on your endpoint.
+	Value string `json:"value,omitempty"`
+}
+
 type EdgeRouteItem struct {
 	// unique identifier of this edge
 	EdgeID string `json:"edge_id,omitempty"`
@@ -1569,6 +1577,8 @@ type HTTPSEdgeRouteCreate struct {
 	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type HTTPSEdgeRouteUpdate struct {
@@ -1612,6 +1622,8 @@ type HTTPSEdgeRouteUpdate struct {
 	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type HTTPSEdgeRoute struct {
@@ -1659,6 +1671,8 @@ type HTTPSEdgeRoute struct {
 	UserAgentFilter       *EndpointUserAgentFilter       `json:"user_agent_filter,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type HTTPSEdgeList struct {
@@ -1752,6 +1766,11 @@ type EdgePolicyReplace struct {
 	Module EndpointPolicy `json:"module,omitempty"`
 }
 
+type EdgeTrafficPolicyReplace struct {
+	ID     string                `json:"id,omitempty"`
+	Module EndpointTrafficPolicy `json:"module,omitempty"`
+}
+
 type EdgeRouteBackendReplace struct {
 	EdgeID string                `json:"edge_id,omitempty"`
 	ID     string                `json:"id,omitempty"`
@@ -1830,6 +1849,12 @@ type EdgeRoutePolicyReplace struct {
 	Module EndpointPolicy `json:"module,omitempty"`
 }
 
+type EdgeRouteTrafficPolicyReplace struct {
+	EdgeID string                `json:"edge_id,omitempty"`
+	ID     string                `json:"id,omitempty"`
+	Module EndpointTrafficPolicy `json:"module,omitempty"`
+}
+
 type TCPEdgeList struct {
 	// the list of all TCP Edges on this account
 	TCPEdges []TCPEdge `json:"tcp_edges,omitempty"`
@@ -1853,6 +1878,8 @@ type TCPEdgeCreate struct {
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type TCPEdgeUpdate struct {
@@ -1871,6 +1898,8 @@ type TCPEdgeUpdate struct {
 	IPRestriction *EndpointIPPolicyMutate `json:"ip_restriction,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type TCPEdge struct {
@@ -1893,6 +1922,8 @@ type TCPEdge struct {
 	IpRestriction *EndpointIPPolicy `json:"ip_restriction,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type TLSEdgeList struct {
@@ -1920,6 +1951,8 @@ type TLSEdgeCreate struct {
 	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type TLSEdgeUpdate struct {
@@ -1940,6 +1973,8 @@ type TLSEdgeUpdate struct {
 	TLSTermination *EndpointTLSTermination  `json:"tls_termination,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type TLSEdge struct {
@@ -1964,6 +1999,8 @@ type TLSEdge struct {
 	TlsTermination *EndpointTLSTermination `json:"tls_termination,omitempty"`
 	// the traffic policy associated with this edge or null
 	Policy *EndpointPolicy `json:"policy,omitempty"`
+	// the traffic policy associated with this edge or null
+	TrafficPolicy *EndpointTrafficPolicy `json:"traffic_policy,omitempty"`
 }
 
 type Endpoint struct {
@@ -1978,14 +2015,19 @@ type Endpoint struct {
 	// URL of the hostport served by this endpoint
 	PublicURL string `json:"public_url,omitempty"`
 	// protocol served by this endpoint. one of http, https, tcp, or tls
-	Proto string `json:"proto,omitempty"`
-	// hostport served by this endpoint (hostname:port)
+	Proto  string `json:"proto,omitempty"`
+	Scheme string `json:"scheme,omitempty"`
+	// hostport served by this endpoint (hostname:port) -> soon to be deprecated
 	Hostport string `json:"hostport,omitempty"`
+	Host     string `json:"host,omitempty"`
+	Port     int64  `json:"port,omitempty"`
 	// whether the endpoint is ephemeral (served directly by an agent-initiated tunnel)
-	// or edge (served by an edge)
+	// or edge (served by an edge) or cloud (represents a cloud endpoint)
 	Type string `json:"type,omitempty"`
 	// user-supplied metadata of the associated tunnel or edge object
 	Metadata string `json:"metadata,omitempty"`
+	// user-supplied description of the associated tunnel
+	Description string `json:"description,omitempty"`
 	// the domain reserved for this endpoint
 	Domain *Ref `json:"domain,omitempty"`
 	// the address reserved for this endpoint
@@ -1994,6 +2036,22 @@ type Endpoint struct {
 	Tunnel *Ref `json:"tunnel,omitempty"`
 	// the edge serving requests to this endpoint, if this is an edge endpoint
 	Edge *Ref `json:"edge,omitempty"`
+	// the local address the tunnel forwards to
+	UpstreamURL string `json:"upstream_url,omitempty"`
+	// the protocol the agent uses to forward with
+	UpstreamProto string `json:"upstream_proto,omitempty"`
+	// the url of the endpoint
+	URL string `json:"url,omitempty"`
+	// The ID of the owner (bot or user) that owns this endpoint
+	PrincipalID *Ref `json:"principal_id,omitempty"`
+	// The traffic policy attached to this endpoint
+	TrafficPolicy string `json:"traffic_policy,omitempty"`
+	// the bindings associated with this endpoint
+	Bindings *[]string `json:"bindings,omitempty"`
+	// The tunnel session of the agent for this endpoint
+	TunnelSession *Ref `json:"tunnel_session,omitempty"`
+	// URI of the clep API resource
+	URI string `json:"uri,omitempty"`
 }
 
 type EndpointList struct {
@@ -2003,6 +2061,37 @@ type EndpointList struct {
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type EndpointCreate struct {
+	// the url of the endpoint
+	URL string `json:"url,omitempty"`
+	// whether the endpoint is ephemeral (served directly by an agent-initiated tunnel)
+	// or edge (served by an edge) or cloud (represents a cloud endpoint)
+	Type string `json:"type,omitempty"`
+	// The traffic policy attached to this endpoint
+	TrafficPolicy string `json:"traffic_policy,omitempty"`
+	// user-supplied description of the associated tunnel
+	Description *string `json:"description,omitempty"`
+	// user-supplied metadata of the associated tunnel or edge object
+	Metadata *string `json:"metadata,omitempty"`
+	// the bindings associated with this endpoint
+	Bindings *[]string `json:"bindings,omitempty"`
+}
+
+type EndpointUpdate struct {
+	// unique endpoint resource identifier
+	ID string `json:"id,omitempty"`
+	// the url of the endpoint
+	Url *string `json:"url,omitempty"`
+	// The traffic policy attached to this endpoint
+	TrafficPolicy *string `json:"traffic_policy,omitempty"`
+	// user-supplied description of the associated tunnel
+	Description *string `json:"description,omitempty"`
+	// user-supplied metadata of the associated tunnel or edge object
+	Metadata *string `json:"metadata,omitempty"`
+	// the bindings associated with this endpoint
+	Bindings *[]string `json:"bindings,omitempty"`
 }
 
 type AgentSessionEvent struct {
@@ -2127,7 +2216,8 @@ type EventTarget struct {
 	// Configuration used for internal debugging.
 	Debug *EventTargetDebug `json:"debug,omitempty"`
 	// Configuration used to send events to Datadog.
-	Datadog *EventTargetDatadog `json:"datadog,omitempty"`
+	Datadog            *EventTargetDatadog            `json:"datadog,omitempty"`
+	AzureLogsIngestion *EventTargetAzureLogsIngestion `json:"azure_logs_ingestion,omitempty"`
 }
 
 type EventTargetFirehose struct {
@@ -2188,6 +2278,21 @@ type EventTargetDatadog struct {
 	Service *string `json:"service,omitempty"`
 	// Datadog site to send event to.
 	Ddsite *string `json:"ddsite,omitempty"`
+}
+
+type EventTargetAzureLogsIngestion struct {
+	// Tenant ID for the Azure account
+	TenantId string `json:"tenant_id,omitempty"`
+	// Client ID for the application client
+	ClientId string `json:"client_id,omitempty"`
+	// Client Secret for the application client
+	ClientSecret string `json:"client_secret,omitempty"`
+	// Data collection endpoint logs ingestion URI
+	LogsIngestionURI string `json:"logs_ingestion_uri,omitempty"`
+	// Data collection rule immutable ID
+	DataCollectionRuleId string `json:"data_collection_rule_id,omitempty"`
+	// Data collection stream name to use as destination, located inside the DCR
+	DataCollectionStreamName string `json:"data_collection_stream_name,omitempty"`
 }
 
 type AWSAuth struct {
@@ -2663,6 +2768,9 @@ type ReservedDomainCreate struct {
 	// null if automatic management is disabled. Optional, mutually exclusive with
 	// certificate_id.
 	CertificateManagementPolicy *ReservedDomainCertPolicy `json:"certificate_management_policy,omitempty"`
+	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
+	// error occurs. Max 10000 bytes.
+	ErrorRedirectUrl *string `json:"error_redirect_url,omitempty"`
 }
 
 type ReservedDomainUpdate struct {
@@ -2690,6 +2798,9 @@ type ReservedDomainUpdate struct {
 	// still connect to specific regions. Optional, null by default. (au, eu, ap, us,
 	// jp, in, sa)
 	Region *string `json:"region,omitempty"`
+	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
+	// error occurs. Max 10000 bytes.
+	ErrorRedirectUrl *string `json:"error_redirect_url,omitempty"`
 }
 
 type ReservedDomain struct {
@@ -2735,6 +2846,9 @@ type ReservedDomain struct {
 	// non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok
 	// subdomains.
 	ACMEChallengeCNAMETarget *string `json:"acme_challenge_cname_target,omitempty"`
+	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
+	// error occurs. Max 10000 bytes.
+	ErrorRedirectURL *string `json:"error_redirect_url,omitempty"`
 }
 
 type ReservedDomainList struct {

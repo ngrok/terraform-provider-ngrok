@@ -1,5 +1,11 @@
 <!-- Code generated for API Clients. DO NOT EDIT. -->
 
+## 0.4.0
+
+ENHANCEMENTS:
+
+* Added support for Cloud Endpoints (currently in private beta).
+
 ## 0.3.0
 
 ENHANCEMENTS:

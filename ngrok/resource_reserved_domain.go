@@ -96,6 +96,15 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    true,
 				Description: "hostname of the reserved domain",
 			},
+			"error_redirect_url": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "Custom URL with CEL Expression Variable support for redirecting when an ngrok error occurs. Max 10000 bytes.",
+			},
 			"http_endpoint_configuration_id": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -185,6 +194,9 @@ func resourceReservedDomainsCreate(d *schema.ResourceData, m interface{}) (err e
 	if v, ok := d.GetOk("certificate_management_policy"); ok {
 		arg.CertificateManagementPolicy = expandReservedDomainCertPolicy(v)
 	}
+	if v, ok := d.GetOk("error_redirect_url"); ok {
+		arg.ErrorRedirectUrl = expandString(v)
+	}
 
 	res, _, err := b.client.ReservedDomainsCreate(context.Background(), &arg)
 	if err != nil {
@@ -221,6 +233,7 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		d.Set("cname_target", res.CNAMETarget)
 		d.Set("description", res.Description)
 		d.Set("domain", res.Domain)
+		d.Set("error_redirect_url", res.ErrorRedirectURL)
 		if res.HTTPEndpointConfiguration != nil {
 			d.Set("http_endpoint_configuration_id", res.HTTPEndpointConfiguration.ID)
 		}
@@ -262,6 +275,9 @@ func resourceReservedDomainsUpdate(d *schema.ResourceData, m interface{}) (err e
 	}
 	if v, ok := d.GetOk("region"); ok {
 		arg.Region = expandString(v)
+	}
+	if v, ok := d.GetOk("error_redirect_url"); ok {
+		arg.ErrorRedirectUrl = expandString(v)
 	}
 
 	res, _, err := b.client.ReservedDomainsUpdate(context.Background(), &arg)
