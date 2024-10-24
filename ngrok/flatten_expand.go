@@ -6762,6 +6762,58 @@ func expandEndpointActionSlice(in interface{}) *[]restapi.EndpointAction {
 	return &out
 }
 
+func flattenEndpointTrafficPolicy(obj *restapi.EndpointTrafficPolicy) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["enabled"] = obj.Enabled
+	m["value"] = obj.Value
+
+	return []interface{}{m}
+}
+
+func flattenEndpointTrafficPolicySlice(objs *[]restapi.EndpointTrafficPolicy) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointTrafficPolicy(&v))
+	}
+	return sl
+}
+
+func expandEndpointTrafficPolicy(in interface{}) *restapi.EndpointTrafficPolicy {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointTrafficPolicy
+	if v, ok := m["enabled"]; ok {
+		obj.Enabled = expandBool(v)
+	}
+	if v, ok := m["value"]; ok {
+		obj.Value = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEndpointTrafficPolicySlice(in interface{}) *[]restapi.EndpointTrafficPolicy {
+	var out []restapi.EndpointTrafficPolicy
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointTrafficPolicy(v))
+	}
+	return &out
+}
+
 func flattenEdgeRouteItem(obj *restapi.EdgeRouteItem) interface{} {
 	if obj == nil {
 		return nil
@@ -6838,6 +6890,7 @@ func flattenHTTPSEdgeRouteCreate(obj *restapi.HTTPSEdgeRouteCreate) interface{} 
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -6919,6 +6972,9 @@ func expandHTTPSEdgeRouteCreate(in interface{}) *restapi.HTTPSEdgeRouteCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -6955,6 +7011,7 @@ func flattenHTTPSEdgeRouteUpdate(obj *restapi.HTTPSEdgeRouteUpdate) interface{} 
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -7039,6 +7096,9 @@ func expandHTTPSEdgeRouteUpdate(in interface{}) *restapi.HTTPSEdgeRouteUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -7077,6 +7137,7 @@ func flattenHTTPSEdgeRoute(obj *restapi.HTTPSEdgeRoute) interface{} {
 	m["websocket_tcp_converter"] = flattenEndpointWebsocketTCPConverter(obj.WebsocketTCPConverter)
 	m["user_agent_filter"] = flattenEndpointUserAgentFilter(obj.UserAgentFilter)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -7166,6 +7227,9 @@ func expandHTTPSEdgeRoute(in interface{}) *restapi.HTTPSEdgeRoute {
 	}
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
 	}
 	return &obj
 }
@@ -7754,6 +7818,58 @@ func expandEdgePolicyReplaceSlice(in interface{}) *[]restapi.EdgePolicyReplace {
 	var out []restapi.EdgePolicyReplace
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEdgePolicyReplace(v))
+	}
+	return &out
+}
+
+func flattenEdgeTrafficPolicyReplace(obj *restapi.EdgeTrafficPolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointTrafficPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeTrafficPolicyReplaceSlice(objs *[]restapi.EdgeTrafficPolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeTrafficPolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeTrafficPolicyReplace(in interface{}) *restapi.EdgeTrafficPolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeTrafficPolicyReplace
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointTrafficPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgeTrafficPolicyReplaceSlice(in interface{}) *[]restapi.EdgeTrafficPolicyReplace {
+	var out []restapi.EdgeTrafficPolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeTrafficPolicyReplace(v))
 	}
 	return &out
 }
@@ -8486,6 +8602,62 @@ func expandEdgeRoutePolicyReplaceSlice(in interface{}) *[]restapi.EdgeRoutePolic
 	return &out
 }
 
+func flattenEdgeRouteTrafficPolicyReplace(obj *restapi.EdgeRouteTrafficPolicyReplace) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["edge_id"] = obj.EdgeID
+	m["id"] = obj.ID
+	m["module"] = flattenEndpointTrafficPolicy(&obj.Module)
+
+	return []interface{}{m}
+}
+
+func flattenEdgeRouteTrafficPolicyReplaceSlice(objs *[]restapi.EdgeRouteTrafficPolicyReplace) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEdgeRouteTrafficPolicyReplace(&v))
+	}
+	return sl
+}
+
+func expandEdgeRouteTrafficPolicyReplace(in interface{}) *restapi.EdgeRouteTrafficPolicyReplace {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EdgeRouteTrafficPolicyReplace
+	if v, ok := m["edge_id"]; ok {
+		obj.EdgeID = *expandString(v)
+	}
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["module"]; ok {
+		obj.Module = *expandEndpointTrafficPolicy(v)
+	}
+	return &obj
+}
+
+func expandEdgeRouteTrafficPolicyReplaceSlice(in interface{}) *[]restapi.EdgeRouteTrafficPolicyReplace {
+	var out []restapi.EdgeRouteTrafficPolicyReplace
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEdgeRouteTrafficPolicyReplace(v))
+	}
+	return &out
+}
+
 func flattenTCPEdgeList(obj *restapi.TCPEdgeList) interface{} {
 	if obj == nil {
 		return nil
@@ -8554,6 +8726,7 @@ func flattenTCPEdgeCreate(obj *restapi.TCPEdgeCreate) interface{} {
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8599,6 +8772,9 @@ func expandTCPEdgeCreate(in interface{}) *restapi.TCPEdgeCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8623,6 +8799,7 @@ func flattenTCPEdgeUpdate(obj *restapi.TCPEdgeUpdate) interface{} {
 	m["backend"] = flattenEndpointBackendMutate(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicyMutate(obj.IPRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8671,6 +8848,9 @@ func expandTCPEdgeUpdate(in interface{}) *restapi.TCPEdgeUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8697,6 +8877,7 @@ func flattenTCPEdge(obj *restapi.TCPEdge) interface{} {
 	m["backend"] = flattenEndpointBackend(obj.Backend)
 	m["ip_restriction"] = flattenEndpointIPPolicy(obj.IpRestriction)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8750,6 +8931,9 @@ func expandTCPEdge(in interface{}) *restapi.TCPEdge {
 	}
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
 	}
 	return &obj
 }
@@ -8832,6 +9016,7 @@ func flattenTLSEdgeCreate(obj *restapi.TLSEdgeCreate) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8883,6 +9068,9 @@ func expandTLSEdgeCreate(in interface{}) *restapi.TLSEdgeCreate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8909,6 +9097,7 @@ func flattenTLSEdgeUpdate(obj *restapi.TLSEdgeUpdate) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLSMutate(obj.MutualTLS)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TLSTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -8963,6 +9152,9 @@ func expandTLSEdgeUpdate(in interface{}) *restapi.TLSEdgeUpdate {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -8991,6 +9183,7 @@ func flattenTLSEdge(obj *restapi.TLSEdge) interface{} {
 	m["mutual_tls"] = flattenEndpointMutualTLS(obj.MutualTls)
 	m["tls_termination"] = flattenEndpointTLSTermination(obj.TlsTermination)
 	m["policy"] = flattenEndpointPolicy(obj.Policy)
+	m["traffic_policy"] = flattenEndpointTrafficPolicy(obj.TrafficPolicy)
 
 	return []interface{}{m}
 }
@@ -9051,6 +9244,9 @@ func expandTLSEdge(in interface{}) *restapi.TLSEdge {
 	if v, ok := m["policy"]; ok {
 		obj.Policy = expandEndpointPolicy(v)
 	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandEndpointTrafficPolicy(v)
+	}
 	return &obj
 }
 
@@ -9074,13 +9270,27 @@ func flattenEndpoint(obj *restapi.Endpoint) interface{} {
 	m["updated_at"] = obj.UpdatedAt
 	m["public_url"] = obj.PublicURL
 	m["proto"] = obj.Proto
+	m["scheme"] = obj.Scheme
 	m["hostport"] = obj.Hostport
+	m["host"] = obj.Host
+	m["port"] = obj.Port
 	m["type"] = obj.Type
 	m["metadata"] = obj.Metadata
+	m["description"] = obj.Description
 	m["domain"] = flattenRef(obj.Domain)
 	m["tcp_addr"] = flattenRef(obj.TCPAddr)
 	m["tunnel"] = flattenRef(obj.Tunnel)
 	m["edge"] = flattenRef(obj.Edge)
+	m["upstream_url"] = obj.UpstreamURL
+	m["upstream_proto"] = obj.UpstreamProto
+	m["url"] = obj.URL
+	m["principal"] = flattenRef(obj.Principal)
+	m["principal_id"] = flattenRef(obj.PrincipalID)
+	m["traffic_policy"] = obj.TrafficPolicy
+	m["bindings"] = obj.Bindings
+	m["tunnel_session"] = flattenRef(obj.TunnelSession)
+	m["uri"] = obj.URI
+	m["name"] = obj.Name
 
 	return []interface{}{m}
 }
@@ -9126,14 +9336,26 @@ func expandEndpoint(in interface{}) *restapi.Endpoint {
 	if v, ok := m["proto"]; ok {
 		obj.Proto = *expandString(v)
 	}
+	if v, ok := m["scheme"]; ok {
+		obj.Scheme = *expandString(v)
+	}
 	if v, ok := m["hostport"]; ok {
 		obj.Hostport = *expandString(v)
+	}
+	if v, ok := m["host"]; ok {
+		obj.Host = *expandString(v)
+	}
+	if v, ok := m["port"]; ok {
+		obj.Port = *expandInt64(v)
 	}
 	if v, ok := m["type"]; ok {
 		obj.Type = *expandString(v)
 	}
 	if v, ok := m["metadata"]; ok {
 		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
 	}
 	if v, ok := m["domain"]; ok {
 		obj.Domain = expandRef(v)
@@ -9146,6 +9368,36 @@ func expandEndpoint(in interface{}) *restapi.Endpoint {
 	}
 	if v, ok := m["edge"]; ok {
 		obj.Edge = expandRef(v)
+	}
+	if v, ok := m["upstream_url"]; ok {
+		obj.UpstreamURL = *expandString(v)
+	}
+	if v, ok := m["upstream_proto"]; ok {
+		obj.UpstreamProto = *expandString(v)
+	}
+	if v, ok := m["url"]; ok {
+		obj.URL = *expandString(v)
+	}
+	if v, ok := m["principal"]; ok {
+		obj.Principal = expandRef(v)
+	}
+	if v, ok := m["principal_id"]; ok {
+		obj.PrincipalID = expandRef(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = *expandString(v)
+	}
+	if v, ok := m["bindings"]; ok {
+		obj.Bindings = expandStringSlice(v)
+	}
+	if v, ok := m["tunnel_session"]; ok {
+		obj.TunnelSession = expandRef(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
 	}
 	return &obj
 }
@@ -9210,6 +9462,142 @@ func expandEndpointListSlice(in interface{}) *[]restapi.EndpointList {
 	var out []restapi.EndpointList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEndpointList(v))
+	}
+	return &out
+}
+
+func flattenEndpointCreate(obj *restapi.EndpointCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["url"] = obj.URL
+	m["type"] = obj.Type
+	m["traffic_policy"] = obj.TrafficPolicy
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["bindings"] = obj.Bindings
+
+	return []interface{}{m}
+}
+
+func flattenEndpointCreateSlice(objs *[]restapi.EndpointCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointCreate(&v))
+	}
+	return sl
+}
+
+func expandEndpointCreate(in interface{}) *restapi.EndpointCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointCreate
+	if v, ok := m["url"]; ok {
+		obj.URL = *expandString(v)
+	}
+	if v, ok := m["type"]; ok {
+		obj.Type = *expandString(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["bindings"]; ok {
+		obj.Bindings = expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointCreateSlice(in interface{}) *[]restapi.EndpointCreate {
+	var out []restapi.EndpointCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointCreate(v))
+	}
+	return &out
+}
+
+func flattenEndpointUpdate(obj *restapi.EndpointUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["url"] = obj.Url
+	m["traffic_policy"] = obj.TrafficPolicy
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["bindings"] = obj.Bindings
+
+	return []interface{}{m}
+}
+
+func flattenEndpointUpdateSlice(objs *[]restapi.EndpointUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointUpdate(&v))
+	}
+	return sl
+}
+
+func expandEndpointUpdate(in interface{}) *restapi.EndpointUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointUpdate
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["url"]; ok {
+		obj.Url = expandString(v)
+	}
+	if v, ok := m["traffic_policy"]; ok {
+		obj.TrafficPolicy = expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["bindings"]; ok {
+		obj.Bindings = expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointUpdateSlice(in interface{}) *[]restapi.EndpointUpdate {
+	var out []restapi.EndpointUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointUpdate(v))
 	}
 	return &out
 }
@@ -9649,6 +10037,7 @@ func flattenEventTarget(obj *restapi.EventTarget) interface{} {
 	m["cloudwatch_logs"] = flattenEventTargetCloudwatchLogs(obj.CloudwatchLogs)
 	m["debug"] = flattenEventTargetDebug(obj.Debug)
 	m["datadog"] = flattenEventTargetDatadog(obj.Datadog)
+	m["azure_logs_ingestion"] = flattenEventTargetAzureLogsIngestion(obj.AzureLogsIngestion)
 
 	return []interface{}{m}
 }
@@ -9690,6 +10079,9 @@ func expandEventTarget(in interface{}) *restapi.EventTarget {
 	}
 	if v, ok := m["datadog"]; ok {
 		obj.Datadog = expandEventTargetDatadog(v)
+	}
+	if v, ok := m["azure_logs_ingestion"]; ok {
+		obj.AzureLogsIngestion = expandEventTargetAzureLogsIngestion(v)
 	}
 	return &obj
 }
@@ -10034,6 +10426,74 @@ func expandEventTargetDatadogSlice(in interface{}) *[]restapi.EventTargetDatadog
 	var out []restapi.EventTargetDatadog
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEventTargetDatadog(v))
+	}
+	return &out
+}
+
+func flattenEventTargetAzureLogsIngestion(obj *restapi.EventTargetAzureLogsIngestion) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["tenant_id"] = obj.TenantId
+	m["client_id"] = obj.ClientId
+	m["client_secret"] = obj.ClientSecret
+	m["logs_ingestion_uri"] = obj.LogsIngestionURI
+	m["data_collection_rule_id"] = obj.DataCollectionRuleId
+	m["data_collection_stream_name"] = obj.DataCollectionStreamName
+
+	return []interface{}{m}
+}
+
+func flattenEventTargetAzureLogsIngestionSlice(objs *[]restapi.EventTargetAzureLogsIngestion) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEventTargetAzureLogsIngestion(&v))
+	}
+	return sl
+}
+
+func expandEventTargetAzureLogsIngestion(in interface{}) *restapi.EventTargetAzureLogsIngestion {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EventTargetAzureLogsIngestion
+	if v, ok := m["tenant_id"]; ok {
+		obj.TenantId = *expandString(v)
+	}
+	if v, ok := m["client_id"]; ok {
+		obj.ClientId = *expandString(v)
+	}
+	if v, ok := m["client_secret"]; ok {
+		obj.ClientSecret = *expandString(v)
+	}
+	if v, ok := m["logs_ingestion_uri"]; ok {
+		obj.LogsIngestionURI = *expandString(v)
+	}
+	if v, ok := m["data_collection_rule_id"]; ok {
+		obj.DataCollectionRuleId = *expandString(v)
+	}
+	if v, ok := m["data_collection_stream_name"]; ok {
+		obj.DataCollectionStreamName = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEventTargetAzureLogsIngestionSlice(in interface{}) *[]restapi.EventTargetAzureLogsIngestion {
+	var out []restapi.EventTargetAzureLogsIngestion
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEventTargetAzureLogsIngestion(v))
 	}
 	return &out
 }
@@ -11630,6 +12090,578 @@ func expandIPRestrictionListSlice(in interface{}) *[]restapi.IPRestrictionList {
 	return &out
 }
 
+func flattenKubernetesOperatorCreate(obj *restapi.KubernetesOperatorCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["enabled_features"] = obj.EnabledFeatures
+	m["region"] = obj.Region
+	m["deployment"] = flattenKubernetesOperatorDeployment(&obj.Deployment)
+	m["binding"] = flattenKubernetesOperatorBindingCreate(obj.Binding)
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorCreateSlice(objs *[]restapi.KubernetesOperatorCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorCreate(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorCreate(in interface{}) *restapi.KubernetesOperatorCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorCreate
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["enabled_features"]; ok {
+		obj.EnabledFeatures = *expandStringSlice(v)
+	}
+	if v, ok := m["region"]; ok {
+		obj.Region = *expandString(v)
+	}
+	if v, ok := m["deployment"]; ok {
+		obj.Deployment = *expandKubernetesOperatorDeployment(v)
+	}
+	if v, ok := m["binding"]; ok {
+		obj.Binding = expandKubernetesOperatorBindingCreate(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorCreateSlice(in interface{}) *[]restapi.KubernetesOperatorCreate {
+	var out []restapi.KubernetesOperatorCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorCreate(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorBindingCreate(obj *restapi.KubernetesOperatorBindingCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["allowed_urls"] = obj.AllowedURLs
+	m["csr"] = obj.CSR
+	m["ingress_endpoint"] = obj.IngressEndpoint
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorBindingCreateSlice(objs *[]restapi.KubernetesOperatorBindingCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorBindingCreate(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorBindingCreate(in interface{}) *restapi.KubernetesOperatorBindingCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorBindingCreate
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["allowed_urls"]; ok {
+		obj.AllowedURLs = *expandStringSlice(v)
+	}
+	if v, ok := m["csr"]; ok {
+		obj.CSR = *expandString(v)
+	}
+	if v, ok := m["ingress_endpoint"]; ok {
+		obj.IngressEndpoint = expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorBindingCreateSlice(in interface{}) *[]restapi.KubernetesOperatorBindingCreate {
+	var out []restapi.KubernetesOperatorBindingCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorBindingCreate(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorUpdate(obj *restapi.KubernetesOperatorUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["enabled_features"] = obj.EnabledFeatures
+	m["region"] = obj.Region
+	m["binding"] = flattenKubernetesOperatorBindingUpdate(obj.Binding)
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorUpdateSlice(objs *[]restapi.KubernetesOperatorUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorUpdate(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorUpdate(in interface{}) *restapi.KubernetesOperatorUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorUpdate
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = expandString(v)
+	}
+	if v, ok := m["enabled_features"]; ok {
+		obj.EnabledFeatures = expandStringSlice(v)
+	}
+	if v, ok := m["region"]; ok {
+		obj.Region = expandString(v)
+	}
+	if v, ok := m["binding"]; ok {
+		obj.Binding = expandKubernetesOperatorBindingUpdate(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorUpdateSlice(in interface{}) *[]restapi.KubernetesOperatorUpdate {
+	var out []restapi.KubernetesOperatorUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorUpdate(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorBindingUpdate(obj *restapi.KubernetesOperatorBindingUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["allowed_urls"] = obj.AllowedURLs
+	m["csr"] = obj.CSR
+	m["ingress_endpoint"] = obj.IngressEndpoint
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorBindingUpdateSlice(objs *[]restapi.KubernetesOperatorBindingUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorBindingUpdate(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorBindingUpdate(in interface{}) *restapi.KubernetesOperatorBindingUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorBindingUpdate
+	if v, ok := m["name"]; ok {
+		obj.Name = expandString(v)
+	}
+	if v, ok := m["allowed_urls"]; ok {
+		obj.AllowedURLs = expandStringSlice(v)
+	}
+	if v, ok := m["csr"]; ok {
+		obj.CSR = expandString(v)
+	}
+	if v, ok := m["ingress_endpoint"]; ok {
+		obj.IngressEndpoint = expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorBindingUpdateSlice(in interface{}) *[]restapi.KubernetesOperatorBindingUpdate {
+	var out []restapi.KubernetesOperatorBindingUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorBindingUpdate(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperator(obj *restapi.KubernetesOperator) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["uri"] = obj.URI
+	m["created_at"] = obj.CreatedAt
+	m["updated_at"] = obj.UpdatedAt
+	m["description"] = obj.Description
+	m["metadata"] = obj.Metadata
+	m["principal"] = flattenRef(&obj.Principal)
+	m["enabled_features"] = obj.EnabledFeatures
+	m["region"] = obj.Region
+	m["deployment"] = flattenKubernetesOperatorDeployment(&obj.Deployment)
+	m["binding"] = flattenKubernetesOperatorBinding(obj.Binding)
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorSlice(objs *[]restapi.KubernetesOperator) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperator(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperator(in interface{}) *restapi.KubernetesOperator {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperator
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	if v, ok := m["updated_at"]; ok {
+		obj.UpdatedAt = *expandString(v)
+	}
+	if v, ok := m["description"]; ok {
+		obj.Description = *expandString(v)
+	}
+	if v, ok := m["metadata"]; ok {
+		obj.Metadata = *expandString(v)
+	}
+	if v, ok := m["principal"]; ok {
+		obj.Principal = *expandRef(v)
+	}
+	if v, ok := m["enabled_features"]; ok {
+		obj.EnabledFeatures = *expandStringSlice(v)
+	}
+	if v, ok := m["region"]; ok {
+		obj.Region = *expandString(v)
+	}
+	if v, ok := m["deployment"]; ok {
+		obj.Deployment = *expandKubernetesOperatorDeployment(v)
+	}
+	if v, ok := m["binding"]; ok {
+		obj.Binding = expandKubernetesOperatorBinding(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorSlice(in interface{}) *[]restapi.KubernetesOperator {
+	var out []restapi.KubernetesOperator
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperator(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorDeployment(obj *restapi.KubernetesOperatorDeployment) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["namespace"] = obj.Namespace
+	m["version"] = obj.Version
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorDeploymentSlice(objs *[]restapi.KubernetesOperatorDeployment) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorDeployment(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorDeployment(in interface{}) *restapi.KubernetesOperatorDeployment {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorDeployment
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["namespace"]; ok {
+		obj.Namespace = *expandString(v)
+	}
+	if v, ok := m["version"]; ok {
+		obj.Version = *expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorDeploymentSlice(in interface{}) *[]restapi.KubernetesOperatorDeployment {
+	var out []restapi.KubernetesOperatorDeployment
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorDeployment(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorCert(obj *restapi.KubernetesOperatorCert) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["cert"] = obj.Cert
+	m["not_before"] = obj.NotBefore
+	m["not_after"] = obj.NotAfter
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorCertSlice(objs *[]restapi.KubernetesOperatorCert) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorCert(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorCert(in interface{}) *restapi.KubernetesOperatorCert {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorCert
+	if v, ok := m["cert"]; ok {
+		obj.Cert = *expandString(v)
+	}
+	if v, ok := m["not_before"]; ok {
+		obj.NotBefore = *expandString(v)
+	}
+	if v, ok := m["not_after"]; ok {
+		obj.NotAfter = *expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorCertSlice(in interface{}) *[]restapi.KubernetesOperatorCert {
+	var out []restapi.KubernetesOperatorCert
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorCert(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorBinding(obj *restapi.KubernetesOperatorBinding) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["allowed_urls"] = obj.AllowedURLs
+	m["cert"] = flattenKubernetesOperatorCert(&obj.Cert)
+	m["ingress_endpoint"] = obj.IngressEndpoint
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorBindingSlice(objs *[]restapi.KubernetesOperatorBinding) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorBinding(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorBinding(in interface{}) *restapi.KubernetesOperatorBinding {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorBinding
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["allowed_urls"]; ok {
+		obj.AllowedURLs = *expandStringSlice(v)
+	}
+	if v, ok := m["cert"]; ok {
+		obj.Cert = *expandKubernetesOperatorCert(v)
+	}
+	if v, ok := m["ingress_endpoint"]; ok {
+		obj.IngressEndpoint = *expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorBindingSlice(in interface{}) *[]restapi.KubernetesOperatorBinding {
+	var out []restapi.KubernetesOperatorBinding
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorBinding(v))
+	}
+	return &out
+}
+
+func flattenKubernetesOperatorList(obj *restapi.KubernetesOperatorList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["operators"] = flattenKubernetesOperatorSlice(&obj.Operators)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenKubernetesOperatorListSlice(objs *[]restapi.KubernetesOperatorList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenKubernetesOperatorList(&v))
+	}
+	return sl
+}
+
+func expandKubernetesOperatorList(in interface{}) *restapi.KubernetesOperatorList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.KubernetesOperatorList
+	if v, ok := m["operators"]; ok {
+		obj.Operators = *expandKubernetesOperatorSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandKubernetesOperatorListSlice(in interface{}) *[]restapi.KubernetesOperatorList {
+	var out []restapi.KubernetesOperatorList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandKubernetesOperatorList(v))
+	}
+	return &out
+}
+
 func flattenEndpointBasicAuthReplace(obj *restapi.EndpointBasicAuthReplace) interface{} {
 	if obj == nil {
 		return nil
@@ -12573,6 +13605,7 @@ func flattenReservedDomainCreate(obj *restapi.ReservedDomainCreate) interface{} 
 	m["https_endpoint_configuration_id"] = obj.HTTPSEndpointConfigurationID
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
+	m["error_redirect_url"] = obj.ErrorRedirectUrl
 
 	return []interface{}{m}
 }
@@ -12627,6 +13660,9 @@ func expandReservedDomainCreate(in interface{}) *restapi.ReservedDomainCreate {
 	if v, ok := m["certificate_management_policy"]; ok {
 		obj.CertificateManagementPolicy = expandReservedDomainCertPolicy(v)
 	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectUrl = expandString(v)
+	}
 	return &obj
 }
 
@@ -12652,6 +13688,7 @@ func flattenReservedDomainUpdate(obj *restapi.ReservedDomainUpdate) interface{} 
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["region"] = obj.Region
+	m["error_redirect_url"] = obj.ErrorRedirectUrl
 
 	return []interface{}{m}
 }
@@ -12703,6 +13740,9 @@ func expandReservedDomainUpdate(in interface{}) *restapi.ReservedDomainUpdate {
 	if v, ok := m["region"]; ok {
 		obj.Region = expandString(v)
 	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectUrl = expandString(v)
+	}
 	return &obj
 }
 
@@ -12734,6 +13774,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["certificate_management_status"] = flattenReservedDomainCertStatus(obj.CertificateManagementStatus)
 	m["acme_challenge_cname_target"] = obj.ACMEChallengeCNAMETarget
+	m["error_redirect_url"] = obj.ErrorRedirectURL
 
 	return []interface{}{m}
 }
@@ -12802,6 +13843,9 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	}
 	if v, ok := m["acme_challenge_cname_target"]; ok {
 		obj.ACMEChallengeCNAMETarget = expandString(v)
+	}
+	if v, ok := m["error_redirect_url"]; ok {
+		obj.ErrorRedirectURL = expandString(v)
 	}
 	return &obj
 }
