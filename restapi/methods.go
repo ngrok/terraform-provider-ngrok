@@ -22,7 +22,7 @@ func (c *Client) AbuseReportsCreate(ctx context.Context, arg *AbuseReportCreate)
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -39,7 +39,7 @@ func (c *Client) AbuseReportsGet(ctx context.Context, arg *Item) (*AbuseReport, 
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -55,7 +55,7 @@ func (c *Client) AgentIngressesCreate(ctx context.Context, arg *AgentIngressCrea
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -72,7 +72,7 @@ func (c *Client) AgentIngressesDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -89,7 +89,7 @@ func (c *Client) AgentIngressesGet(ctx context.Context, arg *Item) (*AgentIngres
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -118,7 +118,7 @@ func (c *Client) AgentIngressesList(ctx context.Context, arg *Paging) (*AgentIng
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -135,7 +135,7 @@ func (c *Client) AgentIngressesUpdate(ctx context.Context, arg *AgentIngressUpda
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -151,7 +151,7 @@ func (c *Client) APIKeysCreate(ctx context.Context, arg *APIKeyCreate) (*APIKey,
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -168,7 +168,7 @@ func (c *Client) APIKeysDelete(ctx context.Context, arg *Item) (*Empty, *http.Re
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -185,7 +185,7 @@ func (c *Client) APIKeysGet(ctx context.Context, arg *Item) (*APIKey, *http.Resp
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -214,7 +214,7 @@ func (c *Client) APIKeysList(ctx context.Context, arg *Paging) (*APIKeyList, *ht
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -231,7 +231,7 @@ func (c *Client) APIKeysUpdate(ctx context.Context, arg *APIKeyUpdate) (*APIKey,
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -248,7 +248,7 @@ func (c *Client) ApplicationSessionsGet(ctx context.Context, arg *Item) (*Applic
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -265,7 +265,7 @@ func (c *Client) ApplicationSessionsDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -294,7 +294,7 @@ func (c *Client) ApplicationSessionsList(ctx context.Context, arg *Paging) (*App
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -311,7 +311,7 @@ func (c *Client) ApplicationUsersGet(ctx context.Context, arg *Item) (*Applicati
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -328,7 +328,7 @@ func (c *Client) ApplicationUsersDelete(ctx context.Context, arg *Item) (*Empty,
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -357,7 +357,7 @@ func (c *Client) ApplicationUsersList(ctx context.Context, arg *Paging) (*Applic
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -386,7 +386,7 @@ func (c *Client) TunnelSessionsList(ctx context.Context, arg *Paging) (*TunnelSe
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -403,7 +403,7 @@ func (c *Client) TunnelSessionsGet(ctx context.Context, arg *Item) (*TunnelSessi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -420,7 +420,7 @@ func (c *Client) TunnelSessionsRestart(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -437,7 +437,7 @@ func (c *Client) TunnelSessionsStop(ctx context.Context, arg *Item) (*Empty, *ht
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -454,7 +454,7 @@ func (c *Client) TunnelSessionsUpdate(ctx context.Context, arg *TunnelSessionsUp
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -470,7 +470,7 @@ func (c *Client) FailoverBackendsCreate(ctx context.Context, arg *FailoverBacken
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -487,7 +487,7 @@ func (c *Client) FailoverBackendsDelete(ctx context.Context, arg *Item) (*Empty,
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -504,7 +504,7 @@ func (c *Client) FailoverBackendsGet(ctx context.Context, arg *Item) (*FailoverB
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -533,7 +533,7 @@ func (c *Client) FailoverBackendsList(ctx context.Context, arg *Paging) (*Failov
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -550,7 +550,7 @@ func (c *Client) FailoverBackendsUpdate(ctx context.Context, arg *FailoverBacken
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -565,7 +565,7 @@ func (c *Client) HTTPResponseBackendsCreate(ctx context.Context, arg *HTTPRespon
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -581,7 +581,7 @@ func (c *Client) HTTPResponseBackendsDelete(ctx context.Context, arg *Item) (*Em
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -597,7 +597,7 @@ func (c *Client) HTTPResponseBackendsGet(ctx context.Context, arg *Item) (*HTTPR
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -625,7 +625,7 @@ func (c *Client) HTTPResponseBackendsList(ctx context.Context, arg *Paging) (*HT
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -641,7 +641,7 @@ func (c *Client) HTTPResponseBackendsUpdate(ctx context.Context, arg *HTTPRespon
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -657,7 +657,7 @@ func (c *Client) StaticBackendsCreate(ctx context.Context, arg *StaticBackendCre
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -674,7 +674,7 @@ func (c *Client) StaticBackendsDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -691,7 +691,7 @@ func (c *Client) StaticBackendsGet(ctx context.Context, arg *Item) (*StaticBacke
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -720,7 +720,7 @@ func (c *Client) StaticBackendsList(ctx context.Context, arg *Paging) (*StaticBa
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -737,7 +737,7 @@ func (c *Client) StaticBackendsUpdate(ctx context.Context, arg *StaticBackendUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -753,7 +753,7 @@ func (c *Client) TunnelGroupBackendsCreate(ctx context.Context, arg *TunnelGroup
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -770,7 +770,7 @@ func (c *Client) TunnelGroupBackendsDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -787,7 +787,7 @@ func (c *Client) TunnelGroupBackendsGet(ctx context.Context, arg *Item) (*Tunnel
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -816,7 +816,7 @@ func (c *Client) TunnelGroupBackendsList(ctx context.Context, arg *Paging) (*Tun
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -833,7 +833,7 @@ func (c *Client) TunnelGroupBackendsUpdate(ctx context.Context, arg *TunnelGroup
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -849,7 +849,7 @@ func (c *Client) WeightedBackendsCreate(ctx context.Context, arg *WeightedBacken
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -866,7 +866,7 @@ func (c *Client) WeightedBackendsDelete(ctx context.Context, arg *Item) (*Empty,
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -883,7 +883,7 @@ func (c *Client) WeightedBackendsGet(ctx context.Context, arg *Item) (*WeightedB
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -912,7 +912,7 @@ func (c *Client) WeightedBackendsList(ctx context.Context, arg *Paging) (*Weight
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -929,7 +929,7 @@ func (c *Client) WeightedBackendsUpdate(ctx context.Context, arg *WeightedBacken
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -945,7 +945,7 @@ func (c *Client) BotUsersCreate(ctx context.Context, arg *BotUserCreate) (*BotUs
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -962,7 +962,7 @@ func (c *Client) BotUsersDelete(ctx context.Context, arg *Item) (*Empty, *http.R
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -979,7 +979,7 @@ func (c *Client) BotUsersGet(ctx context.Context, arg *Item) (*BotUser, *http.Re
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1008,7 +1008,7 @@ func (c *Client) BotUsersList(ctx context.Context, arg *Paging) (*BotUserList, *
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1025,7 +1025,7 @@ func (c *Client) BotUsersUpdate(ctx context.Context, arg *BotUserUpdate) (*BotUs
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1041,7 +1041,7 @@ func (c *Client) CertificateAuthoritiesCreate(ctx context.Context, arg *Certific
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1058,7 +1058,7 @@ func (c *Client) CertificateAuthoritiesDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1075,7 +1075,7 @@ func (c *Client) CertificateAuthoritiesGet(ctx context.Context, arg *Item) (*Cer
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1104,7 +1104,7 @@ func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *Paging) (*
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1121,7 +1121,7 @@ func (c *Client) CertificateAuthoritiesUpdate(ctx context.Context, arg *Certific
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1137,7 +1137,7 @@ func (c *Client) CredentialsCreate(ctx context.Context, arg *CredentialCreate) (
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1154,7 +1154,7 @@ func (c *Client) CredentialsDelete(ctx context.Context, arg *Item) (*Empty, *htt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1171,7 +1171,7 @@ func (c *Client) CredentialsGet(ctx context.Context, arg *Item) (*Credential, *h
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1200,7 +1200,7 @@ func (c *Client) CredentialsList(ctx context.Context, arg *Paging) (*CredentialL
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1217,7 +1217,7 @@ func (c *Client) CredentialsUpdate(ctx context.Context, arg *CredentialUpdate) (
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1233,7 +1233,7 @@ func (c *Client) EndpointConfigurationsCreate(ctx context.Context, arg *Endpoint
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1250,7 +1250,7 @@ func (c *Client) EndpointConfigurationsDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1267,7 +1267,7 @@ func (c *Client) EndpointConfigurationsGet(ctx context.Context, arg *Item) (*End
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1296,7 +1296,7 @@ func (c *Client) EndpointConfigurationsList(ctx context.Context, arg *Paging) (*
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1313,7 +1313,7 @@ func (c *Client) EndpointConfigurationsUpdate(ctx context.Context, arg *Endpoint
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1330,7 +1330,7 @@ func (c *Client) EdgesHTTPSRoutesCreate(ctx context.Context, arg *HTTPSEdgeRoute
 	arg.EdgeID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1348,7 +1348,7 @@ func (c *Client) EdgesHTTPSRoutesGet(ctx context.Context, arg *EdgeRouteItem) (*
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1366,7 +1366,7 @@ func (c *Client) EdgesHTTPSRoutesUpdate(ctx context.Context, arg *HTTPSEdgeRoute
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1384,7 +1384,7 @@ func (c *Client) EdgesHTTPSRoutesDelete(ctx context.Context, arg *EdgeRouteItem)
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1400,7 +1400,7 @@ func (c *Client) EdgesHTTPSCreate(ctx context.Context, arg *HTTPSEdgeCreate) (*H
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1417,7 +1417,7 @@ func (c *Client) EdgesHTTPSGet(ctx context.Context, arg *Item) (*HTTPSEdge, *htt
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1446,7 +1446,7 @@ func (c *Client) EdgesHTTPSList(ctx context.Context, arg *Paging) (*HTTPSEdgeLis
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1463,7 +1463,7 @@ func (c *Client) EdgesHTTPSUpdate(ctx context.Context, arg *HTTPSEdgeUpdate) (*H
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1480,7 +1480,7 @@ func (c *Client) EdgesHTTPSDelete(ctx context.Context, arg *Item) (*Empty, *http
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1496,7 +1496,7 @@ func (c *Client) HTTPSEdgeMutualTLSModuleReplace(ctx context.Context, arg *EdgeM
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1512,7 +1512,7 @@ func (c *Client) HTTPSEdgeMutualTLSModuleGet(ctx context.Context, arg *Item) (*E
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1528,7 +1528,7 @@ func (c *Client) HTTPSEdgeMutualTLSModuleDelete(ctx context.Context, arg *Item) 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1544,7 +1544,7 @@ func (c *Client) HTTPSEdgeTLSTerminationModuleReplace(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1560,7 +1560,7 @@ func (c *Client) HTTPSEdgeTLSTerminationModuleGet(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1576,7 +1576,7 @@ func (c *Client) HTTPSEdgeTLSTerminationModuleDelete(ctx context.Context, arg *I
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1593,7 +1593,7 @@ func (c *Client) EdgeRouteBackendModuleReplace(ctx context.Context, arg *EdgeRou
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1610,7 +1610,7 @@ func (c *Client) EdgeRouteBackendModuleGet(ctx context.Context, arg *EdgeRouteIt
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1627,7 +1627,7 @@ func (c *Client) EdgeRouteBackendModuleDelete(ctx context.Context, arg *EdgeRout
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1644,7 +1644,7 @@ func (c *Client) EdgeRouteIPRestrictionModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1661,7 +1661,7 @@ func (c *Client) EdgeRouteIPRestrictionModuleGet(ctx context.Context, arg *EdgeR
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1678,7 +1678,7 @@ func (c *Client) EdgeRouteIPRestrictionModuleDelete(ctx context.Context, arg *Ed
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1695,7 +1695,7 @@ func (c *Client) EdgeRouteRequestHeadersModuleReplace(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1712,7 +1712,7 @@ func (c *Client) EdgeRouteRequestHeadersModuleGet(ctx context.Context, arg *Edge
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1729,7 +1729,7 @@ func (c *Client) EdgeRouteRequestHeadersModuleDelete(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1746,7 +1746,7 @@ func (c *Client) EdgeRouteResponseHeadersModuleReplace(ctx context.Context, arg 
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1763,7 +1763,7 @@ func (c *Client) EdgeRouteResponseHeadersModuleGet(ctx context.Context, arg *Edg
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1780,7 +1780,7 @@ func (c *Client) EdgeRouteResponseHeadersModuleDelete(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1797,7 +1797,7 @@ func (c *Client) EdgeRouteCompressionModuleReplace(ctx context.Context, arg *Edg
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1814,7 +1814,7 @@ func (c *Client) EdgeRouteCompressionModuleGet(ctx context.Context, arg *EdgeRou
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1831,7 +1831,7 @@ func (c *Client) EdgeRouteCompressionModuleDelete(ctx context.Context, arg *Edge
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1848,7 +1848,7 @@ func (c *Client) EdgeRouteCircuitBreakerModuleReplace(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1865,7 +1865,7 @@ func (c *Client) EdgeRouteCircuitBreakerModuleGet(ctx context.Context, arg *Edge
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1882,7 +1882,7 @@ func (c *Client) EdgeRouteCircuitBreakerModuleDelete(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1899,7 +1899,7 @@ func (c *Client) EdgeRouteWebhookVerificationModuleReplace(ctx context.Context, 
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1916,7 +1916,7 @@ func (c *Client) EdgeRouteWebhookVerificationModuleGet(ctx context.Context, arg 
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1933,7 +1933,7 @@ func (c *Client) EdgeRouteWebhookVerificationModuleDelete(ctx context.Context, a
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1950,7 +1950,7 @@ func (c *Client) EdgeRouteOAuthModuleReplace(ctx context.Context, arg *EdgeRoute
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1967,7 +1967,7 @@ func (c *Client) EdgeRouteOAuthModuleGet(ctx context.Context, arg *EdgeRouteItem
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -1984,7 +1984,7 @@ func (c *Client) EdgeRouteOAuthModuleDelete(ctx context.Context, arg *EdgeRouteI
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2001,7 +2001,7 @@ func (c *Client) EdgeRouteSAMLModuleReplace(ctx context.Context, arg *EdgeRouteS
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2018,7 +2018,7 @@ func (c *Client) EdgeRouteSAMLModuleGet(ctx context.Context, arg *EdgeRouteItem)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2035,7 +2035,7 @@ func (c *Client) EdgeRouteSAMLModuleDelete(ctx context.Context, arg *EdgeRouteIt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2052,7 +2052,7 @@ func (c *Client) EdgeRouteOIDCModuleReplace(ctx context.Context, arg *EdgeRouteO
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2069,7 +2069,7 @@ func (c *Client) EdgeRouteOIDCModuleGet(ctx context.Context, arg *EdgeRouteItem)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2086,7 +2086,7 @@ func (c *Client) EdgeRouteOIDCModuleDelete(ctx context.Context, arg *EdgeRouteIt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2103,7 +2103,7 @@ func (c *Client) EdgeRouteWebsocketTCPConverterModuleReplace(ctx context.Context
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2120,7 +2120,7 @@ func (c *Client) EdgeRouteWebsocketTCPConverterModuleGet(ctx context.Context, ar
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2137,7 +2137,7 @@ func (c *Client) EdgeRouteWebsocketTCPConverterModuleDelete(ctx context.Context,
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2154,7 +2154,7 @@ func (c *Client) EdgeRouteUserAgentFilterModuleReplace(ctx context.Context, arg 
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2171,7 +2171,7 @@ func (c *Client) EdgeRouteUserAgentFilterModuleGet(ctx context.Context, arg *Edg
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2188,7 +2188,7 @@ func (c *Client) EdgeRouteUserAgentFilterModuleDelete(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2205,7 +2205,7 @@ func (c *Client) EdgeRoutePolicyModuleReplace(ctx context.Context, arg *EdgeRout
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2222,7 +2222,7 @@ func (c *Client) EdgeRoutePolicyModuleGet(ctx context.Context, arg *EdgeRouteIte
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2239,7 +2239,58 @@ func (c *Client) EdgeRoutePolicyModuleDelete(ctx context.Context, arg *EdgeRoute
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeRouteTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteTrafficPolicyModuleGet(ctx context.Context, arg *EdgeRouteItem) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) EdgeRouteTrafficPolicyModuleDelete(ctx context.Context, arg *EdgeRouteItem) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.EdgeID = ""
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2255,7 +2306,7 @@ func (c *Client) EdgesTCPCreate(ctx context.Context, arg *TCPEdgeCreate) (*TCPEd
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2272,7 +2323,7 @@ func (c *Client) EdgesTCPGet(ctx context.Context, arg *Item) (*TCPEdge, *http.Re
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2301,7 +2352,7 @@ func (c *Client) EdgesTCPList(ctx context.Context, arg *Paging) (*TCPEdgeList, *
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2318,7 +2369,7 @@ func (c *Client) EdgesTCPUpdate(ctx context.Context, arg *TCPEdgeUpdate) (*TCPEd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2335,7 +2386,7 @@ func (c *Client) EdgesTCPDelete(ctx context.Context, arg *Item) (*Empty, *http.R
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2351,7 +2402,7 @@ func (c *Client) TCPEdgeBackendModuleReplace(ctx context.Context, arg *EdgeBacke
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2367,7 +2418,7 @@ func (c *Client) TCPEdgeBackendModuleGet(ctx context.Context, arg *Item) (*Endpo
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2383,7 +2434,7 @@ func (c *Client) TCPEdgeBackendModuleDelete(ctx context.Context, arg *Item) (*Em
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2399,7 +2450,7 @@ func (c *Client) TCPEdgeIPRestrictionModuleReplace(ctx context.Context, arg *Edg
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2415,7 +2466,7 @@ func (c *Client) TCPEdgeIPRestrictionModuleGet(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2431,7 +2482,7 @@ func (c *Client) TCPEdgeIPRestrictionModuleDelete(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2447,7 +2498,7 @@ func (c *Client) TCPEdgePolicyModuleReplace(ctx context.Context, arg *EdgePolicy
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2463,7 +2514,7 @@ func (c *Client) TCPEdgePolicyModuleGet(ctx context.Context, arg *Item) (*Endpoi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2479,7 +2530,55 @@ func (c *Client) TCPEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleGet(ctx context.Context, arg *Item) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TCPEdgeTrafficPolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tcp/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2495,7 +2594,7 @@ func (c *Client) EdgesTLSCreate(ctx context.Context, arg *TLSEdgeCreate) (*TLSEd
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2512,7 +2611,7 @@ func (c *Client) EdgesTLSGet(ctx context.Context, arg *Item) (*TLSEdge, *http.Re
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2541,7 +2640,7 @@ func (c *Client) EdgesTLSList(ctx context.Context, arg *Paging) (*TLSEdgeList, *
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2558,7 +2657,7 @@ func (c *Client) EdgesTLSUpdate(ctx context.Context, arg *TLSEdgeUpdate) (*TLSEd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2575,7 +2674,7 @@ func (c *Client) EdgesTLSDelete(ctx context.Context, arg *Item) (*Empty, *http.R
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2591,7 +2690,7 @@ func (c *Client) TLSEdgeBackendModuleReplace(ctx context.Context, arg *EdgeBacke
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2607,7 +2706,7 @@ func (c *Client) TLSEdgeBackendModuleGet(ctx context.Context, arg *Item) (*Endpo
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2623,7 +2722,7 @@ func (c *Client) TLSEdgeBackendModuleDelete(ctx context.Context, arg *Item) (*Em
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2639,7 +2738,7 @@ func (c *Client) TLSEdgeIPRestrictionModuleReplace(ctx context.Context, arg *Edg
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2655,7 +2754,7 @@ func (c *Client) TLSEdgeIPRestrictionModuleGet(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2671,7 +2770,7 @@ func (c *Client) TLSEdgeIPRestrictionModuleDelete(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2687,7 +2786,7 @@ func (c *Client) TLSEdgeMutualTLSModuleReplace(ctx context.Context, arg *EdgeMut
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2703,7 +2802,7 @@ func (c *Client) TLSEdgeMutualTLSModuleGet(ctx context.Context, arg *Item) (*End
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2719,7 +2818,7 @@ func (c *Client) TLSEdgeMutualTLSModuleDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2735,7 +2834,7 @@ func (c *Client) TLSEdgeTLSTerminationModuleReplace(ctx context.Context, arg *Ed
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2751,7 +2850,7 @@ func (c *Client) TLSEdgeTLSTerminationModuleGet(ctx context.Context, arg *Item) 
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2767,7 +2866,7 @@ func (c *Client) TLSEdgeTLSTerminationModuleDelete(ctx context.Context, arg *Ite
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2783,7 +2882,7 @@ func (c *Client) TLSEdgePolicyModuleReplace(ctx context.Context, arg *EdgePolicy
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2799,7 +2898,7 @@ func (c *Client) TLSEdgePolicyModuleGet(ctx context.Context, arg *Item) (*Endpoi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2815,7 +2914,71 @@ func (c *Client) TLSEdgePolicyModuleDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleReplace(ctx context.Context, arg *EdgeTrafficPolicyReplace) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Put(ctx, uri, arg.Module, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleGet(ctx context.Context, arg *Item) (*EndpointTrafficPolicy, *http.Response, error) {
+	var res EndpointTrafficPolicy
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+func (c *Client) TLSEdgeTrafficPolicyModuleDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/edges/tls/{{ .ID }}/traffic_policy")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create an endpoint, currently available only for cloud endpoints
+func (c *Client) EndpointsCreate(ctx context.Context, arg *EndpointCreate) (*Endpoint, *http.Response, error) {
+	var res Endpoint
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoints")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2844,7 +3007,7 @@ func (c *Client) EndpointsList(ctx context.Context, arg *Paging) (*EndpointList,
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2861,7 +3024,41 @@ func (c *Client) EndpointsGet(ctx context.Context, arg *Item) (*Endpoint, *http.
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update an Endpoint by ID, currently available only for cloud endpoints
+func (c *Client) EndpointsUpdate(ctx context.Context, arg *EndpointUpdate) (*Endpoint, *http.Response, error) {
+	var res Endpoint
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoints/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete an Endpoint by ID, currently available only for cloud endpoints
+func (c *Client) EndpointsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/endpoints/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2877,7 +3074,7 @@ func (c *Client) EventDestinationsCreate(ctx context.Context, arg *EventDestinat
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2894,7 +3091,7 @@ func (c *Client) EventDestinationsDelete(ctx context.Context, arg *Item) (*Empty
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2911,7 +3108,7 @@ func (c *Client) EventDestinationsGet(ctx context.Context, arg *Item) (*EventDes
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2940,7 +3137,7 @@ func (c *Client) EventDestinationsList(ctx context.Context, arg *Paging) (*Event
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2957,7 +3154,7 @@ func (c *Client) EventDestinationsUpdate(ctx context.Context, arg *EventDestinat
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2974,7 +3171,7 @@ func (c *Client) EventDestinationsSendTestEvent(ctx context.Context, arg *Item) 
 	arg.ID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -2990,7 +3187,7 @@ func (c *Client) EventSubscriptionsCreate(ctx context.Context, arg *EventSubscri
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3007,7 +3204,7 @@ func (c *Client) EventSubscriptionsDelete(ctx context.Context, arg *Item) (*Empt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3024,7 +3221,7 @@ func (c *Client) EventSubscriptionsGet(ctx context.Context, arg *Item) (*EventSu
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3053,7 +3250,7 @@ func (c *Client) EventSubscriptionsList(ctx context.Context, arg *Paging) (*Even
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3070,7 +3267,7 @@ func (c *Client) EventSubscriptionsUpdate(ctx context.Context, arg *EventSubscri
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3087,7 +3284,7 @@ func (c *Client) EventSourcesCreate(ctx context.Context, arg *EventSourceCreate)
 	arg.SubscriptionID = ""
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3105,7 +3302,7 @@ func (c *Client) EventSourcesDelete(ctx context.Context, arg *EventSourceItem) (
 	arg.Type = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3123,7 +3320,7 @@ func (c *Client) EventSourcesGet(ctx context.Context, arg *EventSourceItem) (*Ev
 	arg.Type = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3140,7 +3337,7 @@ func (c *Client) EventSourcesList(ctx context.Context, arg *EventSourcePaging) (
 	arg.SubscriptionID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3158,7 +3355,7 @@ func (c *Client) EventSourcesUpdate(ctx context.Context, arg *EventSourceUpdate)
 	arg.Type = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3174,7 +3371,7 @@ func (c *Client) IPPoliciesCreate(ctx context.Context, arg *IPPolicyCreate) (*IP
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3191,7 +3388,7 @@ func (c *Client) IPPoliciesDelete(ctx context.Context, arg *Item) (*Empty, *http
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3208,7 +3405,7 @@ func (c *Client) IPPoliciesGet(ctx context.Context, arg *Item) (*IPPolicy, *http
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3237,7 +3434,7 @@ func (c *Client) IPPoliciesList(ctx context.Context, arg *Paging) (*IPPolicyList
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3254,7 +3451,7 @@ func (c *Client) IPPoliciesUpdate(ctx context.Context, arg *IPPolicyUpdate) (*IP
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3270,7 +3467,7 @@ func (c *Client) IPPolicyRulesCreate(ctx context.Context, arg *IPPolicyRuleCreat
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3287,7 +3484,7 @@ func (c *Client) IPPolicyRulesDelete(ctx context.Context, arg *Item) (*Empty, *h
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3304,7 +3501,7 @@ func (c *Client) IPPolicyRulesGet(ctx context.Context, arg *Item) (*IPPolicyRule
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3333,7 +3530,7 @@ func (c *Client) IPPolicyRulesList(ctx context.Context, arg *Paging) (*IPPolicyR
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3350,7 +3547,7 @@ func (c *Client) IPPolicyRulesUpdate(ctx context.Context, arg *IPPolicyRuleUpdat
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3366,7 +3563,7 @@ func (c *Client) IPRestrictionsCreate(ctx context.Context, arg *IPRestrictionCre
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3383,7 +3580,7 @@ func (c *Client) IPRestrictionsDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3400,7 +3597,7 @@ func (c *Client) IPRestrictionsGet(ctx context.Context, arg *Item) (*IPRestricti
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3429,7 +3626,7 @@ func (c *Client) IPRestrictionsList(ctx context.Context, arg *Paging) (*IPRestri
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3446,7 +3643,103 @@ func (c *Client) IPRestrictionsUpdate(ctx context.Context, arg *IPRestrictionUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Kubernetes Operator
+func (c *Client) KubernetesOperatorsCreate(ctx context.Context, arg *KubernetesOperatorCreate) (*KubernetesOperator, *http.Response, error) {
+	var res KubernetesOperator
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update an existing Kubernetes operator by ID.
+func (c *Client) KubernetesOperatorsUpdate(ctx context.Context, arg *KubernetesOperatorUpdate) (*KubernetesOperator, *http.Response, error) {
+	var res KubernetesOperator
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a Kubernetes Operator
+func (c *Client) KubernetesOperatorsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get of a Kubernetes Operator
+func (c *Client) KubernetesOperatorsGet(ctx context.Context, arg *Item) (*KubernetesOperator, *http.Response, error) {
+	var res KubernetesOperator
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Kubernetes Operators owned by this account
+func (c *Client) KubernetesOperatorsList(ctx context.Context, arg *Paging) (*KubernetesOperatorList, *http.Response, error) {
+	var res KubernetesOperatorList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3462,7 +3755,7 @@ func (c *Client) EndpointBasicAuthModuleReplace(ctx context.Context, arg *Endpoi
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3478,7 +3771,7 @@ func (c *Client) EndpointBasicAuthModuleGet(ctx context.Context, arg *Item) (*En
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3494,7 +3787,7 @@ func (c *Client) EndpointBasicAuthModuleDelete(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3510,7 +3803,7 @@ func (c *Client) EndpointCircuitBreakerModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3526,7 +3819,7 @@ func (c *Client) EndpointCircuitBreakerModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3542,7 +3835,7 @@ func (c *Client) EndpointCircuitBreakerModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3558,7 +3851,7 @@ func (c *Client) EndpointCompressionModuleReplace(ctx context.Context, arg *Endp
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3574,7 +3867,7 @@ func (c *Client) EndpointCompressionModuleGet(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3590,7 +3883,7 @@ func (c *Client) EndpointCompressionModuleDelete(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3606,7 +3899,7 @@ func (c *Client) EndpointTLSTerminationModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3622,7 +3915,7 @@ func (c *Client) EndpointTLSTerminationModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3638,7 +3931,7 @@ func (c *Client) EndpointTLSTerminationModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3654,7 +3947,7 @@ func (c *Client) EndpointIPPolicyModuleReplace(ctx context.Context, arg *Endpoin
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3670,7 +3963,7 @@ func (c *Client) EndpointIPPolicyModuleGet(ctx context.Context, arg *Item) (*End
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3686,7 +3979,7 @@ func (c *Client) EndpointIPPolicyModuleDelete(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3702,7 +3995,7 @@ func (c *Client) EndpointMutualTLSModuleReplace(ctx context.Context, arg *Endpoi
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3718,7 +4011,7 @@ func (c *Client) EndpointMutualTLSModuleGet(ctx context.Context, arg *Item) (*En
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3734,7 +4027,7 @@ func (c *Client) EndpointMutualTLSModuleDelete(ctx context.Context, arg *Item) (
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3750,7 +4043,7 @@ func (c *Client) EndpointRequestHeadersModuleReplace(ctx context.Context, arg *E
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3766,7 +4059,7 @@ func (c *Client) EndpointRequestHeadersModuleGet(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3782,7 +4075,7 @@ func (c *Client) EndpointRequestHeadersModuleDelete(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3798,7 +4091,7 @@ func (c *Client) EndpointResponseHeadersModuleReplace(ctx context.Context, arg *
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3814,7 +4107,7 @@ func (c *Client) EndpointResponseHeadersModuleGet(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3830,7 +4123,7 @@ func (c *Client) EndpointResponseHeadersModuleDelete(ctx context.Context, arg *I
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3846,7 +4139,7 @@ func (c *Client) EndpointOAuthModuleReplace(ctx context.Context, arg *EndpointOA
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3862,7 +4155,7 @@ func (c *Client) EndpointOAuthModuleGet(ctx context.Context, arg *Item) (*Endpoi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3878,7 +4171,7 @@ func (c *Client) EndpointOAuthModuleDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3894,7 +4187,7 @@ func (c *Client) EndpointWebhookValidationModuleReplace(ctx context.Context, arg
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3910,7 +4203,7 @@ func (c *Client) EndpointWebhookValidationModuleGet(ctx context.Context, arg *It
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3926,7 +4219,7 @@ func (c *Client) EndpointWebhookValidationModuleDelete(ctx context.Context, arg 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3942,7 +4235,7 @@ func (c *Client) EndpointSAMLModuleReplace(ctx context.Context, arg *EndpointSAM
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3958,7 +4251,7 @@ func (c *Client) EndpointSAMLModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3974,7 +4267,7 @@ func (c *Client) EndpointSAMLModuleDelete(ctx context.Context, arg *Item) (*Empt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -3990,7 +4283,7 @@ func (c *Client) EndpointOIDCModuleReplace(ctx context.Context, arg *EndpointOID
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4006,7 +4299,7 @@ func (c *Client) EndpointOIDCModuleGet(ctx context.Context, arg *Item) (*Endpoin
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4022,7 +4315,7 @@ func (c *Client) EndpointOIDCModuleDelete(ctx context.Context, arg *Item) (*Empt
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4038,7 +4331,7 @@ func (c *Client) EndpointBackendModuleReplace(ctx context.Context, arg *Endpoint
 	arg.ID = ""
 
 	resp, err := c.Put(ctx, uri, arg.Module, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4054,7 +4347,7 @@ func (c *Client) EndpointBackendModuleGet(ctx context.Context, arg *Item) (*Endp
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4070,7 +4363,7 @@ func (c *Client) EndpointBackendModuleDelete(ctx context.Context, arg *Item) (*E
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4086,7 +4379,7 @@ func (c *Client) ReservedAddrsCreate(ctx context.Context, arg *ReservedAddrCreat
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4103,7 +4396,7 @@ func (c *Client) ReservedAddrsDelete(ctx context.Context, arg *Item) (*Empty, *h
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4120,7 +4413,7 @@ func (c *Client) ReservedAddrsGet(ctx context.Context, arg *Item) (*ReservedAddr
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4149,7 +4442,7 @@ func (c *Client) ReservedAddrsList(ctx context.Context, arg *Paging) (*ReservedA
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4166,7 +4459,7 @@ func (c *Client) ReservedAddrsUpdate(ctx context.Context, arg *ReservedAddrUpdat
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4183,7 +4476,7 @@ func (c *Client) ReservedAddrsDeleteEndpointConfig(ctx context.Context, arg *Ite
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4199,7 +4492,7 @@ func (c *Client) ReservedDomainsCreate(ctx context.Context, arg *ReservedDomainC
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4216,7 +4509,7 @@ func (c *Client) ReservedDomainsDelete(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4233,7 +4526,7 @@ func (c *Client) ReservedDomainsGet(ctx context.Context, arg *Item) (*ReservedDo
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4262,7 +4555,7 @@ func (c *Client) ReservedDomainsList(ctx context.Context, arg *Paging) (*Reserve
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4279,7 +4572,7 @@ func (c *Client) ReservedDomainsUpdate(ctx context.Context, arg *ReservedDomainU
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4296,7 +4589,7 @@ func (c *Client) ReservedDomainsDeleteCertificateManagementPolicy(ctx context.Co
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4313,7 +4606,7 @@ func (c *Client) ReservedDomainsDeleteCertificate(ctx context.Context, arg *Item
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4330,7 +4623,7 @@ func (c *Client) ReservedDomainsDeleteHTTPEndpointConfig(ctx context.Context, ar
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4347,7 +4640,7 @@ func (c *Client) ReservedDomainsDeleteHTTPSEndpointConfig(ctx context.Context, a
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4362,7 +4655,7 @@ func (c *Client) RootGet(ctx context.Context, arg *Empty) (*RootResponse, *http.
 	uri := path.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4378,7 +4671,7 @@ func (c *Client) SSHCertificateAuthoritiesCreate(ctx context.Context, arg *SSHCe
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4395,7 +4688,7 @@ func (c *Client) SSHCertificateAuthoritiesDelete(ctx context.Context, arg *Item)
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4412,7 +4705,7 @@ func (c *Client) SSHCertificateAuthoritiesGet(ctx context.Context, arg *Item) (*
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4441,7 +4734,7 @@ func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *Paging)
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4458,7 +4751,7 @@ func (c *Client) SSHCertificateAuthoritiesUpdate(ctx context.Context, arg *SSHCe
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4474,7 +4767,7 @@ func (c *Client) SSHCredentialsCreate(ctx context.Context, arg *SSHCredentialCre
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4491,7 +4784,7 @@ func (c *Client) SSHCredentialsDelete(ctx context.Context, arg *Item) (*Empty, *
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4508,7 +4801,7 @@ func (c *Client) SSHCredentialsGet(ctx context.Context, arg *Item) (*SSHCredenti
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4537,7 +4830,7 @@ func (c *Client) SSHCredentialsList(ctx context.Context, arg *Paging) (*SSHCrede
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4554,7 +4847,7 @@ func (c *Client) SSHCredentialsUpdate(ctx context.Context, arg *SSHCredentialUpd
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4570,7 +4863,7 @@ func (c *Client) SSHHostCertificatesCreate(ctx context.Context, arg *SSHHostCert
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4587,7 +4880,7 @@ func (c *Client) SSHHostCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4604,7 +4897,7 @@ func (c *Client) SSHHostCertificatesGet(ctx context.Context, arg *Item) (*SSHHos
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4633,7 +4926,7 @@ func (c *Client) SSHHostCertificatesList(ctx context.Context, arg *Paging) (*SSH
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4650,7 +4943,7 @@ func (c *Client) SSHHostCertificatesUpdate(ctx context.Context, arg *SSHHostCert
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4666,7 +4959,7 @@ func (c *Client) SSHUserCertificatesCreate(ctx context.Context, arg *SSHUserCert
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4683,7 +4976,7 @@ func (c *Client) SSHUserCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4700,7 +4993,7 @@ func (c *Client) SSHUserCertificatesGet(ctx context.Context, arg *Item) (*SSHUse
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4729,7 +5022,7 @@ func (c *Client) SSHUserCertificatesList(ctx context.Context, arg *Paging) (*SSH
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4746,7 +5039,7 @@ func (c *Client) SSHUserCertificatesUpdate(ctx context.Context, arg *SSHUserCert
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4762,7 +5055,7 @@ func (c *Client) TLSCertificatesCreate(ctx context.Context, arg *TLSCertificateC
 	uri := path.String()
 
 	resp, err := c.Post(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4779,7 +5072,7 @@ func (c *Client) TLSCertificatesDelete(ctx context.Context, arg *Item) (*Empty, 
 	arg.ID = ""
 
 	resp, err := c.Delete(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4796,7 +5089,7 @@ func (c *Client) TLSCertificatesGet(ctx context.Context, arg *Item) (*TLSCertifi
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4825,7 +5118,7 @@ func (c *Client) TLSCertificatesList(ctx context.Context, arg *Paging) (*TLSCert
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4842,7 +5135,7 @@ func (c *Client) TLSCertificatesUpdate(ctx context.Context, arg *TLSCertificateU
 	arg.ID = ""
 
 	resp, err := c.Patch(ctx, uri, arg, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4871,7 +5164,7 @@ func (c *Client) TunnelsList(ctx context.Context, arg *Paging) (*TunnelList, *ht
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
@@ -4888,7 +5181,7 @@ func (c *Client) TunnelsGet(ctx context.Context, arg *Item) (*Tunnel, *http.Resp
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)
-	if errors.Is(err, io.EOF) && resp.StatusCode == 204 {
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
 	return &res, resp, err
