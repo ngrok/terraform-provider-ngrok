@@ -39,6 +39,7 @@ func Provider() *schema.Provider {
 			"ngrok_ip_policy":                 resourceIPPolicies(),
 			"ngrok_ip_policy_rule":            resourceIPPolicyRules(),
 			"ngrok_ip_restriction":            resourceIPRestrictions(),
+			"ngrok_kubernetes_operator":       resourceKubernetesOperators(),
 			"ngrok_reserved_addr":             resourceReservedAddrs(),
 			"ngrok_reserved_domain":           resourceReservedDomains(),
 			"ngrok_ssh_certificate_authority": resourceSSHCertificateAuthorities(),

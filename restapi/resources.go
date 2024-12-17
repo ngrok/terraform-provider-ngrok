@@ -15,6 +15,13 @@ type Paging struct {
 	Limit    *string `json:"limit,omitempty"`
 }
 
+type ItemPaging struct {
+	// a resource identifier
+	ID       string  `json:"id,omitempty"`
+	BeforeID *string `json:"before_id,omitempty"`
+	Limit    *string `json:"limit,omitempty"`
+}
+
 type Error struct {
 	ErrorCode  string            `json:"error_code,omitempty"`
 	StatusCode int32             `json:"status_code,omitempty"`
@@ -2039,13 +2046,11 @@ type Endpoint struct {
 	// the local address the tunnel forwards to
 	UpstreamURL string `json:"upstream_url,omitempty"`
 	// the protocol the agent uses to forward with
-	UpstreamProto string `json:"upstream_proto,omitempty"`
+	UpstreamProtocol string `json:"upstream_protocol,omitempty"`
 	// the url of the endpoint
 	URL string `json:"url,omitempty"`
 	// The ID of the owner (bot or user) that owns this endpoint
 	Principal *Ref `json:"principal,omitempty"`
-	// TODO: deprecate me!
-	PrincipalID *Ref `json:"principal_id,omitempty"`
 	// The traffic policy attached to this endpoint
 	TrafficPolicy string `json:"traffic_policy,omitempty"`
 	// the bindings associated with this endpoint
@@ -2671,6 +2676,8 @@ type KubernetesOperatorUpdate struct {
 	// configuration for the Bindings feature of this Kubernetes Operator. set only if
 	// enabling the "bindings" feature
 	Binding *KubernetesOperatorBindingUpdate `json:"binding,omitempty"`
+	// configuration for the Deployment info
+	Deployment *KubernetesOperatorDeploymentUpdate `json:"deployment,omitempty"`
 }
 
 type KubernetesOperatorBindingUpdate struct {
@@ -2685,6 +2692,11 @@ type KubernetesOperatorBindingUpdate struct {
 	CSR *string `json:"csr,omitempty"`
 	// the public ingress endpoint for this Kubernetes Operator
 	IngressEndpoint *string `json:"ingress_endpoint,omitempty"`
+}
+
+type KubernetesOperatorDeploymentUpdate struct {
+	// the deployment name
+	Name *string `json:"name,omitempty"`
 }
 
 type KubernetesOperator struct {
@@ -2722,6 +2734,8 @@ type KubernetesOperatorDeployment struct {
 	Namespace string `json:"namespace,omitempty"`
 	// the version of this Kubernetes Operator
 	Version string `json:"version,omitempty"`
+	// user-given name for the cluster the Kubernetes Operator is deployed to
+	ClusterName string `json:"cluster_name,omitempty"`
 }
 
 type KubernetesOperatorCert struct {
@@ -3030,6 +3044,25 @@ type ReservedDomainCertJob struct {
 type RootResponse struct {
 	URI             string            `json:"uri,omitempty"`
 	SubresourceURIs map[string]string `json:"subresource_uris,omitempty"`
+}
+
+type SelfResponse struct {
+	ApiKey  APIKey  `json:"api_key,omitempty"`
+	Account Account `json:"account,omitempty"`
+	User    string  `json:"user,omitempty"`
+}
+
+type Account struct {
+	// unique API key resource identifier
+	ID                 string `json:"id,omitempty"`
+	Name               string `json:"name,omitempty"`
+	CreatedAt          string `json:"created_at,omitempty"`
+	Suspended          bool   `json:"suspended,omitempty"`
+	EnforceSSO         bool   `json:"enforce_sso,omitempty"`
+	MinApiVersion      int64  `json:"min_api_version,omitempty"`
+	MinAgentVersion    string `json:"min_agent_version,omitempty"`
+	UserMfaRequired    bool   `json:"user_mfa_required,omitempty"`
+	TrafficFullCapture bool   `json:"traffic_full_capture,omitempty"`
 }
 
 type SSHCertificateAuthorityCreate struct {

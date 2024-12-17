@@ -3745,6 +3745,36 @@ func (c *Client) KubernetesOperatorsList(ctx context.Context, arg *Paging) (*Kub
 	return &res, resp, err
 }
 
+// List Endpoints bound to a Kubernetes Operator
+func (c *Client) KubernetesOperatorsGetBoundEndpoints(ctx context.Context, arg *ItemPaging) (*EndpointList, *http.Response, error) {
+	var res EndpointList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators/{{ .ID }}/bound_endpoints")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 func (c *Client) EndpointBasicAuthModuleReplace(ctx context.Context, arg *EndpointBasicAuthReplace) (*EndpointBasicAuth, *http.Response, error) {
 	var res EndpointBasicAuth
 	var path bytes.Buffer
@@ -4650,6 +4680,22 @@ func (c *Client) RootGet(ctx context.Context, arg *Empty) (*RootResponse, *http.
 	var res RootResponse
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get the details of the data used in this current request
+func (c *Client) RootSelf(ctx context.Context, arg *Empty) (*SelfResponse, *http.Response, error) {
+	var res SelfResponse
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/self")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
