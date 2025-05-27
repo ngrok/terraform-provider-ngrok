@@ -15,6 +15,13 @@ type Paging struct {
 	Limit    *string `json:"limit,omitempty"`
 }
 
+type ItemPaging struct {
+	// a resource identifier
+	ID       string  `json:"id,omitempty"`
+	BeforeID *string `json:"before_id,omitempty"`
+	Limit    *string `json:"limit,omitempty"`
+}
+
 type Error struct {
 	ErrorCode  string            `json:"error_code,omitempty"`
 	StatusCode int32             `json:"status_code,omitempty"`
@@ -2039,13 +2046,11 @@ type Endpoint struct {
 	// the local address the tunnel forwards to
 	UpstreamURL string `json:"upstream_url,omitempty"`
 	// the protocol the agent uses to forward with
-	UpstreamProto string `json:"upstream_proto,omitempty"`
+	UpstreamProtocol string `json:"upstream_protocol,omitempty"`
 	// the url of the endpoint
 	URL string `json:"url,omitempty"`
 	// The ID of the owner (bot or user) that owns this endpoint
 	Principal *Ref `json:"principal,omitempty"`
-	// TODO: deprecate me!
-	PrincipalID *Ref `json:"principal_id,omitempty"`
 	// The traffic policy attached to this endpoint
 	TrafficPolicy string `json:"traffic_policy,omitempty"`
 	// the bindings associated with this endpoint
@@ -2056,6 +2061,8 @@ type Endpoint struct {
 	URI string `json:"uri,omitempty"`
 	// user supplied name for the endpoint
 	Name string `json:"name,omitempty"`
+	// whether the endpoint allows pooling
+	PoolingEnabled bool `json:"pooling_enabled,omitempty"`
 }
 
 type EndpointList struct {
@@ -2070,8 +2077,8 @@ type EndpointList struct {
 type EndpointCreate struct {
 	// the url of the endpoint
 	URL string `json:"url,omitempty"`
-	// whether the endpoint is ephemeral (served directly by an agent-initiated tunnel)
-	// or edge (served by an edge) or cloud (represents a cloud endpoint)
+	// Type of endpoint. Only 'cloud' is currently supported (represents a cloud
+	// endpoint). Defaults to 'cloud' if not specified.
 	Type string `json:"type,omitempty"`
 	// The traffic policy attached to this endpoint
 	TrafficPolicy string `json:"traffic_policy,omitempty"`
@@ -2080,7 +2087,8 @@ type EndpointCreate struct {
 	// user-supplied metadata of the associated tunnel or edge object
 	Metadata *string `json:"metadata,omitempty"`
 	// the bindings associated with this endpoint
-	Bindings *[]string `json:"bindings,omitempty"`
+	Bindings       *[]string `json:"bindings,omitempty"`
+	PoolingEnabled bool      `json:"pooling_enabled,omitempty"`
 }
 
 type EndpointUpdate struct {
@@ -2095,7 +2103,8 @@ type EndpointUpdate struct {
 	// user-supplied metadata of the associated tunnel or edge object
 	Metadata *string `json:"metadata,omitempty"`
 	// the bindings associated with this endpoint
-	Bindings *[]string `json:"bindings,omitempty"`
+	Bindings       *[]string `json:"bindings,omitempty"`
+	PoolingEnabled bool      `json:"pooling_enabled,omitempty"`
 }
 
 type AgentSessionEvent struct {
@@ -2627,8 +2636,8 @@ type KubernetesOperatorCreate struct {
 	// arbitrary user-defined machine-readable data of this Kubernetes Operator.
 	// optional, max 4096 bytes.
 	Metadata string `json:"metadata,omitempty"`
-	// features enabled for this Kubernetes Operator. a subset of {"bindings",
-	// "ingress", and "gateway"}
+	// features enabled for this Kubernetes Operator. a subset of "bindings",
+	// "ingress", and "gateway"
 	EnabledFeatures []string `json:"enabled_features,omitempty"`
 	// the ngrok region in which the ingress for this operator is served. defaults to
 	// "global"
@@ -2641,11 +2650,9 @@ type KubernetesOperatorCreate struct {
 }
 
 type KubernetesOperatorBindingCreate struct {
-	// the name by which endpoints can be bound to this Kubernetes Operator. starts
-	// with "k8s/"
-	Name string `json:"name,omitempty"`
-	// the regexes for urls allowed to be bound to this operator
-	AllowedURLs []string `json:"allowed_urls,omitempty"`
+	// the list of cel expressions that filter the k8s bound endpoints for this
+	// operator
+	EndpointSelectors []string `json:"endpoint_selectors,omitempty"`
 	// CSR is supplied during initial creation to enable creating a mutual TLS secured
 	// connection between ngrok and the operator. This is an internal implementation
 	// detail and subject to change.
@@ -2662,8 +2669,8 @@ type KubernetesOperatorUpdate struct {
 	// arbitrary user-defined machine-readable data of this Kubernetes Operator.
 	// optional, max 4096 bytes.
 	Metadata *string `json:"metadata,omitempty"`
-	// features enabled for this Kubernetes Operator. a subset of {"bindings",
-	// "ingress", and "gateway"}
+	// features enabled for this Kubernetes Operator. a subset of "bindings",
+	// "ingress", and "gateway"
 	EnabledFeatures *[]string `json:"enabled_features,omitempty"`
 	// the ngrok region in which the ingress for this operator is served. defaults to
 	// "global"
@@ -2671,20 +2678,27 @@ type KubernetesOperatorUpdate struct {
 	// configuration for the Bindings feature of this Kubernetes Operator. set only if
 	// enabling the "bindings" feature
 	Binding *KubernetesOperatorBindingUpdate `json:"binding,omitempty"`
+	// configuration for the Deployment info
+	Deployment *KubernetesOperatorDeploymentUpdate `json:"deployment,omitempty"`
 }
 
 type KubernetesOperatorBindingUpdate struct {
-	// the name by which endpoints can be bound to this Kubernetes Operator. starts
-	// with "k8s/"
-	Name *string `json:"name,omitempty"`
-	// the regexes for urls allowed to be bound to this operator
-	AllowedURLs *[]string `json:"allowed_urls,omitempty"`
+	// the list of cel expressions that filter the k8s bound endpoints for this
+	// operator
+	EndpointSelectors *[]string `json:"endpoint_selectors,omitempty"`
 	// CSR is supplied during initial creation to enable creating a mutual TLS secured
 	// connection between ngrok and the operator. This is an internal implementation
 	// detail and subject to change.
 	CSR *string `json:"csr,omitempty"`
 	// the public ingress endpoint for this Kubernetes Operator
 	IngressEndpoint *string `json:"ingress_endpoint,omitempty"`
+}
+
+type KubernetesOperatorDeploymentUpdate struct {
+	// the deployment name
+	Name *string `json:"name,omitempty"`
+	// the version of this Kubernetes Operator
+	Version *string `json:"version,omitempty"`
 }
 
 type KubernetesOperator struct {
@@ -2703,8 +2717,8 @@ type KubernetesOperator struct {
 	Metadata string `json:"metadata,omitempty"`
 	// the principal who created this Kubernetes Operator
 	Principal Ref `json:"principal,omitempty"`
-	// features enabled for this Kubernetes Operator. a subset of {"bindings",
-	// "ingress", and "gateway"}
+	// features enabled for this Kubernetes Operator. a subset of "bindings",
+	// "ingress", and "gateway"
 	EnabledFeatures []string `json:"enabled_features,omitempty"`
 	// the ngrok region in which the ingress for this operator is served. defaults to
 	// "global"
@@ -2722,6 +2736,8 @@ type KubernetesOperatorDeployment struct {
 	Namespace string `json:"namespace,omitempty"`
 	// the version of this Kubernetes Operator
 	Version string `json:"version,omitempty"`
+	// user-given name for the cluster the Kubernetes Operator is deployed to
+	ClusterName string `json:"cluster_name,omitempty"`
 }
 
 type KubernetesOperatorCert struct {
@@ -2735,11 +2751,9 @@ type KubernetesOperatorCert struct {
 }
 
 type KubernetesOperatorBinding struct {
-	// the name by which endpoints can be bound to this Kubernetes Operator. starts
-	// with "k8s/"
-	Name string `json:"name,omitempty"`
-	// the regexes for urls allowed to be bound to this operator
-	AllowedURLs []string `json:"allowed_urls,omitempty"`
+	// the list of cel expressions that filter the k8s bound endpoints for this
+	// operator
+	EndpointSelectors []string `json:"endpoint_selectors,omitempty"`
 	// the binding certificate information
 	Cert KubernetesOperatorCert `json:"cert,omitempty"`
 	// the public ingress endpoint for this Kubernetes Operator
@@ -3030,6 +3044,82 @@ type ReservedDomainCertJob struct {
 type RootResponse struct {
 	URI             string            `json:"uri,omitempty"`
 	SubresourceURIs map[string]string `json:"subresource_uris,omitempty"`
+}
+
+type SelfResponse struct {
+	ApiKey  APIKey  `json:"api_key,omitempty"`
+	Account Account `json:"account,omitempty"`
+	User    string  `json:"user,omitempty"`
+}
+
+type Account struct {
+	// unique API key resource identifier
+	ID                 string `json:"id,omitempty"`
+	Name               string `json:"name,omitempty"`
+	CreatedAt          string `json:"created_at,omitempty"`
+	Suspended          bool   `json:"suspended,omitempty"`
+	EnforceSSO         bool   `json:"enforce_sso,omitempty"`
+	MinApiVersion      int64  `json:"min_api_version,omitempty"`
+	MinAgentVersion    string `json:"min_agent_version,omitempty"`
+	UserMfaRequired    bool   `json:"user_mfa_required,omitempty"`
+	TrafficFullCapture bool   `json:"traffic_full_capture,omitempty"`
+}
+
+type SecretCreate struct {
+	// Name of secret
+	Name string `json:"name,omitempty"`
+	// Value of secret
+	Value string `json:"value,omitempty"`
+	// Arbitrary user-defined metadata for this Secret
+	Metadata string `json:"metadata,omitempty"`
+	// description of Secret
+	Description string `json:"description,omitempty"`
+	// unique identifier of the referenced vault
+	VaultID string `json:"vault_id,omitempty"`
+}
+
+type SecretUpdate struct {
+	// identifier for Secret
+	ID string `json:"id,omitempty"`
+	// Name of secret
+	Name *string `json:"name,omitempty"`
+	// Value of secret
+	Value *string `json:"value,omitempty"`
+	// Arbitrary user-defined metadata for this Secret
+	Metadata *string `json:"metadata,omitempty"`
+	// description of Secret
+	Description *string `json:"description,omitempty"`
+}
+
+type Secret struct {
+	// identifier for Secret
+	ID string `json:"id,omitempty"`
+	// URI of this Secret API resource
+	URI string `json:"uri,omitempty"`
+	// Timestamp when the Secret was created (RFC 3339 format)
+	CreatedAt string `json:"created_at,omitempty"`
+	// Timestamp when the Secret was last updated (RFC 3339 format)
+	UpdatedAt string `json:"updated_at,omitempty"`
+	// Name of secret
+	Name string `json:"name,omitempty"`
+	// description of Secret
+	Description string `json:"description,omitempty"`
+	// Arbitrary user-defined metadata for this Secret
+	Metadata string `json:"metadata,omitempty"`
+	// Reference to who created this Secret
+	CreatedBy Ref `json:"created_by,omitempty"`
+	// Reference to who created this Secret
+	LastUpdatedBy Ref `json:"last_updated_by,omitempty"`
+	// Reference to the vault the secret is stored in
+	Vault Ref `json:"vault,omitempty"`
+}
+
+type SecretList struct {
+	// The list of Secrets for this account
+	Secrets []Secret `json:"secrets,omitempty"`
+	URI     string   `json:"uri,omitempty"`
+	// URI of the next page of results, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
 type SSHCertificateAuthorityCreate struct {
@@ -3503,5 +3593,54 @@ type TunnelList struct {
 	// URI of the tunnels list API resource
 	URI string `json:"uri,omitempty"`
 	// URI of the next page, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type VaultCreate struct {
+	// Name of vault
+	Name string `json:"name,omitempty"`
+	// Arbitrary user-defined metadata for this Vault
+	Metadata string `json:"metadata,omitempty"`
+	// description of Vault
+	Description string `json:"description,omitempty"`
+}
+
+type VaultUpdate struct {
+	// identifier for Vault
+	ID string `json:"id,omitempty"`
+	// Name of vault
+	Name *string `json:"name,omitempty"`
+	// Arbitrary user-defined metadata for this Vault
+	Metadata *string `json:"metadata,omitempty"`
+	// description of Vault
+	Description *string `json:"description,omitempty"`
+}
+
+type Vault struct {
+	// identifier for Vault
+	ID string `json:"id,omitempty"`
+	// URI of this Vault API resource
+	URI string `json:"uri,omitempty"`
+	// Timestamp when the Vault was created (RFC 3339 format)
+	CreatedAt string `json:"created_at,omitempty"`
+	// Timestamp when the Vault was last updated (RFC 3339 format)
+	UpdatedAt string `json:"updated_at,omitempty"`
+	// Name of vault
+	Name string `json:"name,omitempty"`
+	// description of Vault
+	Description string `json:"description,omitempty"`
+	// Arbitrary user-defined metadata for this Vault
+	Metadata string `json:"metadata,omitempty"`
+	// Reference to who created this Vault
+	CreatedBy string `json:"created_by,omitempty"`
+	// Reference to who created this Vault
+	LastUpdatedBy string `json:"last_updated_by,omitempty"`
+}
+
+type VaultList struct {
+	// The list of Vaults for this account
+	Vaults []Vault `json:"vaults,omitempty"`
+	URI    string  `json:"uri,omitempty"`
+	// URI of the next page of results, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
