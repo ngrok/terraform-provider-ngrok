@@ -3745,6 +3745,36 @@ func (c *Client) KubernetesOperatorsList(ctx context.Context, arg *Paging) (*Kub
 	return &res, resp, err
 }
 
+// List Endpoints bound to a Kubernetes Operator
+func (c *Client) KubernetesOperatorsGetBoundEndpoints(ctx context.Context, arg *ItemPaging) (*EndpointList, *http.Response, error) {
+	var res EndpointList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/kubernetes_operators/{{ .ID }}/bound_endpoints")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 func (c *Client) EndpointBasicAuthModuleReplace(ctx context.Context, arg *EndpointBasicAuthReplace) (*EndpointBasicAuth, *http.Response, error) {
 	var res EndpointBasicAuth
 	var path bytes.Buffer
@@ -4661,6 +4691,118 @@ func (c *Client) RootGet(ctx context.Context, arg *Empty) (*RootResponse, *http.
 	return &res, resp, err
 }
 
+// Get the details of the data used in this current request
+func (c *Client) RootSelf(ctx context.Context, arg *Empty) (*SelfResponse, *http.Response, error) {
+	var res SelfResponse
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/self")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Secret
+func (c *Client) SecretsCreate(ctx context.Context, arg *SecretCreate) (*Secret, *http.Response, error) {
+	var res Secret
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update an existing Secret by ID
+func (c *Client) SecretsUpdate(ctx context.Context, arg *SecretUpdate) (*Secret, *http.Response, error) {
+	var res Secret
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a Secret
+func (c *Client) SecretsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get a Secret by ID
+func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Response, error) {
+	var res Secret
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Secrets owned by account
+func (c *Client) SecretsList(ctx context.Context, arg *Paging) (*SecretList, *http.Response, error) {
+	var res SecretList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
 // Create a new SSH Certificate Authority
 func (c *Client) SSHCertificateAuthoritiesCreate(ctx context.Context, arg *SSHCertificateAuthorityCreate) (*SSHCertificateAuthority, *http.Response, error) {
 	var res SSHCertificateAuthority
@@ -5179,6 +5321,102 @@ func (c *Client) TunnelsGet(ctx context.Context, arg *Item) (*Tunnel, *http.Resp
 	}
 	uri := path.String()
 	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new Vault
+func (c *Client) VaultsCreate(ctx context.Context, arg *VaultCreate) (*Vault, *http.Response, error) {
+	var res Vault
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update an existing Vault by ID
+func (c *Client) VaultsUpdate(ctx context.Context, arg *VaultUpdate) (*Vault, *http.Response, error) {
+	var res Vault
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a Vault
+func (c *Client) VaultsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get a Vault by ID
+func (c *Client) VaultsGet(ctx context.Context, arg *Item) (*Vault, *http.Response, error) {
+	var res Vault
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all Vaults owned by account
+func (c *Client) VaultsList(ctx context.Context, arg *Paging) (*VaultList, *http.Response, error) {
+	var res VaultList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
 	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
