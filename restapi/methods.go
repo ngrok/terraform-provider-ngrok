@@ -4711,7 +4711,7 @@ func (c *Client) RootSelf(ctx context.Context, arg *Empty) (*SelfResponse, *http
 func (c *Client) SecretsCreate(ctx context.Context, arg *SecretCreate) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4727,7 +4727,7 @@ func (c *Client) SecretsCreate(ctx context.Context, arg *SecretCreate) (*Secret,
 func (c *Client) SecretsUpdate(ctx context.Context, arg *SecretUpdate) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4744,7 +4744,7 @@ func (c *Client) SecretsUpdate(ctx context.Context, arg *SecretUpdate) (*Secret,
 func (c *Client) SecretsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4761,7 +4761,7 @@ func (c *Client) SecretsDelete(ctx context.Context, arg *Item) (*Empty, *http.Re
 func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4778,7 +4778,7 @@ func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Resp
 func (c *Client) SecretsList(ctx context.Context, arg *Paging) (*SecretList, *http.Response, error) {
 	var res SecretList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()

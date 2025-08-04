@@ -13887,6 +13887,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["certificate_management_status"] = flattenReservedDomainCertStatus(obj.CertificateManagementStatus)
 	m["acme_challenge_cname_target"] = obj.ACMEChallengeCNAMETarget
 	m["error_redirect_url"] = obj.ErrorRedirectURL
+	m["is_dev"] = obj.IsDev
 
 	return []interface{}{m}
 }
@@ -13958,6 +13959,9 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	}
 	if v, ok := m["error_redirect_url"]; ok {
 		obj.ErrorRedirectURL = expandString(v)
+	}
+	if v, ok := m["is_dev"]; ok {
+		obj.IsDev = *expandBool(v)
 	}
 	return &obj
 }

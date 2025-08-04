@@ -132,6 +132,15 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    false,
 				Description: "unique reserved domain resource identifier",
 			},
+			"is_dev": {
+				Type:        schema.TypeBool,
+				Required:    false,
+				Computed:    true,
+				Optional:    false,
+				Sensitive:   false,
+				ForceNew:    true,
+				Description: "Whether the reserved domain is a dev domain.",
+			},
 			"metadata": {
 				Type:        schema.TypeString,
 				Required:    false,
@@ -241,6 +250,7 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 			d.Set("https_endpoint_configuration_id", res.HTTPSEndpointConfiguration.ID)
 		}
 		d.Set("id", res.ID)
+		d.Set("is_dev", res.IsDev)
 		d.Set("metadata", res.Metadata)
 		d.Set("region", res.Region)
 	}
