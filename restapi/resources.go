@@ -3000,6 +3000,8 @@ type ReservedDomain struct {
 	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
 	// error occurs. Max 10000 bytes.
 	ErrorRedirectURL *string `json:"error_redirect_url,omitempty"`
+	// Whether the reserved domain is a dev domain.
+	IsDev bool `json:"is_dev,omitempty"`
 }
 
 type ReservedDomainList struct {
