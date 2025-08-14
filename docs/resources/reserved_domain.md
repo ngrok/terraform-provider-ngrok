@@ -50,6 +50,7 @@ resource "ngrok_reserved_domain" "example" {
 - **acme_challenge_cname_target** (String) DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.
 - **cname_target** (String) DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of an ngrok owned domain (e.g. *.ngrok.app)
 - **id** (String) unique reserved domain resource identifier
+- **is_dev** (Boolean) Whether the reserved domain is a dev domain.
 
 <a id="nestedblock--certificate_management_policy"></a>
 ### Nested Schema for `certificate_management_policy`

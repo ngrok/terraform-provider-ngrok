@@ -41,11 +41,13 @@ func Provider() *schema.Provider {
 			"ngrok_ip_restriction":            resourceIPRestrictions(),
 			"ngrok_reserved_addr":             resourceReservedAddrs(),
 			"ngrok_reserved_domain":           resourceReservedDomains(),
+			"ngrok_secret":                    resourceSecrets(),
 			"ngrok_ssh_certificate_authority": resourceSSHCertificateAuthorities(),
 			"ngrok_ssh_credential":            resourceSSHCredentials(),
 			"ngrok_ssh_host_certificate":      resourceSSHHostCertificates(),
 			"ngrok_ssh_user_certificate":      resourceSSHUserCertificates(),
 			"ngrok_tls_certificate":           resourceTLSCertificates(),
+			"ngrok_vault":                     resourceVaults(),
 		},
 		ConfigureFunc: configureProvider,
 	}
