@@ -2057,7 +2057,7 @@ type Endpoint struct {
 	Bindings *[]string `json:"bindings,omitempty"`
 	// The tunnel session of the agent for this endpoint
 	TunnelSession *Ref `json:"tunnel_session,omitempty"`
-	// URI of the clep API resource
+	// URI of the Cloud Endpoint API resource
 	URI string `json:"uri,omitempty"`
 	// user supplied name for the endpoint
 	Name string `json:"name,omitempty"`
@@ -2089,6 +2089,13 @@ type EndpointCreate struct {
 	// the bindings associated with this endpoint
 	Bindings       *[]string `json:"bindings,omitempty"`
 	PoolingEnabled bool      `json:"pooling_enabled,omitempty"`
+}
+
+type EndpointListArgs struct {
+	BeforeID *string  `json:"before_id,omitempty"`
+	Limit    *string  `json:"limit,omitempty"`
+	IDs      []string `json:"ids,omitempty"`
+	URLs     []string `json:"urls,omitempty"`
 }
 
 type EndpointUpdate struct {
@@ -3000,6 +3007,8 @@ type ReservedDomain struct {
 	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
 	// error occurs. Max 10000 bytes.
 	ErrorRedirectURL *string `json:"error_redirect_url,omitempty"`
+	// Whether the reserved domain is a dev domain.
+	IsDev bool `json:"is_dev,omitempty"`
 }
 
 type ReservedDomainList struct {

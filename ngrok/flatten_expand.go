@@ -9594,6 +9594,66 @@ func expandEndpointCreateSlice(in interface{}) *[]restapi.EndpointCreate {
 	return &out
 }
 
+func flattenEndpointListArgs(obj *restapi.EndpointListArgs) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["before_id"] = obj.BeforeID
+	m["limit"] = obj.Limit
+	m["ids"] = obj.IDs
+	m["urls"] = obj.URLs
+
+	return []interface{}{m}
+}
+
+func flattenEndpointListArgsSlice(objs *[]restapi.EndpointListArgs) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointListArgs(&v))
+	}
+	return sl
+}
+
+func expandEndpointListArgs(in interface{}) *restapi.EndpointListArgs {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointListArgs
+	if v, ok := m["before_id"]; ok {
+		obj.BeforeID = expandString(v)
+	}
+	if v, ok := m["limit"]; ok {
+		obj.Limit = expandString(v)
+	}
+	if v, ok := m["ids"]; ok {
+		obj.IDs = *expandStringSlice(v)
+	}
+	if v, ok := m["urls"]; ok {
+		obj.URLs = *expandStringSlice(v)
+	}
+	return &obj
+}
+
+func expandEndpointListArgsSlice(in interface{}) *[]restapi.EndpointListArgs {
+	var out []restapi.EndpointListArgs
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointListArgs(v))
+	}
+	return &out
+}
+
 func flattenEndpointUpdate(obj *restapi.EndpointUpdate) interface{} {
 	if obj == nil {
 		return nil
@@ -13887,6 +13947,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["certificate_management_status"] = flattenReservedDomainCertStatus(obj.CertificateManagementStatus)
 	m["acme_challenge_cname_target"] = obj.ACMEChallengeCNAMETarget
 	m["error_redirect_url"] = obj.ErrorRedirectURL
+	m["is_dev"] = obj.IsDev
 
 	return []interface{}{m}
 }
@@ -13958,6 +14019,9 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	}
 	if v, ok := m["error_redirect_url"]; ok {
 		obj.ErrorRedirectURL = expandString(v)
+	}
+	if v, ok := m["is_dev"]; ok {
+		obj.IsDev = *expandBool(v)
 	}
 	return &obj
 }

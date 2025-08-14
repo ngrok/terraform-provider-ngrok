@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"text/template"
 )
 
@@ -2985,7 +2986,7 @@ func (c *Client) EndpointsCreate(ctx context.Context, arg *EndpointCreate) (*End
 }
 
 // List all active endpoints on the account
-func (c *Client) EndpointsList(ctx context.Context, arg *Paging) (*EndpointList, *http.Response, error) {
+func (c *Client) EndpointsList(ctx context.Context, arg *EndpointListArgs) (*EndpointList, *http.Response, error) {
 	var res EndpointList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/endpoints")).Execute(&path, arg); err != nil {
@@ -3002,6 +3003,12 @@ func (c *Client) EndpointsList(ctx context.Context, arg *Paging) (*EndpointList,
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.IDs != nil {
+		params.Add("ids", strings.Join(arg.IDs, ","))
+	}
+	if arg.URLs != nil {
+		params.Add("urls", strings.Join(arg.URLs, ","))
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -4711,7 +4718,7 @@ func (c *Client) RootSelf(ctx context.Context, arg *Empty) (*SelfResponse, *http
 func (c *Client) SecretsCreate(ctx context.Context, arg *SecretCreate) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4727,7 +4734,7 @@ func (c *Client) SecretsCreate(ctx context.Context, arg *SecretCreate) (*Secret,
 func (c *Client) SecretsUpdate(ctx context.Context, arg *SecretUpdate) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4744,7 +4751,7 @@ func (c *Client) SecretsUpdate(ctx context.Context, arg *SecretUpdate) (*Secret,
 func (c *Client) SecretsDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
 	var res Empty
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4761,7 +4768,7 @@ func (c *Client) SecretsDelete(ctx context.Context, arg *Item) (*Empty, *http.Re
 func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Response, error) {
 	var res Secret
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets/{{ .ID }}")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
@@ -4778,7 +4785,7 @@ func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Resp
 func (c *Client) SecretsList(ctx context.Context, arg *Paging) (*SecretList, *http.Response, error) {
 	var res SecretList
 	var path bytes.Buffer
-	if err := template.Must(template.New("").Parse("/vault-secrets")).Execute(&path, arg); err != nil {
+	if err := template.Must(template.New("").Parse("/vault_secrets")).Execute(&path, arg); err != nil {
 		panic(err)
 	}
 	uri := path.String()
