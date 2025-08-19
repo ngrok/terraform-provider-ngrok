@@ -3004,11 +3004,11 @@ func (c *Client) EndpointsList(ctx context.Context, arg *EndpointListArgs) (*End
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
 	}
-	if arg.IDs != nil {
-		params.Add("ids", strings.Join(arg.IDs, ","))
+	if arg.ID != nil {
+		params.Add("id", strings.Join(arg.ID, ","))
 	}
-	if arg.URLs != nil {
-		params.Add("urls", strings.Join(arg.URLs, ","))
+	if arg.URL != nil {
+		params.Add("url", strings.Join(arg.URL, ","))
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -5394,6 +5394,36 @@ func (c *Client) VaultsGet(ctx context.Context, arg *Item) (*Vault, *http.Respon
 		panic(err)
 	}
 	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get Secrets by Vault ID
+func (c *Client) VaultsGetSecretsByVault(ctx context.Context, arg *ItemPaging) (*SecretList, *http.Response, error) {
+	var res SecretList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/vaults/{{ .ID }}/secrets")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
 	arg.ID = ""
 
 	resp, err := c.Get(ctx, uri, &res)

@@ -9602,8 +9602,8 @@ func flattenEndpointListArgs(obj *restapi.EndpointListArgs) interface{} {
 	m := make(map[string]interface{})
 	m["before_id"] = obj.BeforeID
 	m["limit"] = obj.Limit
-	m["ids"] = obj.IDs
-	m["urls"] = obj.URLs
+	m["id"] = obj.ID
+	m["url"] = obj.URL
 
 	return []interface{}{m}
 }
@@ -9637,11 +9637,11 @@ func expandEndpointListArgs(in interface{}) *restapi.EndpointListArgs {
 	if v, ok := m["limit"]; ok {
 		obj.Limit = expandString(v)
 	}
-	if v, ok := m["ids"]; ok {
-		obj.IDs = *expandStringSlice(v)
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandStringSlice(v)
 	}
-	if v, ok := m["urls"]; ok {
-		obj.URLs = *expandStringSlice(v)
+	if v, ok := m["url"]; ok {
+		obj.URL = *expandStringSlice(v)
 	}
 	return &obj
 }
