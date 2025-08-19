@@ -2094,8 +2094,8 @@ type EndpointCreate struct {
 type EndpointListArgs struct {
 	BeforeID *string  `json:"before_id,omitempty"`
 	Limit    *string  `json:"limit,omitempty"`
-	IDs      []string `json:"ids,omitempty"`
-	URLs     []string `json:"urls,omitempty"`
+	ID       []string `json:"id,omitempty"`
+	URL      []string `json:"url,omitempty"`
 }
 
 type EndpointUpdate struct {
