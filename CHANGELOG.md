@@ -1,14 +1,11 @@
 <!-- Code generated for API Clients. DO NOT EDIT. -->
-## 0.7.0 
-* Add support for `ids` and `urls` query parameters when listing endpoint resources. 
-
-## 0.6.0
-* Add support for `vaults`
-* Add support for `secrets`
-
 ## 0.5.0
 * Renamed `upstream_proto` to `upstream_protocol` for `endpoint` resources
 * Added support for `pooling_enabled` on Endpoints
+* Add support for `vaults`
+* Add support for `secrets`
+* Change endpoint filtering query parameters to `id` and `url`.
+* Add support for getting secrets by vault.
 
 ## 0.4.0
 * Added support for Cloud Endpoints (currently in private beta).
