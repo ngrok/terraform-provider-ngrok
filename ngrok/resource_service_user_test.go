@@ -13,30 +13,18 @@ import (
 )
 
 var (
-	resourceEventDestinations_createConfig = `resource "ngrok_event_destination" "example" {
-  description = "kinesis dev stream"
-  format = "json"
-  metadata = "{\"environment\":\"dev\"}"
-  target {
-    kinesis {
-      auth {
-        role {
-          role_arn = "arn:aws:iam::123456789012:role/example"
-        }
-      }
-      stream_arn = "arn:ngrok-local:kinesis:us-east-2:123456789012:stream/mystream2"
-    }
-  }
+	resourceServiceUsers_createConfig = `resource "ngrok_service_user" "example" {
+  name = "new service user from API"
 }`
-	resourceEventDestinations_updateConfig = `resource "ngrok_event_destination" "example" {
-  description = "kinesis dev stream 1 of 3"
-  metadata = "{\"environment\":\"dev\", \"stream\":1}"
+	resourceServiceUsers_updateConfig = `resource "ngrok_service_user" "example" {
+  active = false
+  name = "inactive service user from API"
 }`
 )
 
 func init() {
-	resource.AddTestSweepers("event_destinations", &resource.Sweeper{
-		Name: "event_destinations",
+	resource.AddTestSweepers("service_users", &resource.Sweeper{
+		Name: "service_users",
 		F: func(region string) error {
 			ctx := context.Background()
 			client, err := sharedClientForRegion(region)
@@ -45,12 +33,12 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.EventDestinationsList(ctx, &restapi.FilteredPaging{})
+			list, _, err := conn.ServiceUsersList(ctx, &restapi.FilteredPaging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
 
-			for _, item := range list.EventDestinations {
+			for _, item := range list.ServiceUsers {
 				// Assume items with empty Description or Metadata are system defined
 				// (i.e. API Keys) so do not sweep them for cleanup.
 				// However, not all items have Description and Metadata fields, so need to reflect.
@@ -59,7 +47,7 @@ func init() {
 				mv := iv.FieldByName("Metadata")
 				shouldKeep := (dv.IsValid() && dv.IsZero()) || (mv.IsValid() && mv.IsZero())
 				if !shouldKeep {
-					_, _, err := conn.EventDestinationsDelete(ctx, &restapi.Item{ID: item.ID})
+					_, _, err := conn.ServiceUsersDelete(ctx, &restapi.Item{ID: item.ID})
 
 					if err != nil {
 						log.Printf("Error destroying id %s during sweep: %s", item.ID, err)
@@ -72,28 +60,28 @@ func init() {
 	})
 }
 
-func TestAccResourceEventDestinations(t *testing.T) {
+func TestAccResourceServiceUsers(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		PreCheck:     func() { testAccPreCheck(t) },
-		CheckDestroy: testAccCheckDestroyEventDestinations,
+		CheckDestroy: testAccCheckDestroyServiceUsers,
 		Steps: []resource.TestStep{
 			{
-				Config: resourceEventDestinations_createConfig,
+				Config: resourceServiceUsers_createConfig,
 				// Check: resource.ComposeAggregateTestCheckFunc(
-				// 	testAccCheckCreateEventDestinations,
+				// 	testAccCheckCreateServiceUsers,
 				// ),
 			},
 		},
 	})
 }
 
-func testAccCheckDestroyEventDestinations(s *terraform.State) (err error) {
+func testAccCheckDestroyServiceUsers(s *terraform.State) (err error) {
 	return err
 }
 
-func testAccCheckCreateEventDestinations(s *terraform.State) (err error) {
+func testAccCheckCreateServiceUsers(s *terraform.State) (err error) {
 	fmt.Sprintf("state=%#v", s)
 	return err
 }

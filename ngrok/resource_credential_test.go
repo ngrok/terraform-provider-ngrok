@@ -33,7 +33,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.CredentialsList(ctx, &restapi.Paging{})
+			list, _, err := conn.CredentialsList(ctx, &restapi.FilteredPaging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}

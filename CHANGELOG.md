@@ -1,4 +1,10 @@
 <!-- Code generated for API Clients. DO NOT EDIT. -->
+## 0.6.0
+* Add support for CEL filtering when listing resources.
+* Add support for service users
+* Add support for `vault_name` on Secrets
+* Make `pooling_enabled` on Endpoints optional
+
 ## 0.5.0
 * Renamed `upstream_proto` to `upstream_protocol` for `endpoint` resources
 * Added support for `pooling_enabled` on Endpoints

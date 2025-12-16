@@ -98,6 +98,9 @@ func resourceCredentialsCreate(d *schema.ResourceData, m interface{}) (err error
 	if v, ok := d.GetOk("precomputed_token"); ok {
 		arg.PrecomputedToken = expandString(v)
 	}
+	if v, ok := d.GetOk("scim_user_id"); ok {
+		arg.ScimUserId = *expandString(v)
+	}
 
 	res, _, err := b.client.CredentialsCreate(context.Background(), &arg)
 	if err != nil {
