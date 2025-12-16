@@ -34,7 +34,7 @@ func init() {
 			}
 			conn := client.(*restapi.Client)
 
-			list, _, err := conn.AgentIngressesList(ctx, &restapi.Paging{})
+			list, _, err := conn.AgentIngressesList(ctx, &restapi.FilteredPaging{})
 			if err != nil {
 				return fmt.Errorf("Error getting list of items: %s", err)
 			}
