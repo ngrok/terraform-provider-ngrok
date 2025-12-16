@@ -15,6 +15,12 @@ type Paging struct {
 	Limit    *string `json:"limit,omitempty"`
 }
 
+type FilteredPaging struct {
+	BeforeID *string `json:"before_id,omitempty"`
+	Limit    *string `json:"limit,omitempty"`
+	Filter   *string `json:"filter,omitempty"`
+}
+
 type ItemPaging struct {
 	// a resource identifier
 	ID       string  `json:"id,omitempty"`
@@ -817,12 +823,16 @@ type CredentialCreate struct {
 	// the authenticated User or Bot.
 	OwnerID *string `json:"owner_id,omitempty"`
 	// If supplied at credential creation, ownership will be assigned to the specified
-	// User. Only admins may specify an owner other than themselves. Both owner_id and
-	// owner_email may not be specified.
+	// User. Only admins may specify an owner other than themselves. Only one of
+	// owner_id, owner_email, or scim_user_id may be specified. specified.
 	OwnerEmail string `json:"owner_email,omitempty"`
 	// Only authorized accounts may supply a pre-computed token that will be associated
 	// with the created credentials.
 	PrecomputedToken *string `json:"precomputed_token,omitempty"`
+	// If supplied at credential creation, ownership will be assigned to the specified
+	// SCIM User. Only admins may specify an owner other than themselves. Only one of
+	// owner_id, owner_email, or scim_user_id may be specified.
+	ScimUserId string `json:"scim_user_id,omitempty"`
 }
 
 type CredentialUpdate struct {
@@ -2019,7 +2029,7 @@ type Endpoint struct {
 	CreatedAt string `json:"created_at,omitempty"`
 	// timestamp when the endpoint was updated in RFC 3339 format
 	UpdatedAt string `json:"updated_at,omitempty"`
-	// URL of the hostport served by this endpoint
+	// deprecated [replaced by URL]: URL of the hostport served by this endpoint
 	PublicURL string `json:"public_url,omitempty"`
 	// protocol served by this endpoint. one of http, https, tcp, or tls
 	Proto  string `json:"proto,omitempty"`
@@ -2088,7 +2098,7 @@ type EndpointCreate struct {
 	Metadata *string `json:"metadata,omitempty"`
 	// the bindings associated with this endpoint
 	Bindings       *[]string `json:"bindings,omitempty"`
-	PoolingEnabled bool      `json:"pooling_enabled,omitempty"`
+	PoolingEnabled *bool     `json:"pooling_enabled,omitempty"`
 }
 
 type EndpointListArgs struct {
@@ -2096,6 +2106,19 @@ type EndpointListArgs struct {
 	Limit    *string  `json:"limit,omitempty"`
 	ID       []string `json:"id,omitempty"`
 	URL      []string `json:"url,omitempty"`
+	Filter   *string  `json:"filter,omitempty"`
+}
+
+type EndpointFilters struct {
+	BeforeID       *string  `json:"before_id,omitempty"`
+	Limit          *string  `json:"limit,omitempty"`
+	ID             []string `json:"id,omitempty"`
+	URL            []string `json:"url,omitempty"`
+	Type           []string `json:"type,omitempty"`
+	Binding        []string `json:"binding,omitempty"`
+	PoolingEnabled bool     `json:"pooling_enabled,omitempty"`
+	// CEL query will soon(ish) subsume the others
+	CELQuery string `json:"cel_query,omitempty"`
 }
 
 type EndpointUpdate struct {
@@ -2111,7 +2134,7 @@ type EndpointUpdate struct {
 	Metadata *string `json:"metadata,omitempty"`
 	// the bindings associated with this endpoint
 	Bindings       *[]string `json:"bindings,omitempty"`
-	PoolingEnabled bool      `json:"pooling_enabled,omitempty"`
+	PoolingEnabled *bool     `json:"pooling_enabled,omitempty"`
 }
 
 type AgentSessionEvent struct {
@@ -2401,19 +2424,15 @@ type EventSubscription struct {
 
 type EventSourceReplace struct {
 	// Type of event for which an event subscription will trigger
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
+	Type   string   `json:"type,omitempty"`
+	Filter string   `json:"filter,omitempty"`
 	Fields []string `json:"fields,omitempty"`
 }
 
 type EventSource struct {
 	// Type of event for which an event subscription will trigger
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
+	Type   string   `json:"type,omitempty"`
+	Filter string   `json:"filter,omitempty"`
 	Fields []string `json:"fields,omitempty"`
 	// URI of the Event Source API resource.
 	URI string `json:"uri,omitempty"`
@@ -2431,10 +2450,8 @@ type EventSourceCreate struct {
 	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
 	// Type of event for which an event subscription will trigger
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter string `json:"filter,omitempty"`
-	// TODO
+	Type   string   `json:"type,omitempty"`
+	Filter string   `json:"filter,omitempty"`
 	Fields []string `json:"fields,omitempty"`
 }
 
@@ -2443,10 +2460,8 @@ type EventSourceUpdate struct {
 	// attached to.
 	SubscriptionID string `json:"subscription_id,omitempty"`
 	// Type of event for which an event subscription will trigger
-	Type string `json:"type,omitempty"`
-	// TODO
-	Filter *string `json:"filter,omitempty"`
-	// TODO
+	Type   string    `json:"type,omitempty"`
+	Filter *string   `json:"filter,omitempty"`
 	Fields *[]string `json:"fields,omitempty"`
 }
 
@@ -3085,6 +3100,8 @@ type SecretCreate struct {
 	Description string `json:"description,omitempty"`
 	// unique identifier of the referenced vault
 	VaultID string `json:"vault_id,omitempty"`
+	// name of the referenced vault
+	VaultName string `json:"vault_name,omitempty"`
 }
 
 type SecretUpdate struct {
@@ -3121,6 +3138,8 @@ type Secret struct {
 	LastUpdatedBy Ref `json:"last_updated_by,omitempty"`
 	// Reference to the vault the secret is stored in
 	Vault Ref `json:"vault,omitempty"`
+	// Name of the vault the secret is stored in
+	VaultName string `json:"vault_name,omitempty"`
 }
 
 type SecretList struct {
@@ -3128,6 +3147,43 @@ type SecretList struct {
 	Secrets []Secret `json:"secrets,omitempty"`
 	URI     string   `json:"uri,omitempty"`
 	// URI of the next page of results, or null if there is no next page
+	NextPageURI *string `json:"next_page_uri,omitempty"`
+}
+
+type ServiceUser struct {
+	// unique API key resource identifier
+	ID string `json:"id,omitempty"`
+	// URI to the API resource of this service user
+	URI string `json:"uri,omitempty"`
+	// human-readable name used to identify the service
+	Name string `json:"name,omitempty"`
+	// whether or not the service is active
+	Active bool `json:"active,omitempty"`
+	// timestamp when the api key was created, RFC 3339 format
+	CreatedAt string `json:"created_at,omitempty"`
+}
+
+type ServiceUserCreate struct {
+	// human-readable name used to identify the service
+	Name string `json:"name,omitempty"`
+	// whether or not the service is active
+	Active *bool `json:"active,omitempty"`
+}
+
+type ServiceUserUpdate struct {
+	ID string `json:"id,omitempty"`
+	// human-readable name used to identify the service
+	Name *string `json:"name,omitempty"`
+	// whether or not the service is active
+	Active *bool `json:"active,omitempty"`
+}
+
+type ServiceUserList struct {
+	// the list of all service users on this account
+	ServiceUsers []ServiceUser `json:"service_users,omitempty"`
+	// URI of the service users list API resource
+	URI string `json:"uri,omitempty"`
+	// URI of the next page, or null if there is no next page
 	NextPageURI *string `json:"next_page_uri,omitempty"`
 }
 
@@ -3215,6 +3271,10 @@ type SSHCredentialCreate struct {
 	// User. Only admins may specify an owner other than themselves. Both owner_id and
 	// owner_email may not be specified.
 	OwnerEmail string `json:"owner_email,omitempty"`
+	// If supplied at credential creation, ownership will be assigned to the specified
+	// SCIM User. Only admins may specify an owner other than themselves. Only one of
+	// owner_id, owner_email, or scim_user_id may be specified.
+	ScimUserId string `json:"scim_user_id,omitempty"`
 }
 
 type SSHCredentialUpdate struct {

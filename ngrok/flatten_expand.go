@@ -142,6 +142,62 @@ func expandPagingSlice(in interface{}) *[]restapi.Paging {
 	return &out
 }
 
+func flattenFilteredPaging(obj *restapi.FilteredPaging) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["before_id"] = obj.BeforeID
+	m["limit"] = obj.Limit
+	m["filter"] = obj.Filter
+
+	return []interface{}{m}
+}
+
+func flattenFilteredPagingSlice(objs *[]restapi.FilteredPaging) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenFilteredPaging(&v))
+	}
+	return sl
+}
+
+func expandFilteredPaging(in interface{}) *restapi.FilteredPaging {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.FilteredPaging
+	if v, ok := m["before_id"]; ok {
+		obj.BeforeID = expandString(v)
+	}
+	if v, ok := m["limit"]; ok {
+		obj.Limit = expandString(v)
+	}
+	if v, ok := m["filter"]; ok {
+		obj.Filter = expandString(v)
+	}
+	return &obj
+}
+
+func expandFilteredPagingSlice(in interface{}) *[]restapi.FilteredPaging {
+	var out []restapi.FilteredPaging
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandFilteredPaging(v))
+	}
+	return &out
+}
+
 func flattenItemPaging(obj *restapi.ItemPaging) interface{} {
 	if obj == nil {
 		return nil
@@ -4202,6 +4258,7 @@ func flattenCredentialCreate(obj *restapi.CredentialCreate) interface{} {
 	m["owner_id"] = obj.OwnerID
 	m["owner_email"] = obj.OwnerEmail
 	m["precomputed_token"] = obj.PrecomputedToken
+	m["scim_user_id"] = obj.ScimUserId
 
 	return []interface{}{m}
 }
@@ -4246,6 +4303,9 @@ func expandCredentialCreate(in interface{}) *restapi.CredentialCreate {
 	}
 	if v, ok := m["precomputed_token"]; ok {
 		obj.PrecomputedToken = expandString(v)
+	}
+	if v, ok := m["scim_user_id"]; ok {
+		obj.ScimUserId = *expandString(v)
 	}
 	return &obj
 }
@@ -9581,7 +9641,7 @@ func expandEndpointCreate(in interface{}) *restapi.EndpointCreate {
 		obj.Bindings = expandStringSlice(v)
 	}
 	if v, ok := m["pooling_enabled"]; ok {
-		obj.PoolingEnabled = *expandBool(v)
+		obj.PoolingEnabled = expandBool(v)
 	}
 	return &obj
 }
@@ -9604,6 +9664,7 @@ func flattenEndpointListArgs(obj *restapi.EndpointListArgs) interface{} {
 	m["limit"] = obj.Limit
 	m["id"] = obj.ID
 	m["url"] = obj.URL
+	m["filter"] = obj.Filter
 
 	return []interface{}{m}
 }
@@ -9643,6 +9704,9 @@ func expandEndpointListArgs(in interface{}) *restapi.EndpointListArgs {
 	if v, ok := m["url"]; ok {
 		obj.URL = *expandStringSlice(v)
 	}
+	if v, ok := m["filter"]; ok {
+		obj.Filter = expandString(v)
+	}
 	return &obj
 }
 
@@ -9650,6 +9714,82 @@ func expandEndpointListArgsSlice(in interface{}) *[]restapi.EndpointListArgs {
 	var out []restapi.EndpointListArgs
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandEndpointListArgs(v))
+	}
+	return &out
+}
+
+func flattenEndpointFilters(obj *restapi.EndpointFilters) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["before_id"] = obj.BeforeID
+	m["limit"] = obj.Limit
+	m["id"] = obj.ID
+	m["url"] = obj.URL
+	m["type"] = obj.Type
+	m["binding"] = obj.Binding
+	m["pooling_enabled"] = obj.PoolingEnabled
+	m["cel_query"] = obj.CELQuery
+
+	return []interface{}{m}
+}
+
+func flattenEndpointFiltersSlice(objs *[]restapi.EndpointFilters) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenEndpointFilters(&v))
+	}
+	return sl
+}
+
+func expandEndpointFilters(in interface{}) *restapi.EndpointFilters {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.EndpointFilters
+	if v, ok := m["before_id"]; ok {
+		obj.BeforeID = expandString(v)
+	}
+	if v, ok := m["limit"]; ok {
+		obj.Limit = expandString(v)
+	}
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandStringSlice(v)
+	}
+	if v, ok := m["url"]; ok {
+		obj.URL = *expandStringSlice(v)
+	}
+	if v, ok := m["type"]; ok {
+		obj.Type = *expandStringSlice(v)
+	}
+	if v, ok := m["binding"]; ok {
+		obj.Binding = *expandStringSlice(v)
+	}
+	if v, ok := m["pooling_enabled"]; ok {
+		obj.PoolingEnabled = *expandBool(v)
+	}
+	if v, ok := m["cel_query"]; ok {
+		obj.CELQuery = *expandString(v)
+	}
+	return &obj
+}
+
+func expandEndpointFiltersSlice(in interface{}) *[]restapi.EndpointFilters {
+	var out []restapi.EndpointFilters
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandEndpointFilters(v))
 	}
 	return &out
 }
@@ -9713,7 +9853,7 @@ func expandEndpointUpdate(in interface{}) *restapi.EndpointUpdate {
 		obj.Bindings = expandStringSlice(v)
 	}
 	if v, ok := m["pooling_enabled"]; ok {
-		obj.PoolingEnabled = *expandBool(v)
+		obj.PoolingEnabled = expandBool(v)
 	}
 	return &obj
 }
@@ -14453,6 +14593,7 @@ func flattenSecretCreate(obj *restapi.SecretCreate) interface{} {
 	m["metadata"] = obj.Metadata
 	m["description"] = obj.Description
 	m["vault_id"] = obj.VaultID
+	m["vault_name"] = obj.VaultName
 
 	return []interface{}{m}
 }
@@ -14494,6 +14635,9 @@ func expandSecretCreate(in interface{}) *restapi.SecretCreate {
 	}
 	if v, ok := m["vault_id"]; ok {
 		obj.VaultID = *expandString(v)
+	}
+	if v, ok := m["vault_name"]; ok {
+		obj.VaultName = *expandString(v)
 	}
 	return &obj
 }
@@ -14586,6 +14730,7 @@ func flattenSecret(obj *restapi.Secret) interface{} {
 	m["created_by"] = flattenRef(&obj.CreatedBy)
 	m["last_updated_by"] = flattenRef(&obj.LastUpdatedBy)
 	m["vault"] = flattenRef(&obj.Vault)
+	m["vault_name"] = obj.VaultName
 
 	return []interface{}{m}
 }
@@ -14642,6 +14787,9 @@ func expandSecret(in interface{}) *restapi.Secret {
 	}
 	if v, ok := m["vault"]; ok {
 		obj.Vault = *expandRef(v)
+	}
+	if v, ok := m["vault_name"]; ok {
+		obj.VaultName = *expandString(v)
 	}
 	return &obj
 }
@@ -14706,6 +14854,234 @@ func expandSecretListSlice(in interface{}) *[]restapi.SecretList {
 	var out []restapi.SecretList
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandSecretList(v))
+	}
+	return &out
+}
+
+func flattenServiceUser(obj *restapi.ServiceUser) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["uri"] = obj.URI
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+	m["created_at"] = obj.CreatedAt
+
+	return []interface{}{m}
+}
+
+func flattenServiceUserSlice(objs *[]restapi.ServiceUser) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenServiceUser(&v))
+	}
+	return sl
+}
+
+func expandServiceUser(in interface{}) *restapi.ServiceUser {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ServiceUser
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = *expandBool(v)
+	}
+	if v, ok := m["created_at"]; ok {
+		obj.CreatedAt = *expandString(v)
+	}
+	return &obj
+}
+
+func expandServiceUserSlice(in interface{}) *[]restapi.ServiceUser {
+	var out []restapi.ServiceUser
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandServiceUser(v))
+	}
+	return &out
+}
+
+func flattenServiceUserCreate(obj *restapi.ServiceUserCreate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+
+	return []interface{}{m}
+}
+
+func flattenServiceUserCreateSlice(objs *[]restapi.ServiceUserCreate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenServiceUserCreate(&v))
+	}
+	return sl
+}
+
+func expandServiceUserCreate(in interface{}) *restapi.ServiceUserCreate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ServiceUserCreate
+	if v, ok := m["name"]; ok {
+		obj.Name = *expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = expandBool(v)
+	}
+	return &obj
+}
+
+func expandServiceUserCreateSlice(in interface{}) *[]restapi.ServiceUserCreate {
+	var out []restapi.ServiceUserCreate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandServiceUserCreate(v))
+	}
+	return &out
+}
+
+func flattenServiceUserUpdate(obj *restapi.ServiceUserUpdate) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["id"] = obj.ID
+	m["name"] = obj.Name
+	m["active"] = obj.Active
+
+	return []interface{}{m}
+}
+
+func flattenServiceUserUpdateSlice(objs *[]restapi.ServiceUserUpdate) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenServiceUserUpdate(&v))
+	}
+	return sl
+}
+
+func expandServiceUserUpdate(in interface{}) *restapi.ServiceUserUpdate {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ServiceUserUpdate
+	if v, ok := m["id"]; ok {
+		obj.ID = *expandString(v)
+	}
+	if v, ok := m["name"]; ok {
+		obj.Name = expandString(v)
+	}
+	if v, ok := m["active"]; ok {
+		obj.Active = expandBool(v)
+	}
+	return &obj
+}
+
+func expandServiceUserUpdateSlice(in interface{}) *[]restapi.ServiceUserUpdate {
+	var out []restapi.ServiceUserUpdate
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandServiceUserUpdate(v))
+	}
+	return &out
+}
+
+func flattenServiceUserList(obj *restapi.ServiceUserList) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["service_users"] = flattenServiceUserSlice(&obj.ServiceUsers)
+	m["uri"] = obj.URI
+	m["next_page_uri"] = obj.NextPageURI
+
+	return []interface{}{m}
+}
+
+func flattenServiceUserListSlice(objs *[]restapi.ServiceUserList) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenServiceUserList(&v))
+	}
+	return sl
+}
+
+func expandServiceUserList(in interface{}) *restapi.ServiceUserList {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ServiceUserList
+	if v, ok := m["service_users"]; ok {
+		obj.ServiceUsers = *expandServiceUserSlice(v)
+	}
+	if v, ok := m["uri"]; ok {
+		obj.URI = *expandString(v)
+	}
+	if v, ok := m["next_page_uri"]; ok {
+		obj.NextPageURI = expandString(v)
+	}
+	return &obj
+}
+
+func expandServiceUserListSlice(in interface{}) *[]restapi.ServiceUserList {
+	var out []restapi.ServiceUserList
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandServiceUserList(v))
 	}
 	return &out
 }
@@ -14970,6 +15346,7 @@ func flattenSSHCredentialCreate(obj *restapi.SSHCredentialCreate) interface{} {
 	m["public_key"] = obj.PublicKey
 	m["owner_id"] = obj.OwnerID
 	m["owner_email"] = obj.OwnerEmail
+	m["scim_user_id"] = obj.ScimUserId
 
 	return []interface{}{m}
 }
@@ -15014,6 +15391,9 @@ func expandSSHCredentialCreate(in interface{}) *restapi.SSHCredentialCreate {
 	}
 	if v, ok := m["owner_email"]; ok {
 		obj.OwnerEmail = *expandString(v)
+	}
+	if v, ok := m["scim_user_id"]; ok {
+		obj.ScimUserId = *expandString(v)
 	}
 	return &obj
 }

@@ -157,12 +157,21 @@ func resourceSecrets() *schema.Resource {
 			},
 			"vault_id": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Required:    false,
 				Computed:    false,
-				Optional:    false,
+				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
 				Description: "unique identifier of the referenced vault",
+			},
+			"vault_name": {
+				Type:        schema.TypeString,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    true,
+				Description: "Name of the vault the secret is stored in",
 			},
 		},
 	}
@@ -186,6 +195,9 @@ func resourceSecretsCreate(d *schema.ResourceData, m interface{}) (err error) {
 	}
 	if v, ok := d.GetOk("vault_id"); ok {
 		arg.VaultID = *expandString(v)
+	}
+	if v, ok := d.GetOk("vault_name"); ok {
+		arg.VaultName = *expandString(v)
 	}
 
 	res, _, err := b.client.SecretsCreate(context.Background(), &arg)
@@ -223,6 +235,7 @@ func resourceSecretsGetDecode(d *schema.ResourceData, res *restapi.Secret, resp 
 		d.Set("name", res.Name)
 		d.Set("vault", flattenRef(&res.Vault))
 		d.Set("vault_id", res.Vault.ID)
+		d.Set("vault_name", res.VaultName)
 	}
 	return nil
 }

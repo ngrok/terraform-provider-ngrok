@@ -42,6 +42,7 @@ func Provider() *schema.Provider {
 			"ngrok_reserved_addr":             resourceReservedAddrs(),
 			"ngrok_reserved_domain":           resourceReservedDomains(),
 			"ngrok_secret":                    resourceSecrets(),
+			"ngrok_service_user":              resourceServiceUsers(),
 			"ngrok_ssh_certificate_authority": resourceSSHCertificateAuthorities(),
 			"ngrok_ssh_credential":            resourceSSHCredentials(),
 			"ngrok_ssh_host_certificate":      resourceSSHHostCertificates(),
