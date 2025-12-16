@@ -98,6 +98,9 @@ func resourceSSHCredentialsCreate(d *schema.ResourceData, m interface{}) (err er
 	if v, ok := d.GetOk("owner_email"); ok {
 		arg.OwnerEmail = *expandString(v)
 	}
+	if v, ok := d.GetOk("scim_user_id"); ok {
+		arg.ScimUserId = *expandString(v)
+	}
 
 	res, _, err := b.client.SSHCredentialsCreate(context.Background(), &arg)
 	if err != nil {

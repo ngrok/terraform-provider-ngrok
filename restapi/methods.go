@@ -97,7 +97,7 @@ func (c *Client) AgentIngressesGet(ctx context.Context, arg *Item) (*AgentIngres
 }
 
 // List all Agent Ingresses owned by this account
-func (c *Client) AgentIngressesList(ctx context.Context, arg *Paging) (*AgentIngressList, *http.Response, error) {
+func (c *Client) AgentIngressesList(ctx context.Context, arg *FilteredPaging) (*AgentIngressList, *http.Response, error) {
 	var res AgentIngressList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/agent_ingresses")).Execute(&path, arg); err != nil {
@@ -114,6 +114,9 @@ func (c *Client) AgentIngressesList(ctx context.Context, arg *Paging) (*AgentIng
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -193,7 +196,7 @@ func (c *Client) APIKeysGet(ctx context.Context, arg *Item) (*APIKey, *http.Resp
 }
 
 // List all API keys owned by this account
-func (c *Client) APIKeysList(ctx context.Context, arg *Paging) (*APIKeyList, *http.Response, error) {
+func (c *Client) APIKeysList(ctx context.Context, arg *FilteredPaging) (*APIKeyList, *http.Response, error) {
 	var res APIKeyList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/api_keys")).Execute(&path, arg); err != nil {
@@ -210,6 +213,9 @@ func (c *Client) APIKeysList(ctx context.Context, arg *Paging) (*APIKeyList, *ht
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -365,7 +371,7 @@ func (c *Client) ApplicationUsersList(ctx context.Context, arg *Paging) (*Applic
 }
 
 // List all online tunnel sessions running on this account.
-func (c *Client) TunnelSessionsList(ctx context.Context, arg *Paging) (*TunnelSessionList, *http.Response, error) {
+func (c *Client) TunnelSessionsList(ctx context.Context, arg *FilteredPaging) (*TunnelSessionList, *http.Response, error) {
 	var res TunnelSessionList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/tunnel_sessions")).Execute(&path, arg); err != nil {
@@ -382,6 +388,9 @@ func (c *Client) TunnelSessionsList(ctx context.Context, arg *Paging) (*TunnelSe
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -1065,7 +1074,7 @@ func (c *Client) CertificateAuthoritiesDelete(ctx context.Context, arg *Item) (*
 	return &res, resp, err
 }
 
-// Get detailed information about a certficate authority
+// Get detailed information about a certificate authority
 func (c *Client) CertificateAuthoritiesGet(ctx context.Context, arg *Item) (*CertificateAuthority, *http.Response, error) {
 	var res CertificateAuthority
 	var path bytes.Buffer
@@ -1083,7 +1092,7 @@ func (c *Client) CertificateAuthoritiesGet(ctx context.Context, arg *Item) (*Cer
 }
 
 // List all Certificate Authority on this account
-func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *Paging) (*CertificateAuthorityList, *http.Response, error) {
+func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *FilteredPaging) (*CertificateAuthorityList, *http.Response, error) {
 	var res CertificateAuthorityList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/certificate_authorities")).Execute(&path, arg); err != nil {
@@ -1100,6 +1109,9 @@ func (c *Client) CertificateAuthoritiesList(ctx context.Context, arg *Paging) (*
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -1179,7 +1191,7 @@ func (c *Client) CredentialsGet(ctx context.Context, arg *Item) (*Credential, *h
 }
 
 // List all tunnel authtoken credentials on this account
-func (c *Client) CredentialsList(ctx context.Context, arg *Paging) (*CredentialList, *http.Response, error) {
+func (c *Client) CredentialsList(ctx context.Context, arg *FilteredPaging) (*CredentialList, *http.Response, error) {
 	var res CredentialList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/credentials")).Execute(&path, arg); err != nil {
@@ -1196,6 +1208,9 @@ func (c *Client) CredentialsList(ctx context.Context, arg *Paging) (*CredentialL
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -3010,6 +3025,9 @@ func (c *Client) EndpointsList(ctx context.Context, arg *EndpointListArgs) (*End
 	if arg.URL != nil {
 		params.Add("url", strings.Join(arg.URL, ","))
 	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
+	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
 
@@ -3122,7 +3140,7 @@ func (c *Client) EventDestinationsGet(ctx context.Context, arg *Item) (*EventDes
 }
 
 // List all Event Destinations on this account.
-func (c *Client) EventDestinationsList(ctx context.Context, arg *Paging) (*EventDestinationList, *http.Response, error) {
+func (c *Client) EventDestinationsList(ctx context.Context, arg *FilteredPaging) (*EventDestinationList, *http.Response, error) {
 	var res EventDestinationList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/event_destinations")).Execute(&path, arg); err != nil {
@@ -3139,6 +3157,9 @@ func (c *Client) EventDestinationsList(ctx context.Context, arg *Paging) (*Event
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -3235,7 +3256,7 @@ func (c *Client) EventSubscriptionsGet(ctx context.Context, arg *Item) (*EventSu
 }
 
 // List this Account's Event Subscriptions.
-func (c *Client) EventSubscriptionsList(ctx context.Context, arg *Paging) (*EventSubscriptionList, *http.Response, error) {
+func (c *Client) EventSubscriptionsList(ctx context.Context, arg *FilteredPaging) (*EventSubscriptionList, *http.Response, error) {
 	var res EventSubscriptionList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/event_subscriptions")).Execute(&path, arg); err != nil {
@@ -3252,6 +3273,9 @@ func (c *Client) EventSubscriptionsList(ctx context.Context, arg *Paging) (*Even
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -3419,7 +3443,7 @@ func (c *Client) IPPoliciesGet(ctx context.Context, arg *Item) (*IPPolicy, *http
 }
 
 // List all IP policies on this account
-func (c *Client) IPPoliciesList(ctx context.Context, arg *Paging) (*IPPolicyList, *http.Response, error) {
+func (c *Client) IPPoliciesList(ctx context.Context, arg *FilteredPaging) (*IPPolicyList, *http.Response, error) {
 	var res IPPolicyList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ip_policies")).Execute(&path, arg); err != nil {
@@ -3436,6 +3460,9 @@ func (c *Client) IPPoliciesList(ctx context.Context, arg *Paging) (*IPPolicyList
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -3515,7 +3542,7 @@ func (c *Client) IPPolicyRulesGet(ctx context.Context, arg *Item) (*IPPolicyRule
 }
 
 // List all IP policy rules on this account
-func (c *Client) IPPolicyRulesList(ctx context.Context, arg *Paging) (*IPPolicyRuleList, *http.Response, error) {
+func (c *Client) IPPolicyRulesList(ctx context.Context, arg *FilteredPaging) (*IPPolicyRuleList, *http.Response, error) {
 	var res IPPolicyRuleList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ip_policy_rules")).Execute(&path, arg); err != nil {
@@ -3532,6 +3559,9 @@ func (c *Client) IPPolicyRulesList(ctx context.Context, arg *Paging) (*IPPolicyR
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -3611,7 +3641,7 @@ func (c *Client) IPRestrictionsGet(ctx context.Context, arg *Item) (*IPRestricti
 }
 
 // List all IP restrictions on this account
-func (c *Client) IPRestrictionsList(ctx context.Context, arg *Paging) (*IPRestrictionList, *http.Response, error) {
+func (c *Client) IPRestrictionsList(ctx context.Context, arg *FilteredPaging) (*IPRestrictionList, *http.Response, error) {
 	var res IPRestrictionList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ip_restrictions")).Execute(&path, arg); err != nil {
@@ -3628,6 +3658,9 @@ func (c *Client) IPRestrictionsList(ctx context.Context, arg *Paging) (*IPRestri
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -4457,7 +4490,7 @@ func (c *Client) ReservedAddrsGet(ctx context.Context, arg *Item) (*ReservedAddr
 }
 
 // List all reserved addresses on this account.
-func (c *Client) ReservedAddrsList(ctx context.Context, arg *Paging) (*ReservedAddrList, *http.Response, error) {
+func (c *Client) ReservedAddrsList(ctx context.Context, arg *FilteredPaging) (*ReservedAddrList, *http.Response, error) {
 	var res ReservedAddrList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/reserved_addrs")).Execute(&path, arg); err != nil {
@@ -4474,6 +4507,9 @@ func (c *Client) ReservedAddrsList(ctx context.Context, arg *Paging) (*ReservedA
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -4570,7 +4606,7 @@ func (c *Client) ReservedDomainsGet(ctx context.Context, arg *Item) (*ReservedDo
 }
 
 // List all reserved domains on this account.
-func (c *Client) ReservedDomainsList(ctx context.Context, arg *Paging) (*ReservedDomainList, *http.Response, error) {
+func (c *Client) ReservedDomainsList(ctx context.Context, arg *FilteredPaging) (*ReservedDomainList, *http.Response, error) {
 	var res ReservedDomainList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/reserved_domains")).Execute(&path, arg); err != nil {
@@ -4587,6 +4623,9 @@ func (c *Client) ReservedDomainsList(ctx context.Context, arg *Paging) (*Reserve
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -4782,7 +4821,7 @@ func (c *Client) SecretsGet(ctx context.Context, arg *Item) (*Secret, *http.Resp
 }
 
 // List all Secrets owned by account
-func (c *Client) SecretsList(ctx context.Context, arg *Paging) (*SecretList, *http.Response, error) {
+func (c *Client) SecretsList(ctx context.Context, arg *FilteredPaging) (*SecretList, *http.Response, error) {
 	var res SecretList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/vault_secrets")).Execute(&path, arg); err != nil {
@@ -4800,10 +4839,112 @@ func (c *Client) SecretsList(ctx context.Context, arg *Paging) (*SecretList, *ht
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
 	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
+	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
 
 	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Create a new service user
+func (c *Client) ServiceUsersCreate(ctx context.Context, arg *ServiceUserCreate) (*ServiceUser, *http.Response, error) {
+	var res ServiceUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/service_users")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+
+	resp, err := c.Post(ctx, uri, arg, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Delete a service user by ID
+func (c *Client) ServiceUsersDelete(ctx context.Context, arg *Item) (*Empty, *http.Response, error) {
+	var res Empty
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/service_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Delete(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Get the details of a Bot User by ID.
+func (c *Client) ServiceUsersGet(ctx context.Context, arg *Item) (*ServiceUser, *http.Response, error) {
+	var res ServiceUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/service_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// List all service users in this account.
+func (c *Client) ServiceUsersList(ctx context.Context, arg *FilteredPaging) (*ServiceUserList, *http.Response, error) {
+	var res ServiceUserList
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/service_users")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	pathUrl, err := url.Parse(uri)
+	if err != nil {
+		panic(err)
+	}
+	params := url.Values{}
+	if arg.BeforeID != nil {
+		params.Add("before_id", *arg.BeforeID)
+	}
+	if arg.Limit != nil {
+		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
+	}
+	pathUrl.RawQuery = params.Encode()
+	uri = pathUrl.String()
+
+	resp, err := c.Get(ctx, uri, &res)
+	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
+		err = nil
+	}
+	return &res, resp, err
+}
+
+// Update attributes of a service user by ID.
+func (c *Client) ServiceUsersUpdate(ctx context.Context, arg *ServiceUserUpdate) (*ServiceUser, *http.Response, error) {
+	var res ServiceUser
+	var path bytes.Buffer
+	if err := template.Must(template.New("").Parse("/service_users/{{ .ID }}")).Execute(&path, arg); err != nil {
+		panic(err)
+	}
+	uri := path.String()
+	arg.ID = ""
+
+	resp, err := c.Patch(ctx, uri, arg, &res)
 	if errors.Is(err, io.EOF) && resp != nil && resp.StatusCode == 204 {
 		err = nil
 	}
@@ -4843,7 +4984,7 @@ func (c *Client) SSHCertificateAuthoritiesDelete(ctx context.Context, arg *Item)
 	return &res, resp, err
 }
 
-// Get detailed information about an SSH Certficate Authority
+// Get detailed information about an SSH Certificate Authority
 func (c *Client) SSHCertificateAuthoritiesGet(ctx context.Context, arg *Item) (*SSHCertificateAuthority, *http.Response, error) {
 	var res SSHCertificateAuthority
 	var path bytes.Buffer
@@ -4861,7 +5002,7 @@ func (c *Client) SSHCertificateAuthoritiesGet(ctx context.Context, arg *Item) (*
 }
 
 // List all SSH Certificate Authorities on this account
-func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *Paging) (*SSHCertificateAuthorityList, *http.Response, error) {
+func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *FilteredPaging) (*SSHCertificateAuthorityList, *http.Response, error) {
 	var res SSHCertificateAuthorityList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ssh_certificate_authorities")).Execute(&path, arg); err != nil {
@@ -4878,6 +5019,9 @@ func (c *Client) SSHCertificateAuthoritiesList(ctx context.Context, arg *Paging)
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -4957,7 +5101,7 @@ func (c *Client) SSHCredentialsGet(ctx context.Context, arg *Item) (*SSHCredenti
 }
 
 // List all ssh credentials on this account
-func (c *Client) SSHCredentialsList(ctx context.Context, arg *Paging) (*SSHCredentialList, *http.Response, error) {
+func (c *Client) SSHCredentialsList(ctx context.Context, arg *FilteredPaging) (*SSHCredentialList, *http.Response, error) {
 	var res SSHCredentialList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/ssh_credentials")).Execute(&path, arg); err != nil {
@@ -4974,6 +5118,9 @@ func (c *Client) SSHCredentialsList(ctx context.Context, arg *Paging) (*SSHCrede
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -5035,7 +5182,7 @@ func (c *Client) SSHHostCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	return &res, resp, err
 }
 
-// Get detailed information about an SSH Host Certficate
+// Get detailed information about an SSH Host Certificate
 func (c *Client) SSHHostCertificatesGet(ctx context.Context, arg *Item) (*SSHHostCertificate, *http.Response, error) {
 	var res SSHHostCertificate
 	var path bytes.Buffer
@@ -5131,7 +5278,7 @@ func (c *Client) SSHUserCertificatesDelete(ctx context.Context, arg *Item) (*Emp
 	return &res, resp, err
 }
 
-// Get detailed information about an SSH User Certficate
+// Get detailed information about an SSH User Certificate
 func (c *Client) SSHUserCertificatesGet(ctx context.Context, arg *Item) (*SSHUserCertificate, *http.Response, error) {
 	var res SSHUserCertificate
 	var path bytes.Buffer
@@ -5245,7 +5392,7 @@ func (c *Client) TLSCertificatesGet(ctx context.Context, arg *Item) (*TLSCertifi
 }
 
 // List all TLS certificates on this account
-func (c *Client) TLSCertificatesList(ctx context.Context, arg *Paging) (*TLSCertificateList, *http.Response, error) {
+func (c *Client) TLSCertificatesList(ctx context.Context, arg *FilteredPaging) (*TLSCertificateList, *http.Response, error) {
 	var res TLSCertificateList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/tls_certificates")).Execute(&path, arg); err != nil {
@@ -5262,6 +5409,9 @@ func (c *Client) TLSCertificatesList(ctx context.Context, arg *Paging) (*TLSCert
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()
@@ -5434,7 +5584,7 @@ func (c *Client) VaultsGetSecretsByVault(ctx context.Context, arg *ItemPaging) (
 }
 
 // List all Vaults owned by account
-func (c *Client) VaultsList(ctx context.Context, arg *Paging) (*VaultList, *http.Response, error) {
+func (c *Client) VaultsList(ctx context.Context, arg *FilteredPaging) (*VaultList, *http.Response, error) {
 	var res VaultList
 	var path bytes.Buffer
 	if err := template.Must(template.New("").Parse("/vaults")).Execute(&path, arg); err != nil {
@@ -5451,6 +5601,9 @@ func (c *Client) VaultsList(ctx context.Context, arg *Paging) (*VaultList, *http
 	}
 	if arg.Limit != nil {
 		params.Add("limit", *arg.Limit)
+	}
+	if arg.Filter != nil {
+		params.Add("filter", *arg.Filter)
 	}
 	pathUrl.RawQuery = params.Encode()
 	uri = pathUrl.String()

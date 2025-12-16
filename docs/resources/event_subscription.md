@@ -45,8 +45,8 @@ resource "ngrok_event_subscription" "example" {
 
 Optional:
 
-- **fields** (List of String) TODO
-- **filter** (String) TODO
+- **fields** (List of String)
+- **filter** (String)
 - **type** (String) Type of event for which an event subscription will trigger
 
 Read-Only:

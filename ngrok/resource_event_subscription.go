@@ -80,7 +80,7 @@ func resourceEventSubscriptions() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "TODO",
+							Description: "",
 						},
 						"fields": {
 							Type:        schema.TypeList,
@@ -89,7 +89,7 @@ func resourceEventSubscriptions() *schema.Resource {
 							Optional:    true,
 							Sensitive:   false,
 							ForceNew:    false,
-							Description: "TODO",
+							Description: "",
 							Elem:        &schema.Schema{Type: schema.TypeString},
 						},
 						"uri": {
