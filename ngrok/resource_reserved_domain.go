@@ -168,6 +168,28 @@ func resourceReservedDomains() *schema.Resource {
 				ForceNew:    false,
 				Description: "deprecated: With the launch of the ngrok Global Network domains traffic is now handled globally. This field applied only to endpoints. Note that agents may still connect to specific regions. Optional, null by default. (au, eu, ap, us, jp, in, sa)",
 			},
+			"resolves_to": {
+				Type:        schema.TypeList,
+				Required:    false,
+				Computed:    false,
+				Optional:    true,
+				Sensitive:   false,
+				ForceNew:    false,
+				Description: "DNS resolver targets configured for the reserved domain, or empty for \"global\" resolution.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"value": {
+							Type:        schema.TypeString,
+							Required:    false,
+							Computed:    false,
+							Optional:    true,
+							Sensitive:   false,
+							ForceNew:    false,
+							Description: "accepts an ngrok point-of-presence shortcode, or \"global\"",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -205,6 +227,9 @@ func resourceReservedDomainsCreate(d *schema.ResourceData, m interface{}) (err e
 	}
 	if v, ok := d.GetOk("error_redirect_url"); ok {
 		arg.ErrorRedirectUrl = expandString(v)
+	}
+	if v, ok := d.GetOk("resolves_to"); ok {
+		arg.ResolvesTo = expandReservedDomainResolvesToEntrySlice(v)
 	}
 
 	res, _, err := b.client.ReservedDomainsCreate(context.Background(), &arg)
@@ -253,6 +278,7 @@ func resourceReservedDomainsGetDecode(d *schema.ResourceData, res *restapi.Reser
 		d.Set("is_dev", res.IsDev)
 		d.Set("metadata", res.Metadata)
 		d.Set("region", res.Region)
+		d.Set("resolves_to", flattenReservedDomainResolvesToEntrySlice(res.ResolvesTo))
 	}
 	return nil
 }
@@ -288,6 +314,9 @@ func resourceReservedDomainsUpdate(d *schema.ResourceData, m interface{}) (err e
 	}
 	if v, ok := d.GetOk("error_redirect_url"); ok {
 		arg.ErrorRedirectUrl = expandString(v)
+	}
+	if v, ok := d.GetOk("resolves_to"); ok {
+		arg.ResolvesTo = expandReservedDomainResolvesToEntrySlice(v)
 	}
 
 	res, _, err := b.client.ReservedDomainsUpdate(context.Background(), &arg)

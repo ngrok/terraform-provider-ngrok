@@ -61,7 +61,7 @@ func resourceCredentials() *schema.Resource {
 				Optional:    true,
 				Sensitive:   false,
 				ForceNew:    true,
-				Description: "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.",
+				Description: "If supplied at credential creation, ownership will be assigned to the specified User or Service User. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Service User. Accepts one of: User ID, User email, or SCIM User ID.",
 			},
 			"token": {
 				Type:        schema.TypeString,

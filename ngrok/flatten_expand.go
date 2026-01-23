@@ -13918,6 +13918,7 @@ func flattenReservedDomainCreate(obj *restapi.ReservedDomainCreate) interface{} 
 	m["certificate_id"] = obj.CertificateID
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["error_redirect_url"] = obj.ErrorRedirectUrl
+	m["resolves_to"] = flattenReservedDomainResolvesToEntrySlice(obj.ResolvesTo)
 
 	return []interface{}{m}
 }
@@ -13975,6 +13976,9 @@ func expandReservedDomainCreate(in interface{}) *restapi.ReservedDomainCreate {
 	if v, ok := m["error_redirect_url"]; ok {
 		obj.ErrorRedirectUrl = expandString(v)
 	}
+	if v, ok := m["resolves_to"]; ok {
+		obj.ResolvesTo = expandReservedDomainResolvesToEntrySlice(v)
+	}
 	return &obj
 }
 
@@ -14001,6 +14005,7 @@ func flattenReservedDomainUpdate(obj *restapi.ReservedDomainUpdate) interface{} 
 	m["certificate_management_policy"] = flattenReservedDomainCertPolicy(obj.CertificateManagementPolicy)
 	m["region"] = obj.Region
 	m["error_redirect_url"] = obj.ErrorRedirectUrl
+	m["resolves_to"] = flattenReservedDomainResolvesToEntrySlice(obj.ResolvesTo)
 
 	return []interface{}{m}
 }
@@ -14055,6 +14060,9 @@ func expandReservedDomainUpdate(in interface{}) *restapi.ReservedDomainUpdate {
 	if v, ok := m["error_redirect_url"]; ok {
 		obj.ErrorRedirectUrl = expandString(v)
 	}
+	if v, ok := m["resolves_to"]; ok {
+		obj.ResolvesTo = expandReservedDomainResolvesToEntrySlice(v)
+	}
 	return &obj
 }
 
@@ -14088,6 +14096,7 @@ func flattenReservedDomain(obj *restapi.ReservedDomain) interface{} {
 	m["acme_challenge_cname_target"] = obj.ACMEChallengeCNAMETarget
 	m["error_redirect_url"] = obj.ErrorRedirectURL
 	m["is_dev"] = obj.IsDev
+	m["resolves_to"] = flattenReservedDomainResolvesToEntrySlice(obj.ResolvesTo)
 
 	return []interface{}{m}
 }
@@ -14162,6 +14171,9 @@ func expandReservedDomain(in interface{}) *restapi.ReservedDomain {
 	}
 	if v, ok := m["is_dev"]; ok {
 		obj.IsDev = *expandBool(v)
+	}
+	if v, ok := m["resolves_to"]; ok {
+		obj.ResolvesTo = expandReservedDomainResolvesToEntrySlice(v)
 	}
 	return &obj
 }
@@ -14390,6 +14402,54 @@ func expandReservedDomainCertJobSlice(in interface{}) *[]restapi.ReservedDomainC
 	var out []restapi.ReservedDomainCertJob
 	for _, v := range in.([]interface{}) {
 		out = append(out, *expandReservedDomainCertJob(v))
+	}
+	return &out
+}
+
+func flattenReservedDomainResolvesToEntry(obj *restapi.ReservedDomainResolvesToEntry) interface{} {
+	if obj == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	m["value"] = obj.Value
+
+	return []interface{}{m}
+}
+
+func flattenReservedDomainResolvesToEntrySlice(objs *[]restapi.ReservedDomainResolvesToEntry) (sl []interface{}) {
+	if objs == nil {
+		return nil
+	}
+
+	for _, v := range *objs {
+		sl = append(sl, flattenReservedDomainResolvesToEntry(&v))
+	}
+	return sl
+}
+
+func expandReservedDomainResolvesToEntry(in interface{}) *restapi.ReservedDomainResolvesToEntry {
+	if in == nil {
+		return nil
+	}
+	v := in.(*schema.Set)
+
+	if v.Len() == 0 {
+		return nil
+	}
+
+	m := v.List()[0].(map[string]interface{})
+	var obj restapi.ReservedDomainResolvesToEntry
+	if v, ok := m["value"]; ok {
+		obj.Value = *expandString(v)
+	}
+	return &obj
+}
+
+func expandReservedDomainResolvesToEntrySlice(in interface{}) *[]restapi.ReservedDomainResolvesToEntry {
+	var out []restapi.ReservedDomainResolvesToEntry
+	for _, v := range in.([]interface{}) {
+		out = append(out, *expandReservedDomainResolvesToEntry(v))
 	}
 	return &out
 }

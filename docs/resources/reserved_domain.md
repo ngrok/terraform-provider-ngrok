@@ -44,6 +44,7 @@ resource "ngrok_reserved_domain" "example" {
 - **metadata** (String) arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.
 - **name** (String) the domain name to reserve. It may be a full domain name like app.example.com. If the name does not contain a '.' it will reserve that subdomain on ngrok.io.
 - **region** (String) deprecated: With the launch of the ngrok Global Network domains traffic is now handled globally. This field applied only to endpoints. Note that agents may still connect to specific regions. Optional, null by default. (au, eu, ap, us, jp, in, sa)
+- **resolves_to** (Block List) DNS resolver targets configured for the reserved domain, or empty for "global" resolution. (see [below for nested schema](#nestedblock--resolves_to))
 
 ### Read-Only
 
@@ -59,5 +60,13 @@ Optional:
 
 - **authority** (String) certificate authority to request certificates from. The only supported value is letsencrypt.
 - **private_key_type** (String) type of private key to use when requesting certificates. Defaults to ecdsa, can be either rsa or ecdsa.
+
+
+<a id="nestedblock--resolves_to"></a>
+### Nested Schema for `resolves_to`
+
+Optional:
+
+- **value** (String) accepts an ngrok point-of-presence shortcode, or "global"
 
 
