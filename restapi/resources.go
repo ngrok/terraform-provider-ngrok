@@ -16,9 +16,18 @@ type Paging struct {
 }
 
 type FilteredPaging struct {
+	// Expects a resource ID as its input. Returns earlier entries in the result set,
+	// sorted by ID.
 	BeforeID *string `json:"before_id,omitempty"`
-	Limit    *string `json:"limit,omitempty"`
-	Filter   *string `json:"filter,omitempty"`
+	// Constrains the number of results in the dataset. See the API Overview
+	// (https://ngrok.com/docs/api/index#pagination) for details.
+	Limit *string `json:"limit,omitempty"`
+	// A CEL expression to filter the list results. Supports logical and comparison
+	// operators to match on fields such as id, metadata, created_at, and more. See
+	// ngrok API Filtering for syntax and field details:
+	// https://ngrok.com/docs/api/api-filtering
+	// (https://ngrok.com/docs/api/api-filtering).
+	Filter *string `json:"filter,omitempty"`
 }
 
 type ItemPaging struct {
@@ -819,8 +828,9 @@ type CredentialCreate struct {
 	// permit all actions.
 	ACL []string `json:"acl,omitempty"`
 	// If supplied at credential creation, ownership will be assigned to the specified
-	// User or Bot. Only admins may specify an owner other than themselves. Defaults to
-	// the authenticated User or Bot.
+	// User or Service User. Only admins may specify an owner other than themselves.
+	// Defaults to the authenticated User or Service User. Accepts one of: User ID,
+	// User email, or SCIM User ID.
 	OwnerID *string `json:"owner_id,omitempty"`
 	// If supplied at credential creation, ownership will be assigned to the specified
 	// User. Only admins may specify an owner other than themselves. Only one of
@@ -889,8 +899,9 @@ type Credential struct {
 	// permit all actions.
 	ACL []string `json:"acl,omitempty"`
 	// If supplied at credential creation, ownership will be assigned to the specified
-	// User or Bot. Only admins may specify an owner other than themselves. Defaults to
-	// the authenticated User or Bot.
+	// User or Service User. Only admins may specify an owner other than themselves.
+	// Defaults to the authenticated User or Service User. Accepts one of: User ID,
+	// User email, or SCIM User ID.
 	OwnerID *string `json:"owner_id,omitempty"`
 }
 
@@ -2102,17 +2113,34 @@ type EndpointCreate struct {
 }
 
 type EndpointListArgs struct {
-	BeforeID *string  `json:"before_id,omitempty"`
-	Limit    *string  `json:"limit,omitempty"`
-	ID       []string `json:"id,omitempty"`
-	URL      []string `json:"url,omitempty"`
-	Filter   *string  `json:"filter,omitempty"`
+	// Expects a resource ID as its input. Returns earlier entries in the result set,
+	// sorted by ID.
+	BeforeID *string `json:"before_id,omitempty"`
+	// Constrains the number of results in the dataset. See the API Overview
+	// (https://ngrok.com/docs/api/index#pagination) for details.
+	Limit *string `json:"limit,omitempty"`
+	// Filter results by endpoint IDs. Deprecated: use filter instead.
+	ID []string `json:"id,omitempty"`
+	// Filter results by endpoint URLs. Deprecated: use filter instead.
+	URL []string `json:"url,omitempty"`
+	// A CEL expression to filter the list results. Supports logical and comparison
+	// operators to match on fields such as id, metadata, created_at, and more. See
+	// ngrok API Filtering for syntax and field details:
+	// https://ngrok.com/docs/api/api-filtering
+	// (https://ngrok.com/docs/api/api-filtering).
+	Filter *string `json:"filter,omitempty"`
 }
 
 type EndpointFilters struct {
-	BeforeID       *string  `json:"before_id,omitempty"`
-	Limit          *string  `json:"limit,omitempty"`
-	ID             []string `json:"id,omitempty"`
+	// Expects a resource ID as its input. Returns earlier entries in the result set,
+	// sorted by ID.
+	BeforeID *string `json:"before_id,omitempty"`
+	// Constrains the number of results in the dataset. See the API Overview
+	// (https://ngrok.com/docs/api/index#pagination) for details.
+	Limit *string `json:"limit,omitempty"`
+	// Filter results by endpoint IDs.
+	ID []string `json:"id,omitempty"`
+	// Filter results by endpoint URLs.
 	URL            []string `json:"url,omitempty"`
 	Type           []string `json:"type,omitempty"`
 	Binding        []string `json:"binding,omitempty"`
@@ -2944,6 +2972,9 @@ type ReservedDomainCreate struct {
 	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
 	// error occurs. Max 10000 bytes.
 	ErrorRedirectUrl *string `json:"error_redirect_url,omitempty"`
+	// DNS resolver targets configured for the reserved domain, or empty for "global"
+	// resolution.
+	ResolvesTo *[]ReservedDomainResolvesToEntry `json:"resolves_to,omitempty"`
 }
 
 type ReservedDomainUpdate struct {
@@ -2974,6 +3005,9 @@ type ReservedDomainUpdate struct {
 	// Custom URL with CEL Expression Variable support for redirecting when an ngrok
 	// error occurs. Max 10000 bytes.
 	ErrorRedirectUrl *string `json:"error_redirect_url,omitempty"`
+	// DNS resolver targets configured for the reserved domain, or empty for "global"
+	// resolution.
+	ResolvesTo *[]ReservedDomainResolvesToEntry `json:"resolves_to,omitempty"`
 }
 
 type ReservedDomain struct {
@@ -3024,6 +3058,9 @@ type ReservedDomain struct {
 	ErrorRedirectURL *string `json:"error_redirect_url,omitempty"`
 	// Whether the reserved domain is a dev domain.
 	IsDev bool `json:"is_dev,omitempty"`
+	// DNS resolver targets configured for the reserved domain, or empty for "global"
+	// resolution.
+	ResolvesTo *[]ReservedDomainResolvesToEntry `json:"resolves_to,omitempty"`
 }
 
 type ReservedDomainList struct {
@@ -3063,6 +3100,11 @@ type ReservedDomainCertJob struct {
 	StartedAt string `json:"started_at,omitempty"`
 	// timestamp when the provisioning job will be retried
 	RetriesAt *string `json:"retries_at,omitempty"`
+}
+
+type ReservedDomainResolvesToEntry struct {
+	// accepts an ngrok point-of-presence shortcode, or "global"
+	Value string `json:"value,omitempty"`
 }
 
 type RootResponse struct {
