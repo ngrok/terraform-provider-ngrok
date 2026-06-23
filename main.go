@@ -1,4 +1,4 @@
-// Code generated for API Clients. DO NOT EDIT.
+//go:generate go tool tfplugindocs generate --provider-name ngrok
 
 package main
 
@@ -7,32 +7,26 @@ import (
 	"flag"
 	"log"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/ngrok/terraform-provider-ngrok/ngrok"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+
+	"github.com/ngrok/terraform-provider-ngrok/internal/provider"
 )
 
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+var version = "dev"
 
 func main() {
-	var debugMode bool
+	var debug bool
 
-	flag.BoolVar(&debugMode, "debug", false, "set to true to run the provider with support for debuggers like delve")
+	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
 
-	opts := &plugin.ServeOpts{
-		ProviderFunc: func() *schema.Provider {
-			return ngrok.Provider()
-		},
+	opts := providerserver.ServeOpts{
+		Address: "registry.terraform.io/ngrok/ngrok",
+		Debug:   debug,
 	}
 
-	if debugMode {
-		err := plugin.Debug(context.Background(), "registry.terraform.io/ngrok/ngrok", opts)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		return
+	err := providerserver.Serve(context.Background(), provider.New(version), opts)
+	if err != nil {
+		log.Fatal(err.Error())
 	}
-
-	plugin.Serve(opts)
 }

@@ -1,0 +1,13 @@
+# Generated Go sources (tfplugingen-framework)
+internal/**/*_gen.go linguist-generated=true
+
+# Generated intermediate codegen artifacts
+codegen/provider_code_spec.json linguist-generated=true
+codegen/openapi_spec.yaml linguist-generated=true
+
+# Auto-generated dependency checksums
+go.sum linguist-generated=true
+
+# Generated documentation (tfplugindocs)
+docs/** linguist-generated=true
+examples/** linguist-generated=true

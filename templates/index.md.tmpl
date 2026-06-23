@@ -1,0 +1,21 @@
+---
+page_title: "ngrok Provider"
+description: |-
+  The ngrok provider is used to interact with the ngrok API to manage domains, endpoints, certificates, and other resources.
+---
+
+# ngrok Provider
+
+The ngrok provider is used to interact with the [ngrok API](https://ngrok.com/docs/api/) to manage domains, endpoints, certificates, and other resources.
+
+## Authentication
+
+The provider requires an ngrok API key. You can create one in the [ngrok dashboard](https://dashboard.ngrok.com/api-keys).
+
+Set it via the `NGROK_API_KEY` environment variable (recommended) or in the provider configuration block.
+
+## Example Usage
+
+{{ tffile "examples/provider/provider.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}

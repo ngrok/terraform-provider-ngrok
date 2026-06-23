@@ -1,8 +1,7 @@
-# Code generated for API Clients. DO NOT EDIT.
-
-
 resource "ngrok_ip_restriction" "example" {
-  ip_policy_ids = [ "ipp_26rOyhglKmVz5ABMOwZwPFBFXBZ" ]
-  type = "dashboard"
+  type          = "dashboard"
+  ip_policy_ids = [ngrok_ip_policy.example.id]
+  description   = "Restrict dashboard access to office networks"
+  metadata      = jsonencode({ team = "security" })
+  enforced      = true
 }
-

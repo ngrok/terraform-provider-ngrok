@@ -1,3 +1,11 @@
-# Code generated for API Clients. DO NOT EDIT.
+# Binary
+terraform-provider-ngrok
 
-vendor/
+# Release artifacts
+dist/
+
+# Test manual
+test-manual/
+
+# OS
+.DS_Store

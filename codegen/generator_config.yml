@@ -1,0 +1,406 @@
+provider:
+  name: ngrok
+
+resources:
+  agent_ingress:
+    create:
+      path: /agent_ingresses
+      method: POST
+    read:
+      path: /agent_ingresses/{id}
+      method: GET
+    update:
+      path: /agent_ingresses/{id}
+      method: PATCH
+    delete:
+      path: /agent_ingresses/{id}
+      method: DELETE
+
+  api_key:
+    create:
+      path: /api_keys
+      method: POST
+    read:
+      path: /api_keys/{id}
+      method: GET
+    update:
+      path: /api_keys/{id}
+      method: PATCH
+    delete:
+      path: /api_keys/{id}
+      method: DELETE
+
+  certificate_authority:
+    create:
+      path: /certificate_authorities
+      method: POST
+    read:
+      path: /certificate_authorities/{id}
+      method: GET
+    update:
+      path: /certificate_authorities/{id}
+      method: PATCH
+    delete:
+      path: /certificate_authorities/{id}
+      method: DELETE
+
+  credential:
+    create:
+      path: /credentials
+      method: POST
+    read:
+      path: /credentials/{id}
+      method: GET
+    update:
+      path: /credentials/{id}
+      method: PATCH
+    delete:
+      path: /credentials/{id}
+      method: DELETE
+
+  cloud_endpoint:
+    create:
+      path: /endpoints
+      method: POST
+    read:
+      path: /endpoints/{id}
+      method: GET
+    update:
+      path: /endpoints/{id}
+      method: PATCH
+    delete:
+      path: /endpoints/{id}
+      method: DELETE
+
+  event_destination:
+    create:
+      path: /event_destinations
+      method: POST
+    read:
+      path: /event_destinations/{id}
+      method: GET
+    update:
+      path: /event_destinations/{id}
+      method: PATCH
+    delete:
+      path: /event_destinations/{id}
+      method: DELETE
+    schema:
+      ignores:
+        - target
+
+  event_subscription:
+    create:
+      path: /event_subscriptions
+      method: POST
+    read:
+      path: /event_subscriptions/{id}
+      method: GET
+    update:
+      path: /event_subscriptions/{id}
+      method: PATCH
+    delete:
+      path: /event_subscriptions/{id}
+      method: DELETE
+
+  ip_policy:
+    create:
+      path: /ip_policies
+      method: POST
+    read:
+      path: /ip_policies/{id}
+      method: GET
+    update:
+      path: /ip_policies/{id}
+      method: PATCH
+    delete:
+      path: /ip_policies/{id}
+      method: DELETE
+
+  ip_policy_rule:
+    create:
+      path: /ip_policy_rules
+      method: POST
+    read:
+      path: /ip_policy_rules/{id}
+      method: GET
+    update:
+      path: /ip_policy_rules/{id}
+      method: PATCH
+    delete:
+      path: /ip_policy_rules/{id}
+      method: DELETE
+
+  ip_restriction:
+    create:
+      path: /ip_restrictions
+      method: POST
+    read:
+      path: /ip_restrictions/{id}
+      method: GET
+    update:
+      path: /ip_restrictions/{id}
+      method: PATCH
+    delete:
+      path: /ip_restrictions/{id}
+      method: DELETE
+
+  reserved_addr:
+    create:
+      path: /reserved_addrs
+      method: POST
+    read:
+      path: /reserved_addrs/{id}
+      method: GET
+    update:
+      path: /reserved_addrs/{id}
+      method: PATCH
+    delete:
+      path: /reserved_addrs/{id}
+      method: DELETE
+
+  reserved_domain:
+    create:
+      path: /reserved_domains
+      method: POST
+    read:
+      path: /reserved_domains/{id}
+      method: GET
+    update:
+      path: /reserved_domains/{id}
+      method: PATCH
+    delete:
+      path: /reserved_domains/{id}
+      method: DELETE
+
+  secret:
+    create:
+      path: /vault_secrets
+      method: POST
+    read:
+      path: /vault_secrets/{id}
+      method: GET
+    update:
+      path: /vault_secrets/{id}
+      method: PATCH
+    delete:
+      path: /vault_secrets/{id}
+      method: DELETE
+
+  service_user:
+    create:
+      path: /service_users
+      method: POST
+    read:
+      path: /service_users/{id}
+      method: GET
+    update:
+      path: /service_users/{id}
+      method: PATCH
+    delete:
+      path: /service_users/{id}
+      method: DELETE
+
+  ssh_certificate_authority:
+    create:
+      path: /ssh_certificate_authorities
+      method: POST
+    read:
+      path: /ssh_certificate_authorities/{id}
+      method: GET
+    update:
+      path: /ssh_certificate_authorities/{id}
+      method: PATCH
+    delete:
+      path: /ssh_certificate_authorities/{id}
+      method: DELETE
+
+  ssh_credential:
+    create:
+      path: /ssh_credentials
+      method: POST
+    read:
+      path: /ssh_credentials/{id}
+      method: GET
+    update:
+      path: /ssh_credentials/{id}
+      method: PATCH
+    delete:
+      path: /ssh_credentials/{id}
+      method: DELETE
+
+  ssh_host_certificate:
+    create:
+      path: /ssh_host_certificates
+      method: POST
+    read:
+      path: /ssh_host_certificates/{id}
+      method: GET
+    update:
+      path: /ssh_host_certificates/{id}
+      method: PATCH
+    delete:
+      path: /ssh_host_certificates/{id}
+      method: DELETE
+
+  ssh_user_certificate:
+    create:
+      path: /ssh_user_certificates
+      method: POST
+    read:
+      path: /ssh_user_certificates/{id}
+      method: GET
+    update:
+      path: /ssh_user_certificates/{id}
+      method: PATCH
+    delete:
+      path: /ssh_user_certificates/{id}
+      method: DELETE
+
+  tls_certificate:
+    create:
+      path: /tls_certificates
+      method: POST
+    read:
+      path: /tls_certificates/{id}
+      method: GET
+    update:
+      path: /tls_certificates/{id}
+      method: PATCH
+    delete:
+      path: /tls_certificates/{id}
+      method: DELETE
+
+  vault:
+    create:
+      path: /vaults
+      method: POST
+    read:
+      path: /vaults/{id}
+      method: GET
+    update:
+      path: /vaults/{id}
+      method: PATCH
+    delete:
+      path: /vaults/{id}
+      method: DELETE
+
+data_sources:
+  agent_ingress:
+    read:
+      path: /agent_ingresses/{id}
+      method: GET
+
+  api_key:
+    read:
+      path: /api_keys/{id}
+      method: GET
+
+  certificate_authority:
+    read:
+      path: /certificate_authorities/{id}
+      method: GET
+
+  credential:
+    read:
+      path: /credentials/{id}
+      method: GET
+
+  cloud_endpoint:
+    read:
+      path: /endpoints/{id}
+      method: GET
+
+  event_destination:
+    read:
+      path: /event_destinations/{id}
+      method: GET
+    schema:
+      ignores:
+        - target
+
+  event_subscription:
+    read:
+      path: /event_subscriptions/{id}
+      method: GET
+
+  ip_policy:
+    read:
+      path: /ip_policies/{id}
+      method: GET
+
+  ip_policy_rule:
+    read:
+      path: /ip_policy_rules/{id}
+      method: GET
+
+  ip_restriction:
+    read:
+      path: /ip_restrictions/{id}
+      method: GET
+
+  reserved_addr:
+    read:
+      path: /reserved_addrs/{id}
+      method: GET
+
+  reserved_domain:
+    read:
+      path: /reserved_domains/{id}
+      method: GET
+
+  secret:
+    read:
+      path: /vault_secrets/{id}
+      method: GET
+
+  service_user:
+    read:
+      path: /service_users/{id}
+      method: GET
+
+  ssh_certificate_authority:
+    read:
+      path: /ssh_certificate_authorities/{id}
+      method: GET
+
+  ssh_credential:
+    read:
+      path: /ssh_credentials/{id}
+      method: GET
+
+  ssh_host_certificate:
+    read:
+      path: /ssh_host_certificates/{id}
+      method: GET
+
+  ssh_user_certificate:
+    read:
+      path: /ssh_user_certificates/{id}
+      method: GET
+
+  tls_certificate:
+    read:
+      path: /tls_certificates/{id}
+      method: GET
+
+  vault:
+    read:
+      path: /vaults/{id}
+      method: GET
+
+  # Data sources without corresponding resources (read-only APIs)
+  tunnel_session:
+    read:
+      path: /tunnel_sessions/{id}
+      method: GET
+
+  application_session:
+    read:
+      path: /app/sessions/{id}
+      method: GET
+
+  application_user:
+    read:
+      path: /app/users/{id}
+      method: GET

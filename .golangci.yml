@@ -1,0 +1,18 @@
+version: "2"
+
+linters:
+  # Defaults (errcheck, govet, ineffassign, staticcheck, unused) plus a
+  # curated set of high-signal, low-noise linters.
+  enable:
+    - copyloopvar
+    - durationcheck
+    - misspell
+    - nilerr
+    - predeclared
+    - unconvert
+    - usestdlibvars
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

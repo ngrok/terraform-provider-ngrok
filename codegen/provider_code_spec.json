@@ -1,0 +1,4448 @@
+{
+	"datasources": [
+		{
+			"name": "agent_ingress",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "certificate_management_policy",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "authority",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "certificate authority to request certificates from. The only supported value is letsencrypt.\n"
+									}
+								},
+								{
+									"name": "private_key_type",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "type of private key to use when requesting certificates. Defaults to rsa, can be either rsa or ecdsa.\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "certificate_management_status",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "provisioning_job",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "error_code",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "if present, an error code indicating why provisioning is failing. It may be either a temporary condition (INTERNAL_ERROR), or a permanent one the user must correct (DNS_ERROR).\n"
+												}
+											},
+											{
+												"name": "msg",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "a message describing the current status or error\n"
+												}
+											},
+											{
+												"name": "retries_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job will be retried\n"
+												}
+											},
+											{
+												"name": "started_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job started, RFC 3339 format\n"
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "renews_at",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "timestamp when the next renewal will be requested, RFC 3339 format\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the Agent Ingress was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of the use of this Agent Ingress. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "domain",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the domain that you own to be used as the base domain name to generate regional agent ingress domains.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this Agent Ingress. optional, max 4096 bytes\n"
+						}
+					},
+					{
+						"name": "ns_targets",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "a list of target values to use as the values of NS records for the domain property these values will delegate control over the domain to ngrok\n"
+						}
+					},
+					{
+						"name": "region_domains",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "a list of regional agent ingress domains that are subdomains of the value of domain this value may increase over time as ngrok adds more regions\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this Agent ingress\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "api_key",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the api key was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of what uses the API key to authenticate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined data of this API key. optional, max 4096 bytes\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.\n"
+						}
+					},
+					{
+						"name": "token",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this API key\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "application_session",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "application_user",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "browser_session",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "ip_address",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "IP address\n"
+									}
+								},
+								{
+									"name": "location",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "country_code",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "ISO country code\n"
+												}
+											},
+											{
+												"name": "lat_long_radius_km",
+												"int64": {
+													"computed_optional_required": "computed",
+													"description": "accuracy radius of the geographical coordinates\n"
+												}
+											},
+											{
+												"name": "latitude",
+												"number": {
+													"computed_optional_required": "computed",
+													"description": "geographical latitude\n"
+												}
+											},
+											{
+												"name": "longitude",
+												"number": {
+													"computed_optional_required": "computed",
+													"description": "geographical longitude\n"
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "user_agent",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "browser_name",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "browser name (e.g. Chrome)\n"
+												}
+											},
+											{
+												"name": "browser_version",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "browser version (e.g. 102)\n"
+												}
+											},
+											{
+												"name": "device_type",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "type of device (e.g. Desktop)\n"
+												}
+											},
+											{
+												"name": "os_name",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "operating system name (e.g. MacOS)\n"
+												}
+											},
+											{
+												"name": "os_version",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "operating system version (e.g. 10.15.7)\n"
+												}
+											},
+											{
+												"name": "raw",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "raw User-Agent request header\n"
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the user was created in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "edge",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "endpoint",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "expires_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when session expires in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "last_active",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the user was last active in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "public_url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URL of the hostport served by this endpoint\n"
+						}
+					},
+					{
+						"name": "route",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the application session API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "application_user",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the user was created in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "email",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user email\n"
+						}
+					},
+					{
+						"name": "identity_provider",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "name",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "name of the identity provider (e.g. Google)\n"
+									}
+								},
+								{
+									"name": "url",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "URL of the identity provider (e.g. https://accounts.google.com)\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "last_active",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the user was last active in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "last_login",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the user last signed-in in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user common name\n"
+						}
+					},
+					{
+						"name": "provider_user_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique user identifier\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the application user API resource\n"
+						}
+					},
+					{
+						"name": "username",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user username\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "certificate_authority",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "ca_pem",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "raw PEM of the Certificate Authority\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the Certificate Authority was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this Certificate Authority. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "extended_key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "extended set of actions the private key of this Certificate Authority can be used for\n"
+						}
+					},
+					{
+						"name": "key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "set of actions the private key of this Certificate Authority can be used for\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "not_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this Certificate Authority becomes invalid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "not_before",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this Certificate Authority becomes valid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "subject_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject common name of the Certificate Authority\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Certificate Authority API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "cloud_endpoint",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "bindings",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the bindings associated with this endpoint\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the endpoint was created in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user-supplied description of the associated tunnel\n"
+						}
+					},
+					{
+						"name": "domain",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "edge",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "host",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "hostport",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "hostport served by this endpoint (hostname:port) -\u003e soon to be deprecated\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user-supplied metadata of the associated tunnel or edge object\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user supplied name for the endpoint\n"
+						}
+					},
+					{
+						"name": "pooling_enabled",
+						"bool": {
+							"computed_optional_required": "computed",
+							"description": "whether the endpoint allows pooling\n"
+						}
+					},
+					{
+						"name": "port",
+						"int64": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "principal",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "proto",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "protocol served by this endpoint. one of `http`, `https`, `tcp`, or `tls`\n"
+						}
+					},
+					{
+						"name": "public_url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "deprecated [replaced by URL]: URL of the hostport served by this endpoint\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "identifier of the region this endpoint belongs to\n"
+						}
+					},
+					{
+						"name": "scheme",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "tcp_addr",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "traffic_policy",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "The traffic policy attached to this endpoint\n"
+						}
+					},
+					{
+						"name": "tunnel",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "tunnel_session",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "whether the endpoint is `ephemeral` (served directly by an agent-initiated tunnel) or `edge` (served by an edge) or `cloud (represents a cloud endpoint)`\n"
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the endpoint was updated in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "upstream_protocol",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the protocol the agent uses to forward with\n"
+						}
+					},
+					{
+						"name": "upstream_url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the local address the tunnel forwards to\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Cloud Endpoint API resource\n"
+						}
+					},
+					{
+						"name": "url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the url of the endpoint\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "credential",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "acl",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains, addresses, and labels the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules for domains may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. Bind rules for labels may specify a wildcard key and/or value to match multiple labels. For example, you may specify a rule of `bind:*=example` which will allow `x=example`, `y=example`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the tunnel credential was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of who or what will use the credential to authenticate. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this credential. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Service User. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Service User. Accepts one of: User ID, User email, or SCIM User ID.\n"
+						}
+					},
+					{
+						"name": "token",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the credential's authtoken that can be used to authenticate an ngrok agent. **This value is only available one time, on the API response from credential creation, otherwise it is null.**\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the tunnel credential API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "event_destination",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Event Destination was created, RFC 3339 format.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Human-readable description of the Event Destination. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "format",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Event Destination API resource.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "event_subscription",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "When the Event Subscription was created (RFC 3339 format).\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Arbitrary customer supplied information intended to be human readable. Optional, max 255 chars.\n"
+						}
+					},
+					{
+						"name": "destinations",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a resource identifier\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a uri for locating a resource\n"
+										}
+									}
+								]
+							},
+							"description": "Destinations to which these events will be sent\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Arbitrary customer supplied information intended to be machine readable. Optional, max 4096 chars.\n"
+						}
+					},
+					{
+						"name": "sources",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "type",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "Type of event for which an event subscription will trigger\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "URI of the Event Source API resource.\n"
+										}
+									}
+								]
+							},
+							"description": "Sources containing the types for which this event subscription will trigger\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Event Subscription API resource.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_policy",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP policy was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of the source IPs of this IP policy. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP Policy API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_policy_rule",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "action",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the action to apply to the policy rule, either `allow` or `deny`\n"
+						}
+					},
+					{
+						"name": "cidr",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP policy rule was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of the source IPs of this IP rule. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "ip_policy",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP policy rule API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_restriction",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP restriction was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this IP restriction. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "enforced",
+						"bool": {
+							"computed_optional_required": "computed",
+							"description": "true if the IP restriction will be enforced. if false, only warnings will be issued\n"
+						}
+					},
+					{
+						"name": "ip_policies",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a resource identifier\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a uri for locating a resource\n"
+										}
+									}
+								]
+							},
+							"description": "the set of IP policies that are used to enforce the restriction\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP restriction API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "reserved_addr",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "addr",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "hostname:port of the reserved address that was assigned at creation time\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the reserved address was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of what this reserved address will be used for\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this reserved address. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "reserve the address in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the reserved address API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "reserved_domain",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "acme_challenge_cname_target",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "certificate_management_policy",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "authority",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "certificate authority to request certificates from. The only supported value is letsencrypt.\n"
+									}
+								},
+								{
+									"name": "private_key_type",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "type of private key to use when requesting certificates. Defaults to ecdsa, can be either rsa or ecdsa.\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "certificate_management_status",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "provisioning_job",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "error_code",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "if present, an error code indicating why provisioning is failing. It may be either a temporary condition (INTERNAL_ERROR), or a permanent one the user must correct (DNS_ERROR).\n"
+												}
+											},
+											{
+												"name": "msg",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "a message describing the current status or error\n"
+												}
+											},
+											{
+												"name": "retries_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job will be retried\n"
+												}
+											},
+											{
+												"name": "started_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job started, RFC 3339 format\n"
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "renews_at",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "timestamp when the next renewal will be requested, RFC 3339 format\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "cname_target",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of an ngrok owned domain (e.g. *.ngrok.app)\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the reserved domain was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of what this reserved domain will be used for\n"
+						}
+					},
+					{
+						"name": "domain",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "hostname of the reserved domain\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "deprecated: With the launch of the ngrok Global Network domains traffic is now handled globally. This field applied only to endpoints. Note that agents may still connect to specific regions. Optional, null by default. (au, eu, ap, us, jp, in, sa)\n"
+						}
+					},
+					{
+						"name": "resolves_to",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "value",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "accepts an ngrok point-of-presence shortcode, or \"global\"\n"
+										}
+									}
+								]
+							},
+							"description": "DNS resolver targets configured for the reserved domain, or empty for \"global\" resolution.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the reserved domain API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "secret",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Secret was created (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "created_by",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "description of Secret\n"
+						}
+					},
+					{
+						"name": "last_updated_by",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Arbitrary user-defined metadata for this Secret\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Name of secret\n"
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Secret was last updated (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of this Secret API resource\n"
+						}
+					},
+					{
+						"name": "vault",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "vault_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Name of the vault the secret is stored in\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "service_user",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "active",
+						"bool": {
+							"computed_optional_required": "computed",
+							"description": "whether or not the service is active\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the api key was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable name used to identify the service\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this service user\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_certificate_authority",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH Certificate Authority API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this SSH Certificate Authority. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the type of private key for this SSH Certificate Authority\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "raw public key for this SSH Certificate Authority\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH Certificate Authority API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_credential",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "acl",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains, addresses, and labels the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules for domains may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. Bind rules for labels may specify a wildcard key and/or value to match multiple labels. For example, you may specify a rule of `bind:*=example` which will allow `x=example`, `y=example`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the ssh credential was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of who or what will use the ssh credential to authenticate. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this ssh credential. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the PEM-encoded public key of the SSH keypair that will be used to authenticate\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the ssh credential API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_host_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH Host Certificate API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this SSH Host Certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this SSH Host Certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "principals",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the list of principals included in the ssh host certificate. This is the list of hostnames and/or IP addresses that are authorized to serve SSH traffic with this certificate. Dangerously, if no principals are specified, this certificate is considered valid for all hosts.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "a public key in OpenSSH Authorized Keys format that this certificate signs\n"
+						}
+					},
+					{
+						"name": "ssh_certificate_authority_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the ssh certificate authority that is used to sign this ssh host certificate\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH Host Certificate API resource\n"
+						}
+					},
+					{
+						"name": "valid_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the time when the ssh host certificate becomes valid, in RFC 3339 format.\n"
+						}
+					},
+					{
+						"name": "valid_until",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_user_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH User Certificate API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "critical_options",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"description": "A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: `force-command` and `source-address`. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this SSH User Certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "extensions",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"description": "A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: `{\"permit-pty\": \"\", \"permit-user-rc\": \"\"}` OpenSSH understands a number of predefined extensions. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this SSH User Certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "principals",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the list of principals included in the ssh user certificate. This is the list of usernames that the certificate holder may sign in as on a machine authorizing the signing certificate authority. Dangerously, if no principals are specified, this certificate may be used to log in as any user.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "a public key in OpenSSH Authorized Keys format that this certificate signs\n"
+						}
+					},
+					{
+						"name": "ssh_certificate_authority_id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the ssh certificate authority that is used to sign this ssh user certificate\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH User Certificate API resource\n"
+						}
+					},
+					{
+						"name": "valid_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the time when the ssh host certificate becomes valid, in RFC 3339 format.\n"
+						}
+					},
+					{
+						"name": "valid_until",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the time after which the ssh host certificate becomes invalid, in RFC 3339 format. the OpenSSH certificates RFC calls this `valid_before`.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "tls_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "certificate_pem",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/cloud-edge/endpoints#certificate-chains).\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the TLS certificate was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "human-readable description of this TLS certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "extended_key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "extended set of actions the private key of this TLS certificate can be used for\n"
+						}
+					},
+					{
+						"name": "issued_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp (in RFC 3339 format) when this TLS certificate was issued automatically, or null if this certificate was user-uploaded\n"
+						}
+					},
+					{
+						"name": "issuer_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "issuer common name from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "set of actions the private key of this TLS certificate can be used for\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "not_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this TLS certificate becomes invalid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "not_before",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this TLS certificate becomes valid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "private_key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "type of the private key of this TLS certificate. One of rsa, ecdsa, or ed25519.\n"
+						}
+					},
+					{
+						"name": "serial_number",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "serial number of the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_alternative_names",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "dns_names",
+									"list": {
+										"computed_optional_required": "computed",
+										"element_type": {
+											"string": {}
+										},
+										"description": "set of additional domains (including wildcards) this TLS certificate is valid for\n"
+									}
+								},
+								{
+									"name": "ips",
+									"list": {
+										"computed_optional_required": "computed",
+										"element_type": {
+											"string": {}
+										},
+										"description": "set of IP addresses this TLS certificate is also valid for\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "subject_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject common name from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_country",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject country from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_locality",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject locality from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_organization",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject organization from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_organizational_unit",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject organizational unit from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_province",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject province from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the TLS certificate API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "tunnel_session",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "agent_version",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "version of the ngrok agent that started this ngrok tunnel session\n"
+						}
+					},
+					{
+						"name": "credential",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "ip",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "source ip address of the tunnel session\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "arbitrary user-defined data specified in the metadata property in the ngrok configuration file. See the metadata configuration option\n"
+						}
+					},
+					{
+						"name": "os",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "operating system of the host the ngrok agent is running on\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the ngrok region identifier in which this tunnel session was started\n"
+						}
+					},
+					{
+						"name": "started_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "time when the tunnel session first connected to the ngrok servers\n"
+						}
+					},
+					{
+						"name": "transport",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the transport protocol used to start the tunnel session. Either `ngrok/v2` or `ssh`\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of the tunnel session\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "vault",
+			"schema": {
+				"attributes": [
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a resource identifier\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Vault was created (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "created_by",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Reference to who created this Vault\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "description of Vault\n"
+						}
+					},
+					{
+						"name": "last_updated_by",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Reference to who created this Vault\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Arbitrary user-defined metadata for this Vault\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Name of vault\n"
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Vault was last updated (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of this Vault API resource\n"
+						}
+					}
+				]
+			}
+		}
+	],
+	"provider": {
+		"name": "ngrok"
+	},
+	"resources": [
+		{
+			"name": "agent_ingress",
+			"schema": {
+				"attributes": [
+					{
+						"name": "certificate_management_policy",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "authority",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "certificate authority to request certificates from. The only supported value is letsencrypt.\n"
+									}
+								},
+								{
+									"name": "private_key_type",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "type of private key to use when requesting certificates. Defaults to rsa, can be either rsa or ecdsa.\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of the use of this Agent Ingress. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "domain",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the domain that you own to be used as the base domain name to generate regional agent ingress domains.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this Agent Ingress. optional, max 4096 bytes\n"
+						}
+					},
+					{
+						"name": "certificate_management_status",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "provisioning_job",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "error_code",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "if present, an error code indicating why provisioning is failing. It may be either a temporary condition (INTERNAL_ERROR), or a permanent one the user must correct (DNS_ERROR).\n"
+												}
+											},
+											{
+												"name": "msg",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "a message describing the current status or error\n"
+												}
+											},
+											{
+												"name": "retries_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job will be retried\n"
+												}
+											},
+											{
+												"name": "started_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job started, RFC 3339 format\n"
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "renews_at",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "timestamp when the next renewal will be requested, RFC 3339 format\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the Agent Ingress was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique Agent Ingress resource identifier\n"
+						}
+					},
+					{
+						"name": "ns_targets",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "a list of target values to use as the values of NS records for the domain property these values will delegate control over the domain to ngrok\n"
+						}
+					},
+					{
+						"name": "region_domains",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "a list of regional agent ingress domains that are subdomains of the value of domain this value may increase over time as ngrok adds more regions\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this Agent ingress\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "api_key",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of what uses the API key to authenticate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined data of this API key. optional, max 4096 bytes\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the api key was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique API key resource identifier\n"
+						}
+					},
+					{
+						"name": "token",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the bearer token that can be placed into the Authorization header to authenticate request to the ngrok API. **This value is only available one time, on the API response from key creation. Otherwise it is null.**\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this API key\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "certificate_authority",
+			"schema": {
+				"attributes": [
+					{
+						"name": "ca_pem",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "raw PEM of the Certificate Authority\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this Certificate Authority. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this Certificate Authority. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the Certificate Authority was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "extended_key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "extended set of actions the private key of this Certificate Authority can be used for\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this Certificate Authority\n"
+						}
+					},
+					{
+						"name": "key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "set of actions the private key of this Certificate Authority can be used for\n"
+						}
+					},
+					{
+						"name": "not_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this Certificate Authority becomes invalid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "not_before",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this Certificate Authority becomes valid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "subject_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject common name of the Certificate Authority\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Certificate Authority API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "cloud_endpoint",
+			"schema": {
+				"attributes": [
+					{
+						"name": "bindings",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the bindings associated with this endpoint\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "user-supplied description of the associated tunnel\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "user-supplied metadata of the associated tunnel or edge object\n"
+						}
+					},
+					{
+						"name": "pooling_enabled",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "traffic_policy",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "The traffic policy attached to this endpoint\n"
+						}
+					},
+					{
+						"name": "type",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "Type of endpoint. Only 'cloud' is currently supported (represents a cloud endpoint). Defaults to 'cloud' if not specified.\n"
+						}
+					},
+					{
+						"name": "url",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the url of the endpoint\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the endpoint was created in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "domain",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "edge",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "host",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "hostport",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "hostport served by this endpoint (hostname:port) -\u003e soon to be deprecated\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique endpoint resource identifier\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "user supplied name for the endpoint\n"
+						}
+					},
+					{
+						"name": "port",
+						"int64": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "principal",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "proto",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "protocol served by this endpoint. one of `http`, `https`, `tcp`, or `tls`\n"
+						}
+					},
+					{
+						"name": "public_url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "deprecated [replaced by URL]: URL of the hostport served by this endpoint\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "identifier of the region this endpoint belongs to\n"
+						}
+					},
+					{
+						"name": "scheme",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "n/a"
+						}
+					},
+					{
+						"name": "tcp_addr",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "tunnel",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "tunnel_session",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the endpoint was updated in RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "upstream_protocol",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the protocol the agent uses to forward with\n"
+						}
+					},
+					{
+						"name": "upstream_url",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the local address the tunnel forwards to\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Cloud Endpoint API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "credential",
+			"schema": {
+				"attributes": [
+					{
+						"name": "acl",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains, addresses, and labels the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules for domains may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. Bind rules for labels may specify a wildcard key and/or value to match multiple labels. For example, you may specify a rule of `bind:*=example` which will allow `x=example`, `y=example`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of who or what will use the credential to authenticate. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this credential. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Service User. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Service User. Accepts one of: User ID, User email, or SCIM User ID.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the tunnel credential was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique tunnel credential resource identifier\n"
+						}
+					},
+					{
+						"name": "token",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the credential's authtoken that can be used to authenticate an ngrok agent. **This value is only available one time, on the API response from credential creation, otherwise it is null.**\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the tunnel credential API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "event_destination",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Human-readable description of the Event Destination. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "format",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The output format you would like to serialize events into when sending to their target. Currently the only accepted value is `JSON`.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Arbitrary user-defined machine-readable data of this Event Destination. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Event Destination was created, RFC 3339 format.\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Unique identifier for this Event Destination.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Event Destination API resource.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "event_subscription",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Arbitrary customer supplied information intended to be human readable. Optional, max 255 chars.\n"
+						}
+					},
+					{
+						"name": "destination_ids",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "A list of Event Destination IDs which should be used for this Event Subscription.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Arbitrary customer supplied information intended to be machine readable. Optional, max 4096 chars.\n"
+						}
+					},
+					{
+						"name": "sources",
+						"list_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "type",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "Type of event for which an event subscription will trigger\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "URI of the Event Source API resource.\n"
+										}
+									}
+								]
+							},
+							"description": "Sources containing the types for which this event subscription will trigger\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "When the Event Subscription was created (RFC 3339 format).\n"
+						}
+					},
+					{
+						"name": "destinations",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a resource identifier\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a uri for locating a resource\n"
+										}
+									}
+								]
+							},
+							"description": "Destinations to which these events will be sent\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Unique identifier for this Event Subscription.\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the Event Subscription API resource.\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_policy",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of the source IPs of this IP policy. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this IP policy. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP policy was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this IP policy\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP Policy API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_policy_rule",
+			"schema": {
+				"attributes": [
+					{
+						"name": "action",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the action to apply to the policy rule, either `allow` or `deny`\n"
+						}
+					},
+					{
+						"name": "cidr",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "an IP or IP range specified in CIDR notation. IPv4 and IPv6 are both supported.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of the source IPs of this IP rule. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "ip_policy_id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "ID of the IP policy this IP policy rule will be attached to\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this IP policy rule. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP policy rule was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this IP policy rule\n"
+						}
+					},
+					{
+						"name": "ip_policy",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP policy rule API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ip_restriction",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this IP restriction. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "enforced",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": "true if the IP restriction will be enforced. if false, only warnings will be issued\n"
+						}
+					},
+					{
+						"name": "ip_policy_ids",
+						"list": {
+							"computed_optional_required": "required",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the set of IP policy identifiers that are used to enforce the restriction\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this IP restriction. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "type",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the IP restriction was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this IP restriction\n"
+						}
+					},
+					{
+						"name": "ip_policies",
+						"list_nested": {
+							"computed_optional_required": "computed",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "id",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a resource identifier\n"
+										}
+									},
+									{
+										"name": "uri",
+										"string": {
+											"computed_optional_required": "computed",
+											"description": "a uri for locating a resource\n"
+										}
+									}
+								]
+							},
+							"description": "the set of IP policies that are used to enforce the restriction\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the IP restriction API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "reserved_addr",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of what this reserved address will be used for\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this reserved address. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "reserve the address in this geographic ngrok datacenter. Optional, default is us. (au, eu, ap, us, jp, in, sa)\n"
+						}
+					},
+					{
+						"name": "addr",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "hostname:port of the reserved address that was assigned at creation time\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the reserved address was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique reserved address resource identifier\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the reserved address API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "reserved_domain",
+			"schema": {
+				"attributes": [
+					{
+						"name": "certificate_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "ID of a user-uploaded TLS certificate to use for connections to targeting this domain. Optional, mutually exclusive with `certificate_management_policy`.\n"
+						}
+					},
+					{
+						"name": "certificate_management_policy",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"attributes": [
+								{
+									"name": "authority",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "certificate authority to request certificates from. The only supported value is letsencrypt.\n"
+									}
+								},
+								{
+									"name": "private_key_type",
+									"string": {
+										"computed_optional_required": "computed_optional",
+										"description": "type of private key to use when requesting certificates. Defaults to ecdsa, can be either rsa or ecdsa.\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of what this reserved domain will be used for\n"
+						}
+					},
+					{
+						"name": "domain",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "hostname of the reserved domain\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this reserved domain. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "region",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "deprecated: With the launch of the ngrok Global Network domains traffic is now handled globally. This field applied only to endpoints. Note that agents may still connect to specific regions. Optional, null by default. (au, eu, ap, us, jp, in, sa)\n"
+						}
+					},
+					{
+						"name": "resolves_to",
+						"list_nested": {
+							"computed_optional_required": "computed_optional",
+							"nested_object": {
+								"attributes": [
+									{
+										"name": "value",
+										"string": {
+											"computed_optional_required": "computed_optional",
+											"description": "accepts an ngrok point-of-presence shortcode, or \"global\"\n"
+										}
+									}
+								]
+							},
+							"description": "DNS resolver targets configured for the reserved domain, or empty for \"global\" resolution.\n"
+						}
+					},
+					{
+						"name": "acme_challenge_cname_target",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "certificate_management_status",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "provisioning_job",
+									"single_nested": {
+										"computed_optional_required": "computed",
+										"attributes": [
+											{
+												"name": "error_code",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "if present, an error code indicating why provisioning is failing. It may be either a temporary condition (INTERNAL_ERROR), or a permanent one the user must correct (DNS_ERROR).\n"
+												}
+											},
+											{
+												"name": "msg",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "a message describing the current status or error\n"
+												}
+											},
+											{
+												"name": "retries_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job will be retried\n"
+												}
+											},
+											{
+												"name": "started_at",
+												"string": {
+													"computed_optional_required": "computed",
+													"description": "timestamp when the provisioning job started, RFC 3339 format\n"
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "renews_at",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "timestamp when the next renewal will be requested, RFC 3339 format\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "cname_target",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "DNS CNAME target for a custom hostname, or null if the reserved domain is a subdomain of an ngrok owned domain (e.g. *.ngrok.app)\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the reserved domain was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique reserved domain resource identifier\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the reserved domain API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "secret",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "description of Secret\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Arbitrary user-defined metadata for this Secret\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Name of secret\n"
+						}
+					},
+					{
+						"name": "value",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Value of secret\n"
+						}
+					},
+					{
+						"name": "vault_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "unique identifier of the referenced vault\n"
+						}
+					},
+					{
+						"name": "vault_name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "name of the referenced vault\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Secret was created (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "created_by",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "identifier for Secret\n"
+						}
+					},
+					{
+						"name": "last_updated_by",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Secret was last updated (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of this Secret API resource\n"
+						}
+					},
+					{
+						"name": "vault",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "id",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a resource identifier\n"
+									}
+								},
+								{
+									"name": "uri",
+									"string": {
+										"computed_optional_required": "computed",
+										"description": "a uri for locating a resource\n"
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "service_user",
+			"schema": {
+				"attributes": [
+					{
+						"name": "active",
+						"bool": {
+							"computed_optional_required": "computed_optional",
+							"description": "whether or not the service is active\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable name used to identify the service\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the api key was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique API key resource identifier\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI to the API resource of this service user\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_certificate_authority",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this SSH Certificate Authority. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "elliptic_curve",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "the type of elliptic curve to use when creating an ECDSA key\n"
+						}
+					},
+					{
+						"name": "key_size",
+						"int64": {
+							"computed_optional_required": "computed_optional",
+							"description": "the key size to use when creating an RSA key. one of `2048` or `4096`\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this SSH Certificate Authority. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "private_key_type",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "the type of private key to generate. one of `rsa`, `ecdsa`, `ed25519`\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH Certificate Authority API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this SSH Certificate Authority\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the type of private key for this SSH Certificate Authority\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "raw public key for this SSH Certificate Authority\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH Certificate Authority API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_credential",
+			"schema": {
+				"attributes": [
+					{
+						"name": "acl",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "optional list of ACL rules. If unspecified, the credential will have no restrictions. The only allowed ACL rule at this time is the `bind` rule. The `bind` rule allows the caller to restrict what domains, addresses, and labels the token is allowed to bind. For example, to allow the token to open a tunnel on example.ngrok.io your ACL would include the rule `bind:example.ngrok.io`. Bind rules for domains may specify a leading wildcard to match multiple domains with a common suffix. For example, you may specify a rule of `bind:*.example.com` which will allow `x.example.com`, `y.example.com`, `*.example.com`, etc. Bind rules for labels may specify a wildcard key and/or value to match multiple labels. For example, you may specify a rule of `bind:*=example` which will allow `x=example`, `y=example`, etc. A rule of `'*'` is equivalent to no acl at all and will explicitly permit all actions.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of who or what will use the ssh credential to authenticate. Optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this ssh credential. Optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "owner_id",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "If supplied at credential creation, ownership will be assigned to the specified User or Bot. Only admins may specify an owner other than themselves. Defaults to the authenticated User or Bot.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the PEM-encoded public key of the SSH keypair that will be used to authenticate\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the ssh credential was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique ssh credential resource identifier\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the ssh credential API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_host_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this SSH Host Certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this SSH Host Certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "principals",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the list of principals included in the ssh host certificate. This is the list of hostnames and/or IP addresses that are authorized to serve SSH traffic with this certificate. Dangerously, if no principals are specified, this certificate is considered valid for all hosts.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a public key in OpenSSH Authorized Keys format that this certificate signs\n"
+						}
+					},
+					{
+						"name": "ssh_certificate_authority_id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the ssh certificate authority that is used to sign this ssh host certificate\n"
+						}
+					},
+					{
+						"name": "valid_after",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The time when the host certificate becomes valid, in RFC 3339 format. Defaults to the current time if unspecified.\n"
+						}
+					},
+					{
+						"name": "valid_until",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The time when this host certificate becomes invalid, in RFC 3339 format. If unspecified, a default value of one year in the future will be used. The OpenSSH certificates RFC calls this `valid_before`.\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the signed SSH certificate in OpenSSH Authorized Keys format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH Host Certificate API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this SSH Host Certificate\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH Host Certificate API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "ssh_user_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "critical_options",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "A map of critical options included in the certificate. Only two critical options are currently defined by OpenSSH: `force-command` and `source-address`. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this SSH User Certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "extensions",
+						"single_nested": {
+							"computed_optional_required": "computed_optional",
+							"description": "A map of extensions included in the certificate. Extensions are additional metadata that can be interpreted by the SSH server for any purpose. These can be used to permit or deny the ability to open a terminal, do port forwarding, x11 forwarding, and more. If unspecified, the certificate will include limited permissions with the following extension map: `{\"permit-pty\": \"\", \"permit-user-rc\": \"\"}` OpenSSH understands a number of predefined extensions. See [the OpenSSH certificate protocol spec](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys) for additional details.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this SSH User Certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "principals",
+						"list": {
+							"computed_optional_required": "computed_optional",
+							"element_type": {
+								"string": {}
+							},
+							"description": "the list of principals included in the ssh user certificate. This is the list of usernames that the certificate holder may sign in as on a machine authorizing the signing certificate authority. Dangerously, if no principals are specified, this certificate may be used to log in as any user.\n"
+						}
+					},
+					{
+						"name": "public_key",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "a public key in OpenSSH Authorized Keys format that this certificate signs\n"
+						}
+					},
+					{
+						"name": "ssh_certificate_authority_id",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "the ssh certificate authority that is used to sign this ssh user certificate\n"
+						}
+					},
+					{
+						"name": "valid_after",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The time when the user certificate becomes valid, in RFC 3339 format. Defaults to the current time if unspecified.\n"
+						}
+					},
+					{
+						"name": "valid_until",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "The time when this host certificate becomes invalid, in RFC 3339 format. If unspecified, a default value of 24 hours will be used. The OpenSSH certificates RFC calls this `valid_before`.\n"
+						}
+					},
+					{
+						"name": "certificate",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the signed SSH certificate in OpenSSH Authorized Keys Format. this value should be placed in a `-cert.pub` certificate file on disk that should be referenced in your `sshd_config` configuration file with a `HostCertificate` directive\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the SSH User Certificate API resource was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this SSH User Certificate\n"
+						}
+					},
+					{
+						"name": "key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "the key type of the `public_key`, one of `rsa`, `ecdsa` or `ed25519`\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the SSH User Certificate API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "tls_certificate",
+			"schema": {
+				"attributes": [
+					{
+						"name": "certificate_pem",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "chain of PEM-encoded certificates, leaf first. See [Certificate Bundles](https://ngrok.com/docs/cloud-edge/endpoints#certificate-chains).\n"
+						}
+					},
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "human-readable description of this TLS certificate. optional, max 255 bytes.\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "arbitrary user-defined machine-readable data of this TLS certificate. optional, max 4096 bytes.\n"
+						}
+					},
+					{
+						"name": "private_key_pem",
+						"string": {
+							"computed_optional_required": "required",
+							"description": "private key for the TLS certificate, PEM-encoded. See [Private Keys](https://ngrok.com/docs/cloud-edge/endpoints#private-keys).\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when the TLS certificate was created, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "extended_key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "extended set of actions the private key of this TLS certificate can be used for\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "unique identifier for this TLS certificate\n"
+						}
+					},
+					{
+						"name": "issued_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp (in RFC 3339 format) when this TLS certificate was issued automatically, or null if this certificate was user-uploaded\n"
+						}
+					},
+					{
+						"name": "issuer_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "issuer common name from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "key_usages",
+						"list": {
+							"computed_optional_required": "computed",
+							"element_type": {
+								"string": {}
+							},
+							"description": "set of actions the private key of this TLS certificate can be used for\n"
+						}
+					},
+					{
+						"name": "not_after",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this TLS certificate becomes invalid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "not_before",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "timestamp when this TLS certificate becomes valid, RFC 3339 format\n"
+						}
+					},
+					{
+						"name": "private_key_type",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "type of the private key of this TLS certificate. One of rsa, ecdsa, or ed25519.\n"
+						}
+					},
+					{
+						"name": "serial_number",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "serial number of the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_alternative_names",
+						"single_nested": {
+							"computed_optional_required": "computed",
+							"attributes": [
+								{
+									"name": "dns_names",
+									"list": {
+										"computed_optional_required": "computed",
+										"element_type": {
+											"string": {}
+										},
+										"description": "set of additional domains (including wildcards) this TLS certificate is valid for\n"
+									}
+								},
+								{
+									"name": "ips",
+									"list": {
+										"computed_optional_required": "computed",
+										"element_type": {
+											"string": {}
+										},
+										"description": "set of IP addresses this TLS certificate is also valid for\n"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "subject_common_name",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject common name from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_country",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject country from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_locality",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject locality from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_organization",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject organization from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_organizational_unit",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject organizational unit from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "subject_province",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "subject province from the leaf of this TLS certificate\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of the TLS certificate API resource\n"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "vault",
+			"schema": {
+				"attributes": [
+					{
+						"name": "description",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "description of Vault\n"
+						}
+					},
+					{
+						"name": "metadata",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Arbitrary user-defined metadata for this Vault\n"
+						}
+					},
+					{
+						"name": "name",
+						"string": {
+							"computed_optional_required": "computed_optional",
+							"description": "Name of vault\n"
+						}
+					},
+					{
+						"name": "created_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Vault was created (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "created_by",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Reference to who created this Vault\n"
+						}
+					},
+					{
+						"name": "id",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "identifier for Vault\n"
+						}
+					},
+					{
+						"name": "last_updated_by",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Reference to who created this Vault\n"
+						}
+					},
+					{
+						"name": "updated_at",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "Timestamp when the Vault was last updated (RFC 3339 format)\n"
+						}
+					},
+					{
+						"name": "uri",
+						"string": {
+							"computed_optional_required": "computed",
+							"description": "URI of this Vault API resource\n"
+						}
+					}
+				]
+			}
+		}
+	],
+	"version": "0.1"
+}
