@@ -1,78 +1,27 @@
 # Design: OpenAPI → Terraform Code Generation
 
-## Status: Proposal
-
 ## Problem
 
-The current Terraform provider v2 has 21 resources and 24 data sources, all hand-written. Each resource file follows a nearly identical pattern (~250 lines) with boilerplate for schema definitions, models, flatten/expand functions, and CRUD methods. When the ngrok API changes, every affected file must be updated manually.
+Each Terraform resource and data source follows a nearly identical pattern with boilerplate for schema definitions, models, flatten/expand functions, and CRUD methods. When the ngrok API changes, every affected file must be updated manually.
 
-### Current v1 Pipeline (apic → everything)
+Code generation eliminates this duplication by deriving schema definitions and model structs directly from the ngrok OpenAPI spec. Schemas stay in sync with the API automatically, descriptions are always accurate, and validators (enum, minLength, etc.) come for free.
 
-The existing v1 provider at [ngrok/terraform-provider-ngrok](https://github.com/ngrok/terraform-provider-ngrok) is **almost entirely code-generated** by the `apic` tool from proto definitions:
+## Pipeline
 
-```
-proto/api/*.proto → apic tool → {
-  1. restapi/          (REST client, API structs, methods — 26k lines)
-  2. ngrok/provider.go (resource map wiring)
-  3. ngrok/resource_*.go (schema + CRUD for each resource)
-  4. ngrok/flatten_expand.go (17k lines of flatten/expand for every API struct)
-  5. transform/convert.go (Ref→string helper)
-}
-```
-
-The proto files contain rich Terraform-specific annotations that drive this generation:
-- `terraform_method: Create/Read/Update/Delete` on RPCs
-- `TerraformField.sensitive`, `TerraformField.computed` on fields
-- `TerraformOutputMapping.skip_schema` to exclude computed-only fields from the schema
-- `TerraformOutputMapping.diff_suppress_func` for custom diff suppression (e.g., `DiffSuppressWhitespace` on `ca_pem`)
-- `TerraformOutputMapping.replace` and `flatten_func` for field remapping
-- `apic.field.required` and `apic.field.nullable` to control Required/Optional/Computed
-
-The generated resource files use **SDKv2** (`hashicorp/terraform-plugin-sdk/v2`), a hand-rolled `restapi` package (not the official `ngrok-api-go` client), and include everything: schemas, CRUD methods, expand/flatten — all in one generated file per resource.
-
-**The OpenAPI spec (`ngrok.yaml`) is a separate side output** of the same `apic` tool — it is generated alongside the TF provider, not consumed by it. It lives at [ngrok/ngrok-openapi](https://github.com/ngrok/ngrok-openapi).
-
-### What the v1 generator produces vs. what we need
-
-| Aspect | v1 (apic-generated, SDKv2) | v2 (hand-written, Plugin Framework) |
-|---|---|---|
-| Framework | `terraform-plugin-sdk/v2` | `terraform-plugin-framework` |
-| API client | Hand-rolled `restapi` package | Official `ngrok-api-go/v9` |
-| Schema attrs | `schema.TypeString`, `ForceNew`, `DiffSuppressFunc` | `schema.StringAttribute`, `RequiresReplace()`, validators |
-| Data model | `d.Set("field", value)` | Typed struct with `tfsdk` tags |
-| Null handling | No null/unknown distinction | `types.String` with null/unknown semantics |
-| Data sources | None | 24 data sources |
-| Plan modifiers | N/A (SDKv2 doesn't have them) | `UseStateForUnknown()`, `ModifyPlan` |
-
-The v1 generator cannot be reused because it targets the wrong framework, wrong client library, and lacks Plugin Framework concepts (plan modifiers, typed models, null semantics).
-
-## Proposed Approach
-
-Decouple TF generation from apic by consuming the OpenAPI spec that apic already produces. Use HashiCorp's official [OpenAPI Provider Spec Generator](https://github.com/hashicorp/terraform-plugin-codegen-openapi) and [Framework Code Generator](https://github.com/hashicorp/terraform-plugin-codegen-framework) to generate schema definitions and models from it.
-
-### Full pipeline (near-term)
-
-Proto and apic remain upstream — they produce the OpenAPI spec as they do today. We add a new downstream pipeline that consumes it:
+The provider uses HashiCorp's official [OpenAPI Provider Spec Generator](https://github.com/hashicorp/terraform-plugin-codegen-openapi) and [Framework Code Generator](https://github.com/hashicorp/terraform-plugin-codegen-framework) to generate schema definitions and models from the ngrok OpenAPI spec:
 
 ```
-proto/api/*.proto → apic → ngrok.yaml (OpenAPI 3.0) → tfplugingen-openapi → provider_code_spec.json → tfplugingen-framework → *_gen.go
-|___________________________________|                |___________________________________________________________________________|
-        Already exists today                              New: what we're building
+ngrok.yaml (OpenAPI 3.0) → tfplugingen-openapi → provider_code_spec.json → tfplugingen-framework → *_gen.go
 ```
 
-This replaces the old flow where apic generated the TF provider directly from proto. The apic TF generator (`go/cmd/apic/gen/terraform_provider/`) is retired.
+1. **`ngrok.yaml`** — The ngrok OpenAPI 3.0 spec, pulled from [ngrok/ngrok-openapi](https://github.com/ngrok/ngrok-openapi) and copied into `codegen/openapi_spec.yaml`.
+2. **`tfplugingen-openapi`** — Reads the OpenAPI spec and the generator config (`codegen/generator_config.yml`), produces an intermediate `provider_code_spec.json`.
+3. **`provider_code_spec.json`** — A framework-agnostic JSON description of every resource and data source schema. Committed to the repo so changes are reviewable in PRs.
+4. **`tfplugingen-framework`** — Reads the provider code spec, writes `*_gen.go` files into per-resource/data-source packages under `internal/`.
 
-### Future state (long-term)
+The pipeline is agnostic to what produces the OpenAPI spec — it only consumes the spec file.
 
-When proto and apic are eventually retired and OpenAPI becomes the system of record for the API, the left side of the pipeline changes but the TF codegen side stays exactly the same:
-
-```
-ngrok.yaml (OpenAPI 3.0, hand-authored) → tfplugingen-openapi → provider_code_spec.json → tfplugingen-framework → *_gen.go
-```
-
-The TF pipeline is intentionally agnostic to what produces the OpenAPI spec.
-
-### What Gets Generated
+## What Gets Generated
 
 The HashiCorp tools generate **schemas and models only**:
 - `Schema()` function with all attributes, descriptions, computed/optional/required flags
@@ -80,7 +29,7 @@ The HashiCorp tools generate **schemas and models only**:
 - Validators (from `enum`, `minLength`, `maxItems`, etc. in the OpenAPI spec)
 - Default values (from `default` in the OpenAPI spec)
 
-### What Remains Hand-Written
+## What Remains Hand-Written
 
 - **CRUD methods** (Create, Read, Update, Delete) — the actual API calls
 - **Provider configuration** (API key, base URL)
@@ -89,21 +38,6 @@ The HashiCorp tools generate **schemas and models only**:
 - **Sensitive field preservation** (write-only fields like `api_key`, `token`, `value`)
 - **ModifyPlan hooks** (marking `updated_at` as unknown on changes)
 - **Import state** logic
-
-### v1 vs Proposed: What's Generated
-
-| Component | v1 (apic from proto) | Proposed (OpenAPI codegen) |
-|---|---|---|
-| REST client / API structs | ✅ Generated (`restapi/`) | ❌ Use `ngrok-api-go/v9` |
-| Resource schemas | ✅ Generated (incl. ForceNew, Sensitive, DiffSuppress) | ✅ Generated (descriptions, types, required/computed only) |
-| Data models | ✅ Generated (implicit via `d.Set`) | ✅ Generated (typed structs with `tfsdk` tags) |
-| Flatten/expand | ✅ Generated (17k lines) | ❌ Hand-written (uses `ngrok-api-go` types directly) |
-| CRUD methods | ✅ Generated | ❌ Hand-written |
-| Plan modifiers | N/A (SDKv2) | ❌ Hand-written (override layer) |
-| Validators | ❌ (only DiffSuppress) | ✅ Generated (from `enum`, `minLength`, etc.) |
-| Provider wiring | ✅ Generated | ❌ Hand-written |
-
-**Key insight**: The v1 apic tool generates ~95% of the provider because the proto annotations encode Terraform-specific concerns (ForceNew, Sensitive, DiffSuppress). The OpenAPI spec does not carry this information, so the proposed approach generates less (~schemas and models) but what it generates is higher quality (typed models, validators) and targets the correct framework.
 
 ## Architecture
 
@@ -114,13 +48,16 @@ terraform-provider-ngrok/
 ├── codegen/
 │   ├── generator_config.yml    # Maps OpenAPI paths → TF resources/data sources
 │   ├── provider_code_spec.json # Generated intermediate spec (committed for review)
-│   └── openapi_spec.yaml       # Copied/symlinked from ngrok-openapi repo
+│   └── openapi_spec.yaml       # Copied from ngrok-openapi repo
 ├── internal/
 │   ├── provider/
-│   │   ├── provider.go                         # Hand-written (unchanged)
-│   │   ├── helpers.go                          # Hand-written (unchanged)
+│   │   ├── provider.go                         # Hand-written
+│   │   ├── helpers.go                          # Hand-written
+│   │   ├── schema_overrides.go                 # Hand-written: plan modifier helpers
+│   │   ├── validators.go                       # Hand-written: custom validators
 │   │   ├── resource_certificate_authority.go   # Hand-written CRUD + overrides
 │   │   ├── resource_cloud_endpoint.go          # Hand-written CRUD + overrides
+│   │   ├── datasource_certificate_authority.go # Hand-written read logic
 │   │   └── ...
 │   ├── resource_certificate_authority/
 │   │   └── certificate_authority_resource_gen.go  # Generated schema + model
@@ -129,13 +66,15 @@ terraform-provider-ngrok/
 │   ├── datasource_certificate_authority/
 │   │   └── certificate_authority_data_source_gen.go
 │   └── ...
-├── Makefile                    # `make generate` target
+├── Makefile                    # `make codegen` target
 └── ...
 ```
 
+Generated code lives in per-resource/data-source packages (`internal/resource_*/`, `internal/datasource_*/`). Hand-written resource logic lives in `internal/provider/`.
+
 ### Generator Config
 
-The `generator_config.yml` maps OpenAPI operations to Terraform resources/data sources:
+The `generator_config.yml` maps OpenAPI operations to Terraform resources and data sources:
 
 ```yaml
 provider:
@@ -170,21 +109,7 @@ resources:
       path: /endpoints/{id}
       method: DELETE
 
-  api_key:
-    create:
-      path: /api_keys
-      method: POST
-    read:
-      path: /api_keys/{id}
-      method: GET
-    update:
-      path: /api_keys/{id}
-      method: PATCH
-    delete:
-      path: /api_keys/{id}
-      method: DELETE
-
-  # ... all 21 resources mapped similarly
+  # ... all resources mapped similarly
 
 data_sources:
   certificate_authority:
@@ -192,17 +117,25 @@ data_sources:
       path: /certificate_authorities/{id}
       method: GET
 
-  cloud_endpoint:
-    read:
-      path: /endpoints/{id}
-      method: GET
+  # ... all data sources
+```
 
-  # ... all 24 data sources
+Fields can be excluded from generation using the `schema.ignores` key:
+
+```yaml
+  event_destination:
+    create:
+      path: /event_destinations
+      method: POST
+    # ...
+    schema:
+      ignores:
+        - target
 ```
 
 ### Resource File Pattern (Post-Codegen)
 
-Each resource file becomes simpler — it imports the generated schema and uses it:
+Each resource file imports the generated schema and applies overrides:
 
 ```go
 package provider
@@ -216,16 +149,21 @@ import (
 func (r *certificateAuthorityResource) Schema(ctx context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
     // Start from generated schema
     s := resource_certificate_authority.CertificateAuthorityResourceSchema(ctx)
+    attrs := s.Attributes
 
     // Apply TF-specific overrides not expressible in OpenAPI
-    // (plan modifiers, ForceNew, sensitive, etc.)
-    applyPlanModifiers(&s)
+    addStringPlanModifiers(attrs, "id", useStateForUnknownString())
+    addStringPlanModifiers(attrs, "uri", useStateForUnknownString())
+    addStringPlanModifiers(attrs, "created_at", useStateForUnknownString())
+    addStringPlanModifiers(attrs, "ca_pem", requiresReplaceString())
 
     resp.Schema = s
 }
 ```
 
-The CRUD methods, flatten/expand, and provider wiring remain hand-written as today.
+The override helpers (`addStringPlanModifiers`, `addListPlanModifiers`, `markSensitive`, etc.) live in `internal/provider/schema_overrides.go` and provide a consistent way to layer plan modifiers, sensitive flags, defaults, and deprecation messages onto the generated schema.
+
+The CRUD methods, flatten/expand, and provider wiring remain hand-written in the same resource file.
 
 ## Mapping: OpenAPI Spec → Terraform Schema
 
@@ -256,65 +194,50 @@ The CRUD methods, flatten/expand, and provider wiring remain hand-written as tod
 | **Ref flattening** | `domain: {$ref: Ref}` → `domain_id: string` | Schema override + custom flatten |
 | **ModifyPlan** | `updated_at` unknown on changes | Hand-written as today |
 | **Field aliasing** | OpenAPI `id` path param vs body `id` | Generator config `aliases` |
-| **Field exclusion** | Endpoint has ephemeral-only fields (`tunnel`, `edge`, `hostport`, `proto`) | Schema override to remove |
+| **Field exclusion** | Endpoint has ephemeral-only fields | `schema.ignores` in generator config |
 
 ### Ref Type Challenge
 
-The ngrok OpenAPI spec uses `$ref: "#/components/schemas/Ref"` for references, which has a single `id` property. In our current TF provider, we flatten these to just the ID string (e.g., `domain_id` instead of a nested `domain.id` object). Options:
+The ngrok OpenAPI spec uses `$ref: "#/components/schemas/Ref"` for references, which has a single `id` property. In the TF provider, these are flattened to just the ID string (e.g., `domain_id` instead of a nested `domain.id` object). Options:
 
 1. **Override in generator config** using `aliases` to map `domain.id` → `domain_id`
 2. **Post-process the generated schema** to replace `SingleNestedAttribute` with `StringAttribute`
 3. **Accept nested objects** and change TF schema to `domain { id = "..." }` (breaking change)
 
-**Recommendation**: Option 2 — post-process in a schema override function per resource.
+**Decision**: Option 2 — post-process in a schema override function per resource. This keeps the flat `_id` pattern that users expect.
 
 ## Build Pipeline
+
+Both codegen tools are pinned in `go.mod` via `tool` directives and invoked with `go tool` — no separate install step required.
 
 ```makefile
 # Makefile targets
 
-.PHONY: generate
-generate: generate-spec generate-code
+# Pull the latest OpenAPI spec from the ngrok-openapi repo.
+# Override OPENAPI_REF to target a specific branch/tag/SHA.
+OPENAPI_REF ?= main
+OPENAPI_URL ?= https://raw.githubusercontent.com/ngrok/ngrok-openapi/$(OPENAPI_REF)/ngrok.yaml
 
-.PHONY: generate-spec
-generate-spec:
-	tfplugingen-openapi generate \
+.PHONY: codegen
+codegen: codegen-spec codegen-framework
+
+.PHONY: codegen-spec
+codegen-spec:
+	go tool tfplugingen-openapi generate \
 		--config codegen/generator_config.yml \
 		--output codegen/provider_code_spec.json \
 		codegen/openapi_spec.yaml
 
-.PHONY: generate-code
-generate-code:
-	tfplugingen-framework generate all \
+.PHONY: codegen-framework
+codegen-framework:
+	go tool tfplugingen-framework generate all \
 		--input codegen/provider_code_spec.json \
 		--output internal
 
 .PHONY: update-openapi
 update-openapi:
-	# Pull the latest apic-generated spec from the ngrok-openapi repo
-	cp ../ngrok-openapi/ngrok.yaml codegen/openapi_spec.yaml
+	curl -fsSL "$(OPENAPI_URL)" -o codegen/openapi_spec.yaml
 ```
-
-## Migration Strategy
-
-### Phase 1: Proof of Concept (1-2 resources)
-1. Set up the codegen pipeline with `certificate_authority` and `api_key`
-2. Generate schemas, verify they match current hand-written schemas
-3. Write the schema override layer for plan modifiers
-4. Validate CRUD still works with generated schemas
-
-### Phase 2: Migrate Simple Resources
-- Resources with only string fields, no nested objects, no sensitive fields
-- `ip_policy`, `ssh_certificate_authority`, `reserved_addr`, `vault`, etc.
-
-### Phase 3: Migrate Complex Resources
-- Resources with `Ref` types: `cloud_endpoint`, `reserved_domain`, `ip_restriction`
-- Resources with sensitive/write-only fields: `api_key`, `credential`, `secret`
-- Resources with nested objects: `event_destination`, `reserved_domain`
-
-### Phase 4: Migrate Data Sources
-- Simpler than resources (read-only, no plan modifiers)
-- Can largely use generated schemas as-is
 
 ## Trade-offs
 
@@ -332,9 +255,9 @@ update-openapi:
 - **Partial generation**: Only schemas/models are generated; CRUD logic stays hand-written (~60% of code)
 - **Ref type mismatch**: OpenAPI `Ref` objects don't map cleanly to our flat ID pattern
 
-### Comparison: Effort Reduction Per Resource
+### Effort Reduction Per Resource
 
-| Component | Lines Today | Lines After Codegen | Savings |
+| Component | Lines (Hand-Written) | Lines (With Codegen) | Savings |
 |---|---|---|---|
 | Schema definition | ~80 | ~5 (import + overrides) | ~94% |
 | Model struct | ~15 | 0 (generated) | 100% |
@@ -349,12 +272,10 @@ For data sources (read-only), savings are higher (~60%) since there's no CRUD bo
 
 1. **Commit `provider_code_spec.json`**: Yes. It makes PRs reviewable — you can see "this API change added these fields" in readable JSON before looking at generated Go. Helps debug when generated output looks wrong.
 
-2. **Schema override pattern**: Inline in each resource's `Schema()` method. Call the generated schema function, then modify the returned schema to add plan modifiers, mark fields sensitive, swap Ref objects for flat ID strings, etc. Keeps overrides co-located with the resource they belong to.
+2. **Schema override pattern**: Inline in each resource's `Schema()` method. Call the generated schema function, then modify the returned schema to add plan modifiers, mark fields sensitive, swap Ref objects for flat ID strings, etc. Keeps overrides co-located with the resource they belong to. Shared helpers live in `schema_overrides.go`.
 
-3. **Ref handling**: Keep flattening to `_id` strings (e.g., `certificate_id`, not `certificate { id = "..." }`). This matches the v1 provider, is simpler for users, and is the established pattern. Post-process the generated schema to replace `SingleNestedAttribute` with `StringAttribute` for Ref-typed fields.
+3. **Ref handling**: Keep flattening to `_id` strings (e.g., `certificate_id`, not `certificate { id = "..." }`). This is simpler for users and is the established pattern. Post-process the generated schema to replace `SingleNestedAttribute` with `StringAttribute` for Ref-typed fields.
 
 4. **OpenAPI spec source**: Copy into this repo via `make update-openapi`. Submodules add friction (forgot to init, wrong commit checked out). An explicit copy is predictable and the file is small (~11k lines).
 
-5. **CI integration**: Yes. Run `make generate` in CI and fail if there's a diff. This catches cases where someone updates the generator config or OpenAPI spec but forgets to regenerate.
-
-6. **Kubernetes operator resource**: Keep fully hand-written for now. It has deeply nested schemas (`ingress`, `bindings` with sub-objects) that may hit codegen limitations. Attempt migration in Phase 3 once the pattern is proven on simpler resources; if the codegen can't handle it, it stays hand-written.
+5. **CI integration**: Run `make codegen` in CI and fail if there's a diff. This catches cases where someone updates the generator config or OpenAPI spec but forgets to regenerate.
