@@ -1,36 +1,35 @@
-# Code generated for API Clients. DO NOT EDIT.
+version: 2
 
-before:
-  hooks:
-    - go mod tidy
+# Decouple artifact naming from the repository/module directory name
+# (which carries a `-v1.0` suffix). The Terraform Registry expects assets
+# named terraform-provider-ngrok_<version>_<os>_<arch>.zip.
+project_name: terraform-provider-ngrok
+
 builds:
   - env:
       - CGO_ENABLED=0
-    mod_timestamp: '{{ .CommitTimestamp }}'
+    mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
     ldflags:
-      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
+      - -s -w -X main.version={{ .Version }}
     goos:
-      - freebsd
-      - windows
       - linux
       - darwin
+      - windows
     goarch:
       - amd64
-      - '386'
-      - arm
       - arm64
-    ignore:
-      - goos: darwin
-        goarch: '386'
-    binary: '{{ .ProjectName }}_v{{ .Version }}'
+    binary: "{{ .ProjectName }}_v{{ .Version }}"
+
 archives:
-  - format: zip
-    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+  - formats: [zip]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
 checksum:
-  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
   algorithm: sha256
+
 signs:
   - artifacts: checksum
     args:
@@ -41,7 +40,19 @@ signs:
       - "${signature}"
       - "--detach-sign"
       - "${artifact}"
+
 release:
+  # The Terraform Registry requires a manifest declaring the supported
+  # plugin protocol version alongside the release assets.
+  extra_files:
+    - glob: terraform-registry-manifest.json
+      name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
   draft: true
+
 changelog:
-  skip: true
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"

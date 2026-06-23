@@ -1,8 +1,5 @@
-# Code generated for API Clients. DO NOT EDIT.
-
-
 resource "ngrok_agent_ingress" "example" {
-  description = "acme devices"
-  domain = "connect.acme.com"
+  domain      = "agents.example.com"
+  description = "Agent ingress for production agents"
+  metadata    = jsonencode({ environment = "production" })
 }
-

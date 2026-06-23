@@ -1,9 +1,10 @@
-# Code generated for API Clients. DO NOT EDIT.
-
-
 resource "ngrok_reserved_domain" "example" {
-  certificate_id = "cert_26rOxyrxCJlOc0frz7MK0HQjRvd"
-  name = "myapp.mydomain.com"
-  region = "us"
-}
+  domain      = "app.example.com"
+  description = "Production application domain"
+  metadata    = jsonencode({ team = "platform" })
 
+  certificate_management_policy = {
+    authority        = "letsencrypt"
+    private_key_type = "ecdsa"
+  }
+}

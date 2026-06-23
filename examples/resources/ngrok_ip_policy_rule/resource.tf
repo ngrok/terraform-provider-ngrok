@@ -1,10 +1,7 @@
-# Code generated for API Clients. DO NOT EDIT.
-
-
 resource "ngrok_ip_policy_rule" "example" {
-  action = "allow"
-  cidr = "212.3.14.0/24"
-  description = "nyc office"
-  ip_policy_id = "ipp_26rOydjEUNZSLTi8bYXBg278qUT"
+  ip_policy_id = ngrok_ip_policy.example.id
+  action       = "allow"
+  cidr         = "203.0.113.0/24"
+  description  = "Allow the office network"
+  metadata     = jsonencode({ team = "security" })
 }
-
