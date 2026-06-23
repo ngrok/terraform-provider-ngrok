@@ -1,4 +1,4 @@
-# ngrok Terraform Provider (v2)
+# ngrok Terraform Provider
 
 A Terraform provider for managing [ngrok](https://ngrok.com) resources, built with the [Terraform Plugin Framework](https://developer.hashicorp.com/terraform/plugin/framework).
 
