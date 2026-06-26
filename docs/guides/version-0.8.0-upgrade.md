@@ -1,16 +1,16 @@
 ---
-page_title: "Upgrading to Version 1.0"
+page_title: "Upgrading to Version 0.8.0"
 description: |-
-  Guide for migrating from terraform-provider-ngrok v0.x to v1.0.
+  Guide for migrating from terraform-provider-ngrok v0.x to v0.8.0.
 ---
 
-# Upgrading to v1.0
+# Upgrading to v0.8.0
 
-Version 1.0 of the ngrok Terraform provider is a major release that rebuilds the provider from the ground up. This guide walks you through upgrading from v0.x.
+Version 0.8.0 of the ngrok Terraform provider is a major release that rebuilds the provider from the ground up. This guide walks you through upgrading from v0.x.
 
 ## What Changed and Why
 
-The v1.0 provider is a complete rewrite:
+The v0.8.0 provider is a complete rewrite:
 
 - **Terraform Plugin Framework** — Replaces the legacy `terraform-plugin-sdk/v2` (SDKv2), which is now in maintenance mode. The Plugin Framework provides better type safety, native nested objects, plan modifiers, and validators.
 - **Official `ngrok-api-go/v9` client** — Replaces the hand-rolled `restapi/` package. The provider now uses ngrok's official, maintained Go API client.
@@ -22,14 +22,14 @@ The v1.0 provider is a complete rewrite:
 
 ### Step 1: Update the Version Constraint
 
-In your `required_providers` block, update the version constraint to `~> 1.0`:
+In your `required_providers` block, update the version constraint to `~> 0.8.0`:
 
 ```hcl
 terraform {
   required_providers {
     ngrok = {
       source  = "ngrok/ngrok"
-      version = "~> 1.0"
+      version = "~> 0.8.0"
     }
   }
 }
@@ -43,11 +43,11 @@ terraform {
 terraform init -upgrade
 ```
 
-This downloads the v1.0 provider binary.
+This downloads the v0.8.0 provider binary.
 
 ### Step 3: Remove Deprecated Resource Blocks
 
-The following resources have been removed in v1.0. For each one present in your configuration:
+The following resources have been removed in v0.8.0. For each one present in your configuration:
 
 1. Remove the resource block from your `.tf` files.
 2. Remove it from Terraform state with `terraform state rm`.
@@ -72,7 +72,7 @@ terraform state rm ngrok_endpoint_configuration.example
 
 ### Step 4: Remove Deprecated Fields from Carried-Over Resources
 
-Some resources that carry over to v1.0 have removed or deprecated fields. Update your HCL:
+Some resources that carry over to v0.8.0 have removed or deprecated fields. Update your HCL:
 
 **`ngrok_reserved_domain`:**
 
@@ -88,7 +88,7 @@ resource "ngrok_reserved_domain" "example" {
   http_endpoint_configuration_id = ngrok_endpoint_configuration.example.id
 }
 
-# After (v1.0)
+# After (v0.8.0)
 resource "ngrok_reserved_domain" "example" {
   domain = "app.example.com"
 }
@@ -108,9 +108,9 @@ The core migration task is replacing your edge + backend + endpoint configuratio
 
 ## Resource Mapping
 
-The following table maps every v0.x resource to its v1.0 equivalent:
+The following table maps every v0.x resource to its v0.8.0 equivalent:
 
-| v0.x Resource | v1.0 Resource | Notes |
+| v0.x Resource | v0.8.0 Resource | Notes |
 |---|---|---|
 | `ngrok_reserved_domain` | `ngrok_reserved_domain` | Carried over. Remove `region` and edge-related fields. |
 | `ngrok_reserved_addr` | `ngrok_reserved_addr` | Carried over. |
@@ -143,7 +143,7 @@ The following table maps every v0.x resource to its v1.0 equivalent:
 
 ## Example Migration
 
-The following example shows how to convert a typical v0.x HTTPS edge setup into a v1.0 cloud endpoint with traffic policy.
+The following example shows how to convert a typical v0.x HTTPS edge setup into a v0.8.0 cloud endpoint with traffic policy.
 
 ### Before: v0.x (Edge + Backend + Endpoint Configuration)
 
@@ -191,7 +191,7 @@ resource "ngrok_edge_https" "app" {
 }
 ```
 
-### After: v1.0 (Cloud Endpoint + Traffic Policy)
+### After: v0.8.0 (Cloud Endpoint + Traffic Policy)
 
 ```hcl
 resource "ngrok_reserved_domain" "app" {

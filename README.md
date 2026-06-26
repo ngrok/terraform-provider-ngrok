@@ -11,7 +11,7 @@ terraform {
   required_providers {
     ngrok = {
       source  = "ngrok/ngrok"
-      version = "~> 1.0"
+      version = "~> 0.8.0"
     }
   }
 }
@@ -92,7 +92,7 @@ There are also **read-only data sources** with no corresponding resource:
 - **Import support** for every resource
 - **OpenAPI-driven code generation** for schema definitions — see [Project Structure](#project-structure)
 
-See the [upgrade guide](docs/guides/version-1-upgrade.md) for migration details.
+See the [upgrade guide](docs/guides/version-0.8.0-upgrade.md) for migration details.
 
 ## Project Structure
 

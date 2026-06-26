@@ -61,7 +61,7 @@ jobs:
             exit 1; \
           }
       # The provider name must be passed explicitly: the module/repo name
-      # (terraform-provider-ngrok-v1.0) is not a valid provider local name
+      # (terraform-provider-ngrok-v0.8.0) is not a valid provider local name
       # because of the dot, so name inference fails.
       - name: Validate docs
         run: make docs-validate

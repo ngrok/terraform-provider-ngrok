@@ -1,7 +1,7 @@
 version: 2
 
 # Decouple artifact naming from the repository/module directory name
-# (which carries a `-v1.0` suffix). The Terraform Registry expects assets
+# (which carries a `-v0.8.0` suffix). The Terraform Registry expects assets
 # named terraform-provider-ngrok_<version>_<os>_<arch>.zip.
 project_name: terraform-provider-ngrok
 
