@@ -40,7 +40,7 @@ func NewReservedDomainDataSource() datasource.DataSource {
 }
 
 func (d *reservedDomainDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_reserved_domain"
+	resp.TypeName = req.ProviderTypeName + "_domain"
 }
 
 func (d *reservedDomainDataSource) Schema(ctx context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {

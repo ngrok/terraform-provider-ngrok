@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	ngrok "github.com/ngrok/ngrok-api-go/v9"
@@ -88,13 +87,6 @@ func (r *cloudEndpointResource) Schema(ctx context.Context, _ resource.SchemaReq
 		PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 	}
 
-	// Add JSON syntax validator to traffic_policy
-	if a, ok := attrs["traffic_policy"]; ok {
-		sa := a.(schema.StringAttribute)
-		sa.Validators = []validator.String{JSONSyntax()}
-		attrs["traffic_policy"] = sa
-	}
-
 	// Plan modifiers
 	addStringPlanModifiers(attrs, "id", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "domain_id", useStateForUnknownString())
@@ -102,7 +94,7 @@ func (r *cloudEndpointResource) Schema(ctx context.Context, _ resource.SchemaReq
 	addStringPlanModifiers(attrs, "uri", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "created_at", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "updated_at", useStateForUnknownString())
-	addStringPlanModifiers(attrs, "url", requiresReplaceString())
+	addStringPlanModifiers(attrs, "url", normalizeURLString(), caseInsensitiveString(), requiresReplaceString())
 	addStringPlanModifiers(attrs, "description", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "metadata", useStateForUnknownString())
 
@@ -261,7 +253,7 @@ func (r *cloudEndpointResource) ImportState(ctx context.Context, req resource.Im
 
 func flattenCloudEndpoint(endpoint *ngrok.Endpoint, model *cloudEndpointResourceModel) {
 	model.ID = types.StringValue(endpoint.ID)
-	model.URL = types.StringValue(endpoint.URL)
+	model.URL = preserveEquivalentURL(endpoint.URL, model.URL)
 	model.Type = types.StringValue(endpoint.Type)
 	model.TrafficPolicy = types.StringValue(endpoint.TrafficPolicy)
 	model.Description = types.StringValue(endpoint.Description)

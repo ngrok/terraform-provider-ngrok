@@ -11,7 +11,7 @@ import (
 func TestAccResourceReservedDomain_basic(t *testing.T) {
 	rName := acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	domainName := fmt.Sprintf("%s.ngrok.io", rName)
-	resourceName := "ngrok_reserved_domain.test"
+	resourceName := "ngrok_domain.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -52,7 +52,7 @@ func testAccReservedDomainConfig(domain, description, metadata string) string {
 		metadataAttr = fmt.Sprintf(`  metadata    = %q`, metadata)
 	}
 	return fmt.Sprintf(`
-resource "ngrok_reserved_domain" "test" {
+resource "ngrok_domain" "test" {
   domain      = %q
   description = %q
 %s

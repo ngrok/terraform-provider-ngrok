@@ -18,13 +18,13 @@ terraform {
 
 provider "ngrok" {}
 
-resource "ngrok_reserved_domain" "example" {
+resource "ngrok_domain" "example" {
   domain      = "app.example.com"
   description = "Production app domain"
 }
 
 resource "ngrok_cloud_endpoint" "example" {
-  url = "https://${ngrok_reserved_domain.example.domain}"
+  url = "https://${ngrok_domain.example.domain}"
 
   traffic_policy = jsonencode({
     on_http_request = [
@@ -57,8 +57,8 @@ Configure the API key via the `NGROK_API_KEY` environment variable or in the pro
 | `ngrok_ip_policy` | IP policy groups |
 | `ngrok_ip_policy_rule` | IP policy CIDR rules |
 | `ngrok_ip_restriction` | IP restrictions on API/dashboard/agent/endpoints |
-| `ngrok_reserved_addr` | Reserved TCP addresses |
-| `ngrok_reserved_domain` | Reserved domains |
+| `ngrok_tcp_address` | Reserved TCP addresses |
+| `ngrok_domain` | Reserved domains |
 | `ngrok_secret` | Secrets stored in vaults |
 | `ngrok_service_user` | Service users (bot users) |
 | `ngrok_ssh_certificate_authority` | SSH certificate authorities |
@@ -70,7 +70,7 @@ Configure the API key via the `NGROK_API_KEY` environment variable or in the pro
 
 Every resource also has a corresponding **data source** for lookups. Several data sources support dual lookup (by ID or by name/domain):
 
-- `ngrok_reserved_domain` — by `id` or `domain`
+- `ngrok_domain` — by `id` or `domain`
 - `ngrok_secret` — by `id` or `name`
 - `ngrok_vault` — by `id` or `name`
 

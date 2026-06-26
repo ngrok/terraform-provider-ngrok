@@ -79,7 +79,7 @@ func (r *agentIngressResource) Schema(ctx context.Context, _ resource.SchemaRequ
 	}
 
 	addStringPlanModifiers(attrs, "id", useStateForUnknownString())
-	addStringPlanModifiers(attrs, "domain", requiresReplaceString())
+	addStringPlanModifiers(attrs, "domain", domainNormalizeString(), requiresReplaceString())
 	addStringPlanModifiers(attrs, "description", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "metadata", useStateForUnknownString())
 	addListPlanModifiers(attrs, "ns_targets", useStateForUnknownList())
@@ -217,7 +217,7 @@ func (r *agentIngressResource) ImportState(ctx context.Context, req resource.Imp
 
 func flattenAgentIngress(ctx context.Context, ingress *ngrok.AgentIngress, model *agentIngressResourceModel, diags *diag.Diagnostics) {
 	model.ID = types.StringValue(ingress.ID)
-	model.Domain = types.StringValue(ingress.Domain)
+	model.Domain = preserveEquivalentDomain(ingress.Domain, model.Domain)
 	model.Description = types.StringValue(ingress.Description)
 	model.Metadata = types.StringValue(ingress.Metadata)
 	model.URI = types.StringValue(ingress.URI)

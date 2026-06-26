@@ -56,6 +56,7 @@ func (r *ipPolicyRuleResource) Schema(ctx context.Context, _ resource.SchemaRequ
 	addStringPlanModifiers(attrs, "metadata", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "ip_policy_id", requiresReplaceString())
 	addStringPlanModifiers(attrs, "action", requiresReplaceString())
+	addStringPlanModifiers(attrs, "cidr", caseInsensitiveString(), whitespaceInsensitiveString())
 
 	resp.Schema = s
 }
@@ -173,7 +174,7 @@ func flattenIPPolicyRule(rule *ngrok.IPPolicyRule, model *ipPolicyRuleResourceMo
 	model.CreatedAt = types.StringValue(rule.CreatedAt)
 	model.Description = types.StringValue(rule.Description)
 	model.Metadata = types.StringValue(rule.Metadata)
-	model.CIDR = types.StringValue(rule.CIDR)
+	model.CIDR = preserveEquivalentCIDR(rule.CIDR, model.CIDR)
 	model.IPPolicyID = types.StringValue(rule.IPPolicy.ID)
 	model.Action = types.StringValue(rule.Action)
 }
