@@ -1,6 +1,10 @@
 package provider
 
 import (
+	"fmt"
+	"net/url"
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	ngrok "github.com/ngrok/ngrok-api-go/v9"
@@ -114,4 +118,59 @@ func stringValueFromPtr(s *string) types.String {
 // isNotFound checks if an error from the ngrok API is a 404 Not Found.
 func isNotFound(err error) bool {
 	return ngrok.IsNotFound(err)
+}
+
+// normalizeURL lowercases the scheme and strips default ports.
+func normalizeURL(raw string) string {
+	u, err := url.Parse(raw)
+	if err != nil {
+		return raw
+	}
+	scheme := strings.ToLower(u.Scheme)
+	host := u.Hostname()
+	port := u.Port()
+	isDefault := (scheme == "https" && port == "443") || (scheme == "http" && port == "80")
+	if port == "" || isDefault {
+		return fmt.Sprintf("%s://%s", scheme, host)
+	}
+	return fmt.Sprintf("%s://%s:%s", scheme, host, port)
+}
+
+// preserveEquivalentDomain returns the prior types.String value if the API
+// response domain is semantically equivalent (differs only by case, whitespace, or trailing dot).
+func preserveEquivalentDomain(apiValue string, prior types.String) types.String {
+	if prior.IsNull() || prior.IsUnknown() {
+		return types.StringValue(apiValue)
+	}
+	normPrior := strings.ToLower(strings.TrimSuffix(strings.TrimSpace(prior.ValueString()), "."))
+	normAPI := strings.ToLower(strings.TrimSuffix(strings.TrimSpace(apiValue), "."))
+	if normPrior == normAPI {
+		return prior
+	}
+	return types.StringValue(apiValue)
+}
+
+// preserveEquivalentURL returns the prior types.String value if the API
+// response URL is semantically equivalent (differs only by scheme case or default port).
+func preserveEquivalentURL(apiValue string, prior types.String) types.String {
+	if prior.IsNull() || prior.IsUnknown() {
+		return types.StringValue(apiValue)
+	}
+	if normalizeURL(prior.ValueString()) == normalizeURL(apiValue) {
+		return prior
+	}
+	return types.StringValue(apiValue)
+}
+
+// preserveEquivalentCIDR returns the prior types.String value if the API
+// response CIDR is semantically equivalent (differs only by case or whitespace).
+// This prevents inconsistent-result errors when the API lowercases IPv6 CIDRs.
+func preserveEquivalentCIDR(apiValue string, prior types.String) types.String {
+	if prior.IsNull() || prior.IsUnknown() {
+		return types.StringValue(apiValue)
+	}
+	if strings.EqualFold(strings.TrimSpace(prior.ValueString()), strings.TrimSpace(apiValue)) {
+		return prior
+	}
+	return types.StringValue(apiValue)
 }

@@ -54,7 +54,7 @@ func (r *certificateAuthorityResource) Schema(ctx context.Context, _ resource.Sc
 	addStringPlanModifiers(attrs, "created_at", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "description", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "metadata", useStateForUnknownString())
-	addStringPlanModifiers(attrs, "ca_pem", requiresReplaceString())
+	addStringPlanModifiers(attrs, "ca_pem", whitespaceInsensitiveString(), requiresReplaceString())
 	addStringPlanModifiers(attrs, "subject_common_name", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "not_before", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "not_after", useStateForUnknownString())
