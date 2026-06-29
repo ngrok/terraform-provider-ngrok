@@ -37,7 +37,7 @@ func NewReservedAddrResource() resource.Resource {
 }
 
 func (r *reservedAddrResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_reserved_addr"
+	resp.TypeName = req.ProviderTypeName + "_tcp_address"
 }
 
 func (r *reservedAddrResource) Schema(ctx context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {

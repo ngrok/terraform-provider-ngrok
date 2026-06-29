@@ -48,7 +48,7 @@ func NewReservedDomainResource() resource.Resource {
 }
 
 func (r *reservedDomainResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_reserved_domain"
+	resp.TypeName = req.ProviderTypeName + "_domain"
 }
 
 func (r *reservedDomainResource) Schema(ctx context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
@@ -91,12 +91,12 @@ func (r *reservedDomainResource) Schema(ctx context.Context, _ resource.SchemaRe
 	}
 
 	addStringPlanModifiers(attrs, "id", useStateForUnknownString())
-	addStringPlanModifiers(attrs, "domain", requiresReplaceString())
+	addStringPlanModifiers(attrs, "domain", domainNormalizeString(), requiresReplaceString())
 	addStringPlanModifiers(attrs, "region", useStateForUnknownString())
 	setDeprecated(attrs, "region", "This field is deprecated and will be removed in a future version.")
 	addStringPlanModifiers(attrs, "description", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "metadata", useStateForUnknownString())
-	addStringPlanModifiers(attrs, "certificate_id", useStateForUnknownString())
+	addStringPlanModifiers(attrs, "certificate_id", suppressWhenSiblingSet("certificate_management_policy"), useStateForUnknownString())
 	addStringPlanModifiers(attrs, "cname_target", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "acme_challenge_cname_target", useStateForUnknownString())
 	addStringPlanModifiers(attrs, "uri", useStateForUnknownString())
@@ -239,7 +239,7 @@ func (r *reservedDomainResource) ImportState(ctx context.Context, req resource.I
 
 func flattenReservedDomain(ctx context.Context, domain *ngrok.ReservedDomain, model *reservedDomainResourceModel, diags *diag.Diagnostics) {
 	model.ID = types.StringValue(domain.ID)
-	model.Domain = types.StringValue(domain.Domain)
+	model.Domain = preserveEquivalentDomain(domain.Domain, model.Domain)
 	model.Region = types.StringValue(domain.Region)
 	model.Description = types.StringValue(domain.Description)
 	model.Metadata = types.StringValue(domain.Metadata)

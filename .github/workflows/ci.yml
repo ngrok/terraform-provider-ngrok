@@ -60,9 +60,8 @@ jobs:
             echo "::error::Docs are out of date. Run 'make docs' and commit the result."; \
             exit 1; \
           }
-      # The provider name must be passed explicitly: the module/repo name
-      # (terraform-provider-ngrok-v1.0) is not a valid provider local name
-      # because of the dot, so name inference fails.
+      # The provider name must be passed explicitly so that
+      # name inference works correctly.
       - name: Validate docs
         run: make docs-validate
 
