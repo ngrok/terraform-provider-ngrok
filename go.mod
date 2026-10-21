@@ -1,6 +1,6 @@
 module github.com/ngrok/terraform-provider-ngrok
 
-go 1.26
+go 1.26.10
 
 require (
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
