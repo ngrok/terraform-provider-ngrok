@@ -11,7 +11,7 @@ terraform {
   required_providers {
     ngrok = {
       source  = "ngrok/ngrok"
-      version = "~> 0.8.0"
+      version = "~> 0.8.1"
     }
   }
 }
@@ -63,8 +63,6 @@ Configure the API key via the `NGROK_API_KEY` environment variable or in the pro
 | `ngrok_service_user` | Service users (bot users) |
 | `ngrok_ssh_certificate_authority` | SSH certificate authorities |
 | `ngrok_ssh_credential` | SSH credentials |
-| `ngrok_ssh_host_certificate` | SSH host certificates |
-| `ngrok_ssh_user_certificate` | SSH user certificates |
 | `ngrok_tls_certificate` | TLS certificates |
 | `ngrok_vault` | Secret management vaults |
 
@@ -80,6 +78,7 @@ There are also **read-only data sources** with no corresponding resource:
 |---|---|
 | `ngrok_application_session` | Active application sessions |
 | `ngrok_application_user` | Application users from OAuth/OIDC |
+| `ngrok_kubernetes_operator` | Kubernetes operator instances |
 | `ngrok_tunnel_session` | Active tunnel/agent sessions |
 
 ## What changed from v0.x
@@ -87,7 +86,10 @@ There are also **read-only data sources** with no corresponding resource:
 - **Terraform Plugin Framework** replaces legacy SDKv2
 - **Official `ngrok-api-go/v9` client** replaces hand-rolled REST client
 - **Cloud endpoints** replace edges — all edge, backend, and endpoint configuration resources are removed
+- **Renamed resources**: `ngrok_reserved_domain` → `ngrok_domain`, `ngrok_reserved_addr` → `ngrok_tcp_address`
 - **New resources**: `ngrok_cloud_endpoint`, `ngrok_vault`, `ngrok_secret`
+- **New data source**: `ngrok_kubernetes_operator`
+- **Removed resources**: `ngrok_ssh_host_certificate`, `ngrok_ssh_user_certificate` (not supported in API v9)
 - **Data sources** for every resource, plus read-only data sources for sessions and application users
 - **Import support** for every resource
 - **OpenAPI-driven code generation** for schema definitions — see [Project Structure](#project-structure)
@@ -150,7 +152,7 @@ terraform {
   required_providers {
     ngrok = {
       source  = "ngrok/ngrok"
-      version = "0.0.1"
+      version = "0.8.1"
     }
   }
 }
